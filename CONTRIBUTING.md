@@ -1,10 +1,10 @@
-## How to contribute to Xray Checker
+## How to contribute
 
 #### **Did you find a bug?**
 
-- **Ensure the bug was not already reported** by searching on GitHub under [Issues](https://github.com/Kennix88/vpnsibcom/issues).
+- **Ensure the bug was not already reported** by searching on GitHub under [Issues](https://github.com/Kennix88/vpnsibcom_web/issues).
 
-- If you're unable to find an open issue addressing the problem, [open a new one](https://github.com/Kennix88/vpnsibcom/issues/new?template=%F0%9F%90%9E-bug-report.md). Be sure to include a **title and clear description**, as much relevant information as possible, and a **code sample** or an **executable test case** demonstrating the expected behavior that is not occurring.
+- If you're unable to find an open issue addressing the problem, [open a new one](https://github.com/Kennix88/vpnsibcom_web/issues/new?template=%F0%9F%90%9E-bug-report.md). Be sure to include a **title and clear description**, as much relevant information as possible, and a **code sample** or an **executable test case** demonstrating the expected behavior that is not occurring.
 
 #### **Did you write a patch that fixes a bug?**
 
@@ -14,7 +14,7 @@
 
 #### **Do you intend to add a new feature or change an existing one?**
 
-- Suggest your change in the [Github Discussions](https://github.com/Kennix88/vpnsibcom/discussions) and start writing code.
+- Suggest your change in the [Github Discussions](https://github.com/Kennix88/vpnsibcom_web/discussions) and start writing code.
 
 - Do not open an issue on GitHub until you have collected positive feedback about the change. GitHub issues are primarily intended for bug reports and fixes.
 

@@ -15,27 +15,26 @@ const compat = new FlatCompat({
 })
 
 export default tseslint.config([
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
   eslint.configs.recommended,
   tseslint.configs.recommended,
   {
     files: ['**/*.{js,mjs,cjs,ts}'],
     extends: [],
     plugins: {
-      eslintPluginPrettier,
+      prettier: eslintPluginPrettier,
     },
     languageOptions: {
       ecmaVersion: 'latest',
-      sourceType: 'commonjs',
+      sourceType: 'module',
       parserOptions: {
         project: 'tsconfig.json',
-        sourceType: 'commonjs',
       },
     },
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
       'no-unused-vars': 'off',
+      'prettier/prettier': 'error',
     },
   },
   {
@@ -43,4 +42,6 @@ export default tseslint.config([
     languageOptions: { globals: globals.node },
   },
   eslintConfigPrettier,
+  ...compat.extends('next/core-web-vitals'),
+  ...compat.extends('next/typescript'),
 ])
