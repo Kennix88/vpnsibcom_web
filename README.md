@@ -96,7 +96,7 @@ If you want to support me, I will be very happy about it. 🥺👉👈
 
 [cc-by-nc-sa]: http://creativecommons.org/licenses/by-nc-sa/4.0/
 [cc-by-nc-sa-image]: https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png
-[cc-by-nc-sa-shield]: https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg?style=for-the-badge&color=0891b2&labelColor=1c1917
+[cc-by-nc-sa-shield]: https://img.shields.io/badge/©%20License-CC%20BY--NC--SA%204.0-lightgrey.svg?style=for-the-badge&color=0891b2&labelColor=1c1917
 
 ---
 
