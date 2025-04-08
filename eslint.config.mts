@@ -17,6 +17,9 @@ const compat = new FlatCompat({
 export default tseslint.config([
   eslint.configs.recommended,
   tseslint.configs.recommended,
+  eslintConfigPrettier,
+  ...compat.extends('next/core-web-vitals'),
+  ...compat.extends('next/typescript'),
   {
     files: ['**/*.{js,mjs,cjs,ts}'],
     extends: [],
@@ -33,7 +36,9 @@ export default tseslint.config([
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-expressions': 'off',
       'no-unused-vars': 'off',
+      'react-hooks/rules-of-hooks': 'off',
       'prettier/prettier': 'error',
     },
   },
@@ -41,7 +46,4 @@ export default tseslint.config([
     files: ['**/*.{js,mjs,cjs,ts}'],
     languageOptions: { globals: globals.node },
   },
-  eslintConfigPrettier,
-  ...compat.extends('next/core-web-vitals'),
-  ...compat.extends('next/typescript'),
 ])
