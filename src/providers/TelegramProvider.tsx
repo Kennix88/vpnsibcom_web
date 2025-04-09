@@ -1,31 +1,21 @@
 'use client'
 
-import { initTelegramSDK } from '@app/core/initTelegramSDK'
-import { useTelegramMock } from '@app/hooks/useTelegramMock'
-import React, { useEffect } from 'react'
+import { ErrorBoundary } from '@app/app/(tma)/_components/ErrorBoundary'
+import { ErrorBoundaryError } from '@app/app/(tma)/_components/ErrorBoundaryError'
+import { TMA } from '@app/app/(tma)/_components/TMA'
+import { useDidMount } from '@app/hooks/useDidMount'
+import { PropsWithChildren } from 'react'
 
-export function TelegramProvider({ children }: { children: React.ReactNode }) {
-  useEffect(() => {
-    const init = async () => {
-      if (process.env.NODE_ENV === 'development') {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        await useTelegramMock()
-        await initTelegramSDK({
-          debug: true,
-          eruda: true,
-          mockForMacOS: false,
-        })
-      } else {
-        await initTelegramSDK({
-          debug: false,
-          eruda: false,
-          mockForMacOS: false,
-        })
-      }
-    }
+export function TelegramProvider(props: PropsWithChildren) {
+  const didMount = useDidMount()
 
-    init()
-  }, [])
-
-  return <>{children}</>
+  return didMount ? (
+    <ErrorBoundary fallback={ErrorBoundaryError}>
+      <TMA {...props} />
+    </ErrorBoundary>
+  ) : (
+    <div className="root__loading bg-background text-on-surface w-screen bg-opacity-90 min-h-screen... ">
+      Loading...
+    </div>
+  )
 }

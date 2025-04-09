@@ -1,9 +1,16 @@
-import { emitEvent, isTMA, mockTelegramEnv } from '@telegram-apps/sdk-react'
+import {
+  emitEvent,
+  isTMA,
+  mockTelegramEnv,
+  retrieveLaunchParams,
+  ThemeParams,
+  themeParamsState,
+} from '@telegram-apps/sdk-react'
 
 /**
  * Mocks Telegram environment in development mode.
  */
-export async function useTelegramMock() {
+export async function useTelegramMock(options: { mockForMacOS: boolean }) {
   if (process.env.NODE_ENV === 'development') {
     if (!(await isTMA('complete'))) {
       const themeParams = {
@@ -22,35 +29,55 @@ export async function useTelegramMock() {
         text_color: '#f5f5f5',
       } as const
 
-      mockTelegramEnv({
-        onEvent(e) {
-          if (e[0] === 'web_app_request_theme') {
-            emitEvent('theme_changed', { theme_params: themeParams })
-          }
-          // ... другие обработчики событий
-        },
-        launchParams: new URLSearchParams([
-          ['tgWebAppThemeParams', JSON.stringify(themeParams)],
-          [
-            'tgWebAppData',
-            new URLSearchParams([
-              ['auth_date', Math.floor(Date.now() / 1000).toString()],
-              ['hash', 'mock-hash'],
-              [
-                'user',
-                JSON.stringify({
-                  id: 1,
-                  first_name: 'Mock',
-                  last_name: 'User',
-                  username: 'mock_user',
-                }),
-              ],
-            ]).toString(),
-          ],
-          ['tgWebAppVersion', '8.4'],
-          ['tgWebAppPlatform', 'tdesktop'],
-        ]),
-      })
+      if (options.mockForMacOS) {
+        let firstThemeSent = false
+        mockTelegramEnv({
+          onEvent(event, next) {
+            if (event[0] === 'web_app_request_theme') {
+              let tp: ThemeParams = {}
+              if (firstThemeSent) {
+                tp = themeParamsState()
+              } else {
+                firstThemeSent = true
+                tp ||= retrieveLaunchParams().tgWebAppThemeParams
+              }
+              return emitEvent('theme_changed', { theme_params: tp })
+            }
+
+            if (event[0] === 'web_app_request_safe_area') {
+              return emitEvent('safe_area_changed', {
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0,
+              })
+            }
+
+            next()
+          },
+          launchParams: new URLSearchParams([
+            ['tgWebAppThemeParams', JSON.stringify(themeParams)],
+            [
+              'tgWebAppData',
+              new URLSearchParams([
+                ['auth_date', Math.floor(Date.now() / 1000).toString()],
+                ['hash', 'mock-hash'],
+                [
+                  'user',
+                  JSON.stringify({
+                    id: 1,
+                    first_name: 'Mock',
+                    last_name: 'User',
+                    username: 'mock_user',
+                  }),
+                ],
+              ]).toString(),
+            ],
+            ['tgWebAppVersion', '8.4'],
+            ['tgWebAppPlatform', 'tdesktop'],
+          ]),
+        })
+      }
 
       console.warn(
         '⚠️ As long as the current environment was not considered as the Telegram-based one, it was mocked. Take a note, that you should not do it in production and current behavior is only specific to the development process. Environment mocking is also applied only in development mode. So, after building the application, you will not see this behavior and related warning, leading to crashing the application outside Telegram.',
