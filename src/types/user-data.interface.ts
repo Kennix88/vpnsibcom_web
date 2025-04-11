@@ -17,4 +17,15 @@ export interface UserDataInterface {
   photoUrl?: string
   languageCode: string
   currencyCode: CurrencyEnum
+  giftsCount: number
+  referralsCount: number
+  balance: UserBalanceInterface
+}
+
+export interface UserBalanceInterface {
+  paymentBalance: number
+  holdBalance: number
+  totalEarnedWithdrawalBalance: number
+  withdrawalBalance: number
+  isUseWithdrawalBalance: boolean
 }
