@@ -56,7 +56,7 @@ function _TMA({ children }: PropsWithChildren) {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     console.log('InitDataRaw:', initDataRaw) // Добавьте логирование
-    if (initDataRaw && !isAuth) {
+    if (initDataRaw && !isAuth && !isLoading) {
       console.log('Calling tmaAuth...')
       tmaAuth(initDataRaw).catch(console.error)
     }
