@@ -1,1 +1,9 @@
-{}
+{
+  "navbar": {
+    "home": "Home",
+    "earning": "Earning",
+    "gifts": "Gifts",
+    "friends": "Friends",
+    "billing": "Billing"
+  }
+}

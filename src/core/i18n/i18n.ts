@@ -13,6 +13,7 @@ const i18nRequestConfig = getRequestConfig(async () => {
       locale === defaultLocale || !locales.includes(locale)
         ? (await import(`@public/locales/${defaultLocale}.json`)).default
         : (await import(`@public/locales/${locale}.json`)).default,
+    fallbackLocale: defaultLocale,
   }
 })
 
