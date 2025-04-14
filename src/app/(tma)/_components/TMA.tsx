@@ -1,6 +1,6 @@
 'use client'
 import { Auth } from '@app/app/(tma)/_components/Auth'
-import { setLocale } from '@app/core/i18n/locale'
+import { setServerLocale } from '@app/core/i18n/locale.server'
 import { initTelegramSDK } from '@app/core/initTelegramSDK'
 import {
   initData,
@@ -14,20 +14,6 @@ export function TMA({ children }: PropsWithChildren) {
   const [initialized, setInitialized] = useState(false)
   const launchParams = useMemo(() => retrieveLaunchParams(), [])
   const initDataUser = useSignal(initData.user)
-
-  // useClientOnce(() => {
-  //   initTelegramSDK({
-  //     debug: true,
-  //     eruda: debug && ['ios', 'android'].includes(platform),
-  //     mockForMacOS: platform === 'macos',
-  //   })
-  // })
-  //
-  // useEffect(() => {
-  //   if (viewport.expand.isAvailable()) {
-  //     viewport.expand()
-  //   }
-  // }, [])
 
   useEffect(() => {
     const debug =
@@ -50,7 +36,7 @@ export function TMA({ children }: PropsWithChildren) {
 
   useEffect(() => {
     if (initDataUser) {
-      setLocale(initDataUser.language_code)
+      setServerLocale(initDataUser.language_code)
     }
   }, [initDataUser])
 

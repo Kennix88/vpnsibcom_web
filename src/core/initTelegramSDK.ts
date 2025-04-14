@@ -5,6 +5,7 @@ import {
   miniApp,
   mountBackButton,
   setDebug,
+  themeParams,
   viewport,
 } from '@telegram-apps/sdk-react'
 
@@ -35,6 +36,11 @@ export async function initTelegramSDK(options: {
     miniApp.mountSync()
     miniApp.isMounted() // true
   }
+  if (themeParams.mountSync.isAvailable()) {
+    themeParams.mountSync()
+    themeParams.isMounted() // true
+  }
+
   if (viewport.mount.isAvailable()) {
     try {
       const promise = viewport.mount()
@@ -48,4 +54,11 @@ export async function initTelegramSDK(options: {
       viewport.isMounted() // false
     }
   }
+  // if (themeParams.bindCssVars.isAvailable()) {
+  //   themeParams.bindCssVars()
+  // }
+  // if (miniApp.bindCssVars.isAvailable()) {
+  //   miniApp.bindCssVars()
+  //   miniApp.isCssVarsBound() // true
+  // }
 }

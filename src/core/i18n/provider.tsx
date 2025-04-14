@@ -1,18 +1,19 @@
-import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
-import React from "react";
+import { NextIntlClientProvider } from 'next-intl'
+import { getMessages } from 'next-intl/server'
+import type { PropsWithChildren } from 'react'
+import { timeZone } from './config'
+import { getServerLocale } from './locale.server'
 
-import { timeZone } from "./config";
+export const I18nProvider = async ({ children }: PropsWithChildren) => {
+  const locale = await getServerLocale()
+  const messages = await getMessages()
 
-const I18nProvider: React.FC<React.PropsWithChildren> = async ({
-                                                                 children,
-                                                               }) => {
-  const messages = await getMessages();
   return (
-    <NextIntlClientProvider messages={messages} timeZone={timeZone}>
-    {children}
+    <NextIntlClientProvider
+      locale={locale}
+      messages={messages}
+      timeZone={timeZone}>
+      {children}
     </NextIntlClientProvider>
-);
-};
-
-export { I18nProvider };
+  )
+}

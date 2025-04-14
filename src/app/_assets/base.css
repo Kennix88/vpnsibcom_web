@@ -1,0 +1,54 @@
+/* === BASE STYLES === */
+body {
+    background-color: var(--background);
+    color: var(--on-background);
+    font-family: system-ui, sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button {
+    background-color: var(--primary);
+    color: var(--on-primary);
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: var(--primary-container);
+    color: var(--on-primary-container);
+}
+
+.card {
+    background-color: var(--surface);
+    color: var(--on-surface);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.3s;
+}
+
+input, textarea {
+    background-color: var(--surface-container);
+    color: var(--on-surface);
+    border: 1px solid var(--outline);
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    transition: border-color 0.3s, background-color 0.3s;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.theme-light {
+    color-scheme: light;
+}
+
+.theme-dark {
+    color-scheme: dark;
+}
