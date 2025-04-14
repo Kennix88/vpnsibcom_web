@@ -3,4 +3,6 @@
 @import "./palette.css";
 @import "./base.css";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 
