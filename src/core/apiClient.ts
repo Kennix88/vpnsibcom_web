@@ -1,78 +1,71 @@
-import { config } from '@app/config/client'
 import { useUserStore } from '@app/store/user.store'
-import axios, { AxiosError, AxiosResponse } from 'axios'
-import { getCookie } from 'cookies-next'
+import axios from 'axios'
 
-const API_BASE_URL = config.apiUrl || 'http://localhost:4000'
-
-// Базовый инстанс без авторизации
-export const baseApiClient = axios.create({
-  baseURL: API_BASE_URL,
-  withCredentials: true,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  withCredentials: true, // для отправки httpOnly куки (refresh)
 })
 
-// Авторизованный инстанс с интерцепторами
-export const authApiClient = (() => {
-  const instance = axios.create({
-    baseURL: API_BASE_URL,
-    withCredentials: true,
-  })
+// 👉 Интерцептор запроса: подставляем accessToken
+api.interceptors.request.use((config) => {
+  const token = useUserStore.getState().accessToken
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
+})
 
-  // Интерцептор запросов
-  instance.interceptors.request.use((config) => {
-    const accessToken = getCookie('access_token')
+// 👉 Интерцептор ответа: пробуем refresh если 401
+api.interceptors.response.use(
+  (res) => res,
+  async (error) => {
+    const originalRequest = error.config
+    const store = useUserStore.getState()
 
-    if (accessToken) {
-      config.headers.set('Authorization', `Bearer ${accessToken}`)
+    // Если уже пробовали refresh или не 401 — выходим
+    if (originalRequest._retry || error.response?.status !== 401) {
+      return Promise.reject(error)
     }
 
-    return config
-  })
+    originalRequest._retry = true
 
-  // Интерцептор ответов
-  instance.interceptors.response.use(
-    (response: AxiosResponse) => response,
-    async (error: AxiosError) => {
-      const originalRequest = error.config as any
+    try {
+      const { data } = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
+        {},
+        { withCredentials: true },
+      )
 
-      // Обрабатываем только 401 ошибки
-      if (error.response?.status === 401 && !originalRequest._retry) {
-        originalRequest._retry = true
+      const newAccessToken = data.data.accessToken
+      useUserStore.getState().setAccessToken(newAccessToken)
 
-        try {
-          // Пытаемся обновить токен
-          const refreshToken = getCookie('refreshToken')
-          if (!refreshToken) throw error
+      originalRequest.headers.Authorization = `Bearer ${newAccessToken}`
+      return api(originalRequest)
+    } catch (refreshError) {
+      store.reset()
+      return Promise.reject(refreshError)
+    }
+  },
+)
 
-          const refreshResponse = await baseApiClient.post(
-            '/auth/refresh',
-            {},
-            {
-              headers: {
-                Cookie: `refreshToken=${refreshToken}`,
-              },
-            },
-          )
+export const authApiClient = {
+  async telegramLogin(initData: string) {
+    const { data } = await api.post('/auth/telegram', { initData })
+    return data.data
+  },
 
-          const newAccessToken = refreshResponse.data.accessToken
-          document.cookie = `access_token=${newAccessToken}; path=/; max-age=900` // 15 минут
+  async refresh() {
+    const { data } = await api.post('/auth/refresh', {})
+    return data.data
+  },
 
-          // Повторяем оригинальный запрос
-          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`
-          return instance(originalRequest)
-        } catch (refreshError) {
-          // При неудачном обновлении делаем логаут
-          await useUserStore.getState().logout()
-          throw refreshError
-        }
-      }
+  async logout() {
+    await api.post('/auth/logout')
+    useUserStore.getState().reset()
+  },
 
-      throw error
-    },
-  )
-
-  return instance
-})()
+  async getMe() {
+    const { data } = await api.get('/user/me')
+    return data.data.user
+  },
+}
