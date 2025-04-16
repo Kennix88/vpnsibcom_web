@@ -42,7 +42,7 @@ export default function NavBar() {
     <div
       className={`bottom-0 left-0 right-0 fixed flex flex-row py-4 items-center justify-center z-[99] `}>
       <div
-        className={`grid grid-cols-5 min-w-[320px] grid-rows-1 gap-2 p-2 rounded-xl bg-[var(--surface-container-lowest)] bg-opacity-90`}>
+        className={`grid grid-cols-5 min-w-[320px] grid-rows-1 gap-2 p-2 rounded-xl bg-[var(--surface-container)] bg-opacity-90 `}>
         {navItems.map((item) => (
           <Link
             href={`${item.href}`}

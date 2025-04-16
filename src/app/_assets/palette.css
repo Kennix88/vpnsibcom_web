@@ -1,76 +1,76 @@
 
 :root {
+    --tg-star-gold: #fec73d;
+    --tg-star-purple: #7F60EC;
+    --tg-star-ice: #6090C7;
     /* === PRIMARY (фиолетовый) === */
     --primary: #6750a4;
     --on-primary: #ffffff;
-    --primary-container: #eaddff;
+    --primary-container: #e2d4ff;
     --on-primary-container: #21005d;
     --inverse-primary: #d0bcff;
 
     /* === SECONDARY === */
     --secondary: #625b71;
     --on-secondary: #ffffff;
-    --secondary-container: #e8def8;
+    --secondary-container: #e2d8f0;
     --on-secondary-container: #1d192b;
 
     /* === TERTIARY === */
     --tertiary: #7d5260;
     --on-tertiary: #ffffff;
-    --tertiary-container: #ffd8e4;
+    --tertiary-container: #fdd3e0;
     --on-tertiary-container: #31111d;
 
     /* === NEUTRAL SURFACES === */
-    --background: #fffbff;
+    --background: #f4f2f7;
     --on-background: #1c1b1f;
-    --surface: #fffbff;
+    --surface: #f9f7fb;
     --on-surface: #1c1b1f;
-    --surface-variant: #e7e0ec;
+    --surface-variant: #dcd5e5;
     --on-surface-variant: #49454f;
-    --outline: #79747e;
+    --outline: #8a8490;
 
     /* === STATUS === */
     --success: #5edca9;
     --on-success: #003825;
-    --success-container: #d5fbe6;
+    --success-container: #caf7e3;
     --on-success-container: #005138;
 
     --warning: #ffb872;
     --on-warning: #4a2800;
-    --warning-container: #fff1e0;
+    --warning-container: #ffeed5;
     --on-warning-container: #6a3c00;
 
     --error: #b3261e;
     --on-error: #ffffff;
-    --error-container: #f9dedc;
+    --error-container: #f4d0ce;
     --on-error-container: #410e0b;
 
     /* Info colors */
     --info: #0061a4;
     --on-info: #ffffff;
-    --info-container: #cce5ff;
+    --info-container: #d4eaff;
     --on-info-container: #001d35;
 
     /* Surface elevations */
-    --surface-dim: #ded8e1;
-    --surface-bright: #f7f2fa;
+    --surface-dim: #e6e2ec;
+    --surface-bright: #f7f4fa;
     --surface-container-lowest: #ffffff;
-    --surface-container-low: #f7f2fa;
-    --surface-container: #f3edf7;
-    --surface-container-high: #ece6f0;
-    --surface-container-highest: #e6e0ec;
+    --surface-container-low: #f3f0f8;
+    --surface-container: #ede9f3;
+    --surface-container-high: #e6e2ec;
+    --surface-container-highest: #ded9e6;
 
     /* Inverse surface */
     --inverse-surface: #322f35;
     --inverse-on-surface: #f4eff4;
 
     /* Outline and shadow */
-    --outline-variant: #cac4d0;
+    --outline-variant: #c1bcc7;
     --scrim: #000000;
     --shadow: #000000;
 }
-
-/* Поддержка переключения темы в зависимости от системных настроек */
-
 
 :root.dark {
     /* === PRIMARY (фиолетовый) === */

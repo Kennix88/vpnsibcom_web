@@ -17,11 +17,11 @@ export const useThemeStore = create<ThemeStore>()(
         typeof window !== 'undefined' &&
         window.matchMedia?.('(prefers-color-scheme: dark)').matches
           ? 'dark'
-          : 'light',
+          : 'dark',
       setTheme: (theme) => {
         set({ theme })
         document.documentElement.classList.toggle('dark', theme === 'dark')
-        document.documentElement.classList.toggle('light', theme === 'light')
+        document.documentElement.classList.toggle('light', theme === 'dark')
         if (miniApp.setBackgroundColor.isAvailable()) {
           const bg = getComputedStyle(document.documentElement)
             .getPropertyValue('--background')
@@ -40,7 +40,7 @@ export const useThemeStore = create<ThemeStore>()(
         }
       },
       toggleTheme: () => {
-        const newTheme = get().theme === 'dark' ? 'light' : 'dark'
+        const newTheme = get().theme === 'dark' ? 'dark' : 'dark'
         get().setTheme(newTheme)
       },
     }),
