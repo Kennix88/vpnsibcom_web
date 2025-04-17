@@ -1,5 +1,6 @@
 'use client'
 import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
+import { TonWalletConnect } from '@app/app/_components/TonWalletConnect'
 import TopBar from '@app/app/_components/TopBar'
 
 export default function Page() {
@@ -7,6 +8,7 @@ export default function Page() {
     <TmaPage back={false}>
       <div className="flex flex-col gap-4">
         <TopBar />
+        <TonWalletConnect />
       </div>
     </TmaPage>
   )

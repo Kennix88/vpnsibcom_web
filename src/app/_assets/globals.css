@@ -5,4 +5,55 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+.loader {
+    border: 5px solid var(--on-primary); /* Light gray */
+    border-top: 5px solid var(--primary); /* Purple color */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.wallet-btn-primary {
+    background-color: var(--primary);
+    color: var(--on-primary);
+    font-weight: 600;
+    padding: 0.6rem 1.2rem;
+    border-radius: 1rem;
+    transition: 0.2s;
+}
+.wallet-btn-primary:hover {
+    background-color: var(--inverse-primary);
+    color: var(--on-primary-container);
+}
+
+.wallet-btn-outline {
+    background-color: transparent;
+    color: var(--on-background);
+    border: 1px solid var(--outline);
+    padding: 0.6rem 1.2rem;
+    border-radius: 1rem;
+    transition: 0.2s;
+}
+.wallet-btn-outline:hover {
+    background-color: var(--surface-container-highest);
+}
+
+.wallet-btn-destructive {
+    background-color: var(--error);
+    color: var(--on-error);
+    padding: 0.6rem 1.2rem;
+    border-radius: 1rem;
+    font-weight: 600;
+    transition: 0.2s;
+}
+.wallet-btn-destructive:hover {
+    background-color: var(--error-container);
+    color: var(--on-error-container);
+}
 

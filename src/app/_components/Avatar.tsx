@@ -8,7 +8,11 @@ export default function Avatar({ w = 40 }: { w?: number }) {
   const { user } = useUserStore()
   return (
     <div
-      className={`flex relative justify-center items-center p-1 rounded-full bg-[var(--surface-container)] ${`w-[${w}px]`} ${`h-[${w}px]`} cursor-pointer`}>
+      className={`flex relative justify-center items-center p-1 rounded-full bg-[var(--surface-container)] cursor-pointer`}
+      style={{
+        width: w,
+        height: w,
+      }}>
       {getRandomEmoji()}
       {user && user.photoUrl && (
         <Image

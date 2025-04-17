@@ -5,6 +5,8 @@ import { Metadata } from 'next'
 import { getLocale } from 'next-intl/server'
 import 'normalize.css/normalize.css'
 import React from 'react'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import '../../_assets/globals.css'
 
 export const metadata: Metadata = {
@@ -23,8 +25,20 @@ export default async function TmaLayout({
       <body className="bg-[var(--primary)]">
         <I18nProvider>
           <TelegramProvider>
+            <ToastContainer
+              position="bottom-center"
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="dark"
+            />
             <div className="bg-[var(--primary)]">
-              <div className="pt-4 px-4 rounded-t-xl pb-[100px] bg-[var(--background)] text-[var(--on-surface)]">
+              <div className="pt-4 px-4 rounded-t-xl pb-[100px] min-h-screen bg-[var(--background)] text-[var(--on-surface)]">
                 {children}
                 <NavBar />
               </div>

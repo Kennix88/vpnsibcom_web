@@ -1,11 +1,10 @@
 'use client'
 import { Auth } from '@app/app/(tma)/_components/Auth'
+import Loader from '@app/app/_components/Loader'
 import { setServerLocale } from '@app/core/i18n/locale.server'
 import { initTelegramSDK } from '@app/core/initTelegramSDK'
 import {
-  BackgroundColor,
   initData,
-  miniApp,
   retrieveLaunchParams,
   useSignal,
   viewport,
@@ -42,27 +41,8 @@ export function TMA({ children }: PropsWithChildren) {
     }
   }, [initDataUser])
 
-  useEffect(() => {
-    if (miniApp.setBackgroundColor.isAvailable()) {
-      const bg = getComputedStyle(document.documentElement)
-        .getPropertyValue('--background')
-        .trim()
-
-      miniApp.setBackgroundColor(bg as BackgroundColor)
-      miniApp.backgroundColor()
-    }
-    if (miniApp.setHeaderColor.isAvailable()) {
-      const primary = getComputedStyle(document.documentElement)
-        .getPropertyValue('--primary')
-        .trim()
-
-      miniApp.setHeaderColor(primary as BackgroundColor)
-      miniApp.headerColor()
-    }
-  }, [])
-
   if (!initialized) {
-    return <div>Loading...</div>
+    return <Loader />
   }
 
   return <Auth>{children}</Auth>

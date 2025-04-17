@@ -1,5 +1,6 @@
 import { useTelegramMock } from '@app/hooks/useTelegramMock'
 import {
+  BackgroundColor,
   initData,
   init as initSDK,
   miniApp,
@@ -17,11 +18,11 @@ export async function initTelegramSDK(options: {
   setDebug(options.debug)
   initSDK()
 
-  options.eruda &&
-    void import('eruda').then(({ default: eruda }) => {
-      eruda.init()
-      eruda.position({ x: window.innerWidth - 50, y: 0 })
-    })
+  // options.eruda &&
+  //   void import('eruda').then(({ default: eruda }) => {
+  //     eruda.init()
+  //     eruda.position({ x: window.innerWidth - 50, y: 0 })
+  //   })
 
   await useTelegramMock({ mockForMacOS: options.mockForMacOS })
   initData.restore()
@@ -53,6 +54,23 @@ export async function initTelegramSDK(options: {
       viewport.isMounting() // false
       viewport.isMounted() // false
     }
+  }
+
+  if (miniApp.setBackgroundColor.isAvailable()) {
+    const bg = getComputedStyle(document.documentElement)
+      .getPropertyValue('--background')
+      .trim()
+
+    miniApp.setBackgroundColor(bg as BackgroundColor)
+    miniApp.backgroundColor()
+  }
+  if (miniApp.setHeaderColor.isAvailable()) {
+    const primary = getComputedStyle(document.documentElement)
+      .getPropertyValue('--primary')
+      .trim()
+
+    miniApp.setHeaderColor(primary as BackgroundColor)
+    miniApp.headerColor()
   }
   // if (themeParams.bindCssVars.isAvailable()) {
   //   themeParams.bindCssVars()

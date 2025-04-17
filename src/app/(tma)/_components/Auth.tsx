@@ -1,4 +1,5 @@
 'use client'
+import Loader from '@app/app/_components/Loader'
 import { config } from '@app/config/client'
 import { authApiClient } from '@app/core/apiClient'
 import { useUserStore } from '@app/store/user.store'
@@ -29,7 +30,7 @@ export function Auth({ children }: PropsWithChildren) {
   }, [initDataRaw])
 
   if (!user || !accessToken) {
-    return <div className="loading-screen">TMA Loading...</div>
+    return <Loader />
   }
 
   const manifestUrl = config.tonManifestUrl

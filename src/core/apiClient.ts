@@ -68,4 +68,14 @@ export const authApiClient = {
     const { data } = await api.get('/user/me')
     return data.data.user
   },
+
+  async updateWallet(address: string) {
+    const { data } = await api.post('/user/wallet', { address })
+    return data.data.user
+  },
+
+  async unlinkWallet() {
+    const { data } = await api.delete('/user/wallet')
+    return data.data.user
+  },
 }
