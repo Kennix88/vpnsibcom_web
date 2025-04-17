@@ -4,11 +4,13 @@ import { authApiClient } from '@app/core/apiClient'
 import { useUserStore } from '@app/store/user.store'
 import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react'
 import { toast } from 'react-toastify'
+import { useTranslations } from 'use-intl'
 
 export function TonWalletManager() {
   const [tonConnectUI] = useTonConnectUI()
   const wallet = useTonWallet()
   const { user, setUser } = useUserStore()
+  const t = useTranslations('wallet')
 
   const saveWallet = async () => {
     if (!wallet?.account?.address) return
@@ -19,7 +21,7 @@ export function TonWalletManager() {
       )
       setUser(updateUser)
     } catch {
-      toast.error('Ошибка при сохранении кошелька')
+      toast.error('Error saving the wallet')
     }
   }
 
@@ -29,7 +31,7 @@ export function TonWalletManager() {
       await tonConnectUI.openModal()
       await saveWallet()
     } catch {
-      toast.error('Не удалось подключить кошелёк')
+      toast.error('Failed to connect wallet')
     }
   }
 
@@ -39,7 +41,7 @@ export function TonWalletManager() {
       const updateUser = await authApiClient.unlinkWallet()
       setUser(updateUser)
     } catch {
-      toast.error('Не удалось отвязать кошелёк')
+      toast.error("Couldn't unlink wallet")
     }
   }
 
@@ -49,13 +51,13 @@ export function TonWalletManager() {
         <div className={'flex flex-row gap-2 w-full'}>
           <button
             onClick={handleUnlink}
-            className="bg-[var(--error-container)] text-[var(--on-error-container)] px-4 py-2 rounded-md text-sm w-full max-w-xs cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]">
-            Отвязать
+            className="bg-[var(--error-container)] text-[var(--on-error-container)] px-4 py-2 rounded-md text-sm w-full max-w-xs cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97] font-mono">
+            {t('disconnect')}
           </button>
           <button
             onClick={handleReplace}
-            className="bg-[var(--primary)] text-[var(--on-primary)] px-4 py-2 rounded-md text-sm w-full max-w-xs cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]">
-            Заменить
+            className="bg-[var(--primary)] text-[var(--on-primary)] px-4 py-2 rounded-md text-sm w-full max-w-xs cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97] font-mono">
+            {t('replace')}
           </button>
         </div>
       )}

@@ -52,7 +52,9 @@ export default function Balance({
             />
           )}
         </div>
-        <div className="font-bold ">{addSuffixToNumberUtil(balance, 2)}</div>
+        <div className="font-bold font-mono text-sm">
+          {addSuffixToNumberUtil(balance, 2)}
+        </div>
         {type == 'payment' && (
           <Link href={`${url}/payment`} className="cursor-pointer">
             <div className="bg-[var(--secondary-container)] p-1 flex items-center justify-center rounded-md font-bold cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]">

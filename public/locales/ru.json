@@ -5,5 +5,15 @@
     "gifts": "Подарки",
     "friends": "Друзья",
     "billing": "Биллинг"
+  },
+  "user": {
+    "role": "Роль",
+    "discount": "Скидка",
+    "wallet": "Кошелек"
+  },
+  "wallet": {
+    "connect": "Подключить TON-кошелек",
+    "disconnect": "Отвязать",
+    "replace": "Заменить"
   }
 }

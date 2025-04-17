@@ -22,7 +22,7 @@ export default async function TmaLayout({
   const locale = await getLocale()
   return (
     <html lang={locale} className={'dark'}>
-      <body className="bg-[var(--primary)]">
+      <body className="bg-[var(--background)]">
         <I18nProvider>
           <TelegramProvider>
             <ToastContainer

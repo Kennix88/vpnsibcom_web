@@ -38,6 +38,15 @@ export default function NavBar() {
     },
   ]
 
+  const isMainUrls =
+    url === location ||
+    url + '/earning' === location ||
+    url + '/gifts' === location ||
+    url + '/friends' === location ||
+    url + '/billing' === location
+
+  if (!isMainUrls) return null
+
   return (
     <div
       className={`bottom-0 left-0 right-0 fixed flex flex-row py-4 items-center justify-center z-[99] `}>
@@ -61,7 +70,7 @@ export default function NavBar() {
               {item.icon}
             </div>
             <span
-              className={` ${
+              className={`font-mono font-bold ${
                 location !== `${item.href}`
                   ? 'text-[var(--on-surface-variant)]'
                   : 'text-[var(--on-surface)]'

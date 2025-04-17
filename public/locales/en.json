@@ -5,5 +5,15 @@
     "gifts": "Gifts",
     "friends": "Friends",
     "billing": "Billing"
+  },
+  "user": {
+    "role": "Role",
+    "discount": "Discount",
+    "wallet": "Wallet"
+  },
+  "wallet": {
+    "connect": "Connect TON-wallet",
+    "disconnect": "Disconnect",
+    "replace": "Replace"
   }
 }

@@ -21,6 +21,7 @@
     "axios": "^1.8.4",
     "cookies-next": "^5.1.0",
     "eruda": "^3.4.1",
+    "framer-motion": "^12.7.4",
     "jose": "^6.0.10",
     "next": "15.2.4",
     "next-intl": "^4.0.2",
