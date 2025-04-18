@@ -1,19 +1,23 @@
 'use client'
 
 import { config } from '@app/config/client'
+import { authApiClient } from '@app/core/apiClient'
 import { localesMap } from '@app/core/i18n/config'
+import { useUserStore } from '@app/store/user.store'
 import { getCookie, setCookie } from 'cookies-next'
 import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { FaCaretDown } from 'react-icons/fa6'
+import { toast } from 'react-toastify'
 
 export default function LanguageSwitcher() {
   const [isOpen, setIsOpen] = useState(false)
   const [selected, setSelected] = useState(localesMap[0])
   const router = useRouter()
   const containerRef = useRef<HTMLDivElement>(null)
+  const { setUser } = useUserStore()
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -36,11 +40,17 @@ export default function LanguageSwitcher() {
     if (found) setSelected(found)
   }, [])
 
-  const changeLanguage = (lang: (typeof localesMap)[number]) => {
-    setSelected(lang)
-    setCookie(config.COOKIE_NAME, lang.key)
-    setIsOpen(false)
-    router.refresh()
+  const changeLanguage = async (lang: (typeof localesMap)[number]) => {
+    try {
+      setSelected(lang)
+      setCookie(config.COOKIE_NAME, lang.key)
+      const updated = await authApiClient.updateLanguageUser(lang.key)
+      setUser(updated)
+      setIsOpen(false)
+      router.refresh()
+    } catch {
+      toast.error('Error during the update')
+    }
   }
 
   return (

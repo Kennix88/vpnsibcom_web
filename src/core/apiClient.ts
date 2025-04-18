@@ -90,6 +90,11 @@ export const authApiClient = {
     return data.data.user
   },
 
+  async updateLanguageUser(code: string) {
+    const { data } = await api.post('/user/language', { code })
+    return data.data.user
+  },
+
   async getCurrency() {
     const { data } = await api.get('/currency')
     return {

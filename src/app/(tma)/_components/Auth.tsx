@@ -2,6 +2,7 @@
 import Loader from '@app/app/_components/Loader'
 import { config } from '@app/config/client'
 import { authApiClient } from '@app/core/apiClient'
+import { setServerLocale } from '@app/core/i18n/locale.server'
 import { useCurrencyStore } from '@app/store/currency.store'
 import { useUserStore } from '@app/store/user.store'
 import { retrieveRawInitData } from '@telegram-apps/sdk-react'
@@ -40,6 +41,12 @@ export function Auth({ children }: PropsWithChildren) {
     }
     getRates()
   }, [])
+
+  useEffect(() => {
+    if (user) {
+      setServerLocale(user.languageCode)
+    }
+  }, [user])
 
   if (!user || !accessToken) {
     return <Loader />
