@@ -15,7 +15,6 @@ export default function LanguageSwitcher() {
   const router = useRouter()
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // Закрытие при клике вне
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -31,7 +30,6 @@ export default function LanguageSwitcher() {
     }
   }, [])
 
-  // Установка сохранённого языка
   useEffect(() => {
     const savedLocale = getCookie(config.COOKIE_NAME) as string | undefined
     const found = localesMap.find((l) => l.key === savedLocale)

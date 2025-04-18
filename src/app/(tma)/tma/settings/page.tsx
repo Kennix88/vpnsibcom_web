@@ -3,8 +3,10 @@ import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
 import Avatar from '@app/app/_components/Avatar'
 import Balance from '@app/app/_components/Balance'
 import LanguageSwitcher from '@app/app/_components/LanguageSwitcher'
+import TgStar from '@app/app/_components/TgStar'
 import { TonWalletConnect } from '@app/app/_components/TonWalletConnect'
 import { TonWalletManager } from '@app/app/_components/TonWalletManager'
+import WithdrawalSwitch from '@app/app/_components/WithdrawalSwitch'
 import { authApiClient } from '@app/core/apiClient'
 import { useSlicedAddress } from '@app/hooks/useSlicedAddress'
 import { useUserStore } from '@app/store/user.store'
@@ -57,7 +59,7 @@ export default function Page() {
         </div>
         <div
           className={
-            'flex flex-col text-sm divide-y divide-[var(--secondary)] max-w-[400px] py-2 px-4 rounded-md bg-[var(--surface-container-lowest)] w-full'
+            'flex flex-col text-sm divide-y divide-[var(--on-background)]/80 max-w-[400px] py-2 px-4 rounded-md bg-[var(--surface-container-lowest)] w-full'
           }>
           <div
             className={
@@ -154,6 +156,23 @@ export default function Page() {
               )}
             </div>
             <TonWalletManager />
+          </div>
+          <div
+            className={
+              'flex flex-row flex-wrap items-center justify-between gap-2 py-2'
+            }>
+            <div
+              className={
+                'font-medium text-[var(--on-background)]/80 font-mono flex flex-row gap-1 items-center flex-wrap'
+              }>
+              {t('usage')} <TgStar w={15} type={'purple'} /> {t('inPayments')}:
+            </div>
+            <div
+              className={
+                'text-sm font-bold font-mono text-[var(--on-primary-container)] flex flex-row gap-2 transition-all duration-200 hover:brightness-110 active:scale-[0.97]'
+              }>
+              <WithdrawalSwitch size={0.75} />
+            </div>
           </div>
         </div>
         <LanguageSwitcher />

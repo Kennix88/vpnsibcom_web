@@ -9,7 +9,9 @@
   "user": {
     "role": "Роль",
     "discount": "Скидка",
-    "wallet": "Кошелек"
+    "wallet": "Кошелек",
+    "usage": "Использование",
+    "inPayments": "в оплатах"
   },
   "wallet": {
     "connect": "Подключить TON-кошелек",

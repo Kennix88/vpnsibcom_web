@@ -9,7 +9,9 @@
   "user": {
     "role": "Role",
     "discount": "Discount",
-    "wallet": "Wallet"
+    "wallet": "Wallet",
+    "usage": "Usage",
+    "inPayments": "in payments"
   },
   "wallet": {
     "connect": "Connect TON-wallet",

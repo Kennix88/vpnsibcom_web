@@ -78,4 +78,9 @@ export const authApiClient = {
     const { data } = await api.delete('/user/wallet')
     return data.data.user
   },
+
+  async updateWithdrawalBalanceUsage(isUse: boolean) {
+    const { data } = await api.post('/user/withdrawal-usage', { isUse })
+    return data.data.user
+  },
 }
