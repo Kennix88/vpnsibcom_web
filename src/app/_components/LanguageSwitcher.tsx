@@ -61,7 +61,7 @@ export default function LanguageSwitcher() {
         />
         <span
           className={'flex flex-row gap-1 items-center font-mono font-bold'}>
-          [{selected.key.toUpperCase()}] {selected.title} <FaCaretDown />
+          {selected.title} [{selected.key.toUpperCase()}] <FaCaretDown />
         </span>
       </button>
       <AnimatePresence>

@@ -2,6 +2,7 @@
 import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
 import Avatar from '@app/app/_components/Avatar'
 import Balance from '@app/app/_components/Balance'
+import CurrencySwitcher from '@app/app/_components/CurrencySwitcher'
 import LanguageSwitcher from '@app/app/_components/LanguageSwitcher'
 import TgStar from '@app/app/_components/TgStar'
 import { TonWalletConnect } from '@app/app/_components/TonWalletConnect'
@@ -175,7 +176,10 @@ export default function Page() {
             </div>
           </div>
         </div>
-        <LanguageSwitcher />
+        <div className={'flex flex-row gap-2 flex-wrap justify-center'}>
+          <LanguageSwitcher />
+          <CurrencySwitcher />
+        </div>
       </div>
     </TmaPage>
   )

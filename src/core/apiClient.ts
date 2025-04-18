@@ -1,3 +1,4 @@
+import { CurrencyEnum } from '@app/enums/currency.enum'
 import { useUserStore } from '@app/store/user.store'
 import axios from 'axios'
 
@@ -82,5 +83,18 @@ export const authApiClient = {
   async updateWithdrawalBalanceUsage(isUse: boolean) {
     const { data } = await api.post('/user/withdrawal-usage', { isUse })
     return data.data.user
+  },
+
+  async updateCurrencyUser(code: CurrencyEnum) {
+    const { data } = await api.post('/user/currency', { code })
+    return data.data.user
+  },
+
+  async getCurrency() {
+    const { data } = await api.get('/currency')
+    return {
+      currencies: data.data.currencies,
+      rates: data.data.rates,
+    }
   },
 }

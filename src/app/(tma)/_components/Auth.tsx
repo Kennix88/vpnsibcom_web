@@ -2,6 +2,7 @@
 import Loader from '@app/app/_components/Loader'
 import { config } from '@app/config/client'
 import { authApiClient } from '@app/core/apiClient'
+import { useCurrencyStore } from '@app/store/currency.store'
 import { useUserStore } from '@app/store/user.store'
 import { retrieveRawInitData } from '@telegram-apps/sdk-react'
 import { TonConnectUIProvider } from '@tonconnect/ui-react'
@@ -10,6 +11,8 @@ import { PropsWithChildren, useEffect } from 'react'
 export function Auth({ children }: PropsWithChildren) {
   const initDataRaw = retrieveRawInitData()
   const { setUser, setAccessToken, reset, user, accessToken } = useUserStore()
+
+  const { setCurrencies, setRates } = useCurrencyStore()
 
   useEffect(() => {
     const authorize = async () => {
@@ -28,6 +31,15 @@ export function Auth({ children }: PropsWithChildren) {
 
     authorize()
   }, [initDataRaw])
+
+  useEffect(() => {
+    const getRates = async () => {
+      const data = await authApiClient.getCurrency()
+      setCurrencies(data.currencies)
+      setRates(data.rates)
+    }
+    getRates()
+  }, [])
 
   if (!user || !accessToken) {
     return <Loader />
