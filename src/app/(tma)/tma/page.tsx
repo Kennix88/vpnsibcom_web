@@ -1,6 +1,6 @@
 'use client'
 import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
-import { TonWalletConnect } from '@app/app/_components/TonWalletConnect'
+import { TonWalletConnect } from '@app/app/_components/ton/TonWalletConnect'
 import TopBar from '@app/app/_components/TopBar'
 
 export default function Page() {

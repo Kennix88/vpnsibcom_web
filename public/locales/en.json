@@ -17,5 +17,22 @@
     "connect": "Connect TON-wallet",
     "disconnect": "Disconnect",
     "replace": "Replace"
+  },
+  "friends": {
+    "title": "Friends",
+    "get": "Get Rewards",
+    "for": "for inviting friends",
+    "statTitle": "Statistics",
+    "listTitle": "Your friends",
+    "listEmpty": "No friends yet",
+    "copy": "Copy",
+    "invite": "Invite a friend",
+    "bonuses": {
+      "title": "Bonuses",
+      "friend": "Invite a friend",
+      "preminumFriend": "Invite a premium friend",
+      "task": "For each completed task",
+      "game": "For expenses in the games section"
+    }
   }
 }

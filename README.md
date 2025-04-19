@@ -9,20 +9,20 @@
 #### **Repository**: This repository contains the source code of the VPNsib.com. Contains: Web App, Telegram-mini-app(TMA), Subscription page, Public website.
 #### **Description**: VPNsibcom is an open source VPN service. It is based on [Xray-core](https://github.com/XTLS/Xray-core/) with [Marzban](https://github.com/Gozargah/Marzban).
 
-![Title](https://img.shields.io/badge/Project%20Repositories%3A-blue?style=for-the-badge&color=005386)
+![FriendsTitle](https://img.shields.io/badge/Project%20Repositories%3A-blue?style=for-the-badge&color=005386)
 [![REPO](https://img.shields.io/github/stars/Kennix88/vpnsibcom_web?style=for-the-badge&color=0891b2&labelColor=1c1917&logo=github&label=vpnsibcom_web)](https://github.com/Kennix88/vpnsibcom_web)
 [![REPO](https://img.shields.io/github/stars/Kennix88/vpnsibcom_api?style=for-the-badge&color=0891b2&labelColor=1c1917&logo=github&label=vpnsibcom_api)](https://github.com/Kennix88/vpnsibcom_api)
 
-![Title](https://img.shields.io/badge/Repository%3A-blue?style=for-the-badge&color=3C5280)
+![FriendsTitle](https://img.shields.io/badge/Repository%3A-blue?style=for-the-badge&color=3C5280)
 [![release](https://img.shields.io/github/package-json/v/Kennix88/vpnsibcom_web?style=for-the-badge&color=0891b2&labelColor=1c1917)](https://github.com/Kennix88/vpnsibcom_web/releases)
 [![CC BY-NC-SA 4.0][cc-by-nc-sa-shield]][cc-by-nc-sa]
 ![GitHub Repo stars](https://img.shields.io/github/stars/Kennix88/vpnsibcom_web?style=for-the-badge&color=0891b2&labelColor=1c1917)
 [![wakatime](https://wakatime.com/badge/user/9268c051-c861-45cc-b927-3babf56c56d9/project/e80cee38-d89a-40d0-934f-eb63d44eb27c.svg?style=for-the-badge&color=0891b2&logoColor=1c1917)](https://github.com/Kennix88/vpnsibcom_web)
-![Title](https://img.shields.io/badge/VPNsibcom%3A-blue?style=for-the-badge&color=3C5280)
+![FriendsTitle](https://img.shields.io/badge/VPNsibcom%3A-blue?style=for-the-badge&color=3C5280)
 [![VPN Telegram Bot](https://img.shields.io/badge/VPN_service-blue?style=for-the-badge&color=0891b2&labelColor=1c1917&logo=telegram&label=Bot)](https://t.me/vpnsibcom_bot)
 [![VPN Telegram Channel](https://img.shields.io/endpoint?style=for-the-badge&color=0891b2&labelColor=1c1917&url=https%3A%2F%2Ftg.sumanjay.workers.dev%2Fvpnsibcom&label=Community)](https://t.me/vpnsibcom)
 [![VPN Telegram chat](https://img.shields.io/endpoint?label=Chat&style=for-the-badge&color=0891b2&labelColor=1c1917&url=https%3A%2F%2Ftg.sumanjay.workers.dev%2Fvpnsibcom_chat)](https://t.me/vpnsibcom_chat)
-![Title](https://img.shields.io/badge/Me%3A-blue?style=for-the-badge&color=3C5280)
+![FriendsTitle](https://img.shields.io/badge/Me%3A-blue?style=for-the-badge&color=3C5280)
 [![Github followers](https://img.shields.io/github/followers/Kennix88?logo=github&style=for-the-badge&color=0891b2&labelColor=1c1917)](https://www.github.com/Kennix88)
 [![Telegram Channel](https://img.shields.io/endpoint?style=for-the-badge&color=0891b2&labelColor=1c1917&url=https%3A%2F%2Ftg.sumanjay.workers.dev%2Fkennixdev&label=Channel)](https://t.me/KennixDev)
 [![Telegram Group](https://img.shields.io/endpoint?label=Group&style=for-the-badge&color=0891b2&labelColor=1c1917&url=https%3A%2F%2Ftg.sumanjay.workers.dev%2FKennixDevGroup)](https://t.me/KennixDevGroup)
