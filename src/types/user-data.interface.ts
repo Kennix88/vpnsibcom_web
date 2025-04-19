@@ -6,6 +6,7 @@ export interface UserDataInterface {
   telegramId: string
   tonWallet?: string
   isFreePlanAvailable: boolean
+  freePlanDays?: number
   isBanned: boolean
   isDeleted: boolean
   banExpiredAt?: Date
