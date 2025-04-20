@@ -43,7 +43,7 @@ export default function Page() {
     <TmaPage back={true}>
       <div className="flex flex-col gap-4 items-center">
         <div className={'flex flex-row gap-2 items-center w-full'}>
-          <Avatar w={40} />
+          <Avatar w={40} url={user?.photoUrl} />
           <div className={'flex flex-col'}>
             <div className="font-bold text-md font-mono">
               {user && limitLengthString(user.fullName)}
