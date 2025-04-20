@@ -1,7 +1,7 @@
 'use client'
 
 import { AnimatePresence, motion } from 'framer-motion'
-import { PropsWithChildren, useState } from 'react'
+import { PropsWithChildren, useLayoutEffect, useRef, useState } from 'react'
 
 type TooltipProps = PropsWithChildren<{
   prompt: string
@@ -10,22 +10,12 @@ type TooltipProps = PropsWithChildren<{
 }>
 
 const colorMap: Record<NonNullable<TooltipProps['color']>, string> = {
-  info: 'bg-[var(--info)] text-[var(--on-info)]',
+  info: 'bg-[var(--info-container)] text-[var(--on-info-container)]',
   warning: 'bg-[var(--warning)] text-[var(--on-warning)]',
   error: 'bg-[var(--error)] text-[var(--on-error)]',
   success: 'bg-[var(--success)] text-[var(--on-success)]',
   default:
     'bg-[var(--surface-container-high)] text-[var(--on-surface)] border border-[var(--outline)]',
-}
-
-const placementStyleMap: Record<
-  NonNullable<TooltipProps['placement']>,
-  string
-> = {
-  top: 'bottom-full left-1/2 -translate-x-1/2 mb-2',
-  bottom: 'top-full left-1/2 -translate-x-1/2 mt-2',
-  left: 'right-full top-1/2 -translate-y-1/2 mr-2',
-  right: 'left-full top-1/2 -translate-y-1/2 ml-2',
 }
 
 export default function TooltipWrapper({
@@ -35,10 +25,68 @@ export default function TooltipWrapper({
   placement = 'top',
 }: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false)
+  const [style, setStyle] = useState<React.CSSProperties>({})
+  const wrapperRef = useRef<HTMLDivElement>(null)
+  const tooltipRef = useRef<HTMLDivElement>(null)
+
+  useLayoutEffect(() => {
+    if (!isVisible || !tooltipRef.current || !wrapperRef.current) return
+
+    const tooltip = tooltipRef.current
+    const wrapper = wrapperRef.current
+    // const tooltipRect = tooltip.getBoundingClientRect()
+    const wrapperRect = wrapper.getBoundingClientRect()
+    const viewportWidth = window.innerWidth
+    const viewportHeight = window.innerHeight
+    const margin = 8
+
+    let top = 0
+    let left = 0
+
+    // начальная позиция тултипа
+    switch (placement) {
+      case 'top':
+        top = wrapperRect.top - tooltip.offsetHeight - margin
+        left =
+          wrapperRect.left + wrapperRect.width / 2 - tooltip.offsetWidth / 2
+        break
+      case 'bottom':
+        top = wrapperRect.bottom + margin
+        left =
+          wrapperRect.left + wrapperRect.width / 2 - tooltip.offsetWidth / 2
+        break
+      case 'left':
+        top =
+          wrapperRect.top + wrapperRect.height / 2 - tooltip.offsetHeight / 2
+        left = wrapperRect.left - tooltip.offsetWidth - margin
+        break
+      case 'right':
+        top =
+          wrapperRect.top + wrapperRect.height / 2 - tooltip.offsetHeight / 2
+        left = wrapperRect.right + margin
+        break
+    }
+
+    // ограничение по экранам (все 4 стороны)
+    const clampedTop = Math.max(
+      margin,
+      Math.min(viewportHeight - tooltip.offsetHeight - margin, top),
+    )
+    const clampedLeft = Math.max(
+      margin,
+      Math.min(viewportWidth - tooltip.offsetWidth - margin, left),
+    )
+
+    setStyle({
+      top: clampedTop,
+      left: clampedLeft,
+    })
+  }, [isVisible, placement])
 
   return (
     <div
-      className="relative inline-block font-mono cursor-pointer"
+      ref={wrapperRef}
+      className="relative inline-flex items-center justify-center font-mono"
       onMouseEnter={() => setIsVisible(true)}
       onMouseLeave={() => setIsVisible(false)}>
       {children}
@@ -46,11 +94,14 @@ export default function TooltipWrapper({
       <AnimatePresence>
         {isVisible && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: -2 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: -2 }}
+            ref={tooltipRef}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.15 }}
-            className={`absolute z-50 px-3 py-1 rounded-md text-xs whitespace-nowrap shadow-lg ${colorMap[color]} ${placementStyleMap[placement]}`}>
+            className={`fixed z-50 px-3 py-2 rounded-md text-xs shadow-xl text-center 
+              max-w-[min(80vw,300px)] w-max break-words whitespace-pre-wrap ${colorMap[color]}`}
+            style={style}>
             {prompt}
           </motion.div>
         )}
