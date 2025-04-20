@@ -1,7 +1,13 @@
 'use client'
 
 import { AnimatePresence, motion } from 'framer-motion'
-import { PropsWithChildren, useLayoutEffect, useRef, useState } from 'react'
+import {
+  PropsWithChildren,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react'
 
 type TooltipProps = PropsWithChildren<{
   prompt: string
@@ -28,6 +34,20 @@ export default function TooltipWrapper({
   const [style, setStyle] = useState<React.CSSProperties>({})
   const wrapperRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const hideOnScroll = () => {
+      setIsVisible(false)
+    }
+
+    if (isVisible) {
+      window.addEventListener('scroll', hideOnScroll, true)
+    }
+
+    return () => {
+      window.removeEventListener('scroll', hideOnScroll, true)
+    }
+  }, [isVisible])
 
   useLayoutEffect(() => {
     if (!isVisible || !tooltipRef.current || !wrapperRef.current) return
