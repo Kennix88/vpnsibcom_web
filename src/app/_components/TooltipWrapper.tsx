@@ -120,7 +120,7 @@ export default function TooltipWrapper({
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.15 }}
             className={`fixed z-50 px-3 py-2 rounded-md text-xs shadow-xl text-center 
-              max-w-[min(80vw,300px)] w-max break-words whitespace-pre-wrap ${colorMap[color]}`}
+              max-w-[min(90vw,300px)] w-max break-words whitespace-pre-wrap ${colorMap[color]}`}
             style={style}>
             {prompt}
           </motion.div>
