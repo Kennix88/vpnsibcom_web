@@ -122,7 +122,7 @@ export const authApiClient = {
     user: UserDataInterface
     referrals: ReferralsDataInterface
   }> {
-    const { data } = await api.get('/user/referrals')
+    const { data } = await api.get('/referrals/my')
     return data.data
   },
 }

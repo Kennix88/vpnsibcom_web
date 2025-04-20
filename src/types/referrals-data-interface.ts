@@ -1,4 +1,10 @@
 export interface ReferralsDataInterface {
+  inviteBotUrl: string
+  inviteBotTgDeeplink: string
+  inviteTmaUrl: string
+  inviteTmaTgDeeplink: string
+  inviteAppUrl: string
+  inviteAppTgDeeplink: string
   lvl1IsActivated: number
   lvl2IsActivated: number
   lvl3IsActivated: number
@@ -34,4 +40,6 @@ export interface ReferralDataInterface {
   fullName: string
   username?: string
   photoUrl?: string
+  totalPaymentsRewarded: number
+  totalWithdrawalsRewarded: number
 }
