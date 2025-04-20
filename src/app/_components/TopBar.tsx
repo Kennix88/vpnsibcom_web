@@ -1,17 +1,19 @@
 'use client'
 import Avatar from '@app/app/_components/Avatar'
 import Balance from '@app/app/_components/Balance'
+import { useUserStore } from '@app/store/user.store'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { IoMenu } from 'react-icons/io5'
 
 export default function TopBar() {
+  const { user } = useUserStore()
   const location = usePathname()
   const url = location === '/app' ? '/app' : '/tma'
   return (
     <div className="flex flex-row gap-2 justify-between items-center">
       <Link href={url + '/settings'}>
-        <Avatar />
+        <Avatar url={user?.photoUrl} className={'cursor-pointer'} />
       </Link>
       <Balance type={'payment'} isAdd={true} />
       <div
