@@ -1,7 +1,7 @@
 'use client'
 import Loader from '@app/app/_components/Loader'
 import { config } from '@app/config/client'
-import { authApiClient } from '@app/core/apiClient'
+import { authApiClient } from '@app/core/authApiClient'
 import { setServerLocale } from '@app/core/i18n/locale.server'
 import { useCurrencyStore } from '@app/store/currency.store'
 import { useUserStore } from '@app/store/user.store'

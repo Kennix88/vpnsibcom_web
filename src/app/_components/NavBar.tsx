@@ -1,8 +1,9 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { FaHome, FaUserFriends } from 'react-icons/fa'
-import { FaFire, FaGift, FaMoneyBill1Wave } from 'react-icons/fa6'
+import { FaUserFriends } from 'react-icons/fa'
+import { FaFire, FaMoneyBill1Wave } from 'react-icons/fa6'
+import { TbGiftFilled, TbSmartHome } from 'react-icons/tb'
 import { useTranslations } from 'use-intl'
 
 export default function NavBar() {
@@ -14,7 +15,7 @@ export default function NavBar() {
     {
       name: t('home'),
       href: url,
-      icon: <FaHome className="text-2xl" />,
+      icon: <TbSmartHome className="text-2xl" />,
     },
     {
       name: t('earning'),
@@ -24,7 +25,7 @@ export default function NavBar() {
     {
       name: t('gifts'),
       href: url + '/gifts',
-      icon: <FaGift className="text-2xl" />,
+      icon: <TbGiftFilled className="text-2xl" />,
     },
     {
       name: t('friends'),

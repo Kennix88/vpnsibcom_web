@@ -1,6 +1,6 @@
 'use client'
 
-import { authApiClient } from '@app/core/apiClient'
+import { authApiClient } from '@app/core/authApiClient'
 import { useUserStore } from '@app/store/user.store'
 import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react'
 import { useEffect } from 'react'

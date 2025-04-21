@@ -5,7 +5,7 @@ import FriendsInviteButtons from '@app/app/_components/friends/FriendsInviteButt
 import FriendsList from '@app/app/_components/friends/FriendsList'
 import FriendsStatistics from '@app/app/_components/friends/FriendsStatistics'
 import FriendsTitle from '@app/app/_components/friends/FriendsTitle'
-import { authApiClient } from '@app/core/apiClient'
+import { authApiClient } from '@app/core/authApiClient'
 import { useRefferlsStore } from '@app/store/referrals.store'
 import { useUserStore } from '@app/store/user.store'
 import { useEffect } from 'react'

@@ -1,6 +1,6 @@
 'use client'
 
-import { authApiClient } from '@app/core/apiClient'
+import { authApiClient } from '@app/core/authApiClient'
 import { useUserStore } from '@app/store/user.store'
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'

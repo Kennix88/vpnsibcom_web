@@ -1,7 +1,7 @@
 'use client'
 
 import TgStar from '@app/app/_components/TgStar'
-import { authApiClient } from '@app/core/apiClient'
+import { authApiClient } from '@app/core/authApiClient'
 import { CurrencyEnum } from '@app/enums/currency.enum'
 import { useCurrencyStore } from '@app/store/currency.store'
 import { useUserStore } from '@app/store/user.store'

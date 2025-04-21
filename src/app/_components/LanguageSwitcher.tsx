@@ -1,7 +1,7 @@
 'use client'
 
 import { config } from '@app/config/client'
-import { authApiClient } from '@app/core/apiClient'
+import { authApiClient } from '@app/core/authApiClient'
 import { localesMap } from '@app/core/i18n/config'
 import { useUserStore } from '@app/store/user.store'
 import { getCookie, setCookie } from 'cookies-next'
