@@ -58,5 +58,17 @@
       "earnInfo": "You've earned it all the time",
       "inviteInfo": "Invited | Activated | Of these, the Standard | Of these, Premium"
     }
+  },
+  "billing": {
+    "title": "Billing",
+    "description": "The movement of your finances",
+    "wallet": {
+      "title": "Wallet",
+      "payment": "Replenish",
+      "paymentInfo": "The invoice used for payments.",
+      "withdrawal": "Withdrawal",
+      "withdrawalInfo": "The account from which funds can be withdrawn.",
+      "holdInfo": "Frozen funds. Soon they will be credited to the account for payments."
+    }
   }
 }
