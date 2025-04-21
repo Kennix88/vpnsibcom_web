@@ -7,7 +7,7 @@ import TopBar from '@app/app/_components/TopBar'
 export default function Page() {
   return (
     <TmaPage back={false}>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 items-center">
         <TopBar />
         <GreenCheck />
         <TonWalletConnect />

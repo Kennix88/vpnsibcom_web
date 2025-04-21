@@ -45,7 +45,7 @@ export function TonWalletConnect() {
   return (
     <button
       onClick={handleConnect}
-      className="bg-[var(--primary)] text-[var(--on-primary)] font-medium text-sm px-4 py-2 rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer font-mono">
+      className="bg-[var(--primary)] text-[var(--on-primary)] font-medium text-sm px-4 py-2 rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer font-mono w-full max-w-[400px]">
       {t('connect')}
     </button>
   )

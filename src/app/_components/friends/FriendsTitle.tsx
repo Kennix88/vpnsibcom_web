@@ -7,7 +7,7 @@ export default function FriendsTitle() {
   return (
     <div className="flex flex-col gap-2 uppercase font-mono w-full">
       <div className="text-2xl font-bold ">{t('title')}</div>
-      <div className="text-lg font-bold font-mono">
+      <div className="text-md font-bold font-mono">
         {t('get')} <span className="opacity-80 font-normal">{t('for')}</span>
       </div>
     </div>

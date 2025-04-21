@@ -11,7 +11,7 @@ export default function TopBar() {
   const location = usePathname()
   const url = location === '/app' ? '/app' : '/tma'
   return (
-    <div className="flex flex-row gap-2 justify-between items-center">
+    <div className="flex flex-row gap-2 justify-between items-center w-full">
       <Link href={url + '/settings'}>
         <Avatar url={user?.photoUrl} className={'cursor-pointer'} />
       </Link>
