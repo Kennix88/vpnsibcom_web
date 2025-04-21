@@ -7,7 +7,6 @@ import {
   initData,
   retrieveLaunchParams,
   useSignal,
-  viewport,
 } from '@telegram-apps/sdk-react'
 import { PropsWithChildren, useEffect, useMemo, useState } from 'react'
 
@@ -27,10 +26,6 @@ export function TMA({ children }: PropsWithChildren) {
         debug && ['ios', 'android'].includes(launchParams.tgWebAppPlatform),
       mockForMacOS: launchParams.tgWebAppPlatform === 'macos',
     })
-
-    if (viewport.expand.isAvailable()) {
-      viewport.expand()
-    }
 
     setInitialized(true)
   }, [launchParams])

@@ -5,7 +5,10 @@ import {
   init as initSDK,
   miniApp,
   mountBackButton,
+  retrieveLaunchParams,
   setDebug,
+  settingsButton,
+  swipeBehavior,
   themeParams,
   viewport,
 } from '@telegram-apps/sdk-react'
@@ -55,6 +58,15 @@ export async function initTelegramSDK(options: {
       viewport.isMounted() // false
     }
   }
+  if (swipeBehavior.mount.isAvailable()) {
+    swipeBehavior.mount()
+    swipeBehavior.isMounted() // true
+  }
+
+  if (settingsButton.mount.isAvailable()) {
+    settingsButton.mount()
+    settingsButton.isMounted() // true
+  }
 
   if (miniApp.setBackgroundColor.isAvailable()) {
     const bg = getComputedStyle(document.documentElement)
@@ -72,6 +84,32 @@ export async function initTelegramSDK(options: {
     miniApp.setHeaderColor(primary as BackgroundColor)
     miniApp.headerColor()
   }
+
+  if (swipeBehavior.disableVertical.isAvailable()) {
+    swipeBehavior.disableVertical()
+    swipeBehavior.isVerticalEnabled() // false
+  }
+
+  const getInitData = retrieveLaunchParams()
+
+  if (
+    !getInitData.tgWebAppPlatform.includes('web') &&
+    getInitData.tgWebAppPlatform !== 'tdesktop'
+  ) {
+    if (viewport.requestFullscreen.isAvailable()) {
+      await viewport.requestFullscreen()
+    }
+  } else {
+    if (viewport.expand.isAvailable()) {
+      viewport.expand()
+    }
+  }
+
+  if (settingsButton.show.isAvailable()) {
+    settingsButton.show()
+    settingsButton.isVisible() // true
+  }
+
   // if (themeParams.bindCssVars.isAvailable()) {
   //   themeParams.bindCssVars()
   // }

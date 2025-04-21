@@ -1,9 +1,9 @@
-import NavBar from '@app/app/_components/NavBar'
 import { I18nProvider } from '@app/core/i18n/provider'
 import { TelegramProvider } from '@app/providers/TelegramProvider'
 import { Metadata } from 'next'
 import { getLocale } from 'next-intl/server'
 // import 'normalize.css/normalize.css'
+import { CheckPlatform } from '@app/app/(tma)/tma/_components/CheckPlatform'
 import React from 'react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -37,12 +37,7 @@ export default async function TmaLayout({
               pauseOnHover
               theme="dark"
             />
-            <div className="bg-[var(--primary)]">
-              <div className="pt-4 px-4 rounded-t-xl pb-[100px] min-h-screen bg-[var(--background)] text-[var(--on-surface)]">
-                {children}
-                <NavBar />
-              </div>
-            </div>
+            <CheckPlatform>{children}</CheckPlatform>
           </TelegramProvider>
         </I18nProvider>
       </body>

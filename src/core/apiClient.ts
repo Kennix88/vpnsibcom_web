@@ -108,7 +108,7 @@ export const authApiClient = {
   },
 
   async getCurrency(): Promise<{
-    currencies: CurrencyInterface
+    currencies: CurrencyInterface[]
     rates: RatesInterface
   }> {
     const { data } = await api.get('/currency')

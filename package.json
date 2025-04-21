@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.2.1",
-    "@telegram-apps/sdk-react": "^3.1.9",
+    "@telegram-apps/sdk-react": "^3.2.0",
     "@ton/core": "^0.60.1",
     "@ton/crypto": "^3.3.0",
     "@ton/ton": "^15.2.1",
