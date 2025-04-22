@@ -1,6 +1,7 @@
 import { CurrencyEnum } from '@app/enums/currency.enum'
 import { useUserStore } from '@app/store/user.store'
 import { CurrencyInterface } from '@app/types/currency.interface'
+import { PaymentMethodsDataInterface } from '@app/types/payment-methods-data.interface'
 import { RatesInterface } from '@app/types/rates.interface'
 import { ReferralsDataInterface } from '@app/types/referrals-data-interface'
 import { UserDataInterface } from '@app/types/user-data.interface'
@@ -123,6 +124,14 @@ export const authApiClient = {
     referrals: ReferralsDataInterface
   }> {
     const { data } = await api.get('/referrals/my')
+    return data.data
+  },
+
+  async getPaymentMethods(): Promise<{
+    user: UserDataInterface
+    methods: PaymentMethodsDataInterface[]
+  }> {
+    const { data } = await api.get('/payments/methods')
     return data.data
   },
 }
