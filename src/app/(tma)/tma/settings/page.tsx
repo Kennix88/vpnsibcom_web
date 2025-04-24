@@ -14,18 +14,22 @@ import { useUserStore } from '@app/store/user.store'
 import { copyToClipboard } from '@app/utils/copy-to-clipboard.util'
 import limitLengthString from '@app/utils/limit-length-string.util'
 import { Address } from '@ton/ton'
+import { useTonWallet } from '@tonconnect/ui-react'
 import { useEffect } from 'react'
 import { FaCopy } from 'react-icons/fa6'
 import { useTranslations } from 'use-intl'
 
 export default function Page() {
   const { user, setUser } = useUserStore()
+  const wallet = useTonWallet()
   const t = useTranslations('user')
-  const address = useSlicedAddress(user?.tonWallet)
-  const fullAddress = Address.parseRaw(user?.tonWallet || '').toString({
-    testOnly: false,
-    bounceable: false,
-  })
+  const address = useSlicedAddress(wallet?.account.address)
+  const fullAddress = wallet?.account.address
+    ? Address.parseRaw(wallet?.account.address || '').toString({
+        testOnly: false,
+        bounceable: false,
+      })
+    : null
 
   useEffect(() => {
     const updateUser = async () => {
@@ -146,7 +150,7 @@ export default function Page() {
                 }>
                 {t('wallet')}:
               </div>
-              {address ? (
+              {address && fullAddress ? (
                 <div
                   onClick={() => copyToClipboard(fullAddress)}
                   className="text-sm font-bold font-mono text-[var(--on-primary-container)] text-center flex flex-row gap-2 cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]">

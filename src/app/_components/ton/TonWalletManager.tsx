@@ -1,7 +1,5 @@
 'use client'
 
-import { authApiClient } from '@app/core/authApiClient'
-import { useUserStore } from '@app/store/user.store'
 import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react'
 import { toast } from 'react-toastify'
 import { useTranslations } from 'use-intl'
@@ -9,27 +7,12 @@ import { useTranslations } from 'use-intl'
 export function TonWalletManager() {
   const [tonConnectUI] = useTonConnectUI()
   const wallet = useTonWallet()
-  const { user, setUser } = useUserStore()
   const t = useTranslations('wallet')
-
-  const saveWallet = async () => {
-    if (!wallet?.account?.address) return
-
-    try {
-      const updateUser = await authApiClient.updateWallet(
-        wallet.account.address,
-      )
-      setUser(updateUser)
-    } catch {
-      toast.error('Error saving the wallet')
-    }
-  }
 
   const handleReplace = async () => {
     try {
       await tonConnectUI.disconnect()
       await tonConnectUI.openModal()
-      await saveWallet()
     } catch {
       toast.error('Failed to connect wallet')
     }
@@ -37,9 +20,7 @@ export function TonWalletManager() {
 
   const handleUnlink = async () => {
     try {
-      // await tonConnectUI.disconnect().catch()
-      const updateUser = await authApiClient.unlinkWallet()
-      setUser(updateUser)
+      await tonConnectUI.disconnect().catch()
     } catch {
       toast.error("Couldn't unlink wallet")
     }
@@ -47,7 +28,7 @@ export function TonWalletManager() {
 
   return (
     <div className="w-full font-bold justify-center items-center flex flex-col">
-      {user?.tonWallet && (
+      {wallet?.account.address && (
         <div className={'flex flex-row gap-2 w-full'}>
           <button
             onClick={handleUnlink}

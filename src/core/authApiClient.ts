@@ -81,16 +81,6 @@ export const authApiClient = {
     return data.data.user
   },
 
-  async updateWallet(address: string): Promise<UserDataInterface> {
-    const { data } = await api.post('/user/wallet', { address })
-    return data.data.user
-  },
-
-  async unlinkWallet(): Promise<UserDataInterface> {
-    const { data } = await api.delete('/user/wallet')
-    return data.data.user
-  },
-
   async updateWithdrawalBalanceUsage(
     isUse: boolean,
   ): Promise<UserDataInterface> {
@@ -127,11 +117,13 @@ export const authApiClient = {
     return data.data
   },
 
-  async getPaymentMethods(): Promise<{
+  async getPaymentMethods(isTma?: boolean): Promise<{
     user: UserDataInterface
     methods: PaymentMethodsDataInterface[]
   }> {
-    const { data } = await api.get('/payments/methods')
+    const { data } = await api.get('/payments/methods', {
+      params: { isTma },
+    })
     return data.data
   },
 }
