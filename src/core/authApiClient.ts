@@ -1,4 +1,5 @@
 import { CurrencyEnum } from '@app/enums/currency.enum'
+import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
 import { useUserStore } from '@app/store/user.store'
 import { CurrencyInterface } from '@app/types/currency.interface'
 import { PaymentMethodsDataInterface } from '@app/types/payment-methods-data.interface'
@@ -123,6 +124,24 @@ export const authApiClient = {
   }> {
     const { data } = await api.get('/payments/methods', {
       params: { isTma },
+    })
+    return data.data
+  },
+
+  async createInvoice({
+    method,
+    amount,
+  }: {
+    method: PaymentMethodEnum
+    amount: number
+  }): Promise<{
+    user: UserDataInterface
+    linkPay: string
+    isTmaIvoice: boolean
+  }> {
+    const { data } = await api.post('/payments/invoice', {
+      method,
+      amount,
     })
     return data.data
   },
