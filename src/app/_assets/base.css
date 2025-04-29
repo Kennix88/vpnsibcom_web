@@ -6,6 +6,17 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield; /* Для Firefox */
+}
+
+
 /* === SCROLLBAR STYLING (no arrows, with padding) === */
 * {
     scrollbar-width: thin;
