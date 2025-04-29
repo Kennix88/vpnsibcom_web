@@ -69,6 +69,27 @@
       "withdrawal": "Вывести",
       "withdrawalInfo": "Счет, с которого можно вывести средства.",
       "holdInfo": "Замороженные средства.\nВскоре они поступят на счет для выплат."
+    },
+    "payment": {
+      "title": "Пополнение баланса",
+      "sum": "Сумма пополнения",
+      "enterSum": "Введите сумму",
+      "sort": {
+        "all": "Все",
+        "crypto": "Криптовалюта",
+        "card": "Карты",
+        "sbp": "СБП",
+        "wallets": "Кошельки",
+        "skins": "Скины"
+      },
+      "method": "Метод оплаты",
+      "split": "Купить Telegram Stars без KYC, с выгодой до 40% можно на платформе Split!",
+      "splitBay": "Купить STARS",
+      "walletInfo": "Плати в TON, USDT-TON, DOGS, NOT, HMSTR, JETTON и других жетонах сети TON, подключив TON-кошелёк.",
+      "limitMessage": "Доступно от {min} до {max} {symbol}. Сейчас: {convertedAmount} {symbol}",
+      "commission": "Комиссия",
+      "toBalance": "На баланс поступит",
+      "pay": "Оплатить"
     }
   }
 }

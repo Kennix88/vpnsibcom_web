@@ -70,5 +70,26 @@
       "withdrawalInfo": "The account from which funds can be withdrawn.",
       "holdInfo": "Frozen funds. Soon they will be credited to the account for payments."
     }
+  },
+  "payment": {
+    "title": "Replenishment",
+    "sum": "The amount",
+    "enterSum": "Enter the amount",
+    "sort": {
+      "all": "All",
+      "crypto": "Cryptocurrency",
+      "card": "Cards",
+      "sbp": "СБП",
+      "wallets": "Wallets",
+      "skins": "Skins"
+    },
+    "method": "Payment method",
+    "split": "You can buy Telegram Stars without KYC, with a profit of up to 40% on the Split platform!",
+    "splitBay": "Buy STARS",
+    "walletInfo": "Pay in TON, USDT-TON, DOGS, NOT, HMSTR, JETTON and other tokens of the TON network by connecting a TON wallet.",
+    "limitMessage": "Available from {min} to {max} {symbol}. Currently: {convertedAmount} {symbol}",
+    "commission": "Commission",
+    "toBalance": "It will be credited to the balance",
+    "pay": "To pay"
   }
 }
