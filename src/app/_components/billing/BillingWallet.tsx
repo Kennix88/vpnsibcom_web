@@ -57,7 +57,7 @@ export default function BillingWallet() {
                 {addSuffixToNumberUtil(
                   fxUtil(
                     user.balance.paymentBalance,
-                    CurrencyEnum.XCH,
+                    CurrencyEnum.XTR,
                     user.currencyCode,
                     rates,
                   ),
@@ -94,7 +94,7 @@ export default function BillingWallet() {
                 {addSuffixToNumberUtil(
                   fxUtil(
                     user.balance.withdrawalBalance,
-                    CurrencyEnum.XCH,
+                    CurrencyEnum.XTR,
                     user.currencyCode,
                     rates,
                   ),
@@ -128,7 +128,7 @@ export default function BillingWallet() {
                 {addSuffixToNumberUtil(
                   fxUtil(
                     user.balance.holdBalance,
-                    CurrencyEnum.XCH,
+                    CurrencyEnum.XTR,
                     user.currencyCode,
                     rates,
                   ),

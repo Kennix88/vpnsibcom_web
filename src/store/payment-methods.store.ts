@@ -4,14 +4,14 @@ import { persist } from 'zustand/middleware'
 
 interface PaymentMethodsStore {
   methods: PaymentMethodsDataInterface[]
-  setCurrencies: (methods: PaymentMethodsDataInterface[]) => void
+  setMethods: (methods: PaymentMethodsDataInterface[]) => void
 }
 
 export const usePaymentMethodsStore = create<PaymentMethodsStore>()(
   persist(
     (set) => ({
       methods: [],
-      setCurrencies: (methods) => set({ methods }),
+      setMethods: (methods) => set({ methods }),
     }),
     {
       name: 'payment-methods-storage',
