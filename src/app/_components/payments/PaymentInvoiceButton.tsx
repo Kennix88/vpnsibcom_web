@@ -76,7 +76,7 @@ export default function PaymentInvoiceButton({
   return (
     <div
       className={
-        'absolute fixed left-4 right-4 bottom-4 rounded-md flex flex-row flex-wrap items-center justify-center p-4 bg-[var(--surface-container)] font-mono gap-4'
+        'fixed z-50 left-4 right-4 bottom-4 rounded-md flex flex-row flex-wrap items-center justify-center p-4 bg-[var(--surface-container)] font-mono gap-4'
       }>
       <div
         className={
