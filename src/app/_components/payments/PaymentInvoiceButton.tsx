@@ -10,7 +10,7 @@ import { UserDataInterface } from '@app/types/user-data.interface'
 import { fxUtil } from '@app/utils/fx.util'
 import { invoice } from '@telegram-apps/sdk-react'
 import clsx from 'clsx'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { useTranslations } from 'use-intl'
@@ -33,6 +33,8 @@ export default function PaymentInvoiceButton({
   isTma,
 }: Props) {
   const t = useTranslations('billing.payment')
+  const location = usePathname()
+  const url = location === '/app' ? '/app' : '/tma'
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   if (amount < 0) return null
@@ -61,12 +63,13 @@ export default function PaymentInvoiceButton({
       if (getInvs.isTmaIvoice && isTma) {
         await invoice.open(getInvs.linkPay, 'url')
       } else {
-        router.push(getInvs.linkPay)
+        window.open(getInvs.linkPay, '_blank')
       }
     } catch {
       toast.error('Failed create invoice')
     } finally {
       setIsLoading(false)
+      router.push(url)
     }
   }
 
