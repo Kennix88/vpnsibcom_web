@@ -1,4 +1,5 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+*~
 
 .env.development
 .env
@@ -6,6 +7,7 @@
 *.log
 
 # IDEs and editors
+/.vscode
 /.idea
 .project
 .classpath
