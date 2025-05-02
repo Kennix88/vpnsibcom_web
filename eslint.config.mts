@@ -39,7 +39,6 @@ export default tseslint.config([
       '@typescript-eslint/no-unused-expressions': 'off',
       'no-unused-vars': 'off',
       'react-hooks/rules-of-hooks': 'off',
-      'prettier/prettier': 'error',
     },
   },
   {

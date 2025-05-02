@@ -5,6 +5,7 @@ import { CurrencyInterface } from '@app/types/currency.interface'
 import { PaymentMethodsDataInterface } from '@app/types/payment-methods-data.interface'
 import { RatesInterface } from '@app/types/rates.interface'
 import { ReferralsDataInterface } from '@app/types/referrals-data-interface'
+import { SubscriptionDataInterface } from '@app/types/subscription-data.interface'
 import { UserDataInterface } from '@app/types/user-data.interface'
 import axios from 'axios'
 
@@ -143,6 +144,22 @@ export const authApiClient = {
       method,
       amount,
     })
+    return data.data
+  },
+
+  async freePlanActivated(): Promise<{
+    subscriptions: SubscriptionDataInterface[]
+    user: UserDataInterface
+  }> {
+    const { data } = await api.post('/subscriptions/free-plan-activated')
+    return data.data
+  },
+
+  async getSubscriptons(): Promise<{
+    subscriptions: SubscriptionDataInterface[]
+    user: UserDataInterface
+  }> {
+    const { data } = await api.get('/subscriptions')
     return data.data
   },
 }
