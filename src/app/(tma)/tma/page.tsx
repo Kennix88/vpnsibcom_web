@@ -1,5 +1,6 @@
 'use client'
 import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
+import { FreePlanActivated } from '@app/app/_components/FreePlanAtivated'
 import GreenCheck from '@app/app/_components/GreenCheck'
 import TopBar from '@app/app/_components/TopBar'
 
@@ -9,6 +10,7 @@ export default function Page() {
       <div className="flex flex-col gap-4 items-center">
         <TopBar />
         <GreenCheck />
+        <FreePlanActivated />
       </div>
     </TmaPage>
   )
