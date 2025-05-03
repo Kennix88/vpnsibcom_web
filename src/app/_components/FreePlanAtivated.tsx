@@ -6,11 +6,13 @@ import { useUserStore } from '@app/store/user.store'
 import clsx from 'clsx'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
+import { useTranslations } from 'use-intl'
 
 export function FreePlanActivated() {
   const { user, setUser } = useUserStore()
   const [isLoading, setIsLoading] = useState(false)
   const { setSubscriptions } = useSubscriptionsStore()
+  const t = useTranslations('freePlan')
 
   if (!user || !user.isFreePlanAvailable) return null
 
@@ -22,7 +24,7 @@ export function FreePlanActivated() {
       setUser(getData.user)
       setSubscriptions(getData.subscriptions)
     } catch {
-      toast.error('Failed activated free plan')
+      toast.error(t('activationFailed'))
     } finally {
       setIsLoading(false)
     }
@@ -31,7 +33,7 @@ export function FreePlanActivated() {
   return (
     <div className="flex flex-col gap-4 p-4 bg-[var(--surface-container-lowest)] rounded-md w-full max-w-[400px] font-mono">
       <div className="text-sm ">
-        🎁 Вам доступен пробный перириод на {user.freePlanDays} дней.
+        🎁 {t('trialAvailable', { days: user.freePlanDays ?? 0 })}
       </div>
       <button
         onClick={() => handleClick()}
@@ -45,7 +47,7 @@ export function FreePlanActivated() {
             className={'loader'}
             style={{ width: '15px', height: '15px', borderWidth: '2px' }}></div>
         )}
-        Активировать
+        {t('activate')}
       </button>
     </div>
   )
