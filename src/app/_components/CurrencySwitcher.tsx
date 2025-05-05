@@ -83,7 +83,7 @@ export default function CurrencySwitcher() {
                     color: 'var(--on-surface)',
                   }}>
                   <span className="font-mono font-bold">{currency.key}</span>-
-                  {currency.key == CurrencyEnum.XCH && (
+                  {currency.key == CurrencyEnum.XTR && (
                     <TgStar type={'gold'} w={15} />
                   )}
                   <span className="opacity-80">{currency.symbol}</span>

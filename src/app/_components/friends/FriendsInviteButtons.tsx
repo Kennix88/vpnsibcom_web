@@ -1,11 +1,12 @@
 'use client'
 import { useRefferlsStore } from '@app/store/referrals.store'
-import { copyToClipboard } from '@app/utils/copy-to-clipboard.util'
+import { useCopyToClipboard } from '@app/utils/copy-to-clipboard.util'
 import Link from 'next/link'
 import { FaCopy, FaShareNodes } from 'react-icons/fa6'
 import { useTranslations } from 'use-intl'
 
 export default function FriendsInviteButtons() {
+  const copyToClipboard = useCopyToClipboard()
   const { referralsData } = useRefferlsStore()
   const t = useTranslations('friends')
 

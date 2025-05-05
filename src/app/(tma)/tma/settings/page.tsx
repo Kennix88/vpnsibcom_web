@@ -11,7 +11,7 @@ import WithdrawalSwitch from '@app/app/_components/WithdrawalSwitch'
 import { authApiClient } from '@app/core/authApiClient'
 import { useSlicedAddress } from '@app/hooks/useSlicedAddress'
 import { useUserStore } from '@app/store/user.store'
-import { copyToClipboard } from '@app/utils/copy-to-clipboard.util'
+import { useCopyToClipboard } from '@app/utils/copy-to-clipboard.util'
 import limitLengthString from '@app/utils/limit-length-string.util'
 import { Address } from '@ton/ton'
 import { useTonWallet } from '@tonconnect/ui-react'
@@ -21,6 +21,7 @@ import { useTranslations } from 'use-intl'
 
 export default function Page() {
   const { user, setUser } = useUserStore()
+  const copyToClipboard = useCopyToClipboard()
   const wallet = useTonWallet()
   const t = useTranslations('user')
   const address = useSlicedAddress(wallet?.account.address)

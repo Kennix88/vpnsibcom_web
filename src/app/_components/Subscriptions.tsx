@@ -5,7 +5,7 @@ import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
 import { useSubscriptionsStore } from '@app/store/subscriptions.store'
 import { useUserStore } from '@app/store/user.store'
 import { SubscriptionDataInterface } from '@app/types/subscription-data.interface'
-import { copyToClipboard } from '@app/utils/copy-to-clipboard.util'
+import { useCopyToClipboard } from '@app/utils/copy-to-clipboard.util'
 import limitLengthString from '@app/utils/limit-length-string.util'
 import { formatDistanceToNow } from 'date-fns'
 import { ru } from 'date-fns/locale'
@@ -25,6 +25,7 @@ import { TbPlugConnected } from 'react-icons/tb'
  * @returns JSX.Element
  */
 export function Subscriptions() {
+  const copyToClipboard = useCopyToClipboard()
   const { subscriptions, setSubscriptions } = useSubscriptionsStore()
   const { user } = useUserStore()
   const [loading, setLoading] = useState(true)
@@ -191,10 +192,10 @@ export function Subscriptions() {
                     <div className="absolute z-10 -top-2 -right-2 flex items-center gap-2">
                       {/* Статус активности */}
                       <div
-                        className={`text-xl rounded-full ${
+                        className={`text-xl rounded-full flex items-center justify-center bg-[var(--surface-container)] ${
                           subscription.isActive
-                            ? 'bg-[var(--success-container)] text-[var(--on-success-container)]'
-                            : 'bg-[var(--error-container)] text-[var(--on-error-container)]'
+                            ? 'text-[var(--success-container)]'
+                            : 'text-[var(--error-container)]'
                         }`}>
                         {subscription.isActive ? (
                           <IoCheckmarkCircle />
@@ -251,7 +252,7 @@ export function Subscriptions() {
                           className={`p-2 rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer ${
                             updatingAutoRenewal === subscription.id
                               ? 'animate-spin'
-                              : !subscription.isAutoRenewal
+                              : subscription.isAutoRenewal
                                 ? 'bg-[var(--success-container)] text-[var(--on-success-container)]'
                                 : 'bg-[var(--warning-container)] text-[var(--on-warning-container)]'
                           }`}>
