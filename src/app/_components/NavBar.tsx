@@ -58,7 +58,8 @@ export default function NavBar() {
             href={`${item.href}`}
             key={item.name}
             className={`flex flex-col items-center justify-center font-[600] text-[12px] gap-1 ${
-              location !== `${item.href}`
+              location !==
+              `${item.href} transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer`
                 ? 'text-[var(--on-surface-variant)]'
                 : 'text-[var(--on-surface)]'
             }`}>

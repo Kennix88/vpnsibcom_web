@@ -2,6 +2,7 @@
 import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
 import { FreePlanActivated } from '@app/app/_components/FreePlanAtivated'
 import GreenCheck from '@app/app/_components/GreenCheck'
+import { Subscriptions } from '@app/app/_components/Subscriptions'
 import TopBar from '@app/app/_components/TopBar'
 
 export default function Page() {
@@ -11,6 +12,7 @@ export default function Page() {
         <TopBar />
         <GreenCheck />
         <FreePlanActivated />
+        <Subscriptions />
       </div>
     </TmaPage>
   )
