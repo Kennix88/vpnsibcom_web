@@ -1,0 +1,36 @@
+{
+  "title": "Friends",
+  "get": "Get Rewards",
+  "for": "for inviting friends",
+  "level": "level",
+  "total": "Total",
+  "list": {
+    "title": "Your friends",
+    "top": "Top",
+    "empty": "There's no one here yet 🥲"
+  },
+  "bonuses": {
+    "title": "Bonuses",
+    "inviteTitle": "For inviting a friend",
+    "paymentTitle": "For a friend's payments",
+    "inviteInfo": "After the first payment by a friend or activation of the trial period!",
+    "paymentInfo": "Get a percentage of the payment of your friends and those who were invited by your friends forever!\n\nYou will be able to withdraw these funds!",
+    "lvl1Info": "Those whom you invited",
+    "lvl2Info": "Those who were invited by friends",
+    "lvl3Info": "Those who were invited by friends of friends 😁"
+  },
+  "invite": {
+    "title": "Invite a friend",
+    "invite": "Will invite",
+    "inTelegram": "In Telegram",
+    "inTMA": "In Telegram mini app",
+    "inWebApp": "In webApp"
+  },
+  "statistics": {
+    "title": "Statistics",
+    "earnTitle": "You earn",
+    "inviteTitle": "Invited",
+    "earnInfo": "You've earned it all the time",
+    "inviteInfo": "Invited | Activated | Of these, the Standard | Of these, Premium"
+  }
+}

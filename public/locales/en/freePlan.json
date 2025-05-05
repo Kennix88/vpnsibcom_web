@@ -1,0 +1,5 @@
+{
+  "trialAvailable": "A trial period of {days} days is available to you.",
+  "activate": "Activate",
+  "activationFailed": "Couldn't activate the free plan"
+}

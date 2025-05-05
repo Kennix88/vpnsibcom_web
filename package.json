@@ -4,9 +4,10 @@
   "license": "CC BY-NC-SA 4.0",
   "private": false,
   "scripts": {
-    "dev": "next dev",
-    "dev:https": "next dev --experimental-https",
+    "dev": "next dev & ts-node scripts/watch-translations.ts",
+    "dev:https": "next dev --experimental-https & ts-node scripts/watch-translations.ts",
     "build": "next build",
+    "build-translations": "ts-node src/core/i18n/build-translations.ts",
     "start": "next start",
     "lint": "next lint"
   },
