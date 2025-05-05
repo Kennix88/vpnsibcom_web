@@ -7,128 +7,354 @@ import { RatesInterface } from '@app/types/rates.interface'
 import { ReferralsDataInterface } from '@app/types/referrals-data-interface'
 import { SubscriptionDataInterface } from '@app/types/subscription-data.interface'
 import { UserDataInterface } from '@app/types/user-data.interface'
-import axios from 'axios'
+import axios, {
+  AxiosError,
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosRequestHeaders,
+  AxiosResponse,
+} from 'axios'
 
-const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-  withCredentials: true, // для отправки httpOnly куки (refresh)
-})
+/**
+ * Interface for API response structure
+ * @template T Type of data returned by API
+ */
+interface ApiResponse<T> {
+  data: T
+  status: number
+  message?: string
+}
 
-// 👉 Интерцептор запроса: подставляем accessToken
-api.interceptors.request.use((config) => {
-  const token = useUserStore.getState().accessToken
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
-  }
-  return config
-})
+/**
+ * Creates and configures Axios instance for API requests
+ */
+const createApiInstance = (): AxiosInstance => {
+  const instance = axios.create({
+    baseURL: process.env.NEXT_PUBLIC_API_URL,
+    withCredentials: true, // для отправки httpOnly куки (refresh)
+    timeout: 15000, // 15 seconds timeout
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+  })
 
-// 👉 Интерцептор ответа: пробуем refresh если 401
-api.interceptors.response.use(
-  (res) => res,
-  async (error) => {
-    const originalRequest = error.config
-    const store = useUserStore.getState()
-
-    // Если уже пробовали refresh или не 401 — выходим
-    if (originalRequest._retry || error.response?.status !== 401) {
+  // Request interceptor: add authorization token
+  instance.interceptors.request.use(
+    (config) => {
+      try {
+        const token = useUserStore.getState().accessToken
+        if (token && config.headers) {
+          // Безопасное обновление заголовков
+          config.headers = {
+            ...config.headers,
+            Authorization: `Bearer ${token}`,
+          } as AxiosRequestHeaders
+        }
+        return config
+      } catch (error) {
+        console.error('Request interceptor error:', error)
+        return config
+      }
+    },
+    (error: AxiosError): Promise<AxiosError> => {
+      console.error('Request interceptor rejection:', error)
       return Promise.reject(error)
-    }
+    },
+  )
 
-    originalRequest._retry = true
+  // Response interceptor: handle 401 errors with token refresh
+  instance.interceptors.response.use(
+    (response: AxiosResponse): AxiosResponse => response,
+    async (error: AxiosError): Promise<any> => {
+      const originalRequest = error.config as AxiosRequestConfig & {
+        _retry?: boolean
+      }
+      const store = useUserStore.getState()
 
-    try {
-      const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
-        {},
-        { withCredentials: true },
+      // Exit if already tried refresh or not 401
+      if (originalRequest._retry || error.response?.status !== 401) {
+        return Promise.reject(error)
+      }
+
+      originalRequest._retry = true
+
+      try {
+        // Attempt to refresh token
+        const { data } = await axios.post<ApiResponse<{ accessToken: string }>>(
+          `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
+          {},
+          { withCredentials: true },
+        )
+
+        const newAccessToken = data.data.accessToken
+
+        // Update token in store
+        store.setAccessToken(newAccessToken)
+
+        // Update authorization header and retry request
+        if (originalRequest.headers) {
+          // Безопасное обновление заголовков
+          originalRequest.headers = {
+            ...originalRequest.headers,
+            Authorization: `Bearer ${newAccessToken}`,
+          } as AxiosRequestHeaders
+        } else {
+          // Создание заголовков, если их нет
+          originalRequest.headers = {
+            Authorization: `Bearer ${newAccessToken}`,
+          } as AxiosRequestHeaders
+        }
+
+        return instance(originalRequest)
+      } catch (refreshError) {
+        // Reset user state on refresh failure
+        console.error('Token refresh failed:', refreshError)
+        store.reset()
+        return Promise.reject(refreshError)
+      }
+    },
+  )
+
+  return instance
+}
+
+// Create API instance
+const api = createApiInstance()
+
+/**
+ * Handles API errors consistently
+ * @param error Error from API request
+ * @returns Rejected promise with formatted error
+ */
+const handleApiError = (error: unknown): Promise<never> => {
+  if (axios.isAxiosError(error)) {
+    const status = error.response?.status
+    const message = error.response?.data?.message || error.message
+
+    console.error(`API Error (${status}): ${message}`, error)
+
+    // Handle specific error codes
+    if (status === 429) {
+      return Promise.reject(
+        new Error('Слишком много запросов. Пожалуйста, попробуйте позже.'),
       )
-
-      const newAccessToken = data.data.accessToken
-      useUserStore.getState().setAccessToken(newAccessToken)
-
-      originalRequest.headers.Authorization = `Bearer ${newAccessToken}`
-      return api(originalRequest)
-    } catch (refreshError) {
-      store.reset()
-      return Promise.reject(refreshError)
     }
-  },
-)
 
+    return Promise.reject(
+      new Error(message || 'Произошла ошибка при обращении к серверу'),
+    )
+  }
+
+  console.error('Unexpected API error:', error)
+  return Promise.reject(new Error('Неизвестная ошибка при обращении к серверу'))
+}
+
+/**
+ * Authentication and API client for application
+ */
 export const authApiClient = {
+  /**
+   * Login with Telegram data
+   * @param initData Telegram auth data
+   * @returns Access token and user data
+   */
   async telegramLogin(initData: string): Promise<{
     accessToken: string
     user: UserDataInterface
   }> {
-    const { data } = await api.post('/auth/telegram', { initData })
-    return data.data
+    try {
+      const { data } = await api.post<
+        ApiResponse<{
+          accessToken: string
+          user: UserDataInterface
+        }>
+      >('/auth/telegram', { initData })
+
+      return data.data
+    } catch (error) {
+      return handleApiError(error)
+    }
   },
 
+  /**
+   * Refresh authentication token
+   * @returns New access token and user data
+   */
   async refresh(): Promise<{
     accessToken: string
     user: UserDataInterface
   }> {
-    const { data } = await api.post('/auth/refresh', {})
-    return data.data
+    try {
+      const { data } = await api.post<
+        ApiResponse<{
+          accessToken: string
+          user: UserDataInterface
+        }>
+      >('/auth/refresh', {})
+
+      return data.data
+    } catch (error) {
+      return handleApiError(error)
+    }
   },
 
+  /**
+   * Logout current user
+   */
   async logout(): Promise<void> {
-    await api.post('/auth/logout')
-    useUserStore.getState().reset()
+    try {
+      await api.post('/auth/logout')
+      useUserStore.getState().reset()
+    } catch (error) {
+      return handleApiError(error)
+    }
   },
 
+  /**
+   * Get current user data
+   * @returns User data
+   */
   async getMe(): Promise<UserDataInterface> {
-    const { data } = await api.get('/user/me')
-    return data.data.user
+    try {
+      const { data } =
+        await api.get<ApiResponse<{ user: UserDataInterface }>>('/user/me')
+      return data.data.user
+    } catch (error) {
+      return handleApiError(error)
+    }
   },
 
+  /**
+   * Update withdrawal balance usage setting
+   * @param isUse Whether to use withdrawal balance
+   * @returns Updated user data
+   */
   async updateWithdrawalBalanceUsage(
     isUse: boolean,
   ): Promise<UserDataInterface> {
-    const { data } = await api.post('/user/withdrawal-usage', { isUse })
-    return data.data.user
+    try {
+      const { data } = await api.post<ApiResponse<{ user: UserDataInterface }>>(
+        '/user/withdrawal-usage',
+        { isUse },
+      )
+      return data.data.user
+    } catch (error) {
+      return handleApiError(error)
+    }
   },
 
+  /**
+   * Update user currency preference
+   * @param code Currency code
+   * @returns Updated user data
+   */
   async updateCurrencyUser(code: CurrencyEnum): Promise<UserDataInterface> {
-    const { data } = await api.post('/user/currency', { code })
-    return data.data.user
+    try {
+      const { data } = await api.post<ApiResponse<{ user: UserDataInterface }>>(
+        '/user/currency',
+        { code },
+      )
+      return data.data.user
+    } catch (error) {
+      return handleApiError(error)
+    }
   },
 
+  /**
+   * Update user language preference
+   * @param code Language code
+   * @returns Updated user data
+   */
   async updateLanguageUser(code: string): Promise<UserDataInterface> {
-    const { data } = await api.post('/user/language', { code })
-    return data.data.user
+    try {
+      const { data } = await api.post<ApiResponse<{ user: UserDataInterface }>>(
+        '/user/language',
+        { code },
+      )
+      return data.data.user
+    } catch (error) {
+      return handleApiError(error)
+    }
   },
 
+  /**
+   * Get available currencies and exchange rates
+   * @returns Currencies and rates data
+   */
   async getCurrency(): Promise<{
     currencies: CurrencyInterface[]
     rates: RatesInterface
   }> {
-    const { data } = await api.get('/currency')
-    return {
-      currencies: data.data.currencies,
-      rates: data.data.rates,
+    try {
+      const { data } = await api.get<
+        ApiResponse<{
+          currencies: CurrencyInterface[]
+          rates: RatesInterface
+        }>
+      >('/currency')
+
+      return {
+        currencies: data.data.currencies,
+        rates: data.data.rates,
+      }
+    } catch (error) {
+      return handleApiError(error)
     }
   },
 
+  /**
+   * Get user referrals data
+   * @returns User and referrals data
+   */
   async getReferrals(): Promise<{
     user: UserDataInterface
     referrals: ReferralsDataInterface
   }> {
-    const { data } = await api.get('/referrals/my')
-    return data.data
+    try {
+      const { data } = await api.get<
+        ApiResponse<{
+          user: UserDataInterface
+          referrals: ReferralsDataInterface
+        }>
+      >('/referrals/my')
+
+      return data.data
+    } catch (error) {
+      return handleApiError(error)
+    }
   },
 
+  /**
+   * Get available payment methods
+   * @param isTma Whether request is from Telegram Mini App
+   * @returns User and payment methods data
+   */
   async getPaymentMethods(isTma?: boolean): Promise<{
     user: UserDataInterface
     methods: PaymentMethodsDataInterface[]
   }> {
-    const { data } = await api.get('/payments/methods', {
-      params: { isTma },
-    })
-    return data.data
+    try {
+      const { data } = await api.get<
+        ApiResponse<{
+          user: UserDataInterface
+          methods: PaymentMethodsDataInterface[]
+        }>
+      >('/payments/methods', {
+        params: { isTma },
+      })
+
+      return data.data
+    } catch (error) {
+      return handleApiError(error)
+    }
   },
 
+  /**
+   * Create payment invoice
+   * @param params Payment method and amount
+   * @returns User data, payment link and TMA invoice flag
+   */
   async createInvoice({
     method,
     amount,
@@ -140,26 +366,65 @@ export const authApiClient = {
     linkPay: string
     isTmaIvoice: boolean
   }> {
-    const { data } = await api.post('/payments/invoice', {
-      method,
-      amount,
-    })
-    return data.data
+    try {
+      const { data } = await api.post<
+        ApiResponse<{
+          user: UserDataInterface
+          linkPay: string
+          isTmaIvoice: boolean
+        }>
+      >('/payments/invoice', {
+        method,
+        amount,
+      })
+
+      return data.data
+    } catch (error) {
+      return handleApiError(error)
+    }
   },
 
+  /**
+   * Activate free plan
+   * @returns Subscriptions and user data
+   */
   async freePlanActivated(): Promise<{
     subscriptions: SubscriptionDataInterface[]
     user: UserDataInterface
   }> {
-    const { data } = await api.post('/subscriptions/free-plan-activated')
-    return data.data
+    try {
+      const { data } = await api.post<
+        ApiResponse<{
+          subscriptions: SubscriptionDataInterface[]
+          user: UserDataInterface
+        }>
+      >('/subscriptions/free-plan-activated')
+
+      return data.data
+    } catch (error) {
+      return handleApiError(error)
+    }
   },
 
+  /**
+   * Get user subscriptions
+   * @returns Subscriptions and user data
+   */
   async getSubscriptons(): Promise<{
     subscriptions: SubscriptionDataInterface[]
     user: UserDataInterface
   }> {
-    const { data } = await api.get('/subscriptions')
-    return data.data
+    try {
+      const { data } = await api.get<
+        ApiResponse<{
+          subscriptions: SubscriptionDataInterface[]
+          user: UserDataInterface
+        }>
+      >('/subscriptions')
+
+      return data.data
+    } catch (error) {
+      return handleApiError(error)
+    }
   },
 }
