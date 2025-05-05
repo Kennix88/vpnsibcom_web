@@ -13,10 +13,10 @@ import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { FaClockRotateLeft, FaCopy, FaRotate } from 'react-icons/fa6'
+import { FaArrowsRotate, FaClockRotateLeft, FaCopy } from 'react-icons/fa6'
 import { FiExternalLink, FiPlus } from 'react-icons/fi'
 import { IoCheckmarkCircle, IoCloseCircle } from 'react-icons/io5'
-import { MdAutoMode } from 'react-icons/md'
+import { MdAutoMode, MdRotateRight } from 'react-icons/md'
 import { SiAdobeindesign } from 'react-icons/si'
 import { TbPlugConnected } from 'react-icons/tb'
 
@@ -218,9 +218,9 @@ export function Subscriptions() {
                       </span>
                     </button>
 
-                    <div className="flex flex-row flex-wrap gap-2 px-4 py-2 items-center justify-between">
+                    <div className="flex flex-row flex-wrap gap-2 px-2 py-2 items-center justify-between">
                       <div className="text-sm mt-1 flex gap-2 items-center">
-                        <FaRotate />
+                        <MdRotateRight size={18} />
                         <span>{formatPeriod(subscription.period)}</span>
                       </div>
                       {subscription.expiredAt && (
@@ -234,24 +234,37 @@ export function Subscriptions() {
                     </div>
 
                     <div className="flex justify-between items-center px-2 py-2 border-t border-[var(--outline)]">
-                      {/* Кнопка автопродления */}
-                      <button
-                        onClick={() => toggleAutoRenewal(subscription)}
-                        disabled={updatingAutoRenewal === subscription.id}
-                        className={`p-2 rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer ${
-                          updatingAutoRenewal === subscription.id
-                            ? 'animate-spin'
-                            : subscription.isAutoRenewal
-                              ? 'bg-[var(--success-container)] text-[var(--on-success-container)]'
-                              : 'bg-[var(--surface-container)] text-[var(--on-surface-variant)]'
-                        }`}
-                        title={
-                          subscription.isAutoRenewal
-                            ? 'Автопродление включено'
-                            : 'Автопродление выключено'
-                        }>
-                        <MdAutoMode size={18} />
-                      </button>
+                      <div className="flex gap-2 items-center ">
+                        <button
+                          onClick={() =>
+                            copyToClipboard(subscription.subscriptionUrl)
+                          }
+                          className="p-2 rounded-md bg-[var(--surface-container)] text-[var(--on-surface-variant)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer">
+                          <FaArrowsRotate size={18} />
+                        </button>
+
+                        <div className="h-4 w-[1px] bg-[var(--outline)]"></div>
+
+                        <button
+                          onClick={() => toggleAutoRenewal(subscription)}
+                          disabled={updatingAutoRenewal === subscription.id}
+                          className={`p-2 rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer ${
+                            updatingAutoRenewal === subscription.id
+                              ? 'animate-spin'
+                              : !subscription.isAutoRenewal
+                                ? 'bg-[var(--success-container)] text-[var(--on-success-container)]'
+                                : 'bg-[var(--warning-container)] text-[var(--on-warning-container)]'
+                          }`}>
+                          <MdAutoMode size={18} />
+                        </button>
+                        <button
+                          onClick={() =>
+                            copyToClipboard(subscription.subscriptionUrl)
+                          }
+                          className="p-2 rounded-md bg-[var(--surface-container)] text-[var(--on-surface-variant)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer">
+                          <FaClockRotateLeft size={18} />
+                        </button>
+                      </div>
 
                       <div className="flex gap-2 items-center ">
                         <div className="flex gap-2 items-center ">
