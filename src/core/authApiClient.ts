@@ -389,13 +389,13 @@ export const authApiClient = {
    * @returns Subscriptions and user data
    */
   async freePlanActivated(): Promise<{
-    subscriptions: SubscriptionDataInterface[]
+    subscriptions: SubscriptionDataInterface
     user: UserDataInterface
   }> {
     try {
       const { data } = await api.post<
         ApiResponse<{
-          subscriptions: SubscriptionDataInterface[]
+          subscriptions: SubscriptionDataInterface
           user: UserDataInterface
         }>
       >('/subscriptions/free-plan-activated')
@@ -411,13 +411,13 @@ export const authApiClient = {
    * @returns Subscriptions and user data
    */
   async getSubscriptons(): Promise<{
-    subscriptions: SubscriptionDataInterface[]
+    subscriptions: SubscriptionDataInterface
     user: UserDataInterface
   }> {
     try {
       const { data } = await api.get<
         ApiResponse<{
-          subscriptions: SubscriptionDataInterface[]
+          subscriptions: SubscriptionDataInterface
           user: UserDataInterface
         }>
       >('/subscriptions')

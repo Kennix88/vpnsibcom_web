@@ -6,6 +6,8 @@
   --color-red: 193, 53, 44;
   --color-gold: 159, 114, 34;
 
+  --gold-container: rgba(254, 199, 61, 0.3);
+
   /* === PRIMARY === */
   --primary: #d0bcff;
   --on-primary: #381e72;

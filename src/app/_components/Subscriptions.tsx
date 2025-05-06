@@ -4,7 +4,7 @@ import { authApiClient } from '@app/core/authApiClient'
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
 import { useSubscriptionsStore } from '@app/store/subscriptions.store'
 import { useUserStore } from '@app/store/user.store'
-import { SubscriptionDataInterface } from '@app/types/subscription-data.interface'
+import { SubscriptionDataListInterface } from '@app/types/subscription-data.interface'
 import { useCopyToClipboard } from '@app/utils/copy-to-clipboard.util'
 import limitLengthString from '@app/utils/limit-length-string.util'
 import { formatDistanceToNow } from 'date-fns'
@@ -87,7 +87,9 @@ export function Subscriptions() {
   }
 
   // Функция для переключения автопродления (заглушка)
-  const toggleAutoRenewal = async (subscription: SubscriptionDataInterface) => {
+  const toggleAutoRenewal = async (
+    subscription: SubscriptionDataListInterface,
+  ) => {
     try {
       setUpdatingAutoRenewal(subscription.id)
       // Здесь должен быть запрос к API для изменения статуса автопродления
@@ -131,24 +133,26 @@ export function Subscriptions() {
   return (
     <div className="flex flex-col gap-2 items-center font-extralight font-mono max-w-[600px] w-full">
       {/* Add Subscription Button */}
-      {user && subscriptions.length < user.limitSubscriptions && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="flex justify-center">
-          <button
-            onClick={addSubscription}
-            disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 rounded-md bg-[var(--primary-container)] text-[var(--on-primary-container)] hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer">
-            <FiPlus size={18} />
-            <span>Добавить подписку</span>
-          </button>
-        </motion.div>
-      )}
+      {user &&
+        subscriptions &&
+        subscriptions?.list.length < user.limitSubscriptions && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex justify-center">
+            <button
+              onClick={addSubscription}
+              disabled={loading}
+              className="flex items-center gap-2 px-4 py-2 rounded-md bg-[var(--primary-container)] text-[var(--on-primary-container)] hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer">
+              <FiPlus size={18} />
+              <span>Добавить подписку</span>
+            </button>
+          </motion.div>
+        )}
       <div className="px-4 opacity-70 flex flex-row gap-2 items-center justify-between w-full">
         <span>Ваши подписки</span>
         <span className="text-sm">
-          {subscriptions.length}/{user?.limitSubscriptions || 0}
+          {subscriptions?.list.length || 0}/{user?.limitSubscriptions || 0}
         </span>
       </div>
 
@@ -172,7 +176,7 @@ export function Subscriptions() {
       {!loading && (
         <div className="flex flex-col gap-2 w-full">
           <AnimatePresence>
-            {subscriptions.length === 0 ? (
+            {subscriptions?.list.length === 0 ? (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -182,7 +186,7 @@ export function Subscriptions() {
               </motion.div>
             ) : (
               <div className="flex flex-col">
-                {subscriptions.map((subscription) => (
+                {subscriptions?.list.map((subscription) => (
                   <motion.div
                     key={subscription.id}
                     initial={{ opacity: 0, y: 20 }}
@@ -273,7 +277,7 @@ export function Subscriptions() {
                           onClick={() =>
                             copyToClipboard(subscription.subscriptionUrl)
                           }
-                          className="p-2 rounded-md bg-[var(--surface-container)] text-[var(--on-surface-variant)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer">
+                          className="p-2 rounded-md bg-[var(--gold-container)] text-[var(--on-surface-variant)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer">
                           <TgStar type={'gold'} w={18} />
                         </button>
                       </div>

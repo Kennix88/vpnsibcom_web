@@ -3,14 +3,14 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 interface SubscriptionsStore {
-  subscriptions: SubscriptionDataInterface[]
-  setSubscriptions: (subscriptions: SubscriptionDataInterface[]) => void
+  subscriptions: SubscriptionDataInterface | null
+  setSubscriptions: (subscriptions: SubscriptionDataInterface) => void
 }
 
 export const useSubscriptionsStore = create<SubscriptionsStore>()(
   persist(
     (set) => ({
-      subscriptions: [],
+      subscriptions: null,
       setSubscriptions: (subscriptions) => set({ subscriptions }),
     }),
     {
