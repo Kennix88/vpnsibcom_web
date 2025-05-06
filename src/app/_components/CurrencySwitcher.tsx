@@ -50,7 +50,7 @@ export default function CurrencySwitcher() {
       className="relative inline-block text-sm text-left ">
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="inline-flex items-center justify-between w-full px-3 py-2 rounded-md border font-medium font-mono transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex-row gap-1 items-center justify-between"
+        className="inline-flex items-center justify-between w-full px-3 py-2 rounded-md border font-medium font-mono transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex-row gap-1"
         style={{
           backgroundColor: 'var(--surface-container)',
           color: 'var(--on-surface)',

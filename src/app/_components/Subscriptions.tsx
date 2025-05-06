@@ -15,10 +15,11 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { FaArrowsRotate, FaClockRotateLeft, FaCopy } from 'react-icons/fa6'
 import { FiExternalLink, FiPlus } from 'react-icons/fi'
-import { IoCheckmarkCircle, IoCloseCircle } from 'react-icons/io5'
+import { IoCheckmarkCircle, IoClose, IoCloseCircle } from 'react-icons/io5'
 import { MdAutoMode, MdRotateRight } from 'react-icons/md'
 import { SiAdobeindesign } from 'react-icons/si'
 import { TbPlugConnected } from 'react-icons/tb'
+import TgStar from './TgStar'
 
 /**
  * Component for displaying user subscriptions
@@ -234,13 +235,23 @@ export function Subscriptions() {
                       )}
                     </div>
 
-                    <div className="flex justify-between items-center px-2 py-2 border-t border-[var(--outline)]">
+                    <div className="flex flex-wrap justify-between items-center px-2 py-2 border-t border-[var(--outline)]">
                       <div className="flex gap-2 items-center ">
                         <button
                           onClick={() =>
                             copyToClipboard(subscription.subscriptionUrl)
                           }
-                          className="p-2 rounded-md bg-[var(--surface-container)] text-[var(--on-surface-variant)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer">
+                          className="p-2 rounded-md bg-[var(--error)] text-[var(--on-error)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer">
+                          <IoClose size={18} />
+                        </button>
+
+                        <div className="h-4 w-[1px] bg-[var(--outline)]"></div>
+
+                        <button
+                          onClick={() =>
+                            copyToClipboard(subscription.subscriptionUrl)
+                          }
+                          className="p-2 rounded-md bg-[var(--warning)] text-[var(--on-warning)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer">
                           <FaArrowsRotate size={18} />
                         </button>
 
@@ -263,7 +274,7 @@ export function Subscriptions() {
                             copyToClipboard(subscription.subscriptionUrl)
                           }
                           className="p-2 rounded-md bg-[var(--surface-container)] text-[var(--on-surface-variant)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer">
-                          <FaClockRotateLeft size={18} />
+                          <TgStar type={'gold'} w={18} />
                         </button>
                       </div>
 
