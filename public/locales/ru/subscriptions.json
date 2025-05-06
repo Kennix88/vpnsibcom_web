@@ -1,0 +1,16 @@
+{
+  "addSubscription": "Добавить подписку",
+  "yourSubscriptions": "Ваши подписки",
+  "noSubscriptions": "У вас пока нет подписок",
+  "periods": {
+    "trial": "Пробный период",
+    "hour": "1 час",
+    "day": "1 день",
+    "month": "1 месяц",
+    "threeMonth": "3 месяца",
+    "sixMonth": "6 месяцев",
+    "year": "1 год",
+    "twoYear": "2 года",
+    "threeYear": "3 года"
+  }
+}

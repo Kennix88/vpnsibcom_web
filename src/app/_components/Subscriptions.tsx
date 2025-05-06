@@ -10,6 +10,7 @@ import limitLengthString from '@app/utils/limit-length-string.util'
 import { formatDistanceToNow } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -26,6 +27,7 @@ import TgStar from './TgStar'
  * @returns JSX.Element
  */
 export function Subscriptions() {
+  const t = useTranslations('subscriptions')
   const copyToClipboard = useCopyToClipboard()
   const { subscriptions, setSubscriptions } = useSubscriptionsStore()
   const { user } = useUserStore()
@@ -36,7 +38,10 @@ export function Subscriptions() {
   const location = usePathname()
   const url = location === '/app' ? '/app' : '/tma'
 
-  // Функция для получения данных о подписках
+  /**
+   * Fetches subscription data from the API
+   * @returns Promise<void>
+   */
   const fetchSubscriptions = async () => {
     try {
       setLoading(true)
@@ -50,43 +55,55 @@ export function Subscriptions() {
     }
   }
 
-  // Загрузка данных при первой отрисовке
+  // Load data on initial render
   useEffect(() => {
     fetchSubscriptions()
   }, [])
 
-  // Функция для форматирования периода подписки
+  /**
+   * Formats subscription period to human-readable string
+   * @param period - Subscription period enum value
+   * @returns Formatted period string
+   */
   const formatPeriod = (period: SubscriptionPeriodEnum): string => {
     switch (period) {
       case SubscriptionPeriodEnum.TRIAL:
-        return 'Пробный период'
+        return t('periods.trial')
       case SubscriptionPeriodEnum.HOUR:
-        return '1 час'
+        return t('periods.hour')
       case SubscriptionPeriodEnum.DAY:
-        return '1 день'
+        return t('periods.day')
       case SubscriptionPeriodEnum.MONTH:
-        return '1 месяц'
+        return t('periods.month')
       case SubscriptionPeriodEnum.THREE_MONTH:
-        return '3 месяца'
+        return t('periods.threeMonth')
       case SubscriptionPeriodEnum.SIX_MONTH:
-        return '6 месяцев'
+        return t('periods.sixMonth')
       case SubscriptionPeriodEnum.YEAR:
-        return '1 год'
+        return t('periods.year')
       case SubscriptionPeriodEnum.TWO_YEAR:
-        return '2 года'
+        return t('periods.twoYear')
       case SubscriptionPeriodEnum.THREE_YEAR:
-        return '3 года'
+        return t('periods.threeYear')
       default:
         return period
     }
   }
 
-  // Функция для форматирования даты истечения
+  /**
+   * Formats expiration date to human-readable string
+   * @param date - Expiration date
+   * @returns Formatted date string
+   */
   const formatExpiredDate = (date: Date): string => {
     return formatDistanceToNow(new Date(date), { addSuffix: false, locale: ru })
   }
 
-  // Функция для переключения автопродления (заглушка)
+  /**
+   * Toggles auto-renewal status for a subscription
+   * @param subscription - Subscription data
+   * @returns Promise<void>
+   */
   const toggleAutoRenewal = async (
     subscription: SubscriptionDataListInterface,
   ) => {
@@ -110,7 +127,10 @@ export function Subscriptions() {
     }
   }
 
-  // Функция для добавления новой подписки (заглушка)
+  /**
+   * Adds a new subscription
+   * @returns Promise<void>
+   */
   const addSubscription = async () => {
     try {
       setLoading(true)
@@ -130,12 +150,22 @@ export function Subscriptions() {
     }
   }
 
+  /**
+   * Handles copying subscription URL to clipboard
+   * @param url - URL to copy
+   */
+  const handleCopyUrl = (url: string) => {
+    copyToClipboard(url)
+    console.log('Subscription URL copied to clipboard')
+  }
+
   return (
     <div className="flex flex-col gap-2 items-center font-extralight font-mono max-w-[600px] w-full">
       {/* Add Subscription Button */}
       {user &&
         subscriptions &&
-        subscriptions?.list.length < user.limitSubscriptions && (
+        subscriptions.list &&
+        subscriptions.list.length < user.limitSubscriptions && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -145,30 +175,52 @@ export function Subscriptions() {
               disabled={loading}
               className="flex items-center gap-2 px-4 py-2 rounded-md bg-[var(--primary-container)] text-[var(--on-primary-container)] hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer">
               <FiPlus size={18} />
-              <span>Добавить подписку</span>
+              <span>{t('addSubscription')}</span>
             </button>
           </motion.div>
         )}
       <div className="px-4 opacity-70 flex flex-row gap-2 items-center justify-between w-full">
-        <span>Ваши подписки</span>
+        <span>{t('yourSubscriptions')}</span>
         <span className="text-sm">
-          {subscriptions?.list.length || 0}/{user?.limitSubscriptions || 0}
+          {subscriptions && subscriptions.list ? subscriptions.list.length : 0}/
+          {user?.limitSubscriptions || 0}
         </span>
       </div>
 
-      {/* Loader */}
+      {/* Loader - Redesigned to match subscription items */}
       {loading && (
-        <div className="flex justify-center items-center py-8 w-full">
-          <div className="animate-pulse flex space-x-4">
-            <div className="rounded-full bg-[var(--primary-container)] h-12 w-12"></div>
-            <div className="flex-1 space-y-4 py-1">
-              <div className="h-4 bg-[var(--primary-container)] rounded w-3/4"></div>
-              <div className="space-y-2">
-                <div className="h-4 bg-[var(--primary-container)] rounded"></div>
-                <div className="h-4 bg-[var(--primary-container)] rounded w-5/6"></div>
+        <div className="flex flex-col gap-2 w-full">
+          {[1, 2].map((item) => (
+            <motion.div
+              key={`skeleton-${item}`}
+              className="relative bg-[var(--surface-container-lowest)] rounded-md overflow-hidden">
+              {/* Skeleton header */}
+              <div className="animate-pulse h-10 bg-[var(--primary)] w-full rounded-t-md flex items-center px-4 py-2">
+                <div className="h-4 bg-[var(--on-primary)] opacity-30 rounded w-3/4"></div>
               </div>
-            </div>
-          </div>
+
+              {/* Skeleton body */}
+              <div className="flex flex-row flex-wrap gap-2 px-2 py-2 items-center justify-between">
+                <div className="animate-pulse h-6 bg-[var(--primary-container)] opacity-30 rounded w-1/3"></div>
+                <div className="animate-pulse h-5 bg-[var(--primary-container)] opacity-30 rounded w-1/4"></div>
+              </div>
+
+              {/* Skeleton footer */}
+              <div className="flex flex-wrap justify-between items-center px-2 py-2 border-t border-[var(--outline)]">
+                <div className="flex gap-2 items-center">
+                  <div className="animate-pulse h-8 w-8 bg-[var(--primary-container)] opacity-30 rounded-md"></div>
+                  <div className="h-4 w-[1px] bg-[var(--outline)]"></div>
+                  <div className="animate-pulse h-8 w-8 bg-[var(--primary-container)] opacity-30 rounded-md"></div>
+                  <div className="h-4 w-[1px] bg-[var(--outline)]"></div>
+                  <div className="animate-pulse h-8 w-8 bg-[var(--primary-container)] opacity-30 rounded-md"></div>
+                </div>
+                <div className="flex gap-2 items-center">
+                  <div className="animate-pulse h-8 w-8 bg-[var(--primary-container)] opacity-30 rounded-md"></div>
+                  <div className="animate-pulse h-8 w-8 bg-[var(--primary-container)] opacity-30 rounded-md"></div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
       )}
 
@@ -182,7 +234,7 @@ export function Subscriptions() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 className="text-center py-4">
-                У вас пока нет подписок
+                {t('noSubscriptions')}
               </motion.div>
             ) : (
               <div className="flex flex-col">
@@ -243,7 +295,7 @@ export function Subscriptions() {
                       <div className="flex gap-2 items-center ">
                         <button
                           onClick={() =>
-                            copyToClipboard(subscription.subscriptionUrl)
+                            handleCopyUrl(subscription.subscriptionUrl)
                           }
                           className="p-2 rounded-md bg-[var(--error)] text-[var(--on-error)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer">
                           <IoClose size={18} />
@@ -253,7 +305,7 @@ export function Subscriptions() {
 
                         <button
                           onClick={() =>
-                            copyToClipboard(subscription.subscriptionUrl)
+                            handleCopyUrl(subscription.subscriptionUrl)
                           }
                           className="p-2 rounded-md bg-[var(--warning)] text-[var(--on-warning)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer">
                           <FaArrowsRotate size={18} />
@@ -275,7 +327,7 @@ export function Subscriptions() {
                         </button>
                         <button
                           onClick={() =>
-                            copyToClipboard(subscription.subscriptionUrl)
+                            handleCopyUrl(subscription.subscriptionUrl)
                           }
                           className="p-2 rounded-md bg-[var(--gold-container)] text-[var(--on-surface-variant)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer">
                           <TgStar type={'gold'} w={18} />
@@ -286,7 +338,7 @@ export function Subscriptions() {
                         <div className="flex gap-2 items-center ">
                           <button
                             onClick={() =>
-                              copyToClipboard(subscription.subscriptionUrl)
+                              handleCopyUrl(subscription.subscriptionUrl)
                             }
                             className="p-2 rounded-md bg-[var(--surface-container)] text-[var(--on-surface-variant)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer">
                             <FaCopy size={18} />

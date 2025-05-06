@@ -1,0 +1,16 @@
+{
+  "addSubscription": "Add subscription",
+  "yourSubscriptions": "Your subscriptions",
+  "noSubscriptions": "You don't have any subscriptions yet",
+  "periods": {
+    "trial": "Trial period",
+    "hour": "1 hour",
+    "day": "1 day",
+    "month": "1 month",
+    "threeMonth": "3 months",
+    "sixMonth": "6 months",
+    "year": "1 year",
+    "twoYear": "2 years",
+    "threeYear": "3 years"
+  }
+}
