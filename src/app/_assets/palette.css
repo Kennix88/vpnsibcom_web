@@ -1,7 +1,19 @@
 :root {
   --tg-star-gold: #fec73d;
+  --on-tg-star-gold: #3a2e00;
+  --tg-star-gold-container: #ffd978;
+  --on-tg-star-gold-container: #241c00;
+
   --tg-star-purple: #7f60ec;
+  --on-tg-star-purple: #ffffff;
+  --tg-star-purple-container: #ece5ff;
+  --on-tg-star-purple-container: #25008e;
+
   --tg-star-ice: #6090c7;
+  --on-tg-star-ice: #ffffff;
+  --tg-star-ice-container: #d3e4ff;
+  --on-tg-star-ice-container: #001c3a;
+
   --color-green: 31, 156, 86;
   --color-red: 193, 53, 44;
   --color-gold: 159, 114, 34;
@@ -9,10 +21,10 @@
   --gold-container: rgba(254, 199, 61, 0.3);
 
   /* === PRIMARY === */
-  --primary: #d0bcff;
+  --primary: #d8c5ff;
   --on-primary: #381e72;
   --primary-container: #4f378a;
-  --on-primary-container: #eaddff;
+  --on-primary-container: #f2e9ff;
   --inverse-primary: #6750a4;
 
   /* === SECONDARY === */
@@ -33,7 +45,7 @@
   --surface: #1c1b1f;
   --on-surface: #e6e1e6;
   --surface-variant: #49454f;
-  --on-surface-variant: #cac4cf;
+  --on-surface-variant: #d5d0da;
   --outline: #938f99;
 
   /* === STATUS === */
@@ -75,4 +87,16 @@
   --outline-variant: #49454f;
   --scrim: #000000;
   --shadow: #000000;
+
+  /* Состояния элементов */
+  --hover-overlay: rgba(255, 255, 255, 0.08);
+  --pressed-overlay: rgba(255, 255, 255, 0.12);
+  --disabled-container: rgba(255, 255, 255, 0.12);
+  --disabled-content: rgba(255, 255, 255, 0.38);
+
+  /* Анимации и переходы */
+  --transition-fast: 150ms;
+  --transition-medium: 250ms;
+  --transition-slow: 350ms;
+  --easing-standard: cubic-bezier(0.2, 0, 0, 1);
 }

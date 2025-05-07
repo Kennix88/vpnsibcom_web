@@ -1,4 +1,10 @@
+
 {
+	"modal": {
+    "cancel": "Cancel",
+    "accept": "Accept",
+    "close": "Close"
+  },
   "clipboard": {
     "copied": "Copied to clipboard!",
     "failed": "Failed to copy!"
