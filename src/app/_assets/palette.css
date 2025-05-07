@@ -19,6 +19,8 @@
   --color-gold: 159, 114, 34;
 
   --gold-container: rgba(254, 199, 61, 0.3);
+  --purple-container: rgba(127, 96, 236, 0.3);
+  --ice-container: rgba(96, 144, 199, 0.3);
 
   /* === PRIMARY === */
   --primary: #d8c5ff;

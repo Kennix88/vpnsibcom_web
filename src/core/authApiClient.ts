@@ -1,5 +1,6 @@
 import { CurrencyEnum } from '@app/enums/currency.enum'
 import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
+import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
 import { useUserStore } from '@app/store/user.store'
 import { CurrencyInterface } from '@app/types/currency.interface'
 import { PaymentMethodsDataInterface } from '@app/types/payment-methods-data.interface'
@@ -421,6 +422,86 @@ export const authApiClient = {
           user: UserDataInterface
         }>
       >('/subscriptions')
+
+      return data.data
+    } catch (error) {
+      return handleApiError(error)
+    }
+  },
+
+  async purchaseSubscription(period: SubscriptionPeriodEnum): Promise<{
+    subscriptions: SubscriptionDataInterface
+    user: UserDataInterface
+  }> {
+    try {
+      const { data } = await api.post<
+        ApiResponse<{
+          subscriptions: SubscriptionDataInterface
+          user: UserDataInterface
+        }>
+      >('/subscriptions/purchase', {
+        period,
+      })
+
+      return data.data
+    } catch (error) {
+      return handleApiError(error)
+    }
+  },
+
+  async deleteSubscription(subscriptionId: string): Promise<{
+    subscriptions: SubscriptionDataInterface
+    user: UserDataInterface
+  }> {
+    try {
+      const { data } = await api.post<
+        ApiResponse<{
+          subscriptions: SubscriptionDataInterface
+          user: UserDataInterface
+        }>
+      >('/subscriptions/delete', {
+        subscriptionId,
+      })
+
+      return data.data
+    } catch (error) {
+      return handleApiError(error)
+    }
+  },
+
+  async renewSubscription(subscriptionId: string): Promise<{
+    subscriptions: SubscriptionDataInterface
+    user: UserDataInterface
+  }> {
+    try {
+      const { data } = await api.post<
+        ApiResponse<{
+          subscriptions: SubscriptionDataInterface
+          user: UserDataInterface
+        }>
+      >('/subscriptions/renew', {
+        subscriptionId,
+      })
+
+      return data.data
+    } catch (error) {
+      return handleApiError(error)
+    }
+  },
+
+  async resetSubscriptionToken(subscriptionId: string): Promise<{
+    subscriptions: SubscriptionDataInterface
+    user: UserDataInterface
+  }> {
+    try {
+      const { data } = await api.post<
+        ApiResponse<{
+          subscriptions: SubscriptionDataInterface
+          user: UserDataInterface
+        }>
+      >('/subscriptions/reset-token', {
+        subscriptionId,
+      })
 
       return data.data
     } catch (error) {
