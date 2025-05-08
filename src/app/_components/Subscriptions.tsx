@@ -17,7 +17,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FaArrowsRotate, FaClockRotateLeft, FaCopy } from 'react-icons/fa6'
 import { FiExternalLink, FiPlus } from 'react-icons/fi'
 import { IoCheckmarkCircle, IoClose, IoCloseCircle } from 'react-icons/io5'
@@ -52,11 +52,7 @@ export function Subscriptions() {
   )
   const [isOpenModalBuy, setIsOpenModalBuy] = useState<string | null>(null)
 
-  /**
-   * Fetches subscription data from the API
-   * @returns Promise<void>
-   */
-  const fetchSubscriptions = async () => {
+  const fetchSubscriptions = useCallback(async (): Promise<void> => {
     try {
       setLoading(true)
       const response = await authApiClient.getSubscriptons()
@@ -64,15 +60,15 @@ export function Subscriptions() {
       console.log('Subscriptions loaded successfully')
     } catch (error) {
       console.error('Failed to load subscriptions', error)
+      toast.error(t('errors.loadFailed'))
     } finally {
       setLoading(false)
     }
-  }
+  }, [setSubscriptions, t])
 
-  // Load data on initial render
   useEffect(() => {
     fetchSubscriptions()
-  }, [])
+  }, [fetchSubscriptions])
 
   /**
    * Formats subscription period to human-readable string
@@ -214,11 +210,15 @@ export function Subscriptions() {
       setUser(data.user)
       setSubscriptions(data.subscriptions)
       toast.success(
-        `Auto renewal ${subscription.isAutoRenewal ? 'disabled' : 'enabled'}`,
+        subscription.isAutoRenewal
+          ? t('autoRenewalDisabled')
+          : t('autoRenewalEnabled'),
       )
     } catch {
       toast.error(
-        `Ошибка ${subscription.isAutoRenewal ? 'отключения' : 'включения'} автопродления!`,
+        subscription.isAutoRenewal 
+          ? t('errors.disableAutoRenewalFailed') 
+          : t('errors.enableAutoRenewalFailed')
       )
     } finally {
       setUpdatingButtons(null)
@@ -235,9 +235,9 @@ export function Subscriptions() {
 
       setUser(data.user)
       setSubscriptions(data.subscriptions)
-      toast.success(`Подписка была успешно удалена`)
+      toast.success(t('subscriptionDeleted'))
     } catch {
-      toast.error(`Ошибка удаления подписки!`)
+      toast.error(t('errors.deleteSubscriptionFailed'))
     } finally {
       setUpdatingButtons(null)
     }
@@ -253,9 +253,9 @@ export function Subscriptions() {
 
       setUser(data.user)
       setSubscriptions(data.subscriptions)
-      toast.success(`Данные подписки были успешно обновлены!`)
+      toast.success(t('subscriptionDataUpdated'))
     } catch {
-      toast.error(`Ошибка сброса данных подписки!`)
+      toast.error(t('errors.resetSubscriptionFailed'))
     } finally {
       setUpdatingButtons(null)
     }
@@ -271,9 +271,9 @@ export function Subscriptions() {
 
       setUser(data.user)
       setSubscriptions(data.subscriptions)
-      toast.success(`Подписка успешно продлена!`)
+      toast.success(t('subscriptionRenewed'))
     } catch {
-      toast.error(`Неудалось продлить подписку!`)
+      toast.error(t('errors.renewSubscriptionFailed'))
     } finally {
       setUpdatingButtons(null)
     }
@@ -285,7 +285,6 @@ export function Subscriptions() {
    */
   const handleCopyUrl = (url: string) => {
     copyToClipboard(url)
-    console.log('Subscription URL copied to clipboard')
   }
 
   if (!user) return null
@@ -433,14 +432,13 @@ export function Subscriptions() {
                         <Modal
                           isOpen={isOpenModalDelete === subscription.id}
                           onClose={() => setIsOpenModalDelete(null)}
-                          title="Предупреждение!"
+                          title={t('modals.delete.title')}
                           variant="error"
-                          actionText="Удалить"
+                          actionText={t('modals.delete.action')}
                           onAction={() => deleteSubscription(subscription)}>
-                          Вы точно хотите безвратно удалить подписку? Ее
-                          невозможно будет восстановить! Компенсация не
-                          предусмотрена!
+                          {t('modals.delete.message')}
                         </Modal>
+
 
                         <div className="h-4 w-[1px] bg-[var(--outline)]"></div>
 
@@ -454,15 +452,11 @@ export function Subscriptions() {
                         <Modal
                           isOpen={isOpenModalRefresh === subscription.id}
                           onClose={() => setIsOpenModalRefresh(null)}
-                          title="Предупреждение!"
+                          title={t('modals.refresh.title')}
                           variant="warning"
-                          actionText="Сбросить"
+                          actionText={t('modals.refresh.action')}
                           onAction={() => resetSubscriptionToken(subscription)}>
-                          Вы точно хотите сделать сброс данных подписки? После
-                          этого ключи и адрес подписки поменяются на новые!
-                          Необходимо будет заново добавить подписку в
-                          приложение! Обычно сброс делают, если ваша подписка
-                          утекала в сеть или кто-то получил доступ к ней!
+                          {t('modals.refresh.message')}
                         </Modal>
 
                         <div className="h-4 w-[1px] bg-[var(--outline)]"></div>
@@ -470,32 +464,34 @@ export function Subscriptions() {
                         <button
                           onClick={() => setIsOpenModalAutoPay(subscription.id)}
                           disabled={updatingButtons === subscription.id}
-                          className={`p-2 rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer ${
-                            updatingButtons === subscription.id
-                              ? 'animate-spin'
-                              : subscription.isAutoRenewal
-                                ? 'bg-[var(--success-container)] text-[var(--on-success-container)]'
-                                : 'bg-[var(--warning-container)] text-[var(--on-warning-container)]'
-                          }`}>
+                          className={`p-2 rounded-md ${
+                            subscription.isAutoRenewal
+                              ? 'bg-[var(--success)] text-[var(--on-success)]'
+                              : 'bg-[var(--surface-container-high)] text-[var(--on-surface)]'
+                          } transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer`}>
                           <MdAutoMode size={18} />
                         </button>
 
                         <Modal
                           isOpen={isOpenModalAutoPay === subscription.id}
                           onClose={() => setIsOpenModalAutoPay(null)}
-                          title="Предупреждение!"
-                          variant="warning"
+                          title={
+                            subscription.isAutoRenewal
+                              ? t('modals.autoRenewal.disableTitle')
+                              : t('modals.autoRenewal.enableTitle')
+                          }
+                          variant={
+                            subscription.isAutoRenewal ? 'warning' : 'success'
+                          }
                           actionText={
                             subscription.isAutoRenewal
-                              ? 'Отключить'
-                              : 'Включить'
+                              ? t('modals.autoRenewal.disableAction')
+                              : t('modals.autoRenewal.enableAction')
                           }
                           onAction={() => toggleAutoRenewal(subscription)}>
-                          Вы точно хотите{' '}
                           {subscription.isAutoRenewal
-                            ? 'отключить'
-                            : 'включить'}{' '}
-                          автопродление?
+                            ? t('modals.autoRenewal.disableMessage')
+                            : t('modals.autoRenewal.enableMessage')}
                         </Modal>
 
                         <button
@@ -523,36 +519,23 @@ export function Subscriptions() {
                         <Modal
                           isOpen={isOpenModalBuy === subscription.id}
                           onClose={() => setIsOpenModalBuy(null)}
-                          title="Предупреждение!"
+                          title={t('modals.renew.title')}
                           variant="warning"
-                          actionText="Продлить"
+                          actionText={t('modals.renew.action')}
                           onAction={() => renewSubscription(subscription)}>
                           <div>
-                            Вы действительно хотите продлить подписку? <br />
-                            Срок продления:{' '}
-                            {formatPeriod(
-                              subscription.period ==
-                                SubscriptionPeriodEnum.TRIAL
-                                ? SubscriptionPeriodEnum.MONTH
-                                : subscription.period,
-                            )}
-                            . <br />C вашего баланса будет списано{' '}
-                            <b className="font-bold">
-                              {getPrice(
-                                subscription.period,
-                                subscriptions,
-                                user!,
-                              )}{' '}
-                              STARS
-                            </b>{' '}
-                            (с учетом скидок{' '}
-                            {100 -
-                              getDiscountPeriod(
-                                subscription.period,
-                                subscriptions,
-                              ) *
-                                100}
-                            % и {user ? 100 - user.roleDiscount * 100 : 0}%)!
+													{t('modals.renew.message', {
+                              period: formatPeriod(subscription.period),
+                              price: subscriptions && user ? 
+                                getPrice(subscription.period, subscriptions, user).toFixed(2) : '0',
+																discountPeriod: 100 -
+																getDiscountPeriod(
+																	subscription.period,
+																	subscriptions,
+																) *
+																	100,
+																	roleDiscount: user ? 100 - user.roleDiscount * 100 : 0
+                            })}
                           </div>
                         </Modal>
                       </div>

@@ -2,6 +2,20 @@
   "addSubscription": "Add subscription",
   "yourSubscriptions": "Your subscriptions",
   "noSubscriptions": "You don't have any subscriptions yet",
+  "renewSubscription": "Renew subscription",
+  "autoRenewalEnabled": "Auto-renewal enabled",
+  "autoRenewalDisabled": "Auto-renewal disabled",
+  "subscriptionDeleted": "Subscription has been successfully deleted",
+  "subscriptionDataUpdated": "Subscription data has been successfully updated",
+  "subscriptionRenewed": "Subscription has been successfully renewed",
+  "errors": {
+    "loadFailed": "Failed to load subscriptions",
+    "disableAutoRenewalFailed": "Failed to disable auto-renewal!",
+    "enableAutoRenewalFailed": "Failed to enable auto-renewal!",
+    "deleteSubscriptionFailed": "Failed to delete subscription!",
+    "resetSubscriptionFailed": "Failed to reset subscription data!",
+    "renewSubscriptionFailed": "Failed to renew subscription!"
+  },
   "periods": {
     "trial": "Trial period",
     "hour": "1 hour",
@@ -12,5 +26,30 @@
     "year": "1 year",
     "twoYear": "2 years",
     "threeYear": "3 years"
+  },
+  "modals": {
+    "delete": {
+      "title": "Deleting a subscription",
+      "action": "Delete",
+      "message": "Are you sure you want to permanently delete your subscription? It will be impossible to restore it! No compensation is provided!"
+    },
+    "refresh": {
+      "title": "Subscription data reset",
+      "action": "Reset",
+      "message": "Are you sure you want to reset the subscription data? After this, the keys and subscription address will be changed to new ones! You will need to add the subscription to the application again! Usually, a reset is done if your subscription has leaked to the network or someone has gained access to it!"
+    },
+    "autoRenewal": {
+      "enableTitle": "Enable auto-renewal",
+      "disableTitle": "Disable auto-renewal",
+      "enableAction": "Enable",
+      "disableAction": "Disable",
+      "enableMessage": "Do you want to enable automatic subscription renewal? Funds will be automatically debited when the subscription expires.",
+      "disableMessage": "Do you want to disable automatic subscription renewal? After expiration, the subscription will be deactivated."
+    },
+    "renew": {
+      "title": "Subscription renewal",
+      "action": "Renew",
+      "message": "Do you want to renew your subscription for the period: {period}? {price} stars will be deducted from your balance (including discounts {discountPeriod}% and {roleDiscount}%)."
+    }
   }
 }
