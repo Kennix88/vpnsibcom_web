@@ -476,12 +476,15 @@ export const authApiClient = {
     try {
       const { data } = await api.post<
         ApiResponse<{
+          message: string
           subscriptions: SubscriptionDataInterface
           user: UserDataInterface
         }>
       >('/subscriptions/renew', {
         subscriptionId,
       })
+
+      console.log(data.data.message)
 
       return data.data
     } catch (error) {
@@ -500,6 +503,26 @@ export const authApiClient = {
           user: UserDataInterface
         }>
       >('/subscriptions/reset-token', {
+        subscriptionId,
+      })
+
+      return data.data
+    } catch (error) {
+      return handleApiError(error)
+    }
+  },
+
+  async toggleAutoRenewalSubscription(subscriptionId: string): Promise<{
+    subscriptions: SubscriptionDataInterface
+    user: UserDataInterface
+  }> {
+    try {
+      const { data } = await api.post<
+        ApiResponse<{
+          subscriptions: SubscriptionDataInterface
+          user: UserDataInterface
+        }>
+      >('/subscriptions/toggle-auto-renewal', {
         subscriptionId,
       })
 
