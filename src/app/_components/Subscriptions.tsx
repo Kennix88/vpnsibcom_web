@@ -11,8 +11,9 @@ import {
 import { UserDataInterface } from '@app/types/user-data.interface'
 import { useCopyToClipboard } from '@app/utils/copy-to-clipboard.util'
 import limitLengthString from '@app/utils/limit-length-string.util'
+
+import { useLocale } from '@app/hooks/useLocale'
 import { formatDistanceToNow } from 'date-fns'
-import { ru } from 'date-fns/locale'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
@@ -33,6 +34,7 @@ import TgStar from './TgStar'
  * @returns JSX.Element
  */
 export function Subscriptions() {
+  const { dateFnsLocale } = useLocale()
   const t = useTranslations('subscriptions')
   const copyToClipboard = useCopyToClipboard()
   const { subscriptions, setSubscriptions } = useSubscriptionsStore()
@@ -110,43 +112,50 @@ export function Subscriptions() {
         return data.priceSubscriptionStars * user.roleDiscount
       case SubscriptionPeriodEnum.HOUR:
         return (
-          data.priceSubscriptionStars *
+          (data.priceSubscriptionStars / 30 / 24) *
           data.hourRatioPayment *
           user.roleDiscount
         )
       case SubscriptionPeriodEnum.DAY:
         return (
-          data.priceSubscriptionStars * data.dayRatioPayment * user.roleDiscount
+          (data.priceSubscriptionStars / 30) *
+          data.dayRatioPayment *
+          user.roleDiscount
         )
       case SubscriptionPeriodEnum.MONTH:
         return data.priceSubscriptionStars * user.roleDiscount
       case SubscriptionPeriodEnum.THREE_MONTH:
         return (
           data.priceSubscriptionStars *
+          3 *
           data.threeMouthesRatioPayment *
           user.roleDiscount
         )
       case SubscriptionPeriodEnum.SIX_MONTH:
         return (
           data.priceSubscriptionStars *
+          6 *
           data.sixMouthesRatioPayment *
           user.roleDiscount
         )
       case SubscriptionPeriodEnum.YEAR:
         return (
           data.priceSubscriptionStars *
+          12 *
           data.oneYearRatioPayment *
           user.roleDiscount
         )
       case SubscriptionPeriodEnum.TWO_YEAR:
         return (
           data.priceSubscriptionStars *
+          24 *
           data.twoYearRatioPayment *
           user.roleDiscount
         )
       case SubscriptionPeriodEnum.THREE_YEAR:
         return (
           data.priceSubscriptionStars *
+          36 *
           data.threeYearRatioPayment *
           user.roleDiscount
         )
@@ -189,7 +198,10 @@ export function Subscriptions() {
    * @returns Formatted date string
    */
   const formatExpiredDate = (date: Date): string => {
-    return formatDistanceToNow(new Date(date), { addSuffix: false, locale: ru })
+    return formatDistanceToNow(new Date(date), {
+      addSuffix: false,
+      locale: dateFnsLocale,
+    })
   }
 
   /**
@@ -216,9 +228,9 @@ export function Subscriptions() {
       )
     } catch {
       toast.error(
-        subscription.isAutoRenewal 
-          ? t('errors.disableAutoRenewalFailed') 
-          : t('errors.enableAutoRenewalFailed')
+        subscription.isAutoRenewal
+          ? t('errors.disableAutoRenewalFailed')
+          : t('errors.enableAutoRenewalFailed'),
       )
     } finally {
       setUpdatingButtons(null)
@@ -288,6 +300,10 @@ export function Subscriptions() {
   }
 
   if (!user) return null
+
+  const balance = user.balance.isUseWithdrawalBalance
+    ? user.balance.paymentBalance + user.balance.withdrawalBalance
+    : user.balance.paymentBalance
 
   return (
     <div className="flex flex-col gap-2 items-center font-extralight font-mono max-w-[600px] w-full">
@@ -439,7 +455,6 @@ export function Subscriptions() {
                           {t('modals.delete.message')}
                         </Modal>
 
-
                         <div className="h-4 w-[1px] bg-[var(--outline)]"></div>
 
                         <button
@@ -502,14 +517,14 @@ export function Subscriptions() {
                               subscription.period,
                               subscriptions,
                               user!,
-                            ) > user?.balance.paymentBalance
+                            ) > balance
                           }
                           className={`p-2 rounded-md bg-[var(--gold-container)] text-[var(--on-surface-variant)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
                             getPrice(
                               subscription.period,
                               subscriptions,
                               user!,
-                            ) > user?.balance.paymentBalance
+                            ) > balance
                               ? 'opacity-50 cursor-not-allowed'
                               : ' cursor-pointer'
                           }`}>
@@ -524,17 +539,33 @@ export function Subscriptions() {
                           actionText={t('modals.renew.action')}
                           onAction={() => renewSubscription(subscription)}>
                           <div>
-													{t('modals.renew.message', {
+                            {t('modals.renew.message', {
                               period: formatPeriod(subscription.period),
-                              price: subscriptions && user ? 
-                                getPrice(subscription.period, subscriptions, user).toFixed(2) : '0',
-																discountPeriod: 100 -
-																getDiscountPeriod(
-																	subscription.period,
-																	subscriptions,
-																) *
-																	100,
-																	roleDiscount: user ? 100 - user.roleDiscount * 100 : 0
+                              price:
+                                subscriptions && user
+                                  ? (getPrice(
+                                      subscription.period,
+                                      subscriptions,
+                                      user,
+                                    ) < 0.01
+                                      ? 0.01
+                                      : getPrice(
+                                          subscription.period,
+                                          subscriptions,
+                                          user,
+                                        )
+                                    ).toFixed(2)
+                                  : '0',
+                              discountPeriod:
+                                100 -
+                                getDiscountPeriod(
+                                  subscription.period,
+                                  subscriptions,
+                                ) *
+                                  100,
+                              roleDiscount: user
+                                ? 100 - user.roleDiscount * 100
+                                : 0,
                             })}
                           </div>
                         </Modal>

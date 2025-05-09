@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 const Loader = () => {
   return (
-    <div className="flex flex-col gap-4 justify-around items-center min-h-screen bg-[var(--background)] text-[var(--on-surface)] rounded-t-xl ">
+    <div className="flex flex-col gap-4 justify-around items-center min-h-screen bg-[var(--background)] text-[var(--on-surface)]">
       <div className={'flex flex-col gap-2 items-center'}>
         <Image
           src={'/logo.png'}
