@@ -429,7 +429,33 @@ export const authApiClient = {
     }
   },
 
-  async purchaseSubscription(period: SubscriptionPeriodEnum): Promise<{
+  /**
+   * Purchase subscription with specified parameters
+   * @param params Subscription purchase parameters
+   * @param params.period Subscription period
+   * @param params.periodMultiplier Optional multiplier for subscription period (default: 1)
+   * @param params.isFixedPrice Optional flag for fixed price (default: false)
+   * @param params.devicesCount Number of devices for subscription
+   * @param params.isAllServers Optional flag to include all servers (default: false)
+   * @param params.isAllPremiumServers Optional flag to include all premium servers (default: false)
+   * @param params.trafficLimitGb Optional traffic limit in GB
+   * @param params.isUnlimitTraffic Optional flag for unlimited traffic (default: false)
+   * @param params.servers Optional array of server IDs (default: [])
+   * @param params.isAutoRenewal Optional flag for auto renewal (default: true)
+   * @returns Subscriptions and user data
+   */
+  async purchaseSubscription(params: {
+    period: SubscriptionPeriodEnum
+    periodMultiplier?: number
+    isFixedPrice?: boolean
+    devicesCount: number
+    isAllServers?: boolean
+    isAllPremiumServers?: boolean
+    trafficLimitGb?: number
+    isUnlimitTraffic?: boolean
+    servers?: string[]
+    isAutoRenewal?: boolean
+  }): Promise<{
     subscriptions: SubscriptionDataInterface
     user: UserDataInterface
   }> {
@@ -440,7 +466,16 @@ export const authApiClient = {
           user: UserDataInterface
         }>
       >('/subscriptions/purchase', {
-        period,
+        period: params.period,
+        periodMultiplier: params.periodMultiplier,
+        isFixedPrice: params.isFixedPrice,
+        devicesCount: params.devicesCount,
+        isAllServers: params.isAllServers,
+        isAllPremiumServers: params.isAllPremiumServers,
+        trafficLimitGb: params.trafficLimitGb,
+        isUnlimitTraffic: params.isUnlimitTraffic,
+        servers: params.servers || [],
+        isAutoRenewal: params.isAutoRenewal,
       })
 
       return data.data
