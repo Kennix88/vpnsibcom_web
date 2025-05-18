@@ -4,7 +4,6 @@ import { UserRolesEnum } from '@app/enums/user-roles.enum'
 export interface UserDataInterface {
   id: string
   telegramId: string
-  tonWallet?: string
   isFreePlanAvailable: boolean
   freePlanDays?: number
   isBanned: boolean
@@ -21,7 +20,6 @@ export interface UserDataInterface {
   photoUrl?: string
   languageCode: string
   currencyCode: CurrencyEnum
-  giftsCount: number
   referralsCount: number
   balance: UserBalanceInterface
 }
@@ -31,5 +29,7 @@ export interface UserBalanceInterface {
   holdBalance: number
   totalEarnedWithdrawalBalance: number
   withdrawalBalance: number
+  ticketsBalance: number
   isUseWithdrawalBalance: boolean
+  exchangeLimit: number
 }
