@@ -6,7 +6,7 @@ import { CurrencyInterface } from '@app/types/currency.interface'
 import { PaymentMethodsDataInterface } from '@app/types/payment-methods-data.interface'
 import { RatesInterface } from '@app/types/rates.interface'
 import { ReferralsDataInterface } from '@app/types/referrals-data-interface'
-import { SubscriptionDataInterface } from '@app/types/subscription-data.interface'
+import { SubscriptionResponseInterface } from '@app/types/subscription-data.interface'
 import { UserDataInterface } from '@app/types/user-data.interface'
 import axios, {
   AxiosError,
@@ -390,13 +390,13 @@ export const authApiClient = {
    * @returns Subscriptions and user data
    */
   async freePlanActivated(): Promise<{
-    subscriptions: SubscriptionDataInterface
+    subscriptions: SubscriptionResponseInterface
     user: UserDataInterface
   }> {
     try {
       const { data } = await api.post<
         ApiResponse<{
-          subscriptions: SubscriptionDataInterface
+          subscriptions: SubscriptionResponseInterface
           user: UserDataInterface
         }>
       >('/subscriptions/free-plan-activated')
@@ -412,13 +412,13 @@ export const authApiClient = {
    * @returns Subscriptions and user data
    */
   async getSubscriptons(): Promise<{
-    subscriptions: SubscriptionDataInterface
+    subscriptions: SubscriptionResponseInterface
     user: UserDataInterface
   }> {
     try {
       const { data } = await api.get<
         ApiResponse<{
-          subscriptions: SubscriptionDataInterface
+          subscriptions: SubscriptionResponseInterface
           user: UserDataInterface
         }>
       >('/subscriptions')
@@ -456,13 +456,13 @@ export const authApiClient = {
     servers?: string[]
     isAutoRenewal?: boolean
   }): Promise<{
-    subscriptions: SubscriptionDataInterface
+    subscriptions: SubscriptionResponseInterface
     user: UserDataInterface
   }> {
     try {
       const { data } = await api.post<
         ApiResponse<{
-          subscriptions: SubscriptionDataInterface
+          subscriptions: SubscriptionResponseInterface
           user: UserDataInterface
         }>
       >('/subscriptions/purchase', {
@@ -497,13 +497,13 @@ export const authApiClient = {
     servers?: string[]
     isAutoRenewal?: boolean
   }): Promise<{
-    subscriptions: SubscriptionDataInterface
+    subscriptions: SubscriptionResponseInterface
     user: UserDataInterface
   }> {
     try {
       const { data } = await api.post<
         ApiResponse<{
-          subscriptions: SubscriptionDataInterface
+          subscriptions: SubscriptionResponseInterface
           user: UserDataInterface
         }>
       >('/subscriptions/change-conditions', {
@@ -527,13 +527,13 @@ export const authApiClient = {
   },
 
   async deleteSubscription(subscriptionId: string): Promise<{
-    subscriptions: SubscriptionDataInterface
+    subscriptions: SubscriptionResponseInterface
     user: UserDataInterface
   }> {
     try {
       const { data } = await api.post<
         ApiResponse<{
-          subscriptions: SubscriptionDataInterface
+          subscriptions: SubscriptionResponseInterface
           user: UserDataInterface
         }>
       >('/subscriptions/delete', {
@@ -547,14 +547,14 @@ export const authApiClient = {
   },
 
   async renewSubscription(subscriptionId: string): Promise<{
-    subscriptions: SubscriptionDataInterface
+    subscriptions: SubscriptionResponseInterface
     user: UserDataInterface
   }> {
     try {
       const { data } = await api.post<
         ApiResponse<{
           message: string
-          subscriptions: SubscriptionDataInterface
+          subscriptions: SubscriptionResponseInterface
           user: UserDataInterface
         }>
       >('/subscriptions/renew', {
@@ -570,13 +570,13 @@ export const authApiClient = {
   },
 
   async resetSubscriptionToken(subscriptionId: string): Promise<{
-    subscriptions: SubscriptionDataInterface
+    subscriptions: SubscriptionResponseInterface
     user: UserDataInterface
   }> {
     try {
       const { data } = await api.post<
         ApiResponse<{
-          subscriptions: SubscriptionDataInterface
+          subscriptions: SubscriptionResponseInterface
           user: UserDataInterface
         }>
       >('/subscriptions/reset-token', {
@@ -590,13 +590,13 @@ export const authApiClient = {
   },
 
   async toggleAutoRenewalSubscription(subscriptionId: string): Promise<{
-    subscriptions: SubscriptionDataInterface
+    subscriptions: SubscriptionResponseInterface
     user: UserDataInterface
   }> {
     try {
       const { data } = await api.post<
         ApiResponse<{
-          subscriptions: SubscriptionDataInterface
+          subscriptions: SubscriptionResponseInterface
           user: UserDataInterface
         }>
       >('/subscriptions/toggle-auto-renewal', {
