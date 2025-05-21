@@ -484,6 +484,48 @@ export const authApiClient = {
     }
   },
 
+  async changeSubscriptionConditions(params: {
+    subscriptionId: string
+    period: SubscriptionPeriodEnum
+    periodMultiplier?: number
+    isFixedPrice?: boolean
+    devicesCount: number
+    isAllServers?: boolean
+    isAllPremiumServers?: boolean
+    trafficLimitGb?: number
+    isUnlimitTraffic?: boolean
+    servers?: string[]
+    isAutoRenewal?: boolean
+  }): Promise<{
+    subscriptions: SubscriptionDataInterface
+    user: UserDataInterface
+  }> {
+    try {
+      const { data } = await api.post<
+        ApiResponse<{
+          subscriptions: SubscriptionDataInterface
+          user: UserDataInterface
+        }>
+      >('/subscriptions/change-conditions', {
+        subscriptionId: params.subscriptionId,
+        period: params.period,
+        periodMultiplier: params.periodMultiplier,
+        isFixedPrice: params.isFixedPrice,
+        devicesCount: params.devicesCount,
+        isAllServers: params.isAllServers,
+        isAllPremiumServers: params.isAllPremiumServers,
+        trafficLimitGb: params.trafficLimitGb,
+        isUnlimitTraffic: params.isUnlimitTraffic,
+        servers: params.servers || [],
+        isAutoRenewal: params.isAutoRenewal,
+      })
+
+      return data.data
+    } catch (error) {
+      return handleApiError(error)
+    }
+  },
+
   async deleteSubscription(subscriptionId: string): Promise<{
     subscriptions: SubscriptionDataInterface
     user: UserDataInterface
