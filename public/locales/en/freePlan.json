@@ -1,5 +1,8 @@
 {
   "trialAvailable": "A trial period of {days} days is available to you.",
   "activate": "Activate",
-  "activationFailed": "Couldn't activate the free plan"
+  "activationFailed": "Couldn't activate the free plan",
+  "modalTitle": "Trial Period Activation",
+  "modalAction": "Activate",
+  "modalConfirmation": "Do you really want to activate the trial period?"
 }
