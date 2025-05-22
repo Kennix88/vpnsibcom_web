@@ -4,15 +4,11 @@ import { authApiClient } from '@app/core/authApiClient'
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
 import { useSubscriptionsStore } from '@app/store/subscriptions.store'
 import { useUserStore } from '@app/store/user.store'
-import {
-  SubscriptionDataInterface,
-  SubscriptionDataListInterface,
-} from '@app/types/subscription-data.interface'
-import { UserDataInterface } from '@app/types/user-data.interface'
 import { useCopyToClipboard } from '@app/utils/copy-to-clipboard.util'
 import limitLengthString from '@app/utils/limit-length-string.util'
 
 import { useLocale } from '@app/hooks/useLocale'
+import { SubscriptionDataInterface } from '@app/types/subscription-data.interface'
 import { formatDistanceToNow } from 'date-fns'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
@@ -85,6 +81,8 @@ export function Subscriptions() {
         return t('periods.hour')
       case SubscriptionPeriodEnum.DAY:
         return t('periods.day')
+      case SubscriptionPeriodEnum.WEEK:
+        return '1 неделя'
       case SubscriptionPeriodEnum.MONTH:
         return t('periods.month')
       case SubscriptionPeriodEnum.THREE_MONTH:
@@ -97,98 +95,10 @@ export function Subscriptions() {
         return t('periods.twoYear')
       case SubscriptionPeriodEnum.THREE_YEAR:
         return t('periods.threeYear')
+      case SubscriptionPeriodEnum.INDEFINITELY:
+        return 'Безсрочно'
       default:
         return period
-    }
-  }
-
-  const getPrice = (
-    period: SubscriptionPeriodEnum,
-    data: SubscriptionDataInterface,
-    user: UserDataInterface,
-  ) => {
-    switch (period) {
-      case SubscriptionPeriodEnum.TRIAL:
-        return data.priceSubscriptionStars * user.roleDiscount
-      case SubscriptionPeriodEnum.HOUR:
-        return (
-          (data.priceSubscriptionStars / 30 / 24) *
-          data.hourRatioPayment *
-          user.roleDiscount
-        )
-      case SubscriptionPeriodEnum.DAY:
-        return (
-          (data.priceSubscriptionStars / 30) *
-          data.dayRatioPayment *
-          user.roleDiscount
-        )
-      case SubscriptionPeriodEnum.MONTH:
-        return data.priceSubscriptionStars * user.roleDiscount
-      case SubscriptionPeriodEnum.THREE_MONTH:
-        return (
-          data.priceSubscriptionStars *
-          3 *
-          data.threeMouthesRatioPayment *
-          user.roleDiscount
-        )
-      case SubscriptionPeriodEnum.SIX_MONTH:
-        return (
-          data.priceSubscriptionStars *
-          6 *
-          data.sixMouthesRatioPayment *
-          user.roleDiscount
-        )
-      case SubscriptionPeriodEnum.YEAR:
-        return (
-          data.priceSubscriptionStars *
-          12 *
-          data.oneYearRatioPayment *
-          user.roleDiscount
-        )
-      case SubscriptionPeriodEnum.TWO_YEAR:
-        return (
-          data.priceSubscriptionStars *
-          24 *
-          data.twoYearRatioPayment *
-          user.roleDiscount
-        )
-      case SubscriptionPeriodEnum.THREE_YEAR:
-        return (
-          data.priceSubscriptionStars *
-          36 *
-          data.threeYearRatioPayment *
-          user.roleDiscount
-        )
-      default:
-        return data.priceSubscriptionStars
-    }
-  }
-
-  const getDiscountPeriod = (
-    period: SubscriptionPeriodEnum,
-    data: SubscriptionDataInterface,
-  ) => {
-    switch (period) {
-      case SubscriptionPeriodEnum.TRIAL:
-        return 1
-      case SubscriptionPeriodEnum.HOUR:
-        return data.hourRatioPayment
-      case SubscriptionPeriodEnum.DAY:
-        return data.dayRatioPayment
-      case SubscriptionPeriodEnum.MONTH:
-        return 1
-      case SubscriptionPeriodEnum.THREE_MONTH:
-        return data.threeMouthesRatioPayment
-      case SubscriptionPeriodEnum.SIX_MONTH:
-        return data.sixMouthesRatioPayment
-      case SubscriptionPeriodEnum.YEAR:
-        return data.oneYearRatioPayment
-      case SubscriptionPeriodEnum.TWO_YEAR:
-        return data.twoYearRatioPayment
-      case SubscriptionPeriodEnum.THREE_YEAR:
-        return data.threeYearRatioPayment
-      default:
-        return 1
     }
   }
 
@@ -209,9 +119,7 @@ export function Subscriptions() {
    * @param subscription - Subscription data
    * @returns Promise<void>
    */
-  const toggleAutoRenewal = async (
-    subscription: SubscriptionDataListInterface,
-  ) => {
+  const toggleAutoRenewal = async (subscription: SubscriptionDataInterface) => {
     try {
       setIsOpenModalAutoPay(null)
       setUpdatingButtons(subscription.id)
@@ -238,7 +146,7 @@ export function Subscriptions() {
   }
 
   const deleteSubscription = async (
-    subscription: SubscriptionDataListInterface,
+    subscription: SubscriptionDataInterface,
   ) => {
     try {
       setIsOpenModalDelete(null)
@@ -256,7 +164,7 @@ export function Subscriptions() {
   }
 
   const resetSubscriptionToken = async (
-    subscription: SubscriptionDataListInterface,
+    subscription: SubscriptionDataInterface,
   ) => {
     try {
       setIsOpenModalRefresh(null)
@@ -273,9 +181,7 @@ export function Subscriptions() {
     }
   }
 
-  const renewSubscription = async (
-    subscription: SubscriptionDataListInterface,
-  ) => {
+  const renewSubscription = async (subscription: SubscriptionDataInterface) => {
     try {
       setIsOpenModalBuy(null)
       setUpdatingButtons(subscription.id)
@@ -310,8 +216,8 @@ export function Subscriptions() {
       {/* Add Subscription Button */}
       {user &&
         subscriptions &&
-        subscriptions.list &&
-        subscriptions.list.length < user.limitSubscriptions && (
+        subscriptions.subscriptions &&
+        subscriptions.subscriptions.length < user.limitSubscriptions && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -327,8 +233,10 @@ export function Subscriptions() {
       <div className="px-4 opacity-70 flex flex-row gap-2 items-center justify-between w-full">
         <span>{t('yourSubscriptions')}</span>
         <span className="text-sm">
-          {subscriptions && subscriptions.list ? subscriptions.list.length : 0}/
-          {user?.limitSubscriptions || 0}
+          {subscriptions && subscriptions.subscriptions
+            ? subscriptions.subscriptions.length
+            : 0}
+          /{user?.limitSubscriptions || 0}
         </span>
       </div>
 
@@ -373,7 +281,7 @@ export function Subscriptions() {
       {!loading && (
         <div className="flex flex-col gap-2 w-full">
           <AnimatePresence>
-            {subscriptions?.list.length === 0 ? (
+            {subscriptions?.subscriptions.length === 0 ? (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -383,7 +291,7 @@ export function Subscriptions() {
               </motion.div>
             ) : (
               <div className="flex flex-col">
-                {subscriptions?.list.map((subscription) => (
+                {subscriptions?.subscriptions.map((subscription) => (
                   <motion.div
                     key={subscription.id}
                     initial={{ opacity: 0, y: 20 }}
@@ -474,101 +382,91 @@ export function Subscriptions() {
                           {t('modals.refresh.message')}
                         </Modal>
 
-                        <div className="h-4 w-[1px] bg-[var(--outline)]"></div>
+                        {subscription.period !== SubscriptionPeriodEnum.TRIAL &&
+                          subscription.period !==
+                            SubscriptionPeriodEnum.INDEFINITELY && (
+                            <>
+                              <div className="h-4 w-[1px] bg-[var(--outline)]"></div>
 
-                        <button
-                          onClick={() => setIsOpenModalAutoPay(subscription.id)}
-                          disabled={updatingButtons === subscription.id}
-                          className={`p-2 rounded-md ${
-                            subscription.isAutoRenewal
-                              ? 'bg-[var(--success)] text-[var(--on-success)]'
-                              : 'bg-[var(--surface-container-high)] text-[var(--on-surface)]'
-                          } transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer`}>
-                          <MdAutoMode size={18} />
-                        </button>
+                              <button
+                                onClick={() =>
+                                  setIsOpenModalAutoPay(subscription.id)
+                                }
+                                disabled={updatingButtons === subscription.id}
+                                className={`p-2 rounded-md ${
+                                  subscription.isAutoRenewal
+                                    ? 'bg-[var(--success)] text-[var(--on-success)]'
+                                    : 'bg-[var(--surface-container-high)] text-[var(--on-surface)]'
+                                } transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer`}>
+                                <MdAutoMode size={18} />
+                              </button>
 
-                        <Modal
-                          isOpen={isOpenModalAutoPay === subscription.id}
-                          onClose={() => setIsOpenModalAutoPay(null)}
-                          title={
-                            subscription.isAutoRenewal
-                              ? t('modals.autoRenewal.disableTitle')
-                              : t('modals.autoRenewal.enableTitle')
-                          }
-                          variant={
-                            subscription.isAutoRenewal ? 'warning' : 'success'
-                          }
-                          actionText={
-                            subscription.isAutoRenewal
-                              ? t('modals.autoRenewal.disableAction')
-                              : t('modals.autoRenewal.enableAction')
-                          }
-                          onAction={() => toggleAutoRenewal(subscription)}>
-                          {subscription.isAutoRenewal
-                            ? t('modals.autoRenewal.disableMessage')
-                            : t('modals.autoRenewal.enableMessage')}
-                        </Modal>
+                              <Modal
+                                isOpen={isOpenModalAutoPay === subscription.id}
+                                onClose={() => setIsOpenModalAutoPay(null)}
+                                title={
+                                  subscription.isAutoRenewal
+                                    ? t('modals.autoRenewal.disableTitle')
+                                    : t('modals.autoRenewal.enableTitle')
+                                }
+                                variant={
+                                  subscription.isAutoRenewal
+                                    ? 'warning'
+                                    : 'success'
+                                }
+                                actionText={
+                                  subscription.isAutoRenewal
+                                    ? t('modals.autoRenewal.disableAction')
+                                    : t('modals.autoRenewal.enableAction')
+                                }
+                                onAction={() =>
+                                  toggleAutoRenewal(subscription)
+                                }>
+                                {subscription.isAutoRenewal
+                                  ? t('modals.autoRenewal.disableMessage')
+                                  : t('modals.autoRenewal.enableMessage')}
+                              </Modal>
+                            </>
+                          )}
 
-                        <button
-                          onClick={() => setIsOpenModalBuy(subscription.id)}
-                          disabled={
-                            updatingButtons === subscription.id ||
-                            getPrice(
-                              subscription.period,
-                              subscriptions,
-                              user!,
-                            ) > balance
-                          }
-                          className={`p-2 rounded-md bg-[var(--gold-container)] text-[var(--on-surface-variant)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
-                            getPrice(
-                              subscription.period,
-                              subscriptions,
-                              user!,
-                            ) > balance
-                              ? 'opacity-50 cursor-not-allowed'
-                              : ' cursor-pointer'
-                          }`}>
-                          <TgStar type={'gold'} w={18} />
-                        </button>
-
-                        <Modal
-                          isOpen={isOpenModalBuy === subscription.id}
-                          onClose={() => setIsOpenModalBuy(null)}
-                          title={t('modals.renew.title')}
-                          variant="warning"
-                          actionText={t('modals.renew.action')}
-                          onAction={() => renewSubscription(subscription)}>
-                          <div>
-                            {t('modals.renew.message', {
-                              period: formatPeriod(subscription.period),
-                              price:
-                                subscriptions && user
-                                  ? (getPrice(
-                                      subscription.period,
-                                      subscriptions,
-                                      user,
-                                    ) < 0.01
-                                      ? 0.01
-                                      : getPrice(
-                                          subscription.period,
-                                          subscriptions,
-                                          user,
-                                        )
-                                    ).toFixed(2)
-                                  : '0',
-                              discountPeriod:
-                                100 -
-                                getDiscountPeriod(
-                                  subscription.period,
-                                  subscriptions,
-                                ) *
-                                  100,
-                              roleDiscount: user
-                                ? 100 - user.roleDiscount * 100
-                                : 0,
-                            })}
-                          </div>
-                        </Modal>
+                        {subscription.period !== SubscriptionPeriodEnum.TRIAL &&
+                          subscription.period !==
+                            SubscriptionPeriodEnum.INDEFINITELY &&
+                          subscription.nextRenewalStars && (
+                            <>
+                              <button
+                                onClick={() =>
+                                  setIsOpenModalBuy(subscription.id)
+                                }
+                                disabled={
+                                  updatingButtons === subscription.id ||
+                                  subscription.nextRenewalStars > balance
+                                }
+                                className={`p-2 rounded-md bg-[var(--gold-container)] text-[var(--on-surface-variant)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+                                  subscription.nextRenewalStars > balance
+                                    ? 'opacity-50 cursor-not-allowed'
+                                    : ' cursor-pointer'
+                                }`}>
+                                <TgStar type={'gold'} w={18} />
+                              </button>
+                              <Modal
+                                isOpen={isOpenModalBuy === subscription.id}
+                                onClose={() => setIsOpenModalBuy(null)}
+                                title={t('modals.renew.title')}
+                                variant="warning"
+                                actionText={t('modals.renew.action')}
+                                onAction={() =>
+                                  renewSubscription(subscription)
+                                }>
+                                <div>
+                                  {t('modals.renew.message', {
+                                    period: formatPeriod(subscription.period),
+                                    price: subscription.nextRenewalStars,
+                                  })}
+                                </div>
+                              </Modal>
+                            </>
+                          )}
                       </div>
 
                       <div className="flex gap-2 items-center ">
