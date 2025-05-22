@@ -1,6 +1,5 @@
-
 {
-	"modal": {
+  "modal": {
     "cancel": "Cancel",
     "accept": "Accept",
     "close": "Close"
@@ -8,5 +7,16 @@
   "clipboard": {
     "copied": "Copied to clipboard!",
     "failed": "Failed to copy!"
+  },
+  "units": {
+    "bytes": "B",
+    "kilobytes": "KB",
+    "megabytes": "MB",
+    "gigabytes": "GB",
+    "terabytes": "TB",
+    "petabytes": "PB",
+    "exabytes": "EB",
+    "zettabytes": "ZB",
+    "yottabytes": "YB"
   }
 }

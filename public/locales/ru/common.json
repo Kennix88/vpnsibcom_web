@@ -12,5 +12,16 @@
     "trialAvailable": "Вам доступен пробный перириод на {days} дней.",
     "activate": "Активировать",
     "activationFailed": "Не удалось активировать бесплатный план"
+  },
+  "units": {
+    "bytes": "Б",
+    "kilobytes": "КБ",
+    "megabytes": "МБ",
+    "gigabytes": "ГБ",
+    "terabytes": "ТБ",
+    "petabytes": "ПБ",
+    "exabytes": "ЭБ",
+    "zettabytes": "ЗБ",
+    "yottabytes": "ЙБ"
   }
 }
