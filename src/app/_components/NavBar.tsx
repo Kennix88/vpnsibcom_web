@@ -3,7 +3,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { FaUserFriends } from 'react-icons/fa'
 import { FaFire, FaMoneyBill1Wave } from 'react-icons/fa6'
-import { TbGiftFilled, TbSmartHome } from 'react-icons/tb'
+import { IoLogoGameControllerA } from 'react-icons/io'
+import { TbSmartHome } from 'react-icons/tb'
 import { useTranslations } from 'use-intl'
 
 export default function NavBar() {
@@ -23,9 +24,9 @@ export default function NavBar() {
       icon: <FaFire className="text-2xl" />,
     },
     {
-      name: t('gifts'),
-      href: url + '/gifts',
-      icon: <TbGiftFilled className="text-2xl" />,
+      name: t('games'),
+      href: url + '/games',
+      icon: <IoLogoGameControllerA className="text-2xl" />,
     },
     {
       name: t('friends'),
@@ -42,7 +43,7 @@ export default function NavBar() {
   const isMainUrls =
     url === location ||
     url + '/earning' === location ||
-    url + '/gifts' === location ||
+    url + '/games' === location ||
     url + '/friends' === location ||
     url + '/billing' === location
 
