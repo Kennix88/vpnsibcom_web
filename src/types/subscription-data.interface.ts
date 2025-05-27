@@ -44,6 +44,8 @@ export interface SubscriptionDataInterface {
   links: string[]
 
   servers: ServerDataInterface[]
+  baseServersCount: number
+  premiumServersCount: number
 
   createdAt: Date
   updatedAt: Date

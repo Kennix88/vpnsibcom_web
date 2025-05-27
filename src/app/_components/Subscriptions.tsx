@@ -5,32 +5,41 @@ import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
 import { useSubscriptionsStore } from '@app/store/subscriptions.store'
 import { useUserStore } from '@app/store/user.store'
 import { useCopyToClipboard } from '@app/utils/copy-to-clipboard.util'
-import limitLengthString from '@app/utils/limit-length-string.util'
 
 import { useLocale } from '@app/hooks/useLocale'
 import { SubscriptionDataInterface } from '@app/types/subscription-data.interface'
-import { formatDistanceToNow } from 'date-fns'
+import { formatBytes } from '@app/utils/format-bytes.util'
+import limitLengthString from '@app/utils/limit-length-string.util'
+import { differenceInMinutes, formatDistanceToNow, intlFormat } from 'date-fns'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
-import { FaArrowsRotate, FaClockRotateLeft, FaCopy } from 'react-icons/fa6'
+import QRCodeStyling from 'qr-code-styling'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import {
+  FaArrowsRotate,
+  FaCircleInfo,
+  FaClockRotateLeft,
+  FaCopy,
+} from 'react-icons/fa6'
 import { FiExternalLink, FiPlus } from 'react-icons/fi'
-import { IoCheckmarkCircle, IoClose, IoCloseCircle } from 'react-icons/io5'
+import { IoCheckmark, IoClose } from 'react-icons/io5'
 import { MdAutoMode, MdRotateRight } from 'react-icons/md'
+import { PiSpeedometerBold } from 'react-icons/pi'
 import { SiAdobeindesign } from 'react-icons/si'
-import { TbPlugConnected } from 'react-icons/tb'
+import { TbPlugConnected, TbQrcode } from 'react-icons/tb'
 import { toast } from 'react-toastify'
 import Modal from './Modal'
 import TgStar from './TgStar'
+import TooltipWrapper from './TooltipWrapper'
 
 /**
  * Component for displaying user subscriptions
  * @returns JSX.Element
  */
 export function Subscriptions() {
-  const { dateFnsLocale } = useLocale()
+  const { locale, dateFnsLocale } = useLocale()
   const t = useTranslations('subscriptions')
   const copyToClipboard = useCopyToClipboard()
   const { subscriptions, setSubscriptions } = useSubscriptionsStore()
@@ -49,6 +58,53 @@ export function Subscriptions() {
     null,
   )
   const [isOpenModalBuy, setIsOpenModalBuy] = useState<string | null>(null)
+  const [isOpenModalQR, setIsOpenModalQR] = useState<string | null>(null)
+  const qrRef = useRef<HTMLDivElement>(null)
+  const qrCodeRef = useRef<QRCodeStyling | null>(null)
+
+  useEffect(() => {
+    if (!isOpenModalQR || !qrRef.current) return
+
+    // Находим подписку по ID
+    const subscription = subscriptions?.subscriptions.find(
+      (sub) => sub.id === isOpenModalQR,
+    )
+    if (!subscription) return
+
+    // Создаем новый QR-код
+    qrCodeRef.current = new QRCodeStyling({
+      width: 250,
+      height: 250,
+      type: 'svg',
+      data: subscription.subscriptionUrl || '',
+      image: '/logo.png', // Путь к вашему логотипу
+      dotsOptions: {
+        color: 'var(--primary)',
+        type: 'rounded', // 'rounded', 'dots', 'classy', 'classy-rounded', 'square', 'extra-rounded'
+      },
+      backgroundOptions: {
+        color: 'var(--surface-container-lowest)',
+      },
+      cornersSquareOptions: {
+        color: 'var(--secondary)',
+        type: 'extra-rounded', // 'dot', 'square', 'extra-rounded', 'rounded'
+      },
+      cornersDotOptions: {
+        color: 'var(--tertiary)',
+        type: 'dot', // 'dot', 'square'
+      },
+      imageOptions: {
+        crossOrigin: 'anonymous',
+        margin: 10,
+        hideBackgroundDots: true,
+        imageSize: 0.3,
+      },
+    })
+
+    // Очищаем контейнер перед добавлением нового QR-кода
+    qrRef.current.innerHTML = ''
+    qrCodeRef.current.append(qrRef.current)
+  }, [isOpenModalQR, subscriptions])
 
   const fetchSubscriptions = useCallback(async (): Promise<void> => {
     try {
@@ -298,23 +354,7 @@ export function Subscriptions() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.3 }}
-                    className="relative bg-[var(--surface-container-lowest)] rounded-md ">
-                    <div className="absolute z-10 -top-2 -right-2 flex items-center gap-2">
-                      {/* Статус активности */}
-                      <div
-                        className={`text-xl rounded-full flex items-center justify-center bg-[var(--surface-container)] ${
-                          subscription.isActive
-                            ? 'text-[var(--success-container)]'
-                            : 'text-[var(--error-container)]'
-                        }`}>
-                        {subscription.isActive ? (
-                          <IoCheckmarkCircle />
-                        ) : (
-                          <IoCloseCircle />
-                        )}
-                      </div>
-                    </div>
-
+                    className="bg-[var(--surface-container-lowest)] rounded-md ">
                     <button
                       onClick={() => copyToClipboard(subscription.id)}
                       className="flex items-center gap-2 cursor-pointer px-4 py-2 text-[var(--on-primary)] bg-[var(--primary)] w-full rounded-t-md">
@@ -329,19 +369,163 @@ export function Subscriptions() {
                       </span>
                     </button>
 
-                    <div className="flex flex-row flex-wrap gap-2 px-2 py-2 items-center justify-between">
-                      <div className="text-sm mt-1 flex gap-2 items-center">
-                        <MdRotateRight size={18} />
-                        <span>{formatPeriod(subscription.period)}</span>
-                      </div>
-                      {subscription.expiredAt && (
-                        <div className="text-xs mt-1 flex gap-2 items-center ">
-                          <FaClockRotateLeft />
-                          <span>
-                            {formatExpiredDate(subscription.expiredAt)}
-                          </span>
+                    <div className="flex flex-col gap-2 px-2 py-2">
+                      <div className="flex gap-2 items-center justify-between">
+                        <div
+                          className={`flex items-center gap-2 rounded-md px-2 py-1 ${
+                            subscription.isActive
+                              ? 'bg-[var(--success-container)] text-[var(--on-success-container)]'
+                              : 'bg-[var(--error-container)] text-[var(--on-error-container)]'
+                          }`}>
+                          {subscription.isActive ? (
+                            <IoCheckmark size={16} />
+                          ) : (
+                            <IoClose size={16} />
+                          )}
+                          <div className="text-sm">
+                            {subscription.isActive ? 'Активна' : 'Не активна'}
+                          </div>
                         </div>
-                      )}
+                        {subscription.onlineAt &&
+                        differenceInMinutes(
+                          new Date(),
+                          new Date(subscription.onlineAt),
+                        ) < 1 ? (
+                          <div className="flex items-center gap-1">
+                            <div className="flex w-4 h-4 items-center justify-center">
+                              <div className="relative w-2 h-2 bg-[var(--success)] rounded-full ">
+                                <motion.div
+                                  className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 rounded-full bg-[var(--success)]"
+                                  initial={{ scale: 1, opacity: 0 }}
+                                  animate={{
+                                    scale: [1, 1, 2, 2],
+                                    opacity: [0, 0.2, 0.5, 0],
+                                  }}
+                                  transition={{
+                                    repeat: Infinity,
+                                    duration: 3,
+                                    ease: 'easeInOut',
+                                    times: [0, 0.2, 0.5, 1],
+                                  }}
+                                  style={{ width: '100%', height: '100%' }}
+                                />
+                              </div>
+                            </div>
+                            <div className="text-sm">Онлайн</div>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-1">
+                            <div className="flex w-4 h-4 items-center justify-center">
+                              <div className="relative w-2 h-2 bg-[var(--error)] rounded-full ">
+                                <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 rounded-full bg-[var(--error)] w-4 h-4 opacity-50" />
+                              </div>
+                            </div>
+                            <div className="text-sm">Офлайн</div>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex gap-2 flex-wrap justify-between items-center ">
+                        <div className="text-xs mt-1 flex gap-2 items-center">
+                          <MdRotateRight size={18} />
+                          <div className="flex gap-1 items-center">
+                            <div>{formatPeriod(subscription.period)}</div>
+                            {subscription.periodMultiplier > 1 && (
+                              <div className="rounded-md w-[22px] h-[22px] justify-center items-center flex bg-[var(--primary)] text-[var(--on-primary)] text-xs font-bold">
+                                x{subscription.periodMultiplier}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        {subscription.expiredAt && (
+                          <div className="text-xs mt-1 flex gap-2 items-center ">
+                            <FaClockRotateLeft size={14} />
+                            <span>
+                              {formatExpiredDate(subscription.expiredAt)} -{' '}
+                              {subscription.expiredAt &&
+                                intlFormat(
+                                  new Date(subscription.expiredAt),
+                                  {
+                                    year: 'numeric',
+                                    month: 'numeric',
+                                    day: 'numeric',
+                                    hour: 'numeric',
+                                    minute: 'numeric',
+                                  },
+                                  {
+                                    locale: locale,
+                                  },
+                                )}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <hr className="w-full rounded-full bg-[var(--outline)] border-[var(--outline)]" />
+                      <div className="text-xs flex items-center justify-between">
+                        <div className="flex gap-1 items-center">
+                          <div>
+                            Сервера: {subscription.baseServersCount}/
+                            {subscription.premiumServersCount}
+                          </div>
+                          <TooltipWrapper
+                            prompt={'Обычные/Премиум'}
+                            color="info"
+                            placement="top">
+                            <FaCircleInfo />
+                          </TooltipWrapper>
+                        </div>
+                        <div className="flex gap-1 items-center">
+                          <div>Устройства: 0/{subscription.devicesCount}</div>
+                          <TooltipWrapper
+                            prompt={'Онлайн/Лимит'}
+                            color="info"
+                            placement="top">
+                            <FaCircleInfo />
+                          </TooltipWrapper>
+                        </div>
+                      </div>
+
+                      <hr className="w-full rounded-full bg-[var(--outline)] border-[var(--outline)]" />
+                      <div className="flex flex-col gap-1 w-full text-xs">
+                        <div className="flex gap-2 items-center">
+                          <PiSpeedometerBold size={16} />
+                          <div>Трафик</div>
+                        </div>
+                        {subscription.dataLimit &&
+                        !subscription.isUnlimitTraffic ? (
+                          <>
+                            <div className="w-full h-2 flex items-center rounded-full bg-[var(--on-secondary)]">
+                              <div
+                                className={`h-2 rounded-full bg-[var(--secondary)]`}
+                                style={{
+                                  width: `${
+                                    (subscription.usedTraffic /
+                                      (subscription.dataLimit || 1)) *
+                                    100
+                                  }%`,
+                                }}></div>
+                            </div>
+                            <div className="flex px-2 items-center gap-2 justify-between ">
+                              <div>
+                                {formatBytes(subscription.usedTraffic)} /{' '}
+                                {formatBytes(subscription.dataLimit || 0)}{' '}
+                                ежедневно
+                              </div>
+                              <div>
+                                Всего:{' '}
+                                {formatBytes(subscription.lifeTimeUsedTraffic)}
+                              </div>
+                            </div>
+                          </>
+                        ) : (
+                          <div className="flex px-2 items-center gap-2 justify-between text-xs">
+                            <div>Безлимит</div>
+                            <div>
+                              Всего:{' '}
+                              {formatBytes(subscription.lifeTimeUsedTraffic)}
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
 
                     <div className="flex flex-wrap justify-between items-center px-2 py-2 border-t border-[var(--outline)]">
@@ -472,11 +656,35 @@ export function Subscriptions() {
                       <div className="flex gap-2 items-center ">
                         <div className="flex gap-2 items-center ">
                           <button
+                            onClick={() => setIsOpenModalQR(subscription.id)}
+                            className="p-2 rounded-md bg-[var(--surface-container)] text-[var(--on-surface-variant)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer">
+                            <TbQrcode size={18} />
+                          </button>
+
+                          <Modal
+                            isOpen={isOpenModalQR === subscription.id}
+                            onClose={() => setIsOpenModalQR(null)}
+                            title={'QR-код подписки'}
+                            variant="default">
+                            <div className="flex flex-col items-center gap-4 p-4">
+                              <div
+                                ref={qrRef}
+                                className="qr-code-container"></div>
+                              <div className="text-sm text-center">
+                                Отсканируйте в клиентском приложении (Happ,
+                                Hiddify, v2box, Straisand, ShadowRocket,
+                                v2rayNG, NekoBox, FoXray, Sing-box, Nekoray и
+                                др.)
+                              </div>
+                            </div>
+                          </Modal>
+
+                          <button
                             onClick={() =>
                               handleCopyUrl(subscription.subscriptionUrl)
                             }
                             className="p-2 rounded-md bg-[var(--surface-container)] text-[var(--on-surface-variant)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer">
-                            <FaCopy size={18} />
+                            <FaCopy size={16} />
                           </button>
 
                           <Link

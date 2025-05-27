@@ -1,62 +1,61 @@
 /* === BASE STYLES === */
 body {
-    /*background-color: var(--background);*/
-    color: var(--on-background);
-    font-family: system-ui, sans-serif;
-    transition: background-color 0.3s ease, color 0.3s ease;
+  /*background-color: var(--background);*/
+  color: var(--on-background);
+  font-family: system-ui, sans-serif;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
-input[type="number"] {
-    -moz-appearance: textfield; /* Для Firefox */
+input[type='number'] {
+  -moz-appearance: textfield; /* Для Firefox */
 }
-
 
 /* === SCROLLBAR STYLING (no arrows, with padding) === */
 * {
-    scrollbar-width: thin;
-    scrollbar-color: var(--outline) var(--surface-container);
+  scrollbar-width: thin;
+  scrollbar-color: var(--outline) var(--surface-container);
 }
 
 /* Webkit (Chrome, Safari, Edge) */
 *::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+  width: 8px;
+  height: 8px;
 }
 
 *::-webkit-scrollbar-track {
-    background: var(--surface-container);
-    margin: 10px; /* Отступы сверху и снизу у вертикального, и по бокам у горизонтального */
+  background: var(--surface-container);
+  margin: 10px; /* Отступы сверху и снизу у вертикального, и по бокам у горизонтального */
 }
 
 *::-webkit-scrollbar-thumb {
-    background-color: var(--outline);
-    border-radius: 8px;
-    border: 2px solid var(--surface-container);
+  background-color: var(--outline);
+  border-radius: 8px;
+  border: 2px solid var(--surface-container);
 }
 
 *::-webkit-scrollbar-thumb:hover {
-    background-color: var(--on-surface-variant);
+  background-color: var(--on-surface-variant);
 }
 
 /* Убираем угол между горизонтальным и вертикальным скроллбаром */
 *::-webkit-scrollbar-corner {
-    background: transparent;
+  background: transparent;
 }
 
 /* Убираем стрелки на старых браузерах (иногда они всё ещё видны) */
 *::-webkit-scrollbar-button {
-    display: none;
-    height: 0;
-    width: 0;
+  display: none;
+  height: 0;
+  width: 0;
 }
-
-
 
 /*button {*/
 /*    background-color: var(--primary);*/

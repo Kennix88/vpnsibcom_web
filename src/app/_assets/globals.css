@@ -1,59 +1,88 @@
-@import "../../../node_modules/tailwindcss";
+@import '../../../node_modules/tailwindcss';
 
-@import "./palette.css";
-@import "./base.css";
+@import './palette.css';
+@import './base.css';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 .loader {
-    border: 5px solid var(--on-primary); /* Light gray */
-    border-top: 5px solid var(--primary); /* Purple color */
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
+  border: 5px solid var(--on-primary); /* Light gray */
+  border-top: 5px solid var(--primary); /* Purple color */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.5);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.5);
+  }
+}
+
+.qr-code-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  background-color: var(--surface-container-lowest);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.status-indicator-pulse {
+  animation: pulse 1.5s ease-in-out infinite;
 }
 
 .wallet-btn-primary {
-    background-color: var(--primary);
-    color: var(--on-primary);
-    font-weight: 600;
-    padding: 0.6rem 1.2rem;
-    border-radius: 1rem;
-    transition: 0.2s;
+  background-color: var(--primary);
+  color: var(--on-primary);
+  font-weight: 600;
+  padding: 0.6rem 1.2rem;
+  border-radius: 1rem;
+  transition: 0.2s;
 }
 .wallet-btn-primary:hover {
-    background-color: var(--inverse-primary);
-    color: var(--on-primary-container);
+  background-color: var(--inverse-primary);
+  color: var(--on-primary-container);
 }
 
 .wallet-btn-outline {
-    background-color: transparent;
-    color: var(--on-background);
-    border: 1px solid var(--outline);
-    padding: 0.6rem 1.2rem;
-    border-radius: 1rem;
-    transition: 0.2s;
+  background-color: transparent;
+  color: var(--on-background);
+  border: 1px solid var(--outline);
+  padding: 0.6rem 1.2rem;
+  border-radius: 1rem;
+  transition: 0.2s;
 }
 .wallet-btn-outline:hover {
-    background-color: var(--surface-container-highest);
+  background-color: var(--surface-container-highest);
 }
 
 .wallet-btn-destructive {
-    background-color: var(--error);
-    color: var(--on-error);
-    padding: 0.6rem 1.2rem;
-    border-radius: 1rem;
-    font-weight: 600;
-    transition: 0.2s;
+  background-color: var(--error);
+  color: var(--on-error);
+  padding: 0.6rem 1.2rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  transition: 0.2s;
 }
 .wallet-btn-destructive:hover {
-    background-color: var(--error-container);
-    color: var(--on-error-container);
+  background-color: var(--error-container);
+  color: var(--on-error-container);
 }
-

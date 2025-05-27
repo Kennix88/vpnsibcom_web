@@ -51,7 +51,7 @@ export default function NavBar() {
 
   return (
     <div
-      className={`bottom-0 left-0 right-0 fixed flex flex-row py-4 items-center justify-center z-[99] `}>
+      className={`bottom-0 left-0 right-0 fixed flex flex-row py-4 items-center justify-center z-[50] `}>
       <div
         className={`grid grid-cols-5 min-w-[320px] grid-rows-1 gap-2 p-2 rounded-xl bg-[var(--surface-container)] bg-opacity-90 `}>
         {navItems.map((item) => (
