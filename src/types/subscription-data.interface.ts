@@ -1,5 +1,10 @@
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
 
+export interface GetSubscriptionConfigResponseInterface {
+  subscription: SubscriptionDataInterface
+  marzbanSubRes?: MarzbanResponseInterface
+}
+
 export interface SubscriptionResponseInterface {
   telegramPremiumRatio: number
   devicesPriceStars: number
@@ -64,4 +69,12 @@ export interface ServerDataInterface {
   network: number
   isActive: boolean
   isPremium: boolean
+}
+
+export interface MarzbanResponseInterface {
+  headers: {
+    'content-disposition': string
+    'content-type': string
+  }
+  body: any
 }
