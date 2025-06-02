@@ -28,14 +28,12 @@ export const publicApiClient = {
   async getSubscriptionData(
     token: string,
     agent: string,
-    accept: string,
   ): Promise<GetSubscriptionConfigResponseInterface> {
     const { data } = await api.get<
       ApiResponse<GetSubscriptionConfigResponseInterface>
     >(`/subscriptions/by-token/${token}`, {
       headers: {
         'User-Agent': agent,
-        Accept: accept,
       },
     })
     return data.data
