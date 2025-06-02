@@ -107,7 +107,7 @@ export function calculateSubscriptionCost(
 
   // Calculate traffic price
   const trafficPrice = isUnlimitTraffic
-    ? settings.unlimitTrafficPriceStars
+    ? settings.unlimitTrafficPriceStars * devicesCount
     : trafficLimitGb * settings.trafficGbPriceStars
 
   // Apply premium ratio if applicable
