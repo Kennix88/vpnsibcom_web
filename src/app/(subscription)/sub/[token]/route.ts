@@ -38,7 +38,7 @@ export async function GET(
       status: 200,
       headers: {
         ...resData.marzbanSubRes.headers,
-        'subscription-userinfo': `upload=0; download=${resData.subscription.usedTraffic || 0}; total=${resData.subscription.dataLimit || 0}; expire=${!resData.subscription.isActive ? 1 : resData.subscription.expiredAt || 0}`,
+        'subscription-userinfo': `upload=0; download=${resData.subscription.usedTraffic || 0}; total=${resData.subscription.dataLimit || 0}; expire=${resData.subscription.expiredAt ? Math.floor(new Date(resData.subscription.expiredAt).getTime() / 1000) : 0}`,
         'support-url': process.env.NEXT_PUBLIC_BOT_URL || '',
         'profile-web-page-url': resData.subscription.subscriptionUrl,
         'profile-update-interval': '1',
