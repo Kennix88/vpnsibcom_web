@@ -1,4 +1,5 @@
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
+import { ServerDataInterface } from './servers-data.interface'
 
 export interface GetSubscriptionConfigResponseInterface {
   subscription: SubscriptionDataInterface
@@ -59,16 +60,6 @@ export interface SubscriptionDataInterface {
 
   token: string
   subscriptionUrl: string
-}
-
-export interface ServerDataInterface {
-  code: string
-  name: string
-  flagKey: string
-  flagEmoji: string
-  network: number
-  isActive: boolean
-  isPremium: boolean
 }
 
 export interface MarzbanResponseInterface {

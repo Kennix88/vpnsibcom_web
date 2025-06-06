@@ -21,7 +21,7 @@ export const publicApiClient = {
     isGreen: boolean
     ip: string
   }> {
-    const { data } = await api.get('/xray/green-check')
+    const { data } = await api.get('/servers/green-check')
     return data.data
   },
 

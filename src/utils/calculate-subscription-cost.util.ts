@@ -133,7 +133,7 @@ export function calculateSubscriptionCost(
 /**
  * Calculate servers price based on configuration
  */
-function calculateServersPrice(
+export function calculateServersPrice(
   isAllServers: boolean,
   isAllPremiumServers: boolean,
   serversCount: number,
@@ -151,7 +151,7 @@ function calculateServersPrice(
 /**
  * Calculate premium servers price based on configuration
  */
-function calculatePremiumServersPrice(
+export function calculatePremiumServersPrice(
   isAllPremiumServers: boolean,
   isAllServers: boolean,
   premiumServersCount: number,
