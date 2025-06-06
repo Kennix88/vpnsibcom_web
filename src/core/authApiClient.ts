@@ -6,6 +6,7 @@ import { CurrencyInterface } from '@app/types/currency.interface'
 import { PaymentMethodsDataInterface } from '@app/types/payment-methods-data.interface'
 import { RatesInterface } from '@app/types/rates.interface'
 import { ReferralsDataInterface } from '@app/types/referrals-data-interface'
+import { ServersResponseDataInterface } from '@app/types/servers-data.interface'
 import { SubscriptionResponseInterface } from '@app/types/subscription-data.interface'
 import { UserDataInterface } from '@app/types/user-data.interface'
 import axios, {
@@ -602,6 +603,17 @@ export const authApiClient = {
       >('/subscriptions/toggle-auto-renewal', {
         subscriptionId,
       })
+
+      return data.data
+    } catch (error) {
+      return handleApiError(error)
+    }
+  },
+
+  async getServers(): Promise<ServersResponseDataInterface> {
+    try {
+      const { data } =
+        await api.get<ApiResponse<ServersResponseDataInterface>>('/servers')
 
       return data.data
     } catch (error) {
