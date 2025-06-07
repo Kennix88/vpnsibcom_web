@@ -90,17 +90,10 @@ export function calculateSubscriptionCost(
   const devicePrice = settings.devicesPriceStars * devicesCount
 
   // Calculate servers price
-  const serversPrice = calculateServersPrice(
-    isAllServers,
-    isAllPremiumServers,
-    serversCount,
-    settings,
-  )
+  const serversPrice = calculateServersPrice(serversCount, settings)
 
   // Calculate premium servers price
   const premiumServersPrice = calculatePremiumServersPrice(
-    isAllPremiumServers,
-    isAllServers,
     premiumServersCount,
     settings,
   )
@@ -134,34 +127,20 @@ export function calculateSubscriptionCost(
  * Calculate servers price based on configuration
  */
 export function calculateServersPrice(
-  isAllServers: boolean,
-  isAllPremiumServers: boolean,
   serversCount: number,
   settings: SubscriptionCostSettings,
 ): number {
-  if (isAllServers && !isAllPremiumServers) {
-    return serversCount * settings.serversPriceStars
-  } else if (isAllServers && isAllPremiumServers) {
-    return serversCount * settings.serversPriceStars
-  } else {
-    return 0
-  }
+  return serversCount * settings.serversPriceStars
 }
 
 /**
  * Calculate premium servers price based on configuration
  */
 export function calculatePremiumServersPrice(
-  isAllPremiumServers: boolean,
-  isAllServers: boolean,
   premiumServersCount: number,
   settings: SubscriptionCostSettings,
 ): number {
-  if (isAllPremiumServers && isAllServers) {
-    return premiumServersCount * settings.premiumServersPriceStars
-  } else {
-    return 0
-  }
+  return premiumServersCount * settings.premiumServersPriceStars
 }
 
 /**
