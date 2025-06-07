@@ -69,3 +69,16 @@ export interface MarzbanResponseInterface {
   }
   body: any
 }
+
+export interface CreateSubscriptionDataInterface {
+  period: SubscriptionPeriodEnum
+  periodMultiplier: number
+  isAutoRenewal: boolean
+  isFixedPrice: boolean
+  devicesCount: number
+  isAllServers: boolean
+  isAllPremiumServers: boolean
+  servers: string[]
+  trafficLimitGb: number
+  isUnlimitTraffic: boolean
+}
