@@ -7,6 +7,12 @@ export interface ServersResponseDataInterface {
   user: UserDataInterface
 }
 
+export interface ServersDataInterface {
+  baseServersCount: number
+  premiumServersCount: number
+  servers: ServerDataInterface[]
+}
+
 export interface ServerDataInterface {
   code: string
   name: string
