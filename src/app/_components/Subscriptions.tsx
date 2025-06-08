@@ -335,7 +335,7 @@ export function Subscriptions() {
 
       {/* Subscriptions List */}
       {!loading && (
-        <div className="flex flex-col gap-2 w-full">
+        <div className="flex flex-col gap-4 w-full">
           <AnimatePresence>
             {subscriptions?.subscriptions.length === 0 ? (
               <motion.div
@@ -346,7 +346,7 @@ export function Subscriptions() {
                 {t('noSubscriptions')}
               </motion.div>
             ) : (
-              <div className="flex flex-col">
+              <>
                 {subscriptions?.subscriptions.map((subscription) => (
                   <motion.div
                     key={subscription.id}
@@ -390,7 +390,7 @@ export function Subscriptions() {
                         differenceInMinutes(
                           new Date(),
                           new Date(subscription.onlineAt),
-                        ) < 1 ? (
+                        ) < 2 ? (
                           <div className="flex items-center gap-1">
                             <div className="flex w-4 h-4 items-center justify-center">
                               <div className="relative w-2 h-2 bg-[var(--success)] rounded-full ">
@@ -436,7 +436,7 @@ export function Subscriptions() {
                             )}
                           </div>
                         </div>
-                        {subscription.expiredAt && (
+                        {subscription.isActive && subscription.expiredAt && (
                           <div className="text-xs mt-1 flex gap-2 items-center ">
                             <FaClockRotateLeft size={14} />
                             <span>
@@ -705,7 +705,7 @@ export function Subscriptions() {
                     </div>
                   </motion.div>
                 ))}
-              </div>
+              </>
             )}
           </AnimatePresence>
         </div>

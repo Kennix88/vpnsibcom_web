@@ -89,7 +89,7 @@ export default function Payments({ isTma = false }: Props) {
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setAmount(val)}
                   className={clsx(
-                    'flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-sm font-mono transition-colors cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]',
+                    'flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-sm font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]',
                   )}
                   style={{
                     backgroundColor: `rgba(${rgb}, ${bgOpacity})`,
