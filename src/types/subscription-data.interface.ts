@@ -1,3 +1,4 @@
+import { PlansEnum } from '@app/enums/plans.enum'
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
 import { ServerDataInterface } from './servers-data.interface'
 
@@ -11,7 +12,7 @@ export interface SubscriptionResponseInterface {
   devicesPriceStars: number
   serversPriceStars: number
   premiumServersPriceStars: number
-  allServersPriceStars: number
+  allBaseServersPriceStars: number
   allPremiumServersPriceStars: number
   trafficGbPriceStars: number
   unlimitTrafficPriceStars: number
@@ -32,13 +33,14 @@ export interface SubscriptionDataInterface {
   id: string
   period: SubscriptionPeriodEnum
   periodMultiplier: number
+  planKey: PlansEnum
   isActive: boolean
   isAutoRenewal: boolean
   nextRenewalStars?: number
   isFixedPrice: boolean
   fixedPriceStars?: number
   devicesCount: number
-  isAllServers: boolean
+  isAllBaseServers: boolean
   isAllPremiumServers: boolean
   trafficLimitGb?: number
   isUnlimitTraffic: boolean
@@ -71,14 +73,15 @@ export interface MarzbanResponseInterface {
 }
 
 export interface CreateSubscriptionDataInterface {
+  planKey: PlansEnum
   period: SubscriptionPeriodEnum
   periodMultiplier: number
   isAutoRenewal: boolean
   isFixedPrice: boolean
   devicesCount: number
-  isAllServers: boolean
+  isAllBaseServers: boolean
   isAllPremiumServers: boolean
   servers: string[]
-  trafficLimitGb: number
+  trafficLimitGb?: number
   isUnlimitTraffic: boolean
 }
