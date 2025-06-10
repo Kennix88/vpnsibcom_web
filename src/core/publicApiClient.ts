@@ -1,3 +1,4 @@
+import { PlansResponseDataInterface } from '@app/types/plans.interface'
 import { GetSubscriptionConfigResponseInterface } from '@app/types/subscription-data.interface'
 import axios from 'axios'
 
@@ -36,6 +37,12 @@ export const publicApiClient = {
         'User-Agent': agent,
       },
     })
+    return data.data
+  },
+
+  async getPlans(): Promise<PlansResponseDataInterface> {
+    const { data } =
+      await api.get<ApiResponse<PlansResponseDataInterface>>(`/plans`)
     return data.data
   },
 }
