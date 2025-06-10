@@ -9,7 +9,7 @@ interface SubscriptionCostSettings {
   premiumServersPriceStars: number
   unlimitTrafficPriceStars: number
   trafficGbPriceStars: number
-  allServersPriceStars: number
+  allBaseServersPriceStars: number
   allPremiumServersPriceStars: number
   hourRatioPayment: number
   dayRatioPayment: number
@@ -34,7 +34,7 @@ interface SubscriptionCostParams {
   serversCount: number
   premiumServersCount: number
   trafficLimitGb: number
-  isAllServers: boolean
+  isAllBaseServers: boolean
   isAllPremiumServers: boolean
   isUnlimitTraffic: boolean
   userDiscount: number
@@ -57,7 +57,7 @@ export function calculateSubscriptionCost(
     serversCount = 0,
     premiumServersCount = 0,
     trafficLimitGb = 0,
-    isAllServers,
+    isAllBaseServers,
     isAllPremiumServers,
     isUnlimitTraffic,
     userDiscount = 1,
@@ -70,7 +70,7 @@ export function calculateSubscriptionCost(
   }
 
   if (
-    (serversCount < 0 && !isAllServers) ||
+    (serversCount < 0 && !isAllBaseServers) ||
     (premiumServersCount < 0 && !isAllPremiumServers)
   ) {
     throw new Error('Servers count cannot be negative')
@@ -91,7 +91,7 @@ export function calculateSubscriptionCost(
 
   // Calculate servers price
   const serversPrice = calculateServersPrice(
-    isAllServers,
+    isAllBaseServers,
     isAllPremiumServers,
     serversCount,
     settings,
@@ -100,7 +100,7 @@ export function calculateSubscriptionCost(
   // Calculate premium servers price
   const premiumServersPrice = calculatePremiumServersPrice(
     isAllPremiumServers,
-    isAllServers,
+    isAllBaseServers,
     premiumServersCount,
     settings,
   )
@@ -140,9 +140,9 @@ export function calculateServersPrice(
   settings: SubscriptionCostSettings,
 ): number {
   if (isAllServers && !isAllPremiumServers) {
-    return serversCount * settings.allServersPriceStars
+    return serversCount * settings.allBaseServersPriceStars
   } else if (isAllServers && isAllPremiumServers) {
-    return serversCount * settings.allServersPriceStars
+    return serversCount * settings.allBaseServersPriceStars
   } else {
     return serversCount * settings.serversPriceStars
   }
