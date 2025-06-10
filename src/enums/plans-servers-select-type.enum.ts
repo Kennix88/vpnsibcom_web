@@ -1,0 +1,6 @@
+export enum PlansServersSelectTypeEnum {
+  ONE_BASE = 'ONE_BASE',
+  ONE_BASE_OR_PREMIUM = 'ONE_BASE_OR_PREMIUM',
+  CUSTOM = 'CUSTOM',
+  NOT_SELECTED = 'NOT_SELECTED',
+}
