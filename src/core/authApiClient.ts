@@ -1,13 +1,16 @@
 import { CurrencyEnum } from '@app/enums/currency.enum'
 import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
-import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
 import { useUserStore } from '@app/store/user.store'
 import { CurrencyInterface } from '@app/types/currency.interface'
 import { PaymentMethodsDataInterface } from '@app/types/payment-methods-data.interface'
 import { RatesInterface } from '@app/types/rates.interface'
 import { ReferralsDataInterface } from '@app/types/referrals-data-interface'
 import { ServersResponseDataInterface } from '@app/types/servers-data.interface'
-import { SubscriptionResponseInterface } from '@app/types/subscription-data.interface'
+import {
+  ChangeSubscriptionConditionsDataInterface,
+  CreateSubscriptionDataInterface,
+  SubscriptionResponseInterface,
+} from '@app/types/subscription-data.interface'
 import { UserDataInterface } from '@app/types/user-data.interface'
 import axios, {
   AxiosError,
@@ -445,18 +448,7 @@ export const authApiClient = {
    * @param params.isAutoRenewal Optional flag for auto renewal (default: true)
    * @returns Subscriptions and user data
    */
-  async purchaseSubscription(params: {
-    period: SubscriptionPeriodEnum
-    periodMultiplier?: number
-    isFixedPrice?: boolean
-    devicesCount: number
-    isAllServers?: boolean
-    isAllPremiumServers?: boolean
-    trafficLimitGb?: number
-    isUnlimitTraffic?: boolean
-    servers?: string[]
-    isAutoRenewal?: boolean
-  }): Promise<{
+  async purchaseSubscription(params: CreateSubscriptionDataInterface): Promise<{
     subscriptions: SubscriptionResponseInterface
     user: UserDataInterface
   }> {
@@ -467,16 +459,7 @@ export const authApiClient = {
           user: UserDataInterface
         }>
       >('/subscriptions/purchase', {
-        period: params.period,
-        periodMultiplier: params.periodMultiplier,
-        isFixedPrice: params.isFixedPrice,
-        devicesCount: params.devicesCount,
-        isAllServers: params.isAllServers,
-        isAllPremiumServers: params.isAllPremiumServers,
-        trafficLimitGb: params.trafficLimitGb,
-        isUnlimitTraffic: params.isUnlimitTraffic,
-        servers: params.servers || [],
-        isAutoRenewal: params.isAutoRenewal,
+        ...params,
       })
 
       return data.data
@@ -485,19 +468,9 @@ export const authApiClient = {
     }
   },
 
-  async changeSubscriptionConditions(params: {
-    subscriptionId: string
-    period: SubscriptionPeriodEnum
-    periodMultiplier?: number
-    isFixedPrice?: boolean
-    devicesCount: number
-    isAllServers?: boolean
-    isAllPremiumServers?: boolean
-    trafficLimitGb?: number
-    isUnlimitTraffic?: boolean
-    servers?: string[]
-    isAutoRenewal?: boolean
-  }): Promise<{
+  async changeSubscriptionConditions(
+    params: ChangeSubscriptionConditionsDataInterface,
+  ): Promise<{
     subscriptions: SubscriptionResponseInterface
     user: UserDataInterface
   }> {
@@ -508,17 +481,7 @@ export const authApiClient = {
           user: UserDataInterface
         }>
       >('/subscriptions/change-conditions', {
-        subscriptionId: params.subscriptionId,
-        period: params.period,
-        periodMultiplier: params.periodMultiplier,
-        isFixedPrice: params.isFixedPrice,
-        devicesCount: params.devicesCount,
-        isAllServers: params.isAllServers,
-        isAllPremiumServers: params.isAllPremiumServers,
-        trafficLimitGb: params.trafficLimitGb,
-        isUnlimitTraffic: params.isUnlimitTraffic,
-        servers: params.servers || [],
-        isAutoRenewal: params.isAutoRenewal,
+        ...params,
       })
 
       return data.data

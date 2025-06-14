@@ -85,3 +85,8 @@ export interface CreateSubscriptionDataInterface {
   trafficLimitGb?: number
   isUnlimitTraffic: boolean
 }
+
+export interface ChangeSubscriptionConditionsDataInterface
+  extends CreateSubscriptionDataInterface {
+  subscriptionId: string
+}
