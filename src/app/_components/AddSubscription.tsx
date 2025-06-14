@@ -1,10 +1,14 @@
 'use client'
 
 import { authApiClient } from '@app/core/authApiClient'
+import { publicApiClient } from '@app/core/publicApiClient'
+import { PlansServersSelectTypeEnum } from '@app/enums/plans-servers-select-type.enum'
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
+import { usePlansStore } from '@app/store/plans.store'
 import { useServersStore } from '@app/store/servers.store'
 import { useSubscriptionsStore } from '@app/store/subscriptions.store'
 import { useUserStore } from '@app/store/user.store'
+import { PlansInterface } from '@app/types/plans.interface'
 import { ServerDataInterface } from '@app/types/servers-data.interface'
 import {
   calculatePremiumServersPrice,
@@ -56,6 +60,8 @@ const getDevicesCountButtonColor = (amount: number) => {
 export default function AddSubscription() {
   const { subscriptions } = useSubscriptionsStore()
   const { user, setUser } = useUserStore()
+  const { serversData, setServersData } = useServersStore()
+  const { plansData, setPlansData } = usePlansStore()
   const [periodButton, setPeriodButton] =
     useState<PeriodButtonInterface | null>(null)
   const [periodButtons, setPeriodButtons] = useState<PeriodButtonInterface[]>(
@@ -66,13 +72,37 @@ export default function AddSubscription() {
   const [isAllPremiumServers, setIsAllPremiumServers] = useState<boolean>(true)
   const [baseServersCount, setBaseServersCount] = useState<number>(0)
   const [premiumServersCount, setPremiumServersCount] = useState<number>(0)
-  const { serversData, setServersData } = useServersStore()
   const [serversSelected, setServersSelected] = useState<string[]>([])
   const [isFixedPrice, setIsFixedPrice] = useState<boolean>(false)
   const [periodMultiplier, setPeriodMultiplier] = useState<number>(1)
   const [isUnlimitTraffic, setIsUnlimitTraffic] = useState<boolean>(false)
   const [trafficLimitGb, setTrafficLimitGb] = useState<number>(1)
   const [isAutoRenewal, setIsAutoRenewal] = useState<boolean>(true)
+  const [planSelected, setPlanSelected] = useState<PlansInterface | null>(null)
+
+  const selectPlan = (plan: PlansInterface) => {
+    setPlanSelected(plan)
+    setDevicesCount(plan.devicesCount)
+    setIsAllBaseServers(plan.isAllBaseServers)
+    setIsAllPremiumServers(plan.isAllPremiumServers)
+    setIsUnlimitTraffic(plan.isUnlimitTraffic)
+    setTrafficLimitGb(plan.trafficLimitGb ? plan.trafficLimitGb : 0)
+
+    if (!serversData || !planSelected) return
+    if (isAllBaseServers && isAllPremiumServers) {
+      setServersSelected([])
+      setBaseServersCount(serversData.baseServersCount)
+      setPremiumServersCount(serversData.premiumServersCount)
+    } else if (isAllBaseServers && !isAllPremiumServers) {
+      setServersSelected([])
+      setBaseServersCount(serversData.baseServersCount)
+      setPremiumServersCount(0)
+    } else {
+      setServersSelected([])
+      setBaseServersCount(0)
+      setPremiumServersCount(0)
+    }
+  }
 
   useEffect(() => {
     const getServers = async () => {
@@ -90,7 +120,17 @@ export default function AddSubscription() {
         toast.error('Error updating data')
       }
     }
+    const getPlans = async () => {
+      try {
+        const updated = await publicApiClient.getPlans()
+        setPlansData(updated)
+        selectPlan(updated.plans[0])
+      } catch {
+        toast.error('Error updating data')
+      }
+    }
     getServers()
+    getPlans()
     return () => {}
   }, [])
 
@@ -154,32 +194,59 @@ export default function AddSubscription() {
     setPeriodButton(buttons[3])
   }, [subscriptions, user])
 
-  if (!subscriptions || !user || !periodButton || !serversData) return null
+  if (
+    !subscriptions ||
+    !user ||
+    !periodButton ||
+    !serversData ||
+    !plansData ||
+    !planSelected
+  )
+    return null
 
   const privileges = [
     {
-      key: 'asdq21wf',
-      icon: <FaShieldHeart />,
-      text: 'Защищенное соединение',
+      key: 'asd124sdfg65234qwf',
+      icon: <MdDevices />,
+      text:
+        planSelected.serversSelectType == PlansServersSelectTypeEnum.CUSTOM
+          ? 'Нужное количество устройств'
+          : `До ${devicesCount} одновременных устройств`,
     },
     {
       key: 'asdqwf',
       icon: <MdLockOpen />,
       text:
-        isAllBaseServers && isAllPremiumServers
-          ? 'Доступ ко всем серверам'
-          : isAllBaseServers
-            ? 'Доступ ко всем базовым серверам'
-            : premiumServersCount == 0
-              ? `Доступ к ${baseServersCount} базовым серверам`
-              : `Доступ к ${baseServersCount} базовым и ${premiumServersCount} премиум серверам`,
+        planSelected.serversSelectType == PlansServersSelectTypeEnum.CUSTOM
+          ? 'Выбирай нужные сервера'
+          : planSelected.serversSelectType ==
+              PlansServersSelectTypeEnum.ONE_BASE
+            ? 'Один базовый сервер на выбор'
+            : planSelected.serversSelectType ==
+                PlansServersSelectTypeEnum.ONE_BASE_OR_PREMIUM
+              ? 'Один базовый или премиум сервер на выбор'
+              : isAllBaseServers && isAllPremiumServers
+                ? 'Доступ ко всем серверам'
+                : isAllBaseServers
+                  ? 'Доступ ко всем базовым серверам'
+                  : premiumServersCount == 0
+                    ? `Доступ к ${baseServersCount} базовым серверам`
+                    : `Доступ к ${baseServersCount} базовым и ${premiumServersCount} премиум серверам`,
     },
     {
       key: 'asd234qwf',
       icon: <TbCloudNetwork />,
-      text: isUnlimitTraffic
-        ? 'Безлимитный трафик'
-        : `${trafficLimitGb} ГБ трафика ежедневно`,
+      text:
+        planSelected.serversSelectType == PlansServersSelectTypeEnum.CUSTOM
+          ? 'Нужное количество трафика'
+          : isUnlimitTraffic
+            ? 'Безлимитный трафик'
+            : `${trafficLimitGb} ГБ трафика ежедневно`,
+    },
+    {
+      key: 'asdq21wf',
+      icon: <FaShieldHeart />,
+      text: 'Защищенное соединение',
     },
     {
       key: 'asd32187qwf',
@@ -201,11 +268,7 @@ export default function AddSubscription() {
       icon: <MdOutlineDevicesOther />,
       text: 'Широкая поддержка устройств',
     },
-    {
-      key: 'asd124sdfg65234qwf',
-      icon: <MdDevices />,
-      text: `До ${devicesCount} одновременных устройств`,
-    },
+
     {
       key: 'asd12465234qwf',
       icon: <IoShieldHalf />,
@@ -228,10 +291,11 @@ export default function AddSubscription() {
     serversCount: baseServersCount,
     premiumServersCount,
     trafficLimitGb,
-    isAllServers: isAllBaseServers,
+    isAllBaseServers: isAllBaseServers,
     isAllPremiumServers,
     isUnlimitTraffic,
     userDiscount: user.roleDiscount,
+    plan: planSelected,
     settings: subscriptions,
   })
   const balance = user.balance.isUseWithdrawalBalance
@@ -243,14 +307,16 @@ export default function AddSubscription() {
       {
         name: 'Устройства',
         value: <div>{devicesCount} шт.</div>,
-        isVisible: true,
+        isVisible:
+          planSelected.serversSelectType == PlansServersSelectTypeEnum.CUSTOM,
       },
       {
         name: 'Трафик',
         value: (
           <div>{isUnlimitTraffic ? 'Безлимит' : `${trafficLimitGb} ГБ.`}</div>
         ),
-        isVisible: true,
+        isVisible:
+          planSelected.serversSelectType == PlansServersSelectTypeEnum.CUSTOM,
       },
       {
         name: 'Сервера',
@@ -273,7 +339,8 @@ export default function AddSubscription() {
             )}
           </div>
         ),
-        isVisible: true,
+        isVisible:
+          planSelected.serversSelectType == PlansServersSelectTypeEnum.CUSTOM,
       },
       {
         name: 'Период',
@@ -308,7 +375,10 @@ export default function AddSubscription() {
             {isAutoRenewal ? 'Да' : 'Нет'}
           </div>
         ),
-        isVisible: periodButton.key !== SubscriptionPeriodEnum.INDEFINITELY,
+        isVisible:
+          planSelected.serversSelectType == PlansServersSelectTypeEnum.CUSTOM &&
+          periodButton.key !== SubscriptionPeriodEnum.INDEFINITELY &&
+          isAutoRenewal,
       },
       {
         name: 'К оплате за период',
@@ -319,6 +389,7 @@ export default function AddSubscription() {
           </div>
         ),
         isVisible:
+          planSelected.serversSelectType == PlansServersSelectTypeEnum.CUSTOM &&
           isFixedPrice &&
           periodButton.key !== SubscriptionPeriodEnum.INDEFINITELY,
       },
@@ -329,7 +400,10 @@ export default function AddSubscription() {
             {isFixedPrice ? 'Да' : 'Нет'}
           </div>
         ),
-        isVisible: periodButton.key !== SubscriptionPeriodEnum.INDEFINITELY,
+        isVisible:
+          planSelected.serversSelectType == PlansServersSelectTypeEnum.CUSTOM &&
+          periodButton.key !== SubscriptionPeriodEnum.INDEFINITELY &&
+          isFixedPrice,
       },
       {
         name: 'К оплате разово',
@@ -343,6 +417,7 @@ export default function AddSubscription() {
           </div>
         ),
         isVisible:
+          planSelected.serversSelectType == PlansServersSelectTypeEnum.CUSTOM &&
           periodButton.key !== SubscriptionPeriodEnum.INDEFINITELY &&
           isFixedPrice,
       },
@@ -369,193 +444,29 @@ export default function AddSubscription() {
       <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
         <div className="flex gap-2 items-end justify-between w-full px-4 ">
           <div className="opacity-50 flex flex-row gap-2 items-center">
-            Устройства
+            Тариф
           </div>
           <div className="flex gap-2 items-center ">
             <TgStar type="gold" w={14} />
-            {user.isPremium
-              ? subscriptions.devicesPriceStars *
-                devicesCount *
-                subscriptions.telegramPremiumRatio
-              : subscriptions.devicesPriceStars * devicesCount}
+            {price}
           </div>
         </div>
 
         <motion.div
           layout
           className="text-sm bg-[var(--surface-container-lowest)] rounded-xl flex flex-row flex-wrap gap-2 items-center p-4 w-full shadow-md">
-          <button
-            onClick={() =>
-              setDevicesCount(devicesCount == 1 ? 1 : devicesCount - 1)
-            }
-            className="flex grow items-center justify-center text-white px-3 py-1.5 rounded-md cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97] "
-            style={{ backgroundColor: 'rgba(216, 197, 255, 0.15)' }}>
-            -
-          </button>
-          <input
-            type="number"
-            placeholder={'Введите число'}
-            value={devicesCount || ''}
-            onChange={(e) =>
-              setDevicesCount(
-                e.target.value
-                  ? parseInt(e.target.value) < 1
-                    ? 1
-                    : parseInt(e.target.value)
-                  : 1,
-              )
-            }
-            className="border max-w-[100px] border-[var(--on-surface)]/50 rounded-md px-2 py-1 bg-transparent focus:border-[var(--primary)] focus:outline-none"
-          />
-          <button
-            onClick={() => setDevicesCount(devicesCount + 1)}
-            className="flex grow items-center justify-center text-white px-3 py-1.5 rounded-md cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97] "
-            style={{ backgroundColor: 'rgba(216, 197, 255, 0.15)' }}>
-            +
-          </button>
-          {devicesCountButtons.map((val) => {
-            const isActive = devicesCount === val
-            const rgb = getDevicesCountButtonColor(val)
+          {plansData.plans.map((btn: PlansInterface) => {
+            const isActive = btn.key === planSelected?.key
             const bgOpacity = isActive ? 0.3 : 0.15
             return (
               <motion.button
-                key={val}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setDevicesCount(val)}
-                className={clsx(
-                  'flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-sm font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]',
-                )}
-                style={{
-                  backgroundColor: `rgba(${rgb}, ${bgOpacity})`,
-                  border: isActive
-                    ? `1px solid rgba(${rgb}, 0.7)`
-                    : '1px solid transparent',
-                }}>
-                {val}
-              </motion.button>
-            )
-          })}
-        </motion.div>
-      </div>
-
-      <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
-        <div className="flex gap-2 items-end justify-between w-full px-4 ">
-          <div className="opacity-50 flex flex-row gap-2 items-center">
-            Сервера
-          </div>
-          <div className="flex gap-2 items-center ">
-            <TgStar type="gold" w={14} />
-            {(calculateServersPrice(
-              isAllBaseServers,
-              isAllPremiumServers,
-              baseServersCount,
-              subscriptions,
-            ) +
-              calculatePremiumServersPrice(
-                isAllBaseServers,
-                isAllPremiumServers,
-                premiumServersCount,
-                subscriptions,
-              )) *
-              (user.isPremium ? subscriptions.telegramPremiumRatio : 1)}
-          </div>
-        </div>
-
-        <motion.div
-          layout
-          className="text-sm bg-[var(--surface-container-lowest)] rounded-xl flex flex-row flex-wrap gap-2 items-center p-4 w-full shadow-md">
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={() => {
-              if (isAllBaseServers) {
-                setIsAllBaseServers(false)
-                setIsAllPremiumServers(false)
-                setBaseServersCount(0)
-              } else {
-                setServersSelected([])
-                setBaseServersCount(serversData.baseServersCount)
-                setIsAllBaseServers(true)
-              }
-            }}
-            className={clsx(
-              'flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-xs font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]',
-            )}
-            style={{
-              backgroundColor: `rgba(216, 197, 255, ${isAllBaseServers ? 0.3 : 0.15})`,
-              border: isAllBaseServers
-                ? `1px solid rgba(216, 197, 255, 0.7)`
-                : '1px solid transparent',
-            }}>
-            Базовые
-          </motion.button>
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={() => {
-              if (isAllPremiumServers) {
-                setIsAllPremiumServers(false)
-                setPremiumServersCount(0)
-              } else {
-                setServersSelected([])
-                setIsAllBaseServers(true)
-                setBaseServersCount(serversData.baseServersCount)
-                setIsAllPremiumServers(true)
-                setPremiumServersCount(serversData.premiumServersCount)
-              }
-            }}
-            className={clsx(
-              'flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-xs font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]',
-            )}
-            style={{
-              backgroundColor: `rgba(216, 197, 255, ${isAllPremiumServers ? 0.3 : 0.15})`,
-              border: isAllPremiumServers
-                ? `1px solid rgba(216, 197, 255, 0.7)`
-                : '1px solid transparent',
-            }}>
-            Премиум
-          </motion.button>
-          <div className="w-full flex gap-2 items-center">
-            <div className="h-[1px] grow bg-[var(--primary)]"></div>
-            <div className="text-[var(--primary)]">или на выбор</div>
-            <div className="h-[1px] grow bg-[var(--primary)]"></div>
-          </div>
-          {serversData.servers.map((btn: ServerDataInterface) => {
-            const isActive = serversSelected.includes(btn.code)
-            const bgOpacity = isActive ? 0.3 : 0.15
-            return (
-              <motion.button
-                key={btn.code}
+                key={btn.key}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => {
-                  if (isActive) {
-                    setServersSelected(
-                      serversSelected.filter((val) => val !== btn.code),
-                    )
-                    if (btn.isPremium)
-                      setPremiumServersCount(
-                        premiumServersCount < 0 ? 0 : premiumServersCount - 1,
-                      )
-                    else
-                      setBaseServersCount(
-                        baseServersCount < 0 ? 0 : baseServersCount - 1,
-                      )
-                  } else {
-                    setServersSelected([...serversSelected, btn.code])
-                    if (btn.isPremium)
-                      setPremiumServersCount(
-                        serversSelected.length < 1
-                          ? 1
-                          : premiumServersCount + 1,
-                      )
-                    else
-                      setBaseServersCount(
-                        serversSelected.length < 1 ? 1 : baseServersCount + 1,
-                      )
-                    setIsAllBaseServers(false)
-                    setIsAllPremiumServers(false)
-                  }
+                  selectPlan(btn)
                 }}
                 className={clsx(
-                  'flex flex-row gap-2 grow items-center justify-center text-white px-2 py-1.5 rounded-md text-xs font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]',
+                  'flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-sm font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]',
                 )}
                 style={{
                   backgroundColor: `rgba(216, 197, 255, ${bgOpacity})`,
@@ -563,13 +474,7 @@ export default function AddSubscription() {
                     ? `1px solid rgba(216, 197, 255, 0.7)`
                     : '1px solid transparent',
                 }}>
-                <Image
-                  src={`/flags/${btn.flagKey}.svg`}
-                  alt="flag"
-                  width={20}
-                  height={20}
-                />
-                {btn.code.toUpperCase()} [{btn.network}GBit] {btn.name}
+                {btn.name}
               </motion.button>
             )
           })}
@@ -577,108 +482,381 @@ export default function AddSubscription() {
       </div>
 
       <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
-        <div className="flex gap-2 items-end justify-between w-full px-4 ">
-          <div className="opacity-50 flex flex-row gap-2 items-center">
-            Ежедневный трафик в ГБ
-          </div>
-          <div className="flex gap-2 items-center ">
-            <TgStar type="gold" w={14} />
-            {user.isPremium
-              ? isUnlimitTraffic
-                ? subscriptions.unlimitTrafficPriceStars *
-                  devicesCount *
-                  subscriptions.telegramPremiumRatio
-                : subscriptions.trafficGbPriceStars *
-                  trafficLimitGb *
-                  subscriptions.telegramPremiumRatio
-              : isUnlimitTraffic
-                ? subscriptions.unlimitTrafficPriceStars * devicesCount
-                : subscriptions.trafficGbPriceStars * trafficLimitGb}
-          </div>
-        </div>
+        {/* <div className="px-4 opacity-50 flex flex-row gap-2 items-center w-full">
+          В тариф входит
+        </div> */}
 
         <motion.div
           layout
-          className="text-sm bg-[var(--surface-container-lowest)] rounded-xl flex flex-row flex-wrap gap-2 items-center p-4 w-full shadow-md">
-          <button
-            onClick={() => {
-              setTrafficLimitGb(trafficLimitGb == 1 ? 1 : trafficLimitGb - 1)
-              setIsUnlimitTraffic(false)
-            }}
-            className="flex grow items-center justify-center text-white px-3 py-1.5 rounded-md cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97] "
-            style={{ backgroundColor: 'rgba(216, 197, 255, 0.15)' }}>
-            -
-          </button>
-          <input
-            type="number"
-            placeholder={'Введите число'}
-            value={trafficLimitGb || ''}
-            onChange={(e) => {
-              setTrafficLimitGb(
-                e.target.value
-                  ? parseInt(e.target.value) < 1
-                    ? 1
-                    : parseInt(e.target.value)
-                  : 1,
-              )
-              setIsUnlimitTraffic(false)
-            }}
-            className="border max-w-[100px] border-[var(--on-surface)]/50 rounded-md px-2 py-1 bg-transparent focus:border-[var(--primary)] focus:outline-none"
-          />
-          <button
-            onClick={() => {
-              setTrafficLimitGb(trafficLimitGb + 1)
-              setIsUnlimitTraffic(false)
-            }}
-            className="flex grow items-center justify-center text-white px-3 py-1.5 rounded-md cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97] "
-            style={{ backgroundColor: 'rgba(216, 197, 255, 0.15)' }}>
-            +
-          </button>
-          {trafficGbButtons.map((val) => {
-            const isActive = trafficLimitGb === val
-            const rgb = getDevicesCountButtonColor(val)
-            const bgOpacity = isActive ? 0.3 : 0.15
+          className="text-sm bg-[var(--surface-container-lowest)] divide-y divide-[var(--primary)] rounded-xl flex flex-col p-4 py-2 w-full shadow-md">
+          {privileges.map((el) => {
             return (
-              <motion.button
-                key={val}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => {
-                  setTrafficLimitGb(val)
-                  setIsUnlimitTraffic(false)
-                }}
+              <motion.div
+                key={el.key}
                 className={clsx(
-                  'flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-sm font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]',
-                )}
-                style={{
-                  backgroundColor: `rgba(${rgb}, ${bgOpacity})`,
-                  border: isActive
-                    ? `1px solid rgba(${rgb}, 0.7)`
-                    : '1px solid transparent',
-                }}>
-                {val}
-              </motion.button>
+                  'flex flex-row gap-3 items-center px-4 py-2 text-sm font-mono',
+                )}>
+                {el.icon} {el.text}
+              </motion.div>
             )
           })}
-
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={() => {
-              setTrafficLimitGb(0)
-              setIsUnlimitTraffic(true)
-            }}
-            className={clsx(
-              'flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-sm font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]',
-            )}
-            style={{
-              backgroundColor: `rgba(216, 197, 255, ${isUnlimitTraffic ? 0.3 : 0.15})`,
-              border: isUnlimitTraffic
-                ? `1px solid rgba(216, 197, 255, 0.7)`
-                : '1px solid transparent',
-            }}>
-            Безлимит
-          </motion.button>
         </motion.div>
       </div>
+
+      {planSelected.serversSelectType == PlansServersSelectTypeEnum.CUSTOM && (
+        <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
+          <div className="flex gap-2 items-end justify-between w-full px-4 ">
+            <div className="opacity-50 flex flex-row gap-2 items-center">
+              Устройства
+            </div>
+            <div className="flex gap-2 items-center ">
+              <TgStar type="gold" w={14} />
+              {user.isPremium
+                ? subscriptions.devicesPriceStars *
+                  devicesCount *
+                  subscriptions.telegramPremiumRatio
+                : subscriptions.devicesPriceStars * devicesCount}
+            </div>
+          </div>
+
+          <motion.div
+            layout
+            className="text-sm bg-[var(--surface-container-lowest)] rounded-xl flex flex-row flex-wrap gap-2 items-center p-4 w-full shadow-md">
+            <button
+              onClick={() =>
+                setDevicesCount(devicesCount == 1 ? 1 : devicesCount - 1)
+              }
+              className="flex grow items-center justify-center text-white px-3 py-1.5 rounded-md cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97] "
+              style={{ backgroundColor: 'rgba(216, 197, 255, 0.15)' }}>
+              -
+            </button>
+            <input
+              type="number"
+              placeholder={'Введите число'}
+              value={devicesCount || ''}
+              onChange={(e) =>
+                setDevicesCount(
+                  e.target.value
+                    ? parseInt(e.target.value) < 1
+                      ? 1
+                      : parseInt(e.target.value)
+                    : 1,
+                )
+              }
+              className="border max-w-[100px] border-[var(--on-surface)]/50 rounded-md px-2 py-1 bg-transparent focus:border-[var(--primary)] focus:outline-none"
+            />
+            <button
+              onClick={() => setDevicesCount(devicesCount + 1)}
+              className="flex grow items-center justify-center text-white px-3 py-1.5 rounded-md cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97] "
+              style={{ backgroundColor: 'rgba(216, 197, 255, 0.15)' }}>
+              +
+            </button>
+            {devicesCountButtons.map((val) => {
+              const isActive = devicesCount === val
+              const rgb = getDevicesCountButtonColor(val)
+              const bgOpacity = isActive ? 0.3 : 0.15
+              return (
+                <motion.button
+                  key={val}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setDevicesCount(val)}
+                  className={clsx(
+                    'flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-sm font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]',
+                  )}
+                  style={{
+                    backgroundColor: `rgba(${rgb}, ${bgOpacity})`,
+                    border: isActive
+                      ? `1px solid rgba(${rgb}, 0.7)`
+                      : '1px solid transparent',
+                  }}>
+                  {val}
+                </motion.button>
+              )
+            })}
+          </motion.div>
+        </div>
+      )}
+
+      {planSelected.serversSelectType !==
+        PlansServersSelectTypeEnum.NOT_SELECTED && (
+        <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
+          <div className="flex gap-2 items-end justify-between w-full px-4 ">
+            <div className="opacity-50 flex flex-row gap-2 items-center">
+              Сервера
+            </div>
+            {planSelected.serversSelectType ==
+              PlansServersSelectTypeEnum.CUSTOM && (
+              <div className="flex gap-2 items-center ">
+                <TgStar type="gold" w={14} />
+                {(calculateServersPrice(
+                  isAllBaseServers,
+                  isAllPremiumServers,
+                  baseServersCount,
+                  subscriptions,
+                ) +
+                  calculatePremiumServersPrice(
+                    isAllBaseServers,
+                    isAllPremiumServers,
+                    premiumServersCount,
+                    subscriptions,
+                  )) *
+                  (user.isPremium ? subscriptions.telegramPremiumRatio : 1)}
+              </div>
+            )}
+          </div>
+
+          <motion.div
+            layout
+            className="text-sm bg-[var(--surface-container-lowest)] rounded-xl flex flex-row flex-wrap gap-2 items-center p-4 w-full shadow-md">
+            {planSelected.serversSelectType ==
+              PlansServersSelectTypeEnum.CUSTOM && (
+              <>
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    if (isAllBaseServers) {
+                      setIsAllBaseServers(false)
+                      setIsAllPremiumServers(false)
+                      setBaseServersCount(0)
+                    } else {
+                      setServersSelected([])
+                      setBaseServersCount(serversData.baseServersCount)
+                      setIsAllBaseServers(true)
+                    }
+                  }}
+                  className={clsx(
+                    'flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-xs font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]',
+                  )}
+                  style={{
+                    backgroundColor: `rgba(216, 197, 255, ${isAllBaseServers ? 0.3 : 0.15})`,
+                    border: isAllBaseServers
+                      ? `1px solid rgba(216, 197, 255, 0.7)`
+                      : '1px solid transparent',
+                  }}>
+                  Базовые
+                </motion.button>
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    if (isAllPremiumServers) {
+                      setIsAllPremiumServers(false)
+                      setPremiumServersCount(0)
+                    } else {
+                      setServersSelected([])
+                      setIsAllBaseServers(true)
+                      setBaseServersCount(serversData.baseServersCount)
+                      setIsAllPremiumServers(true)
+                      setPremiumServersCount(serversData.premiumServersCount)
+                    }
+                  }}
+                  className={clsx(
+                    'flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-xs font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]',
+                  )}
+                  style={{
+                    backgroundColor: `rgba(216, 197, 255, ${isAllPremiumServers ? 0.3 : 0.15})`,
+                    border: isAllPremiumServers
+                      ? `1px solid rgba(216, 197, 255, 0.7)`
+                      : '1px solid transparent',
+                  }}>
+                  Премиум
+                </motion.button>
+                <div className="w-full flex gap-2 items-center">
+                  <div className="h-[1px] grow bg-[var(--primary)]"></div>
+                  <div className="text-[var(--primary)]">или на выбор</div>
+                  <div className="h-[1px] grow bg-[var(--primary)]"></div>
+                </div>
+              </>
+            )}
+
+            {serversData.servers
+              .filter((el) =>
+                planSelected.serversSelectType ==
+                PlansServersSelectTypeEnum.ONE_BASE
+                  ? !el.isPremium
+                  : planSelected.serversSelectType ==
+                      PlansServersSelectTypeEnum.NOT_SELECTED
+                    ? false
+                    : true,
+              )
+              .map((btn: ServerDataInterface) => {
+                const isActive = serversSelected.includes(btn.code)
+                const bgOpacity = isActive ? 0.3 : 0.15
+                return (
+                  <motion.button
+                    key={btn.code}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => {
+                      if (isActive) {
+                        setServersSelected(
+                          serversSelected.filter((val) => val !== btn.code),
+                        )
+                        if (btn.isPremium)
+                          setPremiumServersCount(
+                            premiumServersCount < 0
+                              ? 0
+                              : premiumServersCount - 1,
+                          )
+                        else
+                          setBaseServersCount(
+                            baseServersCount < 0 ? 0 : baseServersCount - 1,
+                          )
+                      } else {
+                        if (
+                          planSelected.serversSelectType ==
+                            PlansServersSelectTypeEnum.ONE_BASE ||
+                          planSelected.serversSelectType ==
+                            PlansServersSelectTypeEnum.ONE_BASE_OR_PREMIUM
+                        ) {
+                          setServersSelected([btn.code])
+                          if (btn.isPremium) setPremiumServersCount(1)
+                          else setBaseServersCount(1)
+                        } else {
+                          setServersSelected([...serversSelected, btn.code])
+                          if (btn.isPremium)
+                            setPremiumServersCount(
+                              serversSelected.length < 1
+                                ? 1
+                                : premiumServersCount + 1,
+                            )
+                          else
+                            setBaseServersCount(
+                              serversSelected.length < 1
+                                ? 1
+                                : baseServersCount + 1,
+                            )
+                        }
+                        setIsAllBaseServers(false)
+                        setIsAllPremiumServers(false)
+                      }
+                    }}
+                    className={clsx(
+                      'flex flex-row gap-2 grow items-center justify-center text-white px-2 py-1.5 rounded-md text-xs font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]',
+                    )}
+                    style={{
+                      backgroundColor: `rgba(216, 197, 255, ${bgOpacity})`,
+                      border: isActive
+                        ? `1px solid rgba(216, 197, 255, 0.7)`
+                        : '1px solid transparent',
+                    }}>
+                    <Image
+                      src={`/flags/${btn.flagKey}.svg`}
+                      alt="flag"
+                      width={20}
+                      height={20}
+                    />
+                    {btn.code.toUpperCase()} [{btn.network}GBit] {btn.name}
+                  </motion.button>
+                )
+              })}
+          </motion.div>
+        </div>
+      )}
+
+      {planSelected.serversSelectType == PlansServersSelectTypeEnum.CUSTOM && (
+        <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
+          <div className="flex gap-2 items-end justify-between w-full px-4 ">
+            <div className="opacity-50 flex flex-row gap-2 items-center">
+              Ежедневный трафик в ГБ
+            </div>
+            <div className="flex gap-2 items-center ">
+              <TgStar type="gold" w={14} />
+              {user.isPremium
+                ? isUnlimitTraffic
+                  ? subscriptions.unlimitTrafficPriceStars *
+                    devicesCount *
+                    subscriptions.telegramPremiumRatio
+                  : subscriptions.trafficGbPriceStars *
+                    trafficLimitGb *
+                    subscriptions.telegramPremiumRatio
+                : isUnlimitTraffic
+                  ? subscriptions.unlimitTrafficPriceStars * devicesCount
+                  : subscriptions.trafficGbPriceStars * trafficLimitGb}
+            </div>
+          </div>
+
+          <motion.div
+            layout
+            className="text-sm bg-[var(--surface-container-lowest)] rounded-xl flex flex-row flex-wrap gap-2 items-center p-4 w-full shadow-md">
+            <button
+              onClick={() => {
+                setTrafficLimitGb(trafficLimitGb == 1 ? 1 : trafficLimitGb - 1)
+                setIsUnlimitTraffic(false)
+              }}
+              className="flex grow items-center justify-center text-white px-3 py-1.5 rounded-md cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97] "
+              style={{ backgroundColor: 'rgba(216, 197, 255, 0.15)' }}>
+              -
+            </button>
+            <input
+              type="number"
+              placeholder={'Введите число'}
+              value={trafficLimitGb || ''}
+              onChange={(e) => {
+                setTrafficLimitGb(
+                  e.target.value
+                    ? parseInt(e.target.value) < 1
+                      ? 1
+                      : parseInt(e.target.value)
+                    : 1,
+                )
+                setIsUnlimitTraffic(false)
+              }}
+              className="border max-w-[100px] border-[var(--on-surface)]/50 rounded-md px-2 py-1 bg-transparent focus:border-[var(--primary)] focus:outline-none"
+            />
+            <button
+              onClick={() => {
+                setTrafficLimitGb(trafficLimitGb + 1)
+                setIsUnlimitTraffic(false)
+              }}
+              className="flex grow items-center justify-center text-white px-3 py-1.5 rounded-md cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97] "
+              style={{ backgroundColor: 'rgba(216, 197, 255, 0.15)' }}>
+              +
+            </button>
+            {trafficGbButtons.map((val) => {
+              const isActive = trafficLimitGb === val
+              const rgb = getDevicesCountButtonColor(val)
+              const bgOpacity = isActive ? 0.3 : 0.15
+              return (
+                <motion.button
+                  key={val}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    setTrafficLimitGb(val)
+                    setIsUnlimitTraffic(false)
+                  }}
+                  className={clsx(
+                    'flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-sm font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]',
+                  )}
+                  style={{
+                    backgroundColor: `rgba(${rgb}, ${bgOpacity})`,
+                    border: isActive
+                      ? `1px solid rgba(${rgb}, 0.7)`
+                      : '1px solid transparent',
+                  }}>
+                  {val}
+                </motion.button>
+              )
+            })}
+
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                setTrafficLimitGb(0)
+                setIsUnlimitTraffic(true)
+              }}
+              className={clsx(
+                'flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-sm font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]',
+              )}
+              style={{
+                backgroundColor: `rgba(216, 197, 255, ${isUnlimitTraffic ? 0.3 : 0.15})`,
+                border: isUnlimitTraffic
+                  ? `1px solid rgba(216, 197, 255, 0.7)`
+                  : '1px solid transparent',
+              }}>
+              Безлимит
+            </motion.button>
+          </motion.div>
+        </div>
+      )}
 
       <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
         <div className="flex gap-2 items-end justify-between w-full px-4 ">
@@ -721,192 +899,174 @@ export default function AddSubscription() {
               </motion.button>
             )
           })}
-          {periodButton.key !== SubscriptionPeriodEnum.INDEFINITELY && (
-            <>
-              <div className="w-full flex flex-col gap-1 opacity-50">
-                Множитель периода
+          {planSelected.serversSelectType ==
+            PlansServersSelectTypeEnum.CUSTOM &&
+            periodButton.key !== SubscriptionPeriodEnum.INDEFINITELY && (
+              <>
+                <div className="w-full flex flex-col gap-1 opacity-50">
+                  Множитель периода
+                </div>
+                <button
+                  onClick={() =>
+                    setPeriodMultiplier(
+                      periodMultiplier == 1 ? 1 : periodMultiplier - 1,
+                    )
+                  }
+                  className="flex grow items-center justify-center text-white px-3 py-1.5 rounded-md cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97] "
+                  style={{ backgroundColor: 'rgba(216, 197, 255, 0.15)' }}>
+                  -
+                </button>
+                <input
+                  type="number"
+                  placeholder={'Введите число'}
+                  value={periodMultiplier || ''}
+                  onChange={(e) =>
+                    setPeriodMultiplier(
+                      e.target.value
+                        ? parseInt(e.target.value) < 1
+                          ? 1
+                          : parseInt(e.target.value)
+                        : 1,
+                    )
+                  }
+                  className="border max-w-[100px] border-[var(--on-surface)]/50 rounded-md px-2 py-1 bg-transparent focus:border-[var(--primary)] focus:outline-none"
+                />
+                <button
+                  onClick={() => setPeriodMultiplier(periodMultiplier + 1)}
+                  className="flex grow items-center justify-center text-white px-3 py-1.5 rounded-md cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97] "
+                  style={{ backgroundColor: 'rgba(216, 197, 255, 0.15)' }}>
+                  +
+                </button>
+                {periodMultiplierButtons.map((val) => {
+                  const isActive = periodMultiplier === val
+                  const rgb = getButtonColor(val)
+                  const bgOpacity = isActive ? 0.3 : 0.15
+                  return (
+                    <motion.button
+                      key={val}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setPeriodMultiplier(val)}
+                      className={clsx(
+                        'flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-sm font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]',
+                      )}
+                      style={{
+                        backgroundColor: `rgba(${rgb}, ${bgOpacity})`,
+                        border: isActive
+                          ? `1px solid rgba(${rgb}, 0.7)`
+                          : '1px solid transparent',
+                      }}>
+                      x{val}
+                    </motion.button>
+                  )
+                })}
+              </>
+            )}
+        </motion.div>
+      </div>
+
+      {planSelected.serversSelectType == PlansServersSelectTypeEnum.CUSTOM && (
+        <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
+          <div className="px-4 opacity-50 flex flex-row gap-2 items-center w-full">
+            Опции
+          </div>
+
+          <motion.div
+            layout
+            className="text-sm bg-[var(--surface-container-lowest)] divide-y divide-[var(--primary)] rounded-xl flex flex-col p-4 py-2 w-full shadow-md">
+            <motion.div
+              className={clsx(
+                'flex flex-row gap-3 items-center justify-between px-4 py-2 text-sm font-mono',
+              )}>
+              <div className="flex gap-2 items-center">
+                <TooltipWrapper
+                  prompt={'Подписка автоматически пролиться с вашего баланса'}
+                  color="info"
+                  placement="top">
+                  <FaCircleInfo />
+                </TooltipWrapper>
+                <div className="opacity-50">Авто продление:</div>
               </div>
-              <button
-                onClick={() =>
-                  setPeriodMultiplier(
-                    periodMultiplier == 1 ? 1 : periodMultiplier - 1,
-                  )
-                }
-                className="flex grow items-center justify-center text-white px-3 py-1.5 rounded-md cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97] "
-                style={{ backgroundColor: 'rgba(216, 197, 255, 0.15)' }}>
-                -
-              </button>
-              <input
-                type="number"
-                placeholder={'Введите число'}
-                value={periodMultiplier || ''}
-                onChange={(e) =>
-                  setPeriodMultiplier(
-                    e.target.value
-                      ? parseInt(e.target.value) < 1
-                        ? 1
-                        : parseInt(e.target.value)
-                      : 1,
-                  )
-                }
-                className="border max-w-[100px] border-[var(--on-surface)]/50 rounded-md px-2 py-1 bg-transparent focus:border-[var(--primary)] focus:outline-none"
-              />
-              <button
-                onClick={() => setPeriodMultiplier(periodMultiplier + 1)}
-                className="flex grow items-center justify-center text-white px-3 py-1.5 rounded-md cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97] "
-                style={{ backgroundColor: 'rgba(216, 197, 255, 0.15)' }}>
-                +
-              </button>
-              {periodMultiplierButtons.map((val) => {
-                const isActive = periodMultiplier === val
-                const rgb = getButtonColor(val)
-                const bgOpacity = isActive ? 0.3 : 0.15
-                return (
-                  <motion.button
-                    key={val}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setPeriodMultiplier(val)}
-                    className={clsx(
-                      'flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-sm font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]',
-                    )}
-                    style={{
-                      backgroundColor: `rgba(${rgb}, ${bgOpacity})`,
-                      border: isActive
-                        ? `1px solid rgba(${rgb}, 0.7)`
-                        : '1px solid transparent',
-                    }}>
-                    x{val}
-                  </motion.button>
-                )
-              })}
-            </>
-          )}
-        </motion.div>
-      </div>
-
-      <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
-        <div className="px-4 opacity-50 flex flex-row gap-2 items-center w-full">
-          С подпиской вы получаете
-        </div>
-
-        <motion.div
-          layout
-          className="text-sm bg-[var(--surface-container-lowest)] divide-y divide-[var(--primary)] rounded-xl flex flex-col p-4 py-2 w-full shadow-md">
-          {privileges.map((el) => {
-            return (
-              <motion.div
-                key={el.key}
-                className={clsx(
-                  'flex flex-row gap-3 items-center px-4 py-2 text-sm font-mono',
-                )}>
-                {el.icon} {el.text}
-              </motion.div>
-            )
-          })}
-        </motion.div>
-      </div>
-
-      <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
-        <div className="px-4 opacity-50 flex flex-row gap-2 items-center w-full">
-          Опции
-        </div>
-
-        <motion.div
-          layout
-          className="text-sm bg-[var(--surface-container-lowest)] divide-y divide-[var(--primary)] rounded-xl flex flex-col p-4 py-2 w-full shadow-md">
-          <motion.div
-            className={clsx(
-              'flex flex-row gap-3 items-center justify-between px-4 py-2 text-sm font-mono',
-            )}>
-            <div className="flex gap-2 items-center">
-              <TooltipWrapper
-                prompt={'Подписка автоматически пролиться с вашего баланса'}
-                color="info"
-                placement="top">
-                <FaCircleInfo />
-              </TooltipWrapper>
-              <div className="opacity-50">Авто продление:</div>
-            </div>
-            <div className="relative flex items-center">
-              <input
-                type="checkbox"
-                id="autoRenewalCheckbox"
-                checked={isAutoRenewal}
-                onChange={() => setIsAutoRenewal(!isAutoRenewal)}
-                className="sr-only peer"
-              />
-              <label
-                htmlFor="autoRenewalCheckbox"
-                className="flex items-center justify-center w-5 h-5 bg-transparent border border-[var(--on-surface)]/50 rounded-md cursor-pointer peer-focus:border-[var(--primary)] peer-focus:ring-2 peer-focus:ring-[var(--primary)]/20 peer-checked:bg-[var(--primary)] peer-checked:border-[var(--primary)] transition-all duration-200 hover:brightness-110 active:scale-[0.97]">
-                {isAutoRenewal && (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 text-[var(--on-primary)]"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}>
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                )}
-              </label>
-            </div>
+              <div className="relative flex items-center">
+                <input
+                  type="checkbox"
+                  id="autoRenewalCheckbox"
+                  checked={isAutoRenewal}
+                  onChange={() => setIsAutoRenewal(!isAutoRenewal)}
+                  className="sr-only peer"
+                />
+                <label
+                  htmlFor="autoRenewalCheckbox"
+                  className="flex items-center justify-center w-5 h-5 bg-transparent border border-[var(--on-surface)]/50 rounded-md cursor-pointer peer-focus:border-[var(--primary)] peer-focus:ring-2 peer-focus:ring-[var(--primary)]/20 peer-checked:bg-[var(--primary)] peer-checked:border-[var(--primary)] transition-all duration-200 hover:brightness-110 active:scale-[0.97]">
+                  {isAutoRenewal && (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 text-[var(--on-primary)]"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}>
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  )}
+                </label>
+              </div>
+            </motion.div>
+            <motion.div
+              className={clsx(
+                'flex flex-row gap-3 items-center justify-between px-4 py-2 text-sm font-mono',
+              )}>
+              <div className="flex gap-2 items-center">
+                <TooltipWrapper
+                  prompt={'При продлениях цена никогда не изменится!'}
+                  color="info"
+                  placement="top">
+                  <FaCircleInfo />
+                </TooltipWrapper>
+                <div className="opacity-50">Зафиксировать цену:</div>
+              </div>
+              <div className="flex flex-row gap-2 items-center">
+                <TgStar type="gold" w={14} />
+                {user.isPremium
+                  ? subscriptions.fixedPriceStars *
+                    subscriptions.telegramPremiumRatio
+                  : subscriptions.fixedPriceStars}
+              </div>
+              <div className="relative flex items-center">
+                <input
+                  type="checkbox"
+                  id="autoFixedPrice"
+                  checked={isFixedPrice}
+                  onChange={() => setIsFixedPrice(!isFixedPrice)}
+                  className="sr-only peer"
+                />
+                <label
+                  htmlFor="autoFixedPrice"
+                  className="flex items-center justify-center w-5 h-5 bg-transparent border border-[var(--on-surface)]/50 rounded-md cursor-pointer peer-focus:border-[var(--primary)] peer-focus:ring-2 peer-focus:ring-[var(--primary)]/20 peer-checked:bg-[var(--primary)] peer-checked:border-[var(--primary)] transition-all duration-200 hover:brightness-110 active:scale-[0.97]">
+                  {isFixedPrice && (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 text-[var(--on-primary)]"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}>
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  )}
+                </label>
+              </div>
+            </motion.div>
           </motion.div>
-          <motion.div
-            className={clsx(
-              'flex flex-row gap-3 items-center justify-between px-4 py-2 text-sm font-mono',
-            )}>
-            <div className="flex gap-2 items-center">
-              <TooltipWrapper
-                prompt={'При продлениях цена никогда не изменится!'}
-                color="info"
-                placement="top">
-                <FaCircleInfo />
-              </TooltipWrapper>
-              <div className="opacity-50">Зафиксировать цену:</div>
-            </div>
-            <div className="flex flex-row gap-2 items-center">
-              <TgStar type="gold" w={14} />
-              {user.isPremium
-                ? subscriptions.fixedPriceStars *
-                  subscriptions.telegramPremiumRatio
-                : subscriptions.fixedPriceStars}
-            </div>
-            <div className="relative flex items-center">
-              <input
-                type="checkbox"
-                id="autoFixedPrice"
-                checked={isFixedPrice}
-                onChange={() => setIsFixedPrice(!isFixedPrice)}
-                className="sr-only peer"
-              />
-              <label
-                htmlFor="autoFixedPrice"
-                className="flex items-center justify-center w-5 h-5 bg-transparent border border-[var(--on-surface)]/50 rounded-md cursor-pointer peer-focus:border-[var(--primary)] peer-focus:ring-2 peer-focus:ring-[var(--primary)]/20 peer-checked:bg-[var(--primary)] peer-checked:border-[var(--primary)] transition-all duration-200 hover:brightness-110 active:scale-[0.97]">
-                {isFixedPrice && (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 text-[var(--on-primary)]"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}>
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                )}
-              </label>
-            </div>
-          </motion.div>
-        </motion.div>
-      </div>
+        </div>
+      )}
 
       <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
         <div className="px-4 opacity-50 flex flex-row gap-2 items-center w-full">
