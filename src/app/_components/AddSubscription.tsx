@@ -410,10 +410,7 @@ export default function AddSubscription() {
         value: (
           <div className="flex flex-row gap-2 items-center">
             <TgStar type="gold" w={14} />
-            {user.isPremium
-              ? subscriptions.fixedPriceStars *
-                subscriptions.telegramPremiumRatio
-              : subscriptions.fixedPriceStars}
+            {subscriptions.fixedPriceStars}
           </div>
         ),
         isVisible:
@@ -426,13 +423,7 @@ export default function AddSubscription() {
         value: (
           <div className="flex flex-row gap-2 items-center">
             <TgStar type="gold" w={14} />
-            {isFixedPrice
-              ? user.isPremium
-                ? price +
-                  subscriptions.fixedPriceStars *
-                    subscriptions.telegramPremiumRatio
-                : price + subscriptions.fixedPriceStars
-              : price}
+            {isFixedPrice ? price + subscriptions.fixedPriceStars : price}
           </div>
         ),
         isVisible: true,
@@ -482,10 +473,6 @@ export default function AddSubscription() {
       </div>
 
       <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
-        {/* <div className="px-4 opacity-50 flex flex-row gap-2 items-center w-full">
-          В тариф входит
-        </div> */}
-
         <motion.div
           layout
           className="text-sm bg-[var(--surface-container-lowest)] divide-y divide-[var(--primary)] rounded-xl flex flex-col p-4 py-2 w-full shadow-md">
@@ -756,20 +743,19 @@ export default function AddSubscription() {
         <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
           <div className="flex gap-2 items-end justify-between w-full px-4 ">
             <div className="opacity-50 flex flex-row gap-2 items-center">
-              Ежедневный трафик в ГБ
+              Ежедневный трафик ГБ
             </div>
             <div className="flex gap-2 items-center ">
               <TgStar type="gold" w={14} />
               {user.isPremium
                 ? isUnlimitTraffic
                   ? subscriptions.unlimitTrafficPriceStars *
-                    devicesCount *
                     subscriptions.telegramPremiumRatio
                   : subscriptions.trafficGbPriceStars *
                     trafficLimitGb *
                     subscriptions.telegramPremiumRatio
                 : isUnlimitTraffic
-                  ? subscriptions.unlimitTrafficPriceStars * devicesCount
+                  ? subscriptions.unlimitTrafficPriceStars
                   : subscriptions.trafficGbPriceStars * trafficLimitGb}
             </div>
           </div>
@@ -1030,10 +1016,7 @@ export default function AddSubscription() {
               </div>
               <div className="flex flex-row gap-2 items-center">
                 <TgStar type="gold" w={14} />
-                {user.isPremium
-                  ? subscriptions.fixedPriceStars *
-                    subscriptions.telegramPremiumRatio
-                  : subscriptions.fixedPriceStars}
+                {subscriptions.fixedPriceStars}
               </div>
               <div className="relative flex items-center">
                 <input
