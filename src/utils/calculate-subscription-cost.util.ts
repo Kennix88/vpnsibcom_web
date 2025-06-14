@@ -1,4 +1,6 @@
+import { PlansServersSelectTypeEnum } from '@app/enums/plans-servers-select-type.enum'
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
+import { PlansInterface } from '@app/types/plans.interface'
 
 /**
  * Subscription cost calculation settings interface
@@ -33,11 +35,12 @@ interface SubscriptionCostParams {
   devicesCount: number
   serversCount: number
   premiumServersCount: number
-  trafficLimitGb: number
+  trafficLimitGb: number | null
   isAllBaseServers: boolean
   isAllPremiumServers: boolean
   isUnlimitTraffic: boolean
   userDiscount: number
+  plan: PlansInterface
   settings: SubscriptionCostSettings
 }
 
@@ -61,6 +64,7 @@ export function calculateSubscriptionCost(
     isAllPremiumServers,
     isUnlimitTraffic,
     userDiscount = 1,
+    plan,
     settings,
   } = params
 
@@ -76,7 +80,10 @@ export function calculateSubscriptionCost(
     throw new Error('Servers count cannot be negative')
   }
 
-  if (trafficLimitGb < 0 && !isUnlimitTraffic) {
+  if (
+    (trafficLimitGb == null && !isUnlimitTraffic) ||
+    (trafficLimitGb !== null && trafficLimitGb < 0 && !isUnlimitTraffic)
+  ) {
     throw new Error('Traffic limit cannot be negative')
   }
 
@@ -106,17 +113,21 @@ export function calculateSubscriptionCost(
   )
 
   // Calculate traffic price
-  const trafficPrice = isUnlimitTraffic
-    ? settings.unlimitTrafficPriceStars * devicesCount
-    : trafficLimitGb * settings.trafficGbPriceStars
+  const trafficPrice =
+    isUnlimitTraffic || !trafficLimitGb
+      ? settings.unlimitTrafficPriceStars
+      : trafficLimitGb * settings.trafficGbPriceStars
 
   // Apply premium ratio if applicable
   const premiumRatio = isPremium ? settings.telegramPremiumRatio : 1
 
   // Calculate base price
   const basePrice =
-    (devicePrice + serversPrice + premiumServersPrice + trafficPrice) *
-    premiumRatio
+    plan.serversSelectType !== PlansServersSelectTypeEnum.CUSTOM &&
+    plan.priceStars
+      ? plan.priceStars * premiumRatio
+      : (devicePrice + serversPrice + premiumServersPrice + trafficPrice) *
+        premiumRatio
 
   // Calculate final price based on subscription period
   const finalPrice = calculatePriceByPeriod(
@@ -140,9 +151,9 @@ export function calculateServersPrice(
   settings: SubscriptionCostSettings,
 ): number {
   if (isAllServers && !isAllPremiumServers) {
-    return serversCount * settings.allBaseServersPriceStars
+    return settings.allBaseServersPriceStars
   } else if (isAllServers && isAllPremiumServers) {
-    return serversCount * settings.allBaseServersPriceStars
+    return 0
   } else {
     return serversCount * settings.serversPriceStars
   }
@@ -157,8 +168,10 @@ export function calculatePremiumServersPrice(
   premiumServersCount: number,
   settings: SubscriptionCostSettings,
 ): number {
-  if (isAllPremiumServers && isAllServers) {
-    return premiumServersCount * settings.allPremiumServersPriceStars
+  if (isAllServers && !isAllPremiumServers) {
+    return 0
+  } else if (isAllPremiumServers && isAllServers) {
+    return settings.allPremiumServersPriceStars
   } else {
     return premiumServersCount * settings.premiumServersPriceStars
   }
