@@ -18,7 +18,7 @@ export async function GET(
   })
 
   const regexAllClients = new RegExp(
-    /^([Cc]lash-verge|[Cc]lash[-.]?[Mm]eta|[Ff][Ll][Cc]lash|[Cc]lash|[Ss]tash|[Mm]ihomo|[Ss]tash|SFA|SFI|SFM|SFT|[Hh]app|[Ss]treisand|v2ray[Nn][Gg]|v2ray[Nn]|[Kk]aring|[Hh]iddify|v2ray|[Hh]iddify[Nn]ext|[Hh]iddify|sing-box|SS|SSR|SSD|SSS|Outline|Shadowsocks|SSconf)/,
+    /^([Cc]lash-verge|[Cc]lash[-.]?[Mm]eta|[Ff][Ll][Cc]lash|[Cc]lash|[Ss]tash|[Mm]ihomo|[Ss]tash|SFA|SFI|SFM|SFT|[Hh]app|[Ss]treisand|v2box|v2ray[Nn][Gg]|v2ray[Nn]|[Kk]aring|[Hh]iddify|v2ray|[Hh]iddify[Nn]ext|[Hh]iddify|sing-box|SS|SSR|SSD|SSS|Outline|Shadowsocks|SSconf|TelegramBot|TwitterBot|NekoBox)/,
   )
 
   if (agent && regexAllClients.test(agent!)) {
@@ -34,7 +34,7 @@ export async function GET(
 
     resData.subscription.links.map((el) => (links = links + el + `\n`))
 
-    return new Response(JSON.stringify(resData.marzbanSubRes.body), {
+    return new Response(resData.marzbanSubRes.body, {
       status: 200,
       headers: {
         ...resData.marzbanSubRes.headers,
