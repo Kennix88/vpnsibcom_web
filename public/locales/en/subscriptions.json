@@ -49,7 +49,7 @@
     "renew": {
       "title": "Subscription renewal",
       "action": "Renew",
-      "message": "Do you want to renew your subscription for the period: {period}? {price} stars will be deducted from your balance (including discounts {discountPeriod}% and {roleDiscount}%)."
+      "message": "Do you want to renew your subscription? {price} stars will be deducted from your balance."
     }
   }
 }

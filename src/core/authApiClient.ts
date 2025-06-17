@@ -37,7 +37,7 @@ const createApiInstance = (): AxiosInstance => {
   const instance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     withCredentials: true, // для отправки httpOnly куки (refresh)
-    timeout: 15000, // 15 seconds timeout
+    timeout: 30000, // 15 seconds timeout
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',

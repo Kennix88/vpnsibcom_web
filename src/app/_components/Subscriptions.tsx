@@ -644,7 +644,6 @@ export function Subscriptions() {
                                 }>
                                 <div>
                                   {t('modals.renew.message', {
-                                    period: formatPeriod(subscription.period),
                                     price: subscription.nextRenewalStars,
                                   })}
                                 </div>
@@ -672,9 +671,8 @@ export function Subscriptions() {
                                 className="qr-code-container"></div>
                               <div className="text-sm text-center">
                                 Отсканируйте в клиентском приложении (Happ,
-                                Hiddify, v2box, Straisand, ShadowRocket,
-                                v2rayNG, NekoBox, FoXray, Sing-box, Nekoray и
-                                др.)
+                                Hiddify, Straisand, ShadowRocket, v2rayNG,
+                                FoXray и др.)
                               </div>
                             </div>
                           </Modal>
