@@ -19,6 +19,7 @@ import clsx from 'clsx'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { JSX, useEffect, useState } from 'react'
 import { BiSolidMask } from 'react-icons/bi'
 import { FaCircleInfo, FaShieldHeart } from 'react-icons/fa6'
@@ -58,7 +59,8 @@ const getDevicesCountButtonColor = (amount: number) => {
 }
 
 export default function AddSubscription() {
-  const { subscriptions } = useSubscriptionsStore()
+  const router = useRouter()
+  const { subscriptions, setSubscriptions } = useSubscriptionsStore()
   const { user, setUser } = useUserStore()
   const { serversData, setServersData } = useServersStore()
   const { plansData, setPlansData } = usePlansStore()
@@ -79,6 +81,7 @@ export default function AddSubscription() {
   const [trafficLimitGb, setTrafficLimitGb] = useState<number>(1)
   const [isAutoRenewal, setIsAutoRenewal] = useState<boolean>(true)
   const [planSelected, setPlanSelected] = useState<PlansInterface | null>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const selectPlan = (plan: PlansInterface) => {
     setPlanSelected(plan)
@@ -204,6 +207,32 @@ export default function AddSubscription() {
   )
     return null
 
+  const handleClickPurchaseSubscription = async () => {
+    setIsLoading(true)
+    try {
+      const update = await authApiClient.purchaseSubscription({
+        period: periodButton.key,
+        periodMultiplier: periodMultiplier,
+        isFixedPrice: isFixedPrice,
+        devicesCount: devicesCount,
+        isAllBaseServers: isAllBaseServers,
+        isAllPremiumServers: isAllPremiumServers,
+        trafficLimitGb: trafficLimitGb,
+        isUnlimitTraffic: isUnlimitTraffic,
+        servers: serversSelected,
+        isAutoRenewal: isAutoRenewal,
+        planKey: planSelected.key,
+      })
+      setIsLoading(false)
+      setUser(update.user)
+      setSubscriptions(update.subscriptions)
+      router.push('/tma/')
+    } catch {
+      setIsLoading(false)
+      toast.error('Error updating data')
+    }
+  }
+
   const privileges = [
     {
       key: 'asd124sdfg65234qwf',
@@ -301,6 +330,10 @@ export default function AddSubscription() {
   const balance = user.balance.isUseWithdrawalBalance
     ? user.balance.paymentBalance + user.balance.withdrawalBalance
     : user.balance.paymentBalance
+
+  const finalPrice = isFixedPrice
+    ? price + subscriptions.fixedPriceStars
+    : price
 
   const resultList: { name: string; value: JSX.Element; isVisible: boolean }[] =
     [
@@ -423,7 +456,7 @@ export default function AddSubscription() {
         value: (
           <div className="flex flex-row gap-2 items-center">
             <TgStar type="gold" w={14} />
-            {isFixedPrice ? price + subscriptions.fixedPriceStars : price}
+            {finalPrice}
           </div>
         ),
         isVisible: true,
@@ -1073,9 +1106,28 @@ export default function AddSubscription() {
             )
           })}
         </motion.div>
+      </div>
 
-        {balance >= price ? (
-          <button>Оплатить с баланса</button>
+      <div className="flex flex-col gap-2 items-center w-full">
+        {balance >= finalPrice ? (
+          <button
+            onClick={() => handleClickPurchaseSubscription()}
+            disabled={isLoading}
+            className={clsx(
+              'flex flex-row gap-2 items-center justify-center bg-[var(--primary)] text-[var(--on-primary)] font-medium text-sm px-4 py-2 rounded-md w-full transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer max-w-[400px]',
+              isLoading && 'opacity-50 pointer-events-none',
+            )}>
+            {isLoading && (
+              <div
+                className={'loader'}
+                style={{
+                  width: '15px',
+                  height: '15px',
+                  borderWidth: '2px',
+                }}></div>
+            )}
+            Оплатить с баланса
+          </button>
         ) : (
           <div>
             <div>На вашем балансе недостаточно средств</div>
