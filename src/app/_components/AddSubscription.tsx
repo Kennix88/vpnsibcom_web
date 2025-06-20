@@ -1109,7 +1109,18 @@ export default function AddSubscription() {
       </div>
 
       <div className="flex flex-col gap-2 items-center w-full">
-        {balance >= finalPrice ? (
+        {(!isAllBaseServers || !isAllPremiumServers) &&
+        serversSelected.length <= 0 ? (
+          <div
+            className={
+              'bg-[var(--warning-container)] text-[var(--on-warning-container)] rounded-md flex flex-col gap-2 py-2 px-4 w-full max-w-[400px]'
+            }>
+            <div className={'flex flex-row gap-2 items-center text-xs'}>
+              <FaCircleInfo />
+              Выберите хотябы один сервер!
+            </div>
+          </div>
+        ) : balance >= finalPrice ? (
           <button
             onClick={() => handleClickPurchaseSubscription()}
             disabled={isLoading}
@@ -1129,9 +1140,22 @@ export default function AddSubscription() {
             Оплатить с баланса
           </button>
         ) : (
-          <div>
-            <div>На вашем балансе недостаточно средств</div>
-            <Link href={'/payments'}>Пополнить баланс</Link>
+          <div
+            className={
+              'bg-[var(--warning-container)] text-[var(--on-warning-container)] rounded-md flex flex-col gap-2 py-2 px-4 w-full max-w-[400px]'
+            }>
+            <div className={'flex flex-row gap-2 items-center text-xs'}>
+              <FaCircleInfo />
+              На вашем балансе недостаточно средств
+            </div>
+            <Link
+              className={
+                'flex flex-row gap-2 items-center justify-center px-4 py-2 bg-[var(--warning)] text-[var(--on-warning)] rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer text-sm'
+              }
+              href={`/payments?amount=${(finalPrice - balance + 1).toFixed(0)}`}>
+              Пополнить баланс на <TgStar type="gold" w={14} />{' '}
+              {(finalPrice - balance + 1).toFixed(0)}
+            </Link>
           </div>
         )}
       </div>
