@@ -1152,7 +1152,7 @@ export default function AddSubscription() {
               className={
                 'flex flex-row gap-2 items-center justify-center px-4 py-2 bg-[var(--warning)] text-[var(--on-warning)] rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer text-sm'
               }
-              href={`/payments?amount=${(finalPrice - balance + 1).toFixed(0)}`}>
+              href={`/tma/payment?amount=${(finalPrice - balance + 1).toFixed(0)}`}>
               Пополнить баланс на <TgStar type="gold" w={14} />{' '}
               {(finalPrice - balance + 1).toFixed(0)}
             </Link>

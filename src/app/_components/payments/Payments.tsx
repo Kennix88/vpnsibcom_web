@@ -12,6 +12,7 @@ import addSuffixToNumberUtil from '@app/utils/add-suffix-to-number.util'
 import { fxUtil } from '@app/utils/fx.util'
 import clsx from 'clsx'
 import { motion } from 'framer-motion'
+import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'use-intl'
 
@@ -35,10 +36,14 @@ export default function Payments({ isTma = false }: Props) {
   const { rates, currencies } = useCurrencyStore()
   const [selectedMethod, setSelectedMethod] =
     useState<PaymentMethodsDataInterface | null>()
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     if (!methods) return
     setSelectedMethod(methods[0])
+    if (searchParams.has('amount')) {
+      setAmount(parseInt(searchParams.get('amount') || '700'))
+    }
   }, [methods])
 
   if (!methods || !user || !rates || !currencies) return null
