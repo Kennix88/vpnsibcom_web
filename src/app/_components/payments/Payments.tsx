@@ -4,6 +4,7 @@ import PaymentInvoiceButton from '@app/app/_components/payments/PaymentInvoiceBu
 import { PaymentMethodSelector } from '@app/app/_components/payments/PaymentMethodSelector'
 import TgStar from '@app/app/_components/TgStar'
 import { CurrencyEnum } from '@app/enums/currency.enum'
+import { PaymentMethodTypeEnum } from '@app/enums/payment-method-type.enum'
 import { useCurrencyStore } from '@app/store/currency.store'
 import { usePaymentMethodsStore } from '@app/store/payment-methods.store'
 import { useUserStore } from '@app/store/user.store'
@@ -12,7 +13,7 @@ import addSuffixToNumberUtil from '@app/utils/add-suffix-to-number.util'
 import { fxUtil } from '@app/utils/fx.util'
 import clsx from 'clsx'
 import { motion } from 'framer-motion'
-import { useSearchParams } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'use-intl'
 
@@ -31,6 +32,8 @@ type Props = {
 export default function Payments({ isTma = false }: Props) {
   const t = useTranslations('billing.payment')
   const { user, setUser } = useUserStore()
+  const location = usePathname()
+  const url = location.includes('/tma') ? '/tma' : '/app'
   const { methods } = usePaymentMethodsStore()
   const [amount, setAmount] = useState<number>(700)
   const { rates, currencies } = useCurrencyStore()
@@ -40,7 +43,12 @@ export default function Payments({ isTma = false }: Props) {
 
   useEffect(() => {
     if (!methods) return
-    setSelectedMethod(methods[0])
+    if (url == '/tma')
+      setSelectedMethod(
+        methods.find((m) => m.type == PaymentMethodTypeEnum.STARS) ||
+          methods[0],
+      )
+    else setSelectedMethod(methods[0])
     if (searchParams.has('amount')) {
       setAmount(parseInt(searchParams.get('amount') || '700'))
     }
@@ -109,16 +117,19 @@ export default function Payments({ isTma = false }: Props) {
           </div>
         </motion.div>
       </div>
-      <PaymentMethodSelector
-        methods={methods}
-        currencies={currencies}
-        amount={amount}
-        rates={rates}
-        isLoading={!methods}
-        selectedKey={selectedMethod?.key}
-        onSelect={(method) => setSelectedMethod(method)}
-        isTma={isTma}
-      />
+      {url !== '/tma' && (
+        <PaymentMethodSelector
+          methods={methods}
+          currencies={currencies}
+          amount={amount}
+          rates={rates}
+          isLoading={!methods}
+          selectedKey={selectedMethod?.key}
+          onSelect={(method) => setSelectedMethod(method)}
+          isTma={isTma}
+        />
+      )}
+
       {selectedMethod && (
         <PaymentInvoiceButton
           method={selectedMethod}
