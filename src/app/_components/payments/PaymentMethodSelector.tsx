@@ -134,7 +134,7 @@ export const PaymentMethodSelector = ({
         )}
         <div
           className={
-            'bg-[var(--warning-container)] text-[var(--on-warning-container)] rounded-md flex flex-col gap-2 py-2 px-4 w-full max-w-[400px]'
+            'bg-[var(--surface-container)] text-[var(--on-surface)] rounded-md flex flex-col gap-2 py-2 px-4 w-full max-w-[400px]'
           }>
           <div className={'flex flex-row gap-2 items-center text-xs'}>
             <FaCircleInfo className={'text-3xl'} />
@@ -143,7 +143,7 @@ export const PaymentMethodSelector = ({
           <Link
             href={config.SPLIT_TG_REF_URL}
             className={
-              'flex flex-row gap-2 items-center justify-center px-4 py-2 bg-[var(--warning)] text-[var(--on-warning)] rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer text-sm'
+              'flex flex-row gap-2 items-center justify-center px-4 py-2 bg-[var(--surface-container-high)] rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer text-sm'
             }
             target={'_blank'}>
             {t('splitBay')} <TgStar type={'original'} w={15} />
