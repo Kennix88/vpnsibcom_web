@@ -28,7 +28,7 @@ import { IoCheckmark, IoClose } from 'react-icons/io5'
 import { MdAutoMode, MdRotateRight } from 'react-icons/md'
 import { PiSpeedometerBold } from 'react-icons/pi'
 import { SiAdobeindesign } from 'react-icons/si'
-import { TbPlugConnected, TbQrcode } from 'react-icons/tb'
+import { TbDotsVertical, TbPlugConnected, TbQrcode } from 'react-icons/tb'
 import { toast } from 'react-toastify'
 import Modal from './Modal'
 import TgStar from './TgStar'
@@ -48,6 +48,7 @@ export function Subscriptions() {
   const [updatingButtons, setUpdatingButtons] = useState<string | null>(null)
   const location = usePathname()
   const url = location === '/app' ? '/app' : '/tma'
+  const [isOpenAction, setIsOpenAction] = useState<string | null>(null)
   const [isOpenModalDelete, setIsOpenModalDelete] = useState<string | null>(
     null,
   )
@@ -531,125 +532,151 @@ export function Subscriptions() {
                     <div className="flex flex-wrap justify-between items-center px-2 py-2 border-t border-[var(--outline)]">
                       <div className="flex gap-2 items-center ">
                         <button
-                          onClick={() => setIsOpenModalDelete(subscription.id)}
-                          disabled={updatingButtons === subscription.id}
-                          className={`p-2 rounded-md bg-[var(--error)] text-[var(--on-error)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer `}>
-                          <IoClose size={18} />
+                          onClick={() => setIsOpenAction(subscription.id)}
+                          className="p-2 rounded-md bg-[var(--surface-container)] text-[var(--on-surface-variant)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex gap-2 items-center text-xs">
+                          <TbDotsVertical size={18} />
+                          Действия
                         </button>
-
                         <Modal
-                          isOpen={isOpenModalDelete === subscription.id}
-                          onClose={() => setIsOpenModalDelete(null)}
-                          title={t('modals.delete.title')}
-                          variant="error"
-                          actionText={t('modals.delete.action')}
-                          onAction={() => deleteSubscription(subscription)}>
-                          {t('modals.delete.message')}
+                          isOpen={isOpenAction === subscription.id}
+                          onClose={() => setIsOpenAction(null)}
+                          title={'Действия'}
+                          variant="default">
+                          <div className="flex flex-col-reverse gap-2">
+                            <button
+                              onClick={() => {
+                                setIsOpenModalDelete(subscription.id)
+                              }}
+                              disabled={updatingButtons === subscription.id}
+                              className={`p-2 rounded-md bg-[var(--error)] text-[var(--on-error)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex gap-2 items-center `}>
+                              <IoClose size={18} />
+                              Удалить
+                            </button>
+
+                            <Modal
+                              isOpen={isOpenModalDelete === subscription.id}
+                              onClose={() => setIsOpenModalDelete(null)}
+                              title={t('modals.delete.title')}
+                              variant="error"
+                              actionText={t('modals.delete.action')}
+                              onAction={() => deleteSubscription(subscription)}>
+                              {t('modals.delete.message')}
+                            </Modal>
+
+                            <button
+                              onClick={() => {
+                                setIsOpenModalRefresh(subscription.id)
+                              }}
+                              disabled={updatingButtons === subscription.id}
+                              className={`p-2 rounded-md bg-[var(--warning)] text-[var(--on-warning)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex gap-2 items-center `}>
+                              <FaArrowsRotate size={18} />
+                              Сбросить данные
+                            </button>
+
+                            <Modal
+                              isOpen={isOpenModalRefresh === subscription.id}
+                              onClose={() => setIsOpenModalRefresh(null)}
+                              title={t('modals.refresh.title')}
+                              variant="warning"
+                              actionText={t('modals.refresh.action')}
+                              onAction={() =>
+                                resetSubscriptionToken(subscription)
+                              }>
+                              {t('modals.refresh.message')}
+                            </Modal>
+
+                            {subscription.period !==
+                              SubscriptionPeriodEnum.TRIAL &&
+                              subscription.period !==
+                                SubscriptionPeriodEnum.INDEFINITELY && (
+                                <>
+                                  <button
+                                    onClick={() => {
+                                      setIsOpenModalAutoPay(subscription.id)
+                                    }}
+                                    disabled={
+                                      updatingButtons === subscription.id
+                                    }
+                                    className={`p-2 rounded-md ${
+                                      subscription.isAutoRenewal
+                                        ? 'bg-[var(--success)] text-[var(--on-success)]'
+                                        : 'bg-[var(--surface-container-high)] text-[var(--on-surface)]'
+                                    } transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex gap-2 items-center `}>
+                                    <MdAutoMode size={18} />
+                                    Автопродление
+                                  </button>
+
+                                  <Modal
+                                    isOpen={
+                                      isOpenModalAutoPay === subscription.id
+                                    }
+                                    onClose={() => setIsOpenModalAutoPay(null)}
+                                    title={
+                                      subscription.isAutoRenewal
+                                        ? t('modals.autoRenewal.disableTitle')
+                                        : t('modals.autoRenewal.enableTitle')
+                                    }
+                                    variant={
+                                      subscription.isAutoRenewal
+                                        ? 'warning'
+                                        : 'success'
+                                    }
+                                    actionText={
+                                      subscription.isAutoRenewal
+                                        ? t('modals.autoRenewal.disableAction')
+                                        : t('modals.autoRenewal.enableAction')
+                                    }
+                                    onAction={() =>
+                                      toggleAutoRenewal(subscription)
+                                    }>
+                                    {subscription.isAutoRenewal
+                                      ? t('modals.autoRenewal.disableMessage')
+                                      : t('modals.autoRenewal.enableMessage')}
+                                  </Modal>
+                                </>
+                              )}
+
+                            {subscription.period !==
+                              SubscriptionPeriodEnum.TRIAL &&
+                              subscription.period !==
+                                SubscriptionPeriodEnum.INDEFINITELY &&
+                              subscription.nextRenewalStars && (
+                                <>
+                                  <button
+                                    onClick={() => {
+                                      setIsOpenModalBuy(subscription.id)
+                                    }}
+                                    disabled={
+                                      updatingButtons === subscription.id ||
+                                      subscription.nextRenewalStars > balance
+                                    }
+                                    className={`p-2 rounded-md bg-[var(--gold-container)] text-[var(--tg-star-gold)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+                                      subscription.nextRenewalStars > balance
+                                        ? 'opacity-50 cursor-not-allowed'
+                                        : ' cursor-pointer'
+                                    } flex gap-2 items-center `}>
+                                    <TgStar type={'gold'} w={18} />
+                                    Продлить
+                                  </button>
+                                  <Modal
+                                    isOpen={isOpenModalBuy === subscription.id}
+                                    onClose={() => setIsOpenModalBuy(null)}
+                                    title={t('modals.renew.title')}
+                                    variant="warning"
+                                    actionText={t('modals.renew.action')}
+                                    onAction={() =>
+                                      renewSubscription(subscription)
+                                    }>
+                                    <div>
+                                      {t('modals.renew.message', {
+                                        price: subscription.nextRenewalStars,
+                                      })}
+                                    </div>
+                                  </Modal>
+                                </>
+                              )}
+                          </div>
                         </Modal>
-
-                        <div className="h-4 w-[1px] bg-[var(--outline)]"></div>
-
-                        <button
-                          onClick={() => setIsOpenModalRefresh(subscription.id)}
-                          disabled={updatingButtons === subscription.id}
-                          className={`p-2 rounded-md bg-[var(--warning)] text-[var(--on-warning)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer`}>
-                          <FaArrowsRotate size={18} />
-                        </button>
-
-                        <Modal
-                          isOpen={isOpenModalRefresh === subscription.id}
-                          onClose={() => setIsOpenModalRefresh(null)}
-                          title={t('modals.refresh.title')}
-                          variant="warning"
-                          actionText={t('modals.refresh.action')}
-                          onAction={() => resetSubscriptionToken(subscription)}>
-                          {t('modals.refresh.message')}
-                        </Modal>
-
-                        {subscription.period !== SubscriptionPeriodEnum.TRIAL &&
-                          subscription.period !==
-                            SubscriptionPeriodEnum.INDEFINITELY && (
-                            <>
-                              <div className="h-4 w-[1px] bg-[var(--outline)]"></div>
-
-                              <button
-                                onClick={() =>
-                                  setIsOpenModalAutoPay(subscription.id)
-                                }
-                                disabled={updatingButtons === subscription.id}
-                                className={`p-2 rounded-md ${
-                                  subscription.isAutoRenewal
-                                    ? 'bg-[var(--success)] text-[var(--on-success)]'
-                                    : 'bg-[var(--surface-container-high)] text-[var(--on-surface)]'
-                                } transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer`}>
-                                <MdAutoMode size={18} />
-                              </button>
-
-                              <Modal
-                                isOpen={isOpenModalAutoPay === subscription.id}
-                                onClose={() => setIsOpenModalAutoPay(null)}
-                                title={
-                                  subscription.isAutoRenewal
-                                    ? t('modals.autoRenewal.disableTitle')
-                                    : t('modals.autoRenewal.enableTitle')
-                                }
-                                variant={
-                                  subscription.isAutoRenewal
-                                    ? 'warning'
-                                    : 'success'
-                                }
-                                actionText={
-                                  subscription.isAutoRenewal
-                                    ? t('modals.autoRenewal.disableAction')
-                                    : t('modals.autoRenewal.enableAction')
-                                }
-                                onAction={() =>
-                                  toggleAutoRenewal(subscription)
-                                }>
-                                {subscription.isAutoRenewal
-                                  ? t('modals.autoRenewal.disableMessage')
-                                  : t('modals.autoRenewal.enableMessage')}
-                              </Modal>
-                            </>
-                          )}
-
-                        {subscription.period !== SubscriptionPeriodEnum.TRIAL &&
-                          subscription.period !==
-                            SubscriptionPeriodEnum.INDEFINITELY &&
-                          subscription.nextRenewalStars && (
-                            <>
-                              <button
-                                onClick={() =>
-                                  setIsOpenModalBuy(subscription.id)
-                                }
-                                disabled={
-                                  updatingButtons === subscription.id ||
-                                  subscription.nextRenewalStars > balance
-                                }
-                                className={`p-2 rounded-md bg-[var(--gold-container)] text-[var(--on-surface-variant)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
-                                  subscription.nextRenewalStars > balance
-                                    ? 'opacity-50 cursor-not-allowed'
-                                    : ' cursor-pointer'
-                                }`}>
-                                <TgStar type={'gold'} w={18} />
-                              </button>
-                              <Modal
-                                isOpen={isOpenModalBuy === subscription.id}
-                                onClose={() => setIsOpenModalBuy(null)}
-                                title={t('modals.renew.title')}
-                                variant="warning"
-                                actionText={t('modals.renew.action')}
-                                onAction={() =>
-                                  renewSubscription(subscription)
-                                }>
-                                <div>
-                                  {t('modals.renew.message', {
-                                    price: subscription.nextRenewalStars,
-                                  })}
-                                </div>
-                              </Modal>
-                            </>
-                          )}
                       </div>
 
                       <div className="flex gap-2 items-center ">
