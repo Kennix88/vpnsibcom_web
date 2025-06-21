@@ -1,4 +1,5 @@
 export enum PlansEnum {
+  TRIAL = 'TRIAL',
   START = 'START',
   BASE = 'BASE',
   PLUS = 'PLUS',
