@@ -1,8 +1,11 @@
 'use client'
 
+import { config } from '@app/config/client'
 import { authApiClient } from '@app/core/authApiClient'
 import { publicApiClient } from '@app/core/publicApiClient'
+import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
 import { PlansServersSelectTypeEnum } from '@app/enums/plans-servers-select-type.enum'
+import { PlansEnum } from '@app/enums/plans.enum'
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
 import { usePlansStore } from '@app/store/plans.store'
 import { useServersStore } from '@app/store/servers.store'
@@ -15,8 +18,10 @@ import {
   calculateServersPrice,
   calculateSubscriptionCost,
 } from '@app/utils/calculate-subscription-cost.util'
+import { invoice } from '@telegram-apps/sdk-react'
 import clsx from 'clsx'
 import { motion } from 'framer-motion'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -59,6 +64,7 @@ const getDevicesCountButtonColor = (amount: number) => {
 }
 
 export default function AddSubscription() {
+  const tBill = useTranslations('billing.payment')
   const router = useRouter()
   const { subscriptions, setSubscriptions } = useSubscriptionsStore()
   const { user, setUser } = useUserStore()
@@ -226,10 +232,42 @@ export default function AddSubscription() {
       setIsLoading(false)
       setUser(update.user)
       setSubscriptions(update.subscriptions)
-      router.push('/tma/')
     } catch {
       setIsLoading(false)
       toast.error('Error updating data')
+    } finally {
+      setIsLoading(false)
+      router.push('/tma')
+    }
+  }
+
+  const handleClickPurchaseInvoiceSubscription = async () => {
+    setIsLoading(true)
+    try {
+      const update = await authApiClient.purchaseInvoiceSubscription({
+        method: PaymentMethodEnum.STARS,
+        period: periodButton.key,
+        periodMultiplier: periodMultiplier,
+        isFixedPrice: isFixedPrice,
+        devicesCount: devicesCount,
+        isAllBaseServers: isAllBaseServers,
+        isAllPremiumServers: isAllPremiumServers,
+        trafficLimitGb: trafficLimitGb,
+        isUnlimitTraffic: isUnlimitTraffic,
+        servers: serversSelected,
+        isAutoRenewal: isAutoRenewal,
+        planKey: planSelected.key,
+      })
+      setUser(update.user)
+      setSubscriptions(update.subscriptions)
+      await invoice.open(update.linkPay, 'url')
+      setIsLoading(false)
+    } catch {
+      setIsLoading(false)
+      toast.error('Error updating data')
+    } finally {
+      setIsLoading(false)
+      router.push('/tma')
     }
   }
 
@@ -479,29 +517,39 @@ export default function AddSubscription() {
         <motion.div
           layout
           className="text-sm bg-[var(--surface-container-lowest)] rounded-xl flex flex-row flex-wrap gap-2 items-center p-4 w-full shadow-md">
-          {plansData.plans.map((btn: PlansInterface) => {
-            const isActive = btn.key === planSelected?.key
-            const bgOpacity = isActive ? 0.3 : 0.15
-            return (
-              <motion.button
-                key={btn.key}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => {
-                  selectPlan(btn)
-                }}
-                className={clsx(
-                  'flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-sm font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]',
-                )}
-                style={{
-                  backgroundColor: `rgba(216, 197, 255, ${bgOpacity})`,
-                  border: isActive
-                    ? `1px solid rgba(216, 197, 255, 0.7)`
-                    : '1px solid transparent',
-                }}>
-                {btn.name}
-              </motion.button>
-            )
-          })}
+          {plansData.plans
+            .sort((a, b) => {
+              const indexA = Object.values(PlansEnum).indexOf(a.key)
+              const indexB = Object.values(PlansEnum).indexOf(b.key)
+
+              const safeIndexA = indexA === -1 ? Infinity : indexA
+              const safeIndexB = indexB === -1 ? Infinity : indexB
+
+              return safeIndexA - safeIndexB
+            })
+            .map((btn: PlansInterface) => {
+              const isActive = btn.key === planSelected?.key
+              const bgOpacity = isActive ? 0.3 : 0.15
+              return (
+                <motion.button
+                  key={btn.key}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    selectPlan(btn)
+                  }}
+                  className={clsx(
+                    'flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-sm font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]',
+                  )}
+                  style={{
+                    backgroundColor: `rgba(216, 197, 255, ${bgOpacity})`,
+                    border: isActive
+                      ? `1px solid rgba(216, 197, 255, 0.7)`
+                      : '1px solid transparent',
+                  }}>
+                  {btn.name}
+                </motion.button>
+              )
+            })}
         </motion.div>
       </div>
 
@@ -1117,7 +1165,7 @@ export default function AddSubscription() {
             }>
             <div className={'flex flex-row gap-2 items-center text-xs'}>
               <FaCircleInfo />
-              Выберите хотябы один сервер!
+              Выберите хотя бы один сервер!
             </div>
           </div>
         ) : balance >= finalPrice ? (
@@ -1137,26 +1185,78 @@ export default function AddSubscription() {
                   borderWidth: '2px',
                 }}></div>
             )}
-            Оплатить с баланса
+            Оплатить с баланса <TgStar type={'gold'} w={15} />{' '}
+            {Math.ceil(finalPrice)}
           </button>
         ) : (
-          <div
-            className={
-              'bg-[var(--warning-container)] text-[var(--on-warning-container)] rounded-md flex flex-col gap-2 py-2 px-4 w-full max-w-[400px]'
-            }>
-            <div className={'flex flex-row gap-2 items-center text-xs'}>
-              <FaCircleInfo />
-              На вашем балансе недостаточно средств
-            </div>
-            <Link
+          <>
+            <div
               className={
-                'flex flex-row gap-2 items-center justify-center px-4 py-2 bg-[var(--warning)] text-[var(--on-warning)] rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer text-sm'
-              }
-              href={`/tma/payment?amount=${(finalPrice - balance + 1).toFixed(0)}`}>
-              Пополнить баланс на <TgStar type="gold" w={14} />{' '}
-              {(finalPrice - balance + 1).toFixed(0)}
-            </Link>
-          </div>
+                'bg-[var(--surface-container)] text-[var(--on-surface)] rounded-md flex flex-col gap-2 py-2 px-4 w-full max-w-[400px]'
+              }>
+              <div className={'flex flex-row gap-2 items-center text-xs'}>
+                <FaCircleInfo />
+                На вашем балансе недостаточно средств
+              </div>
+              <Link
+                className={
+                  'flex flex-row gap-2 items-center justify-center px-4 py-2 bg-[var(--surface-container-high)] rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer text-sm'
+                }
+                href={`/tma/payment?amount=${Math.ceil(finalPrice - balance)}`}>
+                Пополнить баланс на <TgStar type="gold" w={14} />{' '}
+                {Math.ceil(finalPrice - balance)}
+              </Link>
+            </div>
+          </>
+        )}
+
+        {(!isAllBaseServers || !isAllPremiumServers) &&
+        serversSelected.length <= 0 ? (
+          <></>
+        ) : (
+          <>
+            <div className="w-full flex gap-2 items-center px-4">
+              <div className="h-[1px] grow bg-[var(--primary)]"></div>
+              <div className="text-[var(--primary)]">или</div>
+              <div className="h-[1px] grow bg-[var(--primary)]"></div>
+            </div>
+            <button
+              onClick={() => handleClickPurchaseInvoiceSubscription()}
+              disabled={isLoading}
+              className={clsx(
+                'flex flex-row gap-2 items-center justify-center bg-[var(--surface-container-lowest)] font-medium text-sm px-4 py-2 rounded-md w-full transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer max-w-[400px]',
+                isLoading && 'opacity-50 pointer-events-none',
+              )}>
+              {isLoading && (
+                <div
+                  className={'loader'}
+                  style={{
+                    width: '15px',
+                    height: '15px',
+                    borderWidth: '2px',
+                  }}></div>
+              )}
+              Оплатить напрямую <TgStar type={'original'} w={15} />
+              {Math.ceil(finalPrice)}
+            </button>
+            <div
+              className={
+                'bg-[var(--surface-container)] text-[var(--on-surface)] rounded-md flex flex-col gap-2 py-2 px-4 w-full max-w-[400px]'
+              }>
+              <div className={'flex flex-row gap-2 items-center text-xs'}>
+                <FaCircleInfo className={'text-3xl'} />
+                {tBill('split')}
+              </div>
+              <Link
+                href={config.SPLIT_TG_REF_URL}
+                className={
+                  'flex flex-row gap-2 items-center justify-center px-4 py-2 bg-[var(--surface-container-high)] rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer text-sm'
+                }
+                target={'_blank'}>
+                {tBill('splitBay')} <TgStar type={'original'} w={15} />
+              </Link>
+            </div>
+          </>
         )}
       </div>
     </div>

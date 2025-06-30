@@ -656,7 +656,7 @@ export function Subscriptions() {
                                         : ' cursor-pointer'
                                     } flex gap-2 items-center `}>
                                     <TgStar type={'gold'} w={18} />
-                                    Продлить
+                                    Продлить с баланса
                                   </button>
                                   <Modal
                                     isOpen={isOpenModalBuy === subscription.id}
