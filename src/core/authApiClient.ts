@@ -8,6 +8,7 @@ import { ReferralsDataInterface } from '@app/types/referrals-data-interface'
 import { ServersResponseDataInterface } from '@app/types/servers-data.interface'
 import {
   ChangeSubscriptionConditionsDataInterface,
+  CreateInvoiceSubscriptionDataInterface,
   CreateSubscriptionDataInterface,
   SubscriptionResponseInterface,
 } from '@app/types/subscription-data.interface'
@@ -459,6 +460,32 @@ export const authApiClient = {
           user: UserDataInterface
         }>
       >('/subscriptions/purchase', {
+        ...params,
+      })
+
+      return data.data
+    } catch (error) {
+      return handleApiError(error)
+    }
+  },
+
+  async purchaseInvoiceSubscription(
+    params: CreateInvoiceSubscriptionDataInterface,
+  ): Promise<{
+    subscriptions: SubscriptionResponseInterface
+    user: UserDataInterface
+    linkPay: string
+    isTmaIvoice: boolean
+  }> {
+    try {
+      const { data } = await api.post<
+        ApiResponse<{
+          subscriptions: SubscriptionResponseInterface
+          user: UserDataInterface
+          linkPay: string
+          isTmaIvoice: boolean
+        }>
+      >('/subscriptions/purchase-invoice', {
         ...params,
       })
 
