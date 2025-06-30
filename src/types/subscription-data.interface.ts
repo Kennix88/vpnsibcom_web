@@ -1,3 +1,4 @@
+import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
 import { PlansEnum } from '@app/enums/plans.enum'
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
 import { ServerDataInterface } from './servers-data.interface'
@@ -86,6 +87,11 @@ export interface CreateSubscriptionDataInterface {
   servers: string[]
   trafficLimitGb?: number
   isUnlimitTraffic: boolean
+}
+
+export interface CreateInvoiceSubscriptionDataInterface
+  extends CreateSubscriptionDataInterface {
+  method: PaymentMethodEnum
 }
 
 export interface ChangeSubscriptionConditionsDataInterface
