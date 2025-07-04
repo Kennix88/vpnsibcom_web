@@ -34,15 +34,20 @@ export async function GET(
 
     resData.subscription.links.map((el) => (links = links + el + `\n`))
 
-    return new Response(resData.marzbanSubRes.body, {
+    const announce = 'TEst announce 👍54654'
+
+    return new Response(Buffer.from(links).toString('base64'), {
       status: 200,
       headers: {
-        ...resData.marzbanSubRes.headers,
+        // ...resData.marzbanSubRes.headers,
+        'content-type': 'text/plain; charset=utf-8',
+        'content-disposition': 'attachment; filename="213"',
         'subscription-userinfo': `upload=0; download=${resData.subscription.usedTraffic || 0}; total=${resData.subscription.dataLimit || 0}; expire=${resData.subscription.expiredAt ? Math.floor(new Date(resData.subscription.expiredAt).getTime() / 1000) : 0}`,
         'support-url': process.env.NEXT_PUBLIC_BOT_URL || '',
         'profile-web-page-url': resData.subscription.subscriptionUrl,
         'profile-update-interval': '1',
-        'profile-title': `base64:${Buffer.from(`VPNsib.com - ${resData.subscription.id}`).toString('base64')}`,
+        'profile-title': `base64:${Buffer.from(`VPNsib - ${resData.subscription.id}`).toString('base64')}`,
+        announce: `base64:${Buffer.from(announce).toString('base64')}`,
       },
     })
   } else redirect(`/sub/${token}/info`)
