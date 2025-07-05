@@ -24,7 +24,7 @@ import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { JSX, useEffect, useState } from 'react'
 import { BiSolidMask } from 'react-icons/bi'
 import { FaCircleInfo, FaShieldHeart } from 'react-icons/fa6'
@@ -65,6 +65,8 @@ const getDevicesCountButtonColor = (amount: number) => {
 
 export default function AddSubscription() {
   const tBill = useTranslations('billing.payment')
+  const location = usePathname()
+  const url = location.includes('/tma') ? '/tma' : '/app'
   const router = useRouter()
   const { subscriptions, setSubscriptions } = useSubscriptionsStore()
   const { user, setUser } = useUserStore()
@@ -229,15 +231,13 @@ export default function AddSubscription() {
         isAutoRenewal: isAutoRenewal,
         planKey: planSelected.key,
       })
-      setIsLoading(false)
-      setUser(update.user)
-      setSubscriptions(update.subscriptions)
+      await setUser(update.user)
+      await setSubscriptions(update.subscriptions)
     } catch {
-      setIsLoading(false)
       toast.error('Error updating data')
     } finally {
       setIsLoading(false)
-      router.push('/tma')
+      router.push(url)
     }
   }
 
@@ -258,16 +258,14 @@ export default function AddSubscription() {
         isAutoRenewal: isAutoRenewal,
         planKey: planSelected.key,
       })
-      setUser(update.user)
-      setSubscriptions(update.subscriptions)
+      await setUser(update.user)
+      await setSubscriptions(update.subscriptions)
       await invoice.open(update.linkPay, 'url')
-      setIsLoading(false)
     } catch {
-      setIsLoading(false)
       toast.error('Error updating data')
     } finally {
       setIsLoading(false)
-      router.push('/tma')
+      router.push(url)
     }
   }
 
@@ -1186,7 +1184,7 @@ export default function AddSubscription() {
                 }}></div>
             )}
             Оплатить с баланса <TgStar type={'gold'} w={15} />{' '}
-            {Math.ceil(finalPrice)}
+            {finalPrice.toFixed(2)}
           </button>
         ) : (
           <>
