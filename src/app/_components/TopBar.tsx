@@ -4,7 +4,6 @@ import Balance from '@app/app/_components/Balance'
 import { useUserStore } from '@app/store/user.store'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { IoMenu } from 'react-icons/io5'
 
 export default function TopBar() {
   const { user } = useUserStore()
@@ -16,12 +15,12 @@ export default function TopBar() {
         <Avatar url={user?.photoUrl} className={'cursor-pointer'} />
       </Link>
       <Balance type={'payment'} isAdd={true} />
-      <div
+      {/* <div
         className={
           'flex justify-center bg-[var(--secondary-container)] rounded-md items-center p-1 cursor-pointer'
         }>
         <IoMenu className={'text-2xl'} />
-      </div>
+      </div> */}
     </div>
   )
 }
