@@ -65,6 +65,8 @@ export interface SubscriptionDataInterface {
 
   token: string
   subscriptionUrl: string
+
+  announce?: string
 }
 
 export interface MarzbanResponseInterface {

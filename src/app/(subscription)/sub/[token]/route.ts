@@ -16,6 +16,9 @@ export async function GET(
   console.log({
     agent,
   })
+  console.log(JSON.stringify(await params, null, 2))
+
+  headersList.forEach((value, key) => console.log(`${key}: ${value}`))
 
   const regexAllClients = new RegExp(
     /^([Cc]lash-verge|[Cc]lash[-.]?[Mm]eta|[Ff][Ll][Cc]lash|[Cc]lash|[Ss]tash|[Mm]ihomo|[Ss]tash|SFA|SFI|SFM|SFT|[Hh]app|[Ss]treisand|v2box|v2ray[Nn][Gg]|v2ray[Nn]|[Kk]aring|[Hh]iddify|v2ray|[Hh]iddify[Nn]ext|[Hh]iddify|sing-box|SS|SSR|SSD|SSS|Outline|Shadowsocks|SSconf|TelegramBot|TwitterBot|NekoBox)/,
@@ -34,7 +37,9 @@ export async function GET(
 
     resData.subscription.links.map((el) => (links = links + el + `\n`))
 
-    const announce = 'TEst announce 👍54654'
+    const announce =
+      resData.subscription.announce &&
+      `base64:${Buffer.from(resData.subscription.announce).toString('base64')}`
 
     return new Response(Buffer.from(links).toString('base64'), {
       status: 200,
@@ -47,7 +52,7 @@ export async function GET(
         'profile-web-page-url': resData.subscription.subscriptionUrl,
         'profile-update-interval': '1',
         'profile-title': `base64:${Buffer.from(`VPNsib - ${resData.subscription.id}`).toString('base64')}`,
-        announce: `base64:${Buffer.from(announce).toString('base64')}`,
+        ...(announce && { announce }),
       },
     })
   } else redirect(`/sub/${token}/info`)
