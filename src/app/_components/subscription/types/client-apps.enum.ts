@@ -1,0 +1,8 @@
+export enum ClientAppsEnum {
+  HAPP = 'HAPP',
+  SHADOWROCKET = 'SHADOWROCKET',
+  V2RAYNG = 'V2RAYNG',
+  STRAISAND = 'STRAISAND',
+  FOXRAY = 'FOXRAY',
+  V2BOX = 'V2BOX',
+}

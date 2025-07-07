@@ -1,8 +1,9 @@
+import { ClientAppsEnum } from './client-apps.enum'
 import { IconTypeEnum } from './icon-type.enum'
 import { PlatformEnum } from './platform.enum'
 
 export interface ClientAppInterface {
-  key: string
+  key: ClientAppsEnum
   name: string
   isPaid: boolean
   isRequired: boolean
