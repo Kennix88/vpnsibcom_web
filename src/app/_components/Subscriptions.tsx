@@ -626,8 +626,7 @@ export function Subscriptions() {
                                 className="qr-code-container"></div>
                               <div className="text-sm text-center">
                                 Отсканируйте в клиентском приложении (Happ,
-                                Hiddify, Straisand, ShadowRocket, v2rayNG,
-                                FoXray и др.)
+                                Straisand, ShadowRocket, v2rayNG, FoXray и др.)
                               </div>
                             </div>
                           </Modal>
