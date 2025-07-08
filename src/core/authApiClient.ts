@@ -10,6 +10,7 @@ import {
   ChangeSubscriptionConditionsDataInterface,
   CreateInvoiceSubscriptionDataInterface,
   CreateSubscriptionDataInterface,
+  GetSubscriptionConfigResponseInterface,
   SubscriptionResponseInterface,
 } from '@app/types/subscription-data.interface'
 import { UserDataInterface } from '@app/types/user-data.interface'
@@ -598,6 +599,22 @@ export const authApiClient = {
     } catch (error) {
       return handleApiError(error)
     }
+  },
+
+  async getSubscriptionDataById(
+    id: string,
+    agent?: string,
+  ): Promise<GetSubscriptionConfigResponseInterface> {
+    const { data } = await api.get<
+      ApiResponse<GetSubscriptionConfigResponseInterface>
+    >(`/subscriptions/by-id/${id}`, {
+      headers: {
+        ...(agent && {
+          'User-Agent': agent,
+        }),
+      },
+    })
+    return data.data
   },
 
   async getServers(): Promise<ServersResponseDataInterface> {
