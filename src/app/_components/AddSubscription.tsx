@@ -26,13 +26,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { JSX, useEffect, useState } from 'react'
-import { BiSolidMask } from 'react-icons/bi'
+import { BiServer, BiSolidMask } from 'react-icons/bi'
 import { FaCircleInfo, FaShieldHeart } from 'react-icons/fa6'
 import { IoLogoGithub, IoShieldHalf } from 'react-icons/io5'
 import {
   MdAdsClick,
   MdDevices,
-  MdLockOpen,
   MdOutlineDevicesOther,
   MdTraffic,
 } from 'react-icons/md'
@@ -280,7 +279,7 @@ export default function AddSubscription() {
     },
     {
       key: 'asdqwf',
-      icon: <MdLockOpen />,
+      icon: <BiServer />,
       text:
         planSelected.serversSelectType == PlansServersSelectTypeEnum.CUSTOM
           ? 'Выбирай нужные сервера'
