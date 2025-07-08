@@ -8,7 +8,6 @@ import { useCopyToClipboard } from '@app/utils/copy-to-clipboard.util'
 
 import { useLocale } from '@app/hooks/useLocale'
 import { SubscriptionDataInterface } from '@app/types/subscription-data.interface'
-import { formatBytes } from '@app/utils/format-bytes.util'
 import limitLengthString from '@app/utils/limit-length-string.util'
 import { differenceInMinutes, formatDistanceToNow, intlFormat } from 'date-fns'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -17,22 +16,15 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import QRCodeStyling from 'qr-code-styling'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import {
-  FaArrowsRotate,
-  FaCircleInfo,
-  FaClockRotateLeft,
-  FaCopy,
-} from 'react-icons/fa6'
+import { FaArrowsRotate, FaClockRotateLeft, FaCopy } from 'react-icons/fa6'
 import { FiExternalLink, FiPlus } from 'react-icons/fi'
 import { IoCheckmark, IoClose } from 'react-icons/io5'
 import { MdAutoMode, MdRotateRight } from 'react-icons/md'
-import { PiSpeedometerBold } from 'react-icons/pi'
 import { SiAdobeindesign } from 'react-icons/si'
 import { TbDotsVertical, TbPlugConnected, TbQrcode } from 'react-icons/tb'
 import { toast } from 'react-toastify'
 import Modal from './Modal'
 import TgStar from './TgStar'
-import TooltipWrapper from './TooltipWrapper'
 
 /**
  * Component for displaying user subscriptions
@@ -362,8 +354,8 @@ export function Subscriptions() {
                       <span className="text-xs opacity-70">
                         <SiAdobeindesign />
                       </span>
-                      <span className="font-mono text-sm">
-                        {limitLengthString(subscription.id, 26)}
+                      <span className="font-mono text-xs">
+                        {limitLengthString(subscription.id, 50)}
                       </span>
                       <span className="p-1 rounded-full">
                         <FaCopy size={14} />
@@ -372,6 +364,9 @@ export function Subscriptions() {
 
                     <div className="flex flex-col gap-2 px-2 py-2">
                       <div className="flex gap-2 items-center justify-between">
+                        <div className="rounded-md px-2 py-1 bg-[var(--tertiary-container)] text-[var(--on-tertiary-container)] text-sm font-bold">
+                          {subscription.planKey}
+                        </div>
                         <div
                           className={`flex items-center gap-2 rounded-md px-2 py-1 ${
                             subscription.isActive
@@ -457,73 +452,6 @@ export function Subscriptions() {
                                   },
                                 )}
                             </span>
-                          </div>
-                        )}
-                      </div>
-                      <hr className="w-full rounded-full bg-[var(--outline)] border-[var(--outline)]" />
-                      <div className="text-xs flex items-center justify-between">
-                        <div className="flex gap-1 items-center">
-                          <div>
-                            Сервера: {subscription.baseServersCount}/
-                            {subscription.premiumServersCount}
-                          </div>
-                          <TooltipWrapper
-                            prompt={'Обычные/Премиум'}
-                            color="info"
-                            placement="top">
-                            <FaCircleInfo />
-                          </TooltipWrapper>
-                        </div>
-                        <div className="flex gap-1 items-center">
-                          <div>Устройства: 0/{subscription.devicesCount}</div>
-                          <TooltipWrapper
-                            prompt={'Онлайн/Лимит'}
-                            color="info"
-                            placement="top">
-                            <FaCircleInfo />
-                          </TooltipWrapper>
-                        </div>
-                      </div>
-
-                      <hr className="w-full rounded-full bg-[var(--outline)] border-[var(--outline)]" />
-                      <div className="flex flex-col gap-1 w-full text-xs">
-                        <div className="flex gap-2 items-center">
-                          <PiSpeedometerBold size={16} />
-                          <div>Трафик</div>
-                        </div>
-                        {subscription.dataLimit &&
-                        !subscription.isUnlimitTraffic ? (
-                          <>
-                            <div className="w-full h-2 flex items-center rounded-full bg-[var(--on-secondary)]">
-                              <div
-                                className={`h-2 rounded-full bg-[var(--secondary)]`}
-                                style={{
-                                  width: `${
-                                    (subscription.usedTraffic /
-                                      (subscription.dataLimit || 1)) *
-                                    100
-                                  }%`,
-                                }}></div>
-                            </div>
-                            <div className="flex px-2 items-center gap-2 justify-between ">
-                              <div>
-                                {formatBytes(subscription.usedTraffic)} /{' '}
-                                {formatBytes(subscription.dataLimit || 0)}{' '}
-                                ежедневно
-                              </div>
-                              <div>
-                                Всего:{' '}
-                                {formatBytes(subscription.lifeTimeUsedTraffic)}
-                              </div>
-                            </div>
-                          </>
-                        ) : (
-                          <div className="flex px-2 items-center gap-2 justify-between text-xs">
-                            <div>Безлимит</div>
-                            <div>
-                              Всего:{' '}
-                              {formatBytes(subscription.lifeTimeUsedTraffic)}
-                            </div>
                           </div>
                         )}
                       </div>
