@@ -12,7 +12,11 @@ import { useEffect, useRef, useState } from 'react'
 import { FaCaretDown } from 'react-icons/fa6'
 import { toast } from 'react-toastify'
 
-export default function LanguageSwitcher() {
+export default function LanguageSwitcher({
+  isPublic = false,
+}: {
+  isPublic: boolean
+}) {
   const [isOpen, setIsOpen] = useState(false)
   const [selected, setSelected] = useState(localesMap[0])
   const router = useRouter()
@@ -44,8 +48,10 @@ export default function LanguageSwitcher() {
     try {
       setSelected(lang)
       setCookie(config.COOKIE_NAME, lang.key)
-      const updated = await authApiClient.updateLanguageUser(lang.key)
-      setUser(updated)
+      if (!isPublic) {
+        const updated = await authApiClient.updateLanguageUser(lang.key)
+        setUser(updated)
+      }
       setIsOpen(false)
       router.refresh()
     } catch {
