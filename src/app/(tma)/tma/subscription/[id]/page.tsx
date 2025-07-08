@@ -1,4 +1,5 @@
 import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
+import Subscription from '@app/app/_components/subscription/Subscription'
 
 export default async function Page({
   params,
@@ -8,7 +9,7 @@ export default async function Page({
   const { id } = await params
   return (
     <TmaPage back={true}>
-      <div>Subscription: {id}</div>
+      <Subscription token={id} isToken={false} />
     </TmaPage>
   )
 }
