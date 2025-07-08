@@ -25,7 +25,10 @@ export async function GET(
   )
 
   if (agent && regexAllClients.test(agent!)) {
-    const resData = await publicApiClient.getSubscriptionData(token, agent)
+    const resData = await publicApiClient.getSubscriptionDataByToken(
+      token,
+      agent,
+    )
 
     if (!resData || !resData.marzbanSubRes) {
       return new Response('Not Found', {

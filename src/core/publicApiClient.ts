@@ -26,15 +26,17 @@ export const publicApiClient = {
     return data.data
   },
 
-  async getSubscriptionData(
+  async getSubscriptionDataByToken(
     token: string,
-    agent: string,
+    agent?: string,
   ): Promise<GetSubscriptionConfigResponseInterface> {
     const { data } = await api.get<
       ApiResponse<GetSubscriptionConfigResponseInterface>
     >(`/subscriptions/by-token/${token}`, {
       headers: {
-        'User-Agent': agent,
+        ...(agent && {
+          'User-Agent': agent,
+        }),
       },
     })
     return data.data
