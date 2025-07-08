@@ -2,8 +2,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { FaUserFriends } from 'react-icons/fa'
-import { FaFire, FaMoneyBill1Wave } from 'react-icons/fa6'
-import { IoLogoGameControllerA } from 'react-icons/io'
+import { FaMoneyBill1Wave } from 'react-icons/fa6'
 import { TbSmartHome } from 'react-icons/tb'
 import { useTranslations } from 'use-intl'
 
@@ -18,16 +17,16 @@ export default function NavBar() {
       href: url,
       icon: <TbSmartHome className="text-2xl" />,
     },
-    {
-      name: t('earning'),
-      href: url + '/earning',
-      icon: <FaFire className="text-2xl" />,
-    },
-    {
-      name: t('games'),
-      href: url + '/games',
-      icon: <IoLogoGameControllerA className="text-2xl" />,
-    },
+    // {
+    //   name: t('earning'),
+    //   href: url + '/earning',
+    //   icon: <FaFire className="text-2xl" />,
+    // },
+    // {
+    //   name: t('games'),
+    //   href: url + '/games',
+    //   icon: <IoLogoGameControllerA className="text-2xl" />,
+    // },
     {
       name: t('friends'),
       href: url + '/friends',
@@ -53,7 +52,7 @@ export default function NavBar() {
     <div
       className={`bottom-0 left-0 right-0 fixed flex flex-row py-4 items-center justify-center z-[50] `}>
       <div
-        className={`grid grid-cols-5 min-w-[320px] grid-rows-1 gap-2 p-2 rounded-xl bg-[var(--surface-container)] bg-opacity-90 `}>
+        className={`grid grid-cols-3 max-w-[320px] grid-rows-1 gap-2 p-2 rounded-xl bg-[var(--surface-container)] bg-opacity-90 justify-center`}>
         {navItems.map((item) => (
           <Link
             href={`${item.href}`}
