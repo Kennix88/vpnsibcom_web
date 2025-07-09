@@ -25,6 +25,7 @@ import { TbDotsVertical, TbPlugConnected, TbQrcode } from 'react-icons/tb'
 import { toast } from 'react-toastify'
 import Modal from './Modal'
 import TgStar from './TgStar'
+import HappDeepLinkButton from './subscription/HappDeepLinkButton'
 
 /**
  * Component for displaying user subscriptions
@@ -609,6 +610,9 @@ export function Subscriptions() {
 
                       <div className="flex gap-2 items-center ">
                         <div className="flex gap-2 items-center ">
+                          <HappDeepLinkButton
+                            subscriptionUrl={subscription.subscriptionUrl}
+                          />
                           <button
                             onClick={() => setIsOpenModalQR(subscription.id)}
                             className="p-2 rounded-md bg-[var(--surface-container)] text-[var(--on-surface-variant)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer">

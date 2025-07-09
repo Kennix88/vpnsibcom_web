@@ -140,7 +140,7 @@ export default function AppElement({
               <div className="flex flex-wrap items-center justify-start gap-2 text-sm px-4">
                 <div>2. Добавить подписку в приложение:</div>
                 <Link
-                  href={deepLink}
+                  href={`/deeplink/?link=${encodeURI(deepLink)}`}
                   target="_blank"
                   title="Добавить подписку в приложение"
                   className="rounded-md bg-[var(--surface-container)] h-8  cursor-pointer flex items-center gap-2 justify-center px-4">
