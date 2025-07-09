@@ -33,6 +33,7 @@ import LanguageSwitcher from '../LanguageSwitcher'
 import Modal from '../Modal'
 import TgStar from '../TgStar'
 import AppsList from './AppsList'
+import LinksList from './LinksList'
 
 export default function Subscription({
   token,
@@ -660,7 +661,7 @@ export default function Subscription({
         {tab == 'apps' ? (
           <AppsList subscriptionUrl={subscription.subscriptionUrl} />
         ) : (
-          <>Links</>
+          <LinksList links={subscription.links} />
         )}
       </div>
     </div>
