@@ -23,23 +23,11 @@ export const CLIENT_APPS: ClientAppInterface[] = [
             title: 'AppStore GLOBAL',
             link: 'https://apps.apple.com/us/app/happ-proxy-utility/id6504287215',
           },
-        ],
-      },
-      {
-        platform: PlatformEnum.IOS,
-        version: '15.0+',
-        downloadLinks: [
           {
             iconType: IconTypeEnum.APPLE_STORE,
             title: 'AppStore RUS',
             link: 'https://apps.apple.com/ru/app/happ-proxy-utility-plus/id6746188973',
           },
-        ],
-      },
-      {
-        platform: PlatformEnum.IOS,
-        version: '15.0+',
-        downloadLinks: [
           {
             iconType: IconTypeEnum.OTHER,
             title: 'Testflight GLOBAL',
@@ -56,23 +44,11 @@ export const CLIENT_APPS: ClientAppInterface[] = [
             title: 'AppStore GLOBAL',
             link: 'https://apps.apple.com/us/app/happ-proxy-utility/id6504287215',
           },
-        ],
-      },
-      {
-        platform: PlatformEnum.IPADOS,
-        version: '15.0+',
-        downloadLinks: [
           {
             iconType: IconTypeEnum.APPLE_STORE,
             title: 'AppStore RUS',
             link: 'https://apps.apple.com/ru/app/happ-proxy-utility-plus/id6746188973',
           },
-        ],
-      },
-      {
-        platform: PlatformEnum.IPADOS,
-        version: '15.0+',
-        downloadLinks: [
           {
             iconType: IconTypeEnum.OTHER,
             title: 'Testflight GLOBAL',
@@ -89,23 +65,11 @@ export const CLIENT_APPS: ClientAppInterface[] = [
             title: 'Play Market',
             link: 'https://play.google.com/store/apps/details?id=com.happproxy',
           },
-        ],
-      },
-      {
-        platform: PlatformEnum.ANDROID,
-        version: '8.0+',
-        downloadLinks: [
           {
             iconType: IconTypeEnum.OTHER,
             title: 'APK file',
             link: 'https://github.com/Happ-proxy/happ-android/releases/latest/download/Happ.apk',
           },
-        ],
-      },
-      {
-        platform: PlatformEnum.ANDROID,
-        version: '8.0+',
-        downloadLinks: [
           {
             iconType: IconTypeEnum.OTHER,
             title: 'APK Beta file',
@@ -122,12 +86,6 @@ export const CLIENT_APPS: ClientAppInterface[] = [
             title: 'Play Market',
             link: 'https://play.google.com/store/apps/details?id=com.happproxy',
           },
-        ],
-      },
-      {
-        platform: PlatformEnum.ANDROID_TV,
-        version: '8.0+',
-        downloadLinks: [
           {
             iconType: IconTypeEnum.OTHER,
             title: 'APK file',
@@ -155,26 +113,14 @@ export const CLIENT_APPS: ClientAppInterface[] = [
             title: 'AppStore GLOBAL',
             link: 'https://apps.apple.com/us/app/happ-proxy-utility/id6504287215',
           },
-        ],
-      },
-      {
-        platform: PlatformEnum.MACOS,
-        version: 'Chip M1+',
-        downloadLinks: [
           {
             iconType: IconTypeEnum.APPLE_STORE,
             title: 'AppStore RUS',
             link: 'https://apps.apple.com/ru/app/happ-proxy-utility-plus/id6746188973',
           },
-        ],
-      },
-      {
-        platform: PlatformEnum.MACOS,
-        version: '13.0+',
-        downloadLinks: [
           {
             iconType: IconTypeEnum.OTHER,
-            title: 'File',
+            title: 'File (not M1)',
             link: 'https://github.com/Happ-proxy/happ-desktop/releases/',
           },
         ],
