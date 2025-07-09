@@ -15,7 +15,7 @@ import { toast } from 'react-toastify'
 export default function LanguageSwitcher({
   isPublic = false,
 }: {
-  isPublic: boolean
+  isPublic?: boolean
 }) {
   const [isOpen, setIsOpen] = useState(false)
   const [selected, setSelected] = useState(localesMap[0])
