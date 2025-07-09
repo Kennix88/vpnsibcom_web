@@ -13,7 +13,6 @@ import { differenceInMinutes, formatDistanceToNow, intlFormat } from 'date-fns'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import QRCodeStyling from 'qr-code-styling'
 import { useEffect, useRef, useState } from 'react'
 import { BiServer } from 'react-icons/bi'
@@ -33,6 +32,7 @@ import { toast } from 'react-toastify'
 import LanguageSwitcher from '../LanguageSwitcher'
 import Modal from '../Modal'
 import TgStar from '../TgStar'
+import AppsList from './AppsList'
 
 export default function Subscription({
   token,
@@ -41,11 +41,9 @@ export default function Subscription({
   token: string
   isToken: boolean
 }) {
-  const location = usePathname()
   const { locale, dateFnsLocale } = useLocale()
   const t = useTranslations('subscriptions')
-  // const url = location.includes('/tma') ? '/tma' : '/app'
-  const isTma = location.includes('/tma')
+
   const { user, setUser } = useUserStore()
   const [updatingButtons, setUpdatingButtons] = useState<boolean>(false)
   const { setSubscriptions } = useSubscriptionsStore()
@@ -65,7 +63,7 @@ export default function Subscription({
   useEffect(() => {
     const getSubscription = async () => {
       try {
-        if (isTma) {
+        if (!isToken) {
           const get = await authApiClient.getSubscriptionDataById(token)
           setSubscription(get.subscription)
         } else {
@@ -77,40 +75,53 @@ export default function Subscription({
       }
     }
     getSubscription()
-  }, [isTma, token])
+  }, [isToken, token])
+
+  useEffect(() => {
+    if (!isOpenModalQR || !qrRef.current) return
+
+    // Находим подписку по ID
+    const sub = subscription
+    if (!sub) return
+
+    // Создаем новый QR-код
+    qrCodeRef.current = new QRCodeStyling({
+      width: 250,
+      height: 250,
+      type: 'svg',
+      image: '/logo.png', // Путь к вашему логотипу
+      dotsOptions: {
+        color: 'var(--primary)',
+        type: 'rounded', // 'rounded', 'dots', 'classy', 'classy-rounded', 'square', 'extra-rounded'
+      },
+      backgroundOptions: {
+        color: 'var(--surface-container-lowest)',
+      },
+      cornersSquareOptions: {
+        color: 'var(--secondary)',
+        type: 'extra-rounded', // 'dot', 'square', 'extra-rounded', 'rounded'
+      },
+      cornersDotOptions: {
+        color: 'var(--tertiary)',
+        type: 'dot', // 'dot', 'square'
+      },
+      imageOptions: {
+        crossOrigin: 'anonymous',
+        margin: 10,
+        hideBackgroundDots: true,
+        imageSize: 0.3,
+      },
+      data: subscription.subscriptionUrl || '',
+    })
+
+    // Очищаем контейнер перед добавлением нового QR-кода
+    qrRef.current.innerHTML = ''
+    qrCodeRef.current.append(qrRef.current)
+  }, [isOpenModalQR, subscription])
 
   if (!subscription) {
     return null
   }
-
-  qrCodeRef.current = new QRCodeStyling({
-    width: 250,
-    height: 250,
-    type: 'svg',
-    image: '/logo.png', // Путь к вашему логотипу
-    dotsOptions: {
-      color: 'var(--primary)',
-      type: 'rounded', // 'rounded', 'dots', 'classy', 'classy-rounded', 'square', 'extra-rounded'
-    },
-    backgroundOptions: {
-      color: 'var(--surface-container-lowest)',
-    },
-    cornersSquareOptions: {
-      color: 'var(--secondary)',
-      type: 'extra-rounded', // 'dot', 'square', 'extra-rounded', 'rounded'
-    },
-    cornersDotOptions: {
-      color: 'var(--tertiary)',
-      type: 'dot', // 'dot', 'square'
-    },
-    imageOptions: {
-      crossOrigin: 'anonymous',
-      margin: 10,
-      hideBackgroundDots: true,
-      imageSize: 0.3,
-    },
-    data: subscription.subscriptionUrl || '',
-  })
 
   /**
    * Formats subscription period to human-readable string
@@ -248,7 +259,7 @@ export default function Subscription({
       <div className="max-w-lg flex w-full flex-col gap-4 py-4">
         <div className="flex flex-wrap justify-between gap-2">
           <h3 className="text-lg">Подписка</h3>
-          {!isTma && <LanguageSwitcher isPublic={true} />}
+          {isToken && <LanguageSwitcher isPublic={true} />}
         </div>
         <div className="flex w-full flex-col gap-4 bg-[var(--surface-container-lowest)] rounded-md ">
           <button
@@ -432,7 +443,7 @@ export default function Subscription({
                 )}
               </div>
             </div>
-            {isTma && (
+            {!isToken && (
               <>
                 <hr className="w-full rounded-full bg-[var(--outline)] border-[var(--outline)] opacity-70" />
                 <div className="flex flex-wrap items-center justify-between px-4 pt-2">
@@ -646,7 +657,11 @@ export default function Subscription({
             Конфигурации
           </button>
         </div>
-        {tab == 'apps' ? <>Apps</> : <>Links</>}
+        {tab == 'apps' ? (
+          <AppsList subscriptionUrl={subscription.subscriptionUrl} />
+        ) : (
+          <>Links</>
+        )}
       </div>
     </div>
   )
