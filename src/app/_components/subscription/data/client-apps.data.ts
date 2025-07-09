@@ -25,7 +25,7 @@ export const CLIENT_APPS: ClientAppInterface[] = [
           },
           {
             iconType: IconTypeEnum.APPLE_STORE,
-            title: 'AppStore RUS',
+            title: 'AppStore 🇷🇺',
             link: 'https://apps.apple.com/ru/app/happ-proxy-utility-plus/id6746188973',
           },
           {
