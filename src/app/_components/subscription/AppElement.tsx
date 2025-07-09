@@ -136,8 +136,8 @@ export default function AppElement({
                   </Link>
                 ))}
               </div>
-              <hr className="w-full rounded-full bg-[var(--outline)] border-[var(--outline)] opacity-70" />
-              <div className="flex flex-row items-center justify-start gap-2 text-sm px-4">
+              <hr className="w-full rounded-full bg-[var(--outline)] border-[var(--outline)] opacity-70 " />
+              <div className="flex flex-wrap items-center justify-start gap-2 text-sm px-4">
                 <div>2. Добавить подписку в приложение:</div>
                 <Link
                   href={deepLink}
@@ -149,12 +149,12 @@ export default function AppElement({
                 <button
                   title="Копировать URL подписки"
                   onClick={() => copyToClipboard(subscriptionUrl)}
-                  className="rounded-md bg-[var(--surface-container)] h-8 w-8 cursor-pointer flex items-center gap-2 justify-center">
+                  className="rounded-md bg-[var(--surface-container)] h-8 cursor-pointer flex items-center gap-2 justify-center px-2">
                   <FaCopy size={16} />
                 </button>
                 <button
                   title="Открыть QR-код подписки"
-                  className="rounded-md bg-[var(--surface-container)] h-8 w-8 cursor-pointer flex items-center gap-2 justify-center"
+                  className="rounded-md bg-[var(--surface-container)] h-8 cursor-pointer flex items-center gap-2 justify-center px-2"
                   onClick={() => setIsOpenModalQRAdd(true)}>
                   <TbQrcode size={18} />
                 </button>
