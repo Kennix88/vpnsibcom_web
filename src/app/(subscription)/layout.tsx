@@ -3,7 +3,7 @@ import { getLocale } from 'next-intl/server'
 import '../_assets/globals.css'
 
 export const metadata = {
-  title: 'Your subscription - VPNsib.com',
+  title: 'Your subscription - VPNsib',
   description: 'Your subscription',
 }
 

@@ -44,11 +44,11 @@ export default function Subscription({
   const location = usePathname()
   const { locale, dateFnsLocale } = useLocale()
   const t = useTranslations('subscriptions')
-  const url = location.includes('/tma') ? '/tma' : '/app'
+  // const url = location.includes('/tma') ? '/tma' : '/app'
   const isTma = location.includes('/tma')
   const { user, setUser } = useUserStore()
   const [updatingButtons, setUpdatingButtons] = useState<boolean>(false)
-  const { subscriptions, setSubscriptions } = useSubscriptionsStore()
+  const { setSubscriptions } = useSubscriptionsStore()
   const [subscription, setSubscription] =
     useState<SubscriptionDataInterface | null>(null)
   const copyToClipboard = useCopyToClipboard()
@@ -614,6 +614,39 @@ export default function Subscription({
             )}
           </div>
         </div>
+        <div className="flex items-center divide-x-2 divide-[var(--surface-container-highest)]">
+          <button
+            onClick={() => setTab('apps')}
+            className="grow cursor-pointer rounded-l-md h-8 transition-all duration-200 hover:brightness-110 active:scale-[0.97]"
+            style={{
+              backgroundColor:
+                tab == 'apps'
+                  ? 'var(--primary)'
+                  : 'var(--surface-container-lowest)',
+              color:
+                tab == 'apps'
+                  ? 'var(--on-primary)'
+                  : 'var(--on-surface-container)',
+            }}>
+            Подключение
+          </button>
+          <button
+            onClick={() => setTab('links')}
+            className="grow cursor-pointer rounded-r-md h-8 transition-all duration-200 hover:brightness-110 active:scale-[0.97]"
+            style={{
+              backgroundColor:
+                tab !== 'apps'
+                  ? 'var(--primary)'
+                  : 'var(--surface-container-lowest)',
+              color:
+                tab !== 'apps'
+                  ? 'var(--on-primary)'
+                  : 'var(--on-surface-container)',
+            }}>
+            Конфигурации
+          </button>
+        </div>
+        {tab == 'apps' ? <>Apps</> : <>Links</>}
       </div>
     </div>
   )

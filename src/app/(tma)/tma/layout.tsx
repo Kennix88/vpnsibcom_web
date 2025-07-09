@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import '../../_assets/globals.css'
 
 export const metadata: Metadata = {
-  title: 'TMA - VPNsib.com',
+  title: 'TMA - VPNsib',
   description: 'VPNsibcom is an open source VPN service.',
 }
 
