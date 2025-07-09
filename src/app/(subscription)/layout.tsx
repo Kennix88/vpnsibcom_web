@@ -1,5 +1,7 @@
 import { I18nProvider } from '@app/core/i18n/provider'
 import { getLocale } from 'next-intl/server'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import '../_assets/globals.css'
 
 export const metadata = {
@@ -16,7 +18,21 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body className="bg-[var(--background)]">
-        <I18nProvider>{children}</I18nProvider>
+        <I18nProvider>
+          <ToastContainer
+            position="bottom-center"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+          />
+          {children}
+        </I18nProvider>
       </body>
     </html>
   )
