@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Version from './Version'
 
 const Loader = () => {
   return (
@@ -13,9 +14,10 @@ const Loader = () => {
           height={100}
           priority
         />
-        <div className={'font-bold text-xl'}>VPNsib.com</div>
+        <div className={'font-bold text-xl'}>VPNsib</div>
       </div>
       <div className="loader"></div>
+      <Version />
     </div>
   )
 }

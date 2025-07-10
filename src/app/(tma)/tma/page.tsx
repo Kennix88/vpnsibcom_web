@@ -4,6 +4,7 @@ import { FreePlanActivated } from '@app/app/_components/FreePlanAtivated'
 import GreenCheck from '@app/app/_components/GreenCheck'
 import { Subscriptions } from '@app/app/_components/Subscriptions'
 import TopBar from '@app/app/_components/TopBar'
+import Version from '@app/app/_components/Version'
 
 export default function Page() {
   return (
@@ -13,6 +14,7 @@ export default function Page() {
         <GreenCheck />
         <FreePlanActivated />
         <Subscriptions />
+        <Version />
       </div>
     </TmaPage>
   )
