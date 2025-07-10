@@ -795,7 +795,7 @@ export default function AddSubscription() {
                       }
                     }}
                     className={clsx(
-                      'flex flex-row gap-2 grow items-center justify-center text-white px-2 py-1.5 rounded-md text-xs font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]',
+                      'flex flex-wrap gap-2 grow items-center justify-center text-white px-2 py-1.5 rounded-md text-xs font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]',
                     )}
                     style={{
                       backgroundColor: `rgba(216, 197, 255, ${bgOpacity})`,
@@ -803,6 +803,11 @@ export default function AddSubscription() {
                         ? `1px solid rgba(216, 197, 255, 0.7)`
                         : '1px solid transparent',
                     }}>
+                    {btn.isPremium && (
+                      <div className="flex items-center justify-center h-5 w-5 bg-[var(--gold-container)] rounded-md">
+                        ⭐
+                      </div>
+                    )}
                     <Image
                       src={`/flags/${btn.flagKey}.svg`}
                       alt="flag"
