@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'VPNsib.com',
-  description: 'Your tunnel to the world',
+  title: 'FastRunner Game',
+  description: 'FastRunner Game',
 }
 
 export default function RootLayout({
