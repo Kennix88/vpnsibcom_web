@@ -341,326 +341,342 @@ export function Subscriptions() {
               </motion.div>
             ) : (
               <>
-                {subscriptions?.subscriptions.map((subscription) => (
-                  <motion.div
-                    key={subscription.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3 }}
-                    className="bg-[var(--surface-container-lowest)] rounded-md ">
-                    <button
-                      onClick={() => copyToClipboard(subscription.id)}
-                      className="flex items-center gap-2 cursor-pointer px-4 py-2 text-[var(--on-primary)] bg-[var(--primary)] w-full rounded-t-md">
-                      <span className="text-xs opacity-70">
-                        <SiAdobeindesign />
-                      </span>
-                      <span className="font-mono text-xs">
-                        {limitLengthString(subscription.id, 50)}
-                      </span>
-                      <span className="p-1 rounded-full">
-                        <FaCopy size={14} />
-                      </span>
-                    </button>
+                {subscriptions?.subscriptions
+                  .sort((a, b) => {
+                    return (
+                      new Date(b.createdAt).getTime() -
+                      new Date(a.createdAt).getTime()
+                    )
+                  })
+                  .map((subscription) => (
+                    <motion.div
+                      key={subscription.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.3 }}
+                      className="bg-[var(--surface-container-lowest)] rounded-md ">
+                      <button
+                        onClick={() => copyToClipboard(subscription.id)}
+                        className="flex items-center gap-2 cursor-pointer px-4 py-2 text-[var(--on-primary)] bg-[var(--primary)] w-full rounded-t-md">
+                        <span className="text-xs opacity-70">
+                          <SiAdobeindesign />
+                        </span>
+                        <span className="font-mono text-xs">
+                          {limitLengthString(subscription.id, 50)}
+                        </span>
+                        <span className="p-1 rounded-full">
+                          <FaCopy size={14} />
+                        </span>
+                      </button>
 
-                    <div className="flex flex-col gap-2 px-2 py-2">
-                      <div className="flex gap-2 items-center justify-between">
-                        <div className="rounded-md px-2 py-1 bg-[var(--tertiary-container)] text-[var(--on-tertiary-container)] text-sm font-bold">
-                          {subscription.planKey}
-                        </div>
-                        <div
-                          className={`flex items-center gap-2 rounded-md px-2 py-1 ${
-                            subscription.isActive
-                              ? 'bg-[var(--success-container)] text-[var(--on-success-container)]'
-                              : 'bg-[var(--error-container)] text-[var(--on-error-container)]'
-                          }`}>
-                          {subscription.isActive ? (
-                            <IoCheckmark size={16} />
-                          ) : (
-                            <IoClose size={16} />
-                          )}
-                          <div className="text-sm">
-                            {subscription.isActive ? 'Активна' : 'Не активна'}
+                      <div className="flex flex-col gap-2 px-2 py-2">
+                        <div className="flex gap-2 items-center justify-between">
+                          <div className="rounded-md px-2 py-1 bg-[var(--tertiary-container)] text-[var(--on-tertiary-container)] text-sm font-bold">
+                            {subscription.planKey}
                           </div>
-                        </div>
-                        {subscription.onlineAt &&
-                        differenceInMinutes(
-                          new Date(),
-                          new Date(subscription.onlineAt),
-                        ) < 2 ? (
-                          <div className="flex items-center gap-1">
-                            <div className="flex w-4 h-4 items-center justify-center">
-                              <div className="relative w-2 h-2 bg-[var(--success)] rounded-full ">
-                                <motion.div
-                                  className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 rounded-full bg-[var(--success)]"
-                                  initial={{ scale: 1, opacity: 0 }}
-                                  animate={{
-                                    scale: [1, 1, 2, 2],
-                                    opacity: [0, 0.2, 0.5, 0],
-                                  }}
-                                  transition={{
-                                    repeat: Infinity,
-                                    duration: 3,
-                                    ease: 'easeInOut',
-                                    times: [0, 0.2, 0.5, 1],
-                                  }}
-                                  style={{ width: '100%', height: '100%' }}
-                                />
-                              </div>
-                            </div>
-                            <div className="text-sm">Онлайн</div>
-                          </div>
-                        ) : (
-                          <div className="flex items-center gap-1">
-                            <div className="flex w-4 h-4 items-center justify-center">
-                              <div className="relative w-2 h-2 bg-[var(--error)] rounded-full ">
-                                <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 rounded-full bg-[var(--error)] w-4 h-4 opacity-50" />
-                              </div>
-                            </div>
-                            <div className="text-sm">Офлайн</div>
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex gap-2 flex-wrap justify-between items-center ">
-                        <div className="text-xs mt-1 flex gap-2 items-center">
-                          <MdRotateRight size={18} />
-                          <div className="flex gap-1 items-center">
-                            <div>{formatPeriod(subscription.period)}</div>
-                            {subscription.periodMultiplier > 1 && (
-                              <div className="rounded-md w-[22px] h-[22px] justify-center items-center flex bg-[var(--primary)] text-[var(--on-primary)] text-xs font-bold">
-                                x{subscription.periodMultiplier}
-                              </div>
+                          <div
+                            className={`flex items-center gap-2 rounded-md px-2 py-1 ${
+                              subscription.isActive
+                                ? 'bg-[var(--success-container)] text-[var(--on-success-container)]'
+                                : 'bg-[var(--error-container)] text-[var(--on-error-container)]'
+                            }`}>
+                            {subscription.isActive ? (
+                              <IoCheckmark size={16} />
+                            ) : (
+                              <IoClose size={16} />
                             )}
+                            <div className="text-sm">
+                              {subscription.isActive ? 'Активна' : 'Не активна'}
+                            </div>
                           </div>
-                        </div>
-                        {subscription.isActive && subscription.expiredAt && (
-                          <div className="text-xs mt-1 flex gap-2 items-center ">
-                            <FaClockRotateLeft size={14} />
-                            <span>
-                              {formatExpiredDate(subscription.expiredAt)} -{' '}
-                              {subscription.expiredAt &&
-                                intlFormat(
-                                  new Date(subscription.expiredAt),
-                                  {
-                                    year: 'numeric',
-                                    month: 'numeric',
-                                    day: 'numeric',
-                                    hour: 'numeric',
-                                    minute: 'numeric',
-                                  },
-                                  {
-                                    locale: locale,
-                                  },
-                                )}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="flex flex-wrap justify-between items-center px-2 py-2 border-t border-[var(--outline)]">
-                      <div className="flex gap-2 items-center ">
-                        <button
-                          onClick={() => setIsOpenAction(subscription.id)}
-                          className="p-2 rounded-md bg-[var(--surface-container)] text-[var(--on-surface-variant)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex gap-2 items-center text-xs">
-                          <TbDotsVertical size={18} />
-                          Действия
-                        </button>
-                        <Modal
-                          isOpen={isOpenAction === subscription.id}
-                          onClose={() => setIsOpenAction(null)}
-                          title={'Действия'}
-                          variant="default">
-                          <div className="flex flex-col-reverse gap-2">
-                            <button
-                              onClick={() => {
-                                setIsOpenModalDelete(subscription.id)
-                              }}
-                              disabled={updatingButtons === subscription.id}
-                              className={`p-2 rounded-md bg-[var(--error)] text-[var(--on-error)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex gap-2 items-center `}>
-                              <IoClose size={18} />
-                              Удалить
-                            </button>
-
-                            <Modal
-                              isOpen={isOpenModalDelete === subscription.id}
-                              onClose={() => setIsOpenModalDelete(null)}
-                              title={t('modals.delete.title')}
-                              variant="error"
-                              actionText={t('modals.delete.action')}
-                              onAction={() => deleteSubscription(subscription)}>
-                              {t('modals.delete.message')}
-                            </Modal>
-
-                            <button
-                              onClick={() => {
-                                setIsOpenModalRefresh(subscription.id)
-                              }}
-                              disabled={updatingButtons === subscription.id}
-                              className={`p-2 rounded-md bg-[var(--warning)] text-[var(--on-warning)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex gap-2 items-center `}>
-                              <FaArrowsRotate size={18} />
-                              Сбросить данные
-                            </button>
-
-                            <Modal
-                              isOpen={isOpenModalRefresh === subscription.id}
-                              onClose={() => setIsOpenModalRefresh(null)}
-                              title={t('modals.refresh.title')}
-                              variant="warning"
-                              actionText={t('modals.refresh.action')}
-                              onAction={() =>
-                                resetSubscriptionToken(subscription)
-                              }>
-                              {t('modals.refresh.message')}
-                            </Modal>
-
-                            {subscription.period !==
-                              SubscriptionPeriodEnum.TRIAL &&
-                              subscription.period !==
-                                SubscriptionPeriodEnum.INDEFINITELY && (
-                                <>
-                                  <button
-                                    onClick={() => {
-                                      setIsOpenModalAutoPay(subscription.id)
+                          {subscription.onlineAt &&
+                          differenceInMinutes(
+                            new Date(),
+                            new Date(subscription.onlineAt),
+                          ) < 2 ? (
+                            <div className="flex items-center gap-1">
+                              <div className="flex w-4 h-4 items-center justify-center">
+                                <div className="relative w-2 h-2 bg-[var(--success)] rounded-full ">
+                                  <motion.div
+                                    className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 rounded-full bg-[var(--success)]"
+                                    initial={{ scale: 1, opacity: 0 }}
+                                    animate={{
+                                      scale: [1, 1, 2, 2],
+                                      opacity: [0, 0.2, 0.5, 0],
                                     }}
-                                    disabled={
-                                      updatingButtons === subscription.id
-                                    }
-                                    className={`p-2 rounded-md ${
-                                      subscription.isAutoRenewal
-                                        ? 'bg-[var(--success)] text-[var(--on-success)]'
-                                        : 'bg-[var(--surface-container-high)] text-[var(--on-surface)]'
-                                    } transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex gap-2 items-center `}>
-                                    <MdAutoMode size={18} />
-                                    Автопродление
-                                  </button>
-
-                                  <Modal
-                                    isOpen={
-                                      isOpenModalAutoPay === subscription.id
-                                    }
-                                    onClose={() => setIsOpenModalAutoPay(null)}
-                                    title={
-                                      subscription.isAutoRenewal
-                                        ? t('modals.autoRenewal.disableTitle')
-                                        : t('modals.autoRenewal.enableTitle')
-                                    }
-                                    variant={
-                                      subscription.isAutoRenewal
-                                        ? 'warning'
-                                        : 'success'
-                                    }
-                                    actionText={
-                                      subscription.isAutoRenewal
-                                        ? t('modals.autoRenewal.disableAction')
-                                        : t('modals.autoRenewal.enableAction')
-                                    }
-                                    onAction={() =>
-                                      toggleAutoRenewal(subscription)
-                                    }>
-                                    {subscription.isAutoRenewal
-                                      ? t('modals.autoRenewal.disableMessage')
-                                      : t('modals.autoRenewal.enableMessage')}
-                                  </Modal>
-                                </>
-                              )}
-
-                            {subscription.period !==
-                              SubscriptionPeriodEnum.TRIAL &&
-                              subscription.period !==
-                                SubscriptionPeriodEnum.INDEFINITELY &&
-                              subscription.nextRenewalStars && (
-                                <>
-                                  <button
-                                    onClick={() => {
-                                      setIsOpenModalBuy(subscription.id)
+                                    transition={{
+                                      repeat: Infinity,
+                                      duration: 3,
+                                      ease: 'easeInOut',
+                                      times: [0, 0.2, 0.5, 1],
                                     }}
-                                    disabled={
-                                      updatingButtons === subscription.id ||
-                                      subscription.nextRenewalStars > balance
-                                    }
-                                    className={`p-2 rounded-md bg-[var(--gold-container)] text-[var(--tg-star-gold)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
-                                      subscription.nextRenewalStars > balance
-                                        ? 'opacity-50 cursor-not-allowed'
-                                        : ' cursor-pointer'
-                                    } flex gap-2 items-center `}>
-                                    <TgStar type={'gold'} w={18} />
-                                    Продлить с баланса
-                                  </button>
-                                  <Modal
-                                    isOpen={isOpenModalBuy === subscription.id}
-                                    onClose={() => setIsOpenModalBuy(null)}
-                                    title={t('modals.renew.title')}
-                                    variant="warning"
-                                    actionText={t('modals.renew.action')}
-                                    onAction={() =>
-                                      renewSubscription(subscription)
-                                    }>
-                                    <div>
-                                      {t('modals.renew.message', {
-                                        price: subscription.nextRenewalStars,
-                                      })}
-                                    </div>
-                                  </Modal>
-                                </>
-                              )}
-                          </div>
-                        </Modal>
-                      </div>
-
-                      <div className="flex gap-2 items-center ">
-                        <div className="flex gap-2 items-center ">
-                          <HappDeepLinkButton
-                            subscriptionUrl={subscription.subscriptionUrl}
-                          />
-                          <button
-                            onClick={() => setIsOpenModalQR(subscription.id)}
-                            className="p-2 rounded-md bg-[var(--surface-container)] text-[var(--on-surface-variant)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer">
-                            <TbQrcode size={18} />
-                          </button>
-
-                          <Modal
-                            isOpen={isOpenModalQR === subscription.id}
-                            onClose={() => setIsOpenModalQR(null)}
-                            title={'QR-код подписки'}
-                            variant="default">
-                            <div className="flex flex-col items-center gap-4 p-4">
-                              <div
-                                ref={qrRef}
-                                className="qr-code-container"></div>
-                              <div className="text-sm text-center">
-                                Отсканируйте в клиентском приложении (Happ,
-                                Straisand, ShadowRocket, v2rayNG, FoXray и др.)
+                                    style={{ width: '100%', height: '100%' }}
+                                  />
+                                </div>
                               </div>
+                              <div className="text-sm">Онлайн</div>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-1">
+                              <div className="flex w-4 h-4 items-center justify-center">
+                                <div className="relative w-2 h-2 bg-[var(--error)] rounded-full ">
+                                  <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 rounded-full bg-[var(--error)] w-4 h-4 opacity-50" />
+                                </div>
+                              </div>
+                              <div className="text-sm">Офлайн</div>
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex gap-2 flex-wrap justify-between items-center ">
+                          <div className="text-xs mt-1 flex gap-2 items-center">
+                            <MdRotateRight size={18} />
+                            <div className="flex gap-1 items-center">
+                              <div>{formatPeriod(subscription.period)}</div>
+                              {subscription.periodMultiplier > 1 && (
+                                <div className="rounded-md w-[22px] h-[22px] justify-center items-center flex bg-[var(--primary)] text-[var(--on-primary)] text-xs font-bold">
+                                  x{subscription.periodMultiplier}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          {subscription.isActive && subscription.expiredAt && (
+                            <div className="text-xs mt-1 flex gap-2 items-center ">
+                              <FaClockRotateLeft size={14} />
+                              <span>
+                                {formatExpiredDate(subscription.expiredAt)} -{' '}
+                                {subscription.expiredAt &&
+                                  intlFormat(
+                                    new Date(subscription.expiredAt),
+                                    {
+                                      year: 'numeric',
+                                      month: 'numeric',
+                                      day: 'numeric',
+                                      hour: 'numeric',
+                                      minute: 'numeric',
+                                    },
+                                    {
+                                      locale: locale,
+                                    },
+                                  )}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap justify-between items-center px-2 py-2 border-t border-[var(--outline)]">
+                        <div className="flex gap-2 items-center ">
+                          <button
+                            onClick={() => setIsOpenAction(subscription.id)}
+                            className="p-2 rounded-md bg-[var(--surface-container)] text-[var(--on-surface-variant)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex gap-2 items-center text-xs">
+                            <TbDotsVertical size={18} />
+                            Действия
+                          </button>
+                          <Modal
+                            isOpen={isOpenAction === subscription.id}
+                            onClose={() => setIsOpenAction(null)}
+                            title={'Действия'}
+                            variant="default">
+                            <div className="flex flex-col-reverse gap-2">
+                              <button
+                                onClick={() => {
+                                  setIsOpenModalDelete(subscription.id)
+                                }}
+                                disabled={updatingButtons === subscription.id}
+                                className={`p-2 rounded-md bg-[var(--error)] text-[var(--on-error)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex gap-2 items-center `}>
+                                <IoClose size={18} />
+                                Удалить
+                              </button>
+
+                              <Modal
+                                isOpen={isOpenModalDelete === subscription.id}
+                                onClose={() => setIsOpenModalDelete(null)}
+                                title={t('modals.delete.title')}
+                                variant="error"
+                                actionText={t('modals.delete.action')}
+                                onAction={() =>
+                                  deleteSubscription(subscription)
+                                }>
+                                {t('modals.delete.message')}
+                              </Modal>
+
+                              <button
+                                onClick={() => {
+                                  setIsOpenModalRefresh(subscription.id)
+                                }}
+                                disabled={updatingButtons === subscription.id}
+                                className={`p-2 rounded-md bg-[var(--warning)] text-[var(--on-warning)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex gap-2 items-center `}>
+                                <FaArrowsRotate size={18} />
+                                Сбросить данные
+                              </button>
+
+                              <Modal
+                                isOpen={isOpenModalRefresh === subscription.id}
+                                onClose={() => setIsOpenModalRefresh(null)}
+                                title={t('modals.refresh.title')}
+                                variant="warning"
+                                actionText={t('modals.refresh.action')}
+                                onAction={() =>
+                                  resetSubscriptionToken(subscription)
+                                }>
+                                {t('modals.refresh.message')}
+                              </Modal>
+
+                              {subscription.period !==
+                                SubscriptionPeriodEnum.TRIAL &&
+                                subscription.period !==
+                                  SubscriptionPeriodEnum.INDEFINITELY && (
+                                  <>
+                                    <button
+                                      onClick={() => {
+                                        setIsOpenModalAutoPay(subscription.id)
+                                      }}
+                                      disabled={
+                                        updatingButtons === subscription.id
+                                      }
+                                      className={`p-2 rounded-md ${
+                                        subscription.isAutoRenewal
+                                          ? 'bg-[var(--success)] text-[var(--on-success)]'
+                                          : 'bg-[var(--surface-container-high)] text-[var(--on-surface)]'
+                                      } transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex gap-2 items-center `}>
+                                      <MdAutoMode size={18} />
+                                      Автопродление
+                                    </button>
+
+                                    <Modal
+                                      isOpen={
+                                        isOpenModalAutoPay === subscription.id
+                                      }
+                                      onClose={() =>
+                                        setIsOpenModalAutoPay(null)
+                                      }
+                                      title={
+                                        subscription.isAutoRenewal
+                                          ? t('modals.autoRenewal.disableTitle')
+                                          : t('modals.autoRenewal.enableTitle')
+                                      }
+                                      variant={
+                                        subscription.isAutoRenewal
+                                          ? 'warning'
+                                          : 'success'
+                                      }
+                                      actionText={
+                                        subscription.isAutoRenewal
+                                          ? t(
+                                              'modals.autoRenewal.disableAction',
+                                            )
+                                          : t('modals.autoRenewal.enableAction')
+                                      }
+                                      onAction={() =>
+                                        toggleAutoRenewal(subscription)
+                                      }>
+                                      {subscription.isAutoRenewal
+                                        ? t('modals.autoRenewal.disableMessage')
+                                        : t('modals.autoRenewal.enableMessage')}
+                                    </Modal>
+                                  </>
+                                )}
+
+                              {subscription.period !==
+                                SubscriptionPeriodEnum.TRIAL &&
+                                subscription.period !==
+                                  SubscriptionPeriodEnum.INDEFINITELY &&
+                                subscription.nextRenewalStars && (
+                                  <>
+                                    <button
+                                      onClick={() => {
+                                        setIsOpenModalBuy(subscription.id)
+                                      }}
+                                      disabled={
+                                        updatingButtons === subscription.id ||
+                                        subscription.nextRenewalStars > balance
+                                      }
+                                      className={`p-2 rounded-md bg-[var(--gold-container)] text-[var(--tg-star-gold)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+                                        subscription.nextRenewalStars > balance
+                                          ? 'opacity-50 cursor-not-allowed'
+                                          : ' cursor-pointer'
+                                      } flex gap-2 items-center `}>
+                                      <TgStar type={'gold'} w={18} />
+                                      Продлить с баланса
+                                    </button>
+                                    <Modal
+                                      isOpen={
+                                        isOpenModalBuy === subscription.id
+                                      }
+                                      onClose={() => setIsOpenModalBuy(null)}
+                                      title={t('modals.renew.title')}
+                                      variant="warning"
+                                      actionText={t('modals.renew.action')}
+                                      onAction={() =>
+                                        renewSubscription(subscription)
+                                      }>
+                                      <div>
+                                        {t('modals.renew.message', {
+                                          price: subscription.nextRenewalStars,
+                                        })}
+                                      </div>
+                                    </Modal>
+                                  </>
+                                )}
                             </div>
                           </Modal>
+                        </div>
 
-                          <button
-                            onClick={() =>
-                              handleCopyUrl(subscription.subscriptionUrl)
-                            }
-                            className="p-2 rounded-md bg-[var(--surface-container)] text-[var(--on-surface-variant)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer">
-                            <FaCopy size={16} />
-                          </button>
+                        <div className="flex gap-2 items-center ">
+                          <div className="flex gap-2 items-center ">
+                            <HappDeepLinkButton
+                              subscriptionUrl={subscription.subscriptionUrl}
+                            />
+                            <button
+                              onClick={() => setIsOpenModalQR(subscription.id)}
+                              className="p-2 rounded-md bg-[var(--surface-container)] text-[var(--on-surface-variant)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer">
+                              <TbQrcode size={18} />
+                            </button>
 
+                            <Modal
+                              isOpen={isOpenModalQR === subscription.id}
+                              onClose={() => setIsOpenModalQR(null)}
+                              title={'QR-код подписки'}
+                              variant="default">
+                              <div className="flex flex-col items-center gap-4 p-4">
+                                <div
+                                  ref={qrRef}
+                                  className="qr-code-container"></div>
+                                <div className="text-sm text-center">
+                                  Отсканируйте в клиентском приложении (Happ,
+                                  Straisand, ShadowRocket, v2rayNG, FoXray и
+                                  др.)
+                                </div>
+                              </div>
+                            </Modal>
+
+                            <button
+                              onClick={() =>
+                                handleCopyUrl(subscription.subscriptionUrl)
+                              }
+                              className="p-2 rounded-md bg-[var(--surface-container)] text-[var(--on-surface-variant)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer">
+                              <FaCopy size={16} />
+                            </button>
+
+                            <Link
+                              href={subscription.subscriptionUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-2 rounded-md bg-[var(--surface-container)] text-[var(--on-surface-variant)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] ">
+                              <FiExternalLink size={18} />
+                            </Link>
+                          </div>
+                          <div className="h-4 w-[1px] bg-[var(--outline)]"></div>
                           <Link
-                            href={subscription.subscriptionUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            href={`${url}/subscription/${subscription.id}`}
                             className="p-2 rounded-md bg-[var(--surface-container)] text-[var(--on-surface-variant)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] ">
-                            <FiExternalLink size={18} />
+                            <TbPlugConnected size={18} />
                           </Link>
                         </div>
-                        <div className="h-4 w-[1px] bg-[var(--outline)]"></div>
-                        <Link
-                          href={`${url}/subscription/${subscription.id}`}
-                          className="p-2 rounded-md bg-[var(--surface-container)] text-[var(--on-surface-variant)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] ">
-                          <TbPlugConnected size={18} />
-                        </Link>
                       </div>
-                    </div>
-                  </motion.div>
-                ))}
+                    </motion.div>
+                  ))}
               </>
             )}
           </AnimatePresence>
