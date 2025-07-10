@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import SocialButtons from './SocialButtons'
 import Version from './Version'
 
 const Loader = () => {
@@ -17,7 +18,10 @@ const Loader = () => {
         <div className={'font-bold text-xl'}>VPNsib</div>
       </div>
       <div className="loader"></div>
-      <Version />
+      <div className="flex flex-col gap-4 justify-center">
+        <SocialButtons />
+        <Version />
+      </div>
     </div>
   )
 }
