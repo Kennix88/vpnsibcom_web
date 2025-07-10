@@ -71,7 +71,7 @@ export default function FriendsInviteButtons() {
               </button>
             </div>
           </div>
-          <div className={'flex flex-row justify-between py-2'}>
+          {/* <div className={'flex flex-row justify-between py-2'}>
             <div className={'opacity-50 flex flex-row gap-2 items-center'}>
               {t('invite.inWebApp')}
             </div>
@@ -95,7 +95,7 @@ export default function FriendsInviteButtons() {
                 <FaCopy />
               </button>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

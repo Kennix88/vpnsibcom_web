@@ -22,7 +22,7 @@
   "invite": {
     "title": "Invite a friend",
     "invite": "Will invite",
-    "inTelegram": "In Telegram",
+    "inTelegram": "In Telegram bot",
     "inTMA": "In Telegram mini app",
     "inWebApp": "In webApp"
   },
