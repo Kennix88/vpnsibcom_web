@@ -370,6 +370,10 @@ export default function AddSubscription() {
     ? price + subscriptions.fixedPriceStars
     : price
 
+  const nextFinalPrice = user.isTgProgramPartner
+    ? finalPrice * subscriptions.telegramPartnerProgramRatio
+    : finalPrice
+
   const resultList: { name: string; value: JSX.Element; isVisible: boolean }[] =
     [
       {
@@ -491,12 +495,44 @@ export default function AddSubscription() {
         value: (
           <div className="flex flex-row gap-2 items-center">
             <TgStar type="gold" w={14} />
-            {finalPrice}
+            {nextFinalPrice}
           </div>
         ),
         isVisible: true,
       },
     ]
+
+  const trafficPrice = user.isPremium
+    ? isUnlimitTraffic
+      ? subscriptions.unlimitTrafficPriceStars *
+        subscriptions.telegramPremiumRatio
+      : subscriptions.trafficGbPriceStars *
+        trafficLimitGb *
+        subscriptions.telegramPremiumRatio
+    : isUnlimitTraffic
+      ? subscriptions.unlimitTrafficPriceStars
+      : subscriptions.trafficGbPriceStars * trafficLimitGb
+
+  const serversPrice =
+    (calculateServersPrice(
+      isAllBaseServers,
+      isAllPremiumServers,
+      baseServersCount,
+      subscriptions,
+    ) +
+      calculatePremiumServersPrice(
+        isAllBaseServers,
+        isAllPremiumServers,
+        premiumServersCount,
+        subscriptions,
+      )) *
+    (user.isPremium ? subscriptions.telegramPremiumRatio : 1)
+
+  const devicePrice = user.isPremium
+    ? subscriptions.devicesPriceStars *
+      devicesCount *
+      subscriptions.telegramPremiumRatio
+    : subscriptions.devicesPriceStars * devicesCount
 
   return (
     <div className={'flex flex-col gap-4 items-center w-full max-w-[400px]'}>
@@ -507,7 +543,9 @@ export default function AddSubscription() {
           </div>
           <div className="flex gap-2 items-center ">
             <TgStar type="gold" w={14} />
-            {price}
+            {user.isTgProgramPartner
+              ? price * subscriptions.telegramPartnerProgramRatio
+              : price}
           </div>
         </div>
 
@@ -576,11 +614,9 @@ export default function AddSubscription() {
             </div>
             <div className="flex gap-2 items-center ">
               <TgStar type="gold" w={14} />
-              {user.isPremium
-                ? subscriptions.devicesPriceStars *
-                  devicesCount *
-                  subscriptions.telegramPremiumRatio
-                : subscriptions.devicesPriceStars * devicesCount}
+              {user.isTgProgramPartner
+                ? devicePrice * subscriptions.telegramPartnerProgramRatio
+                : devicePrice}
             </div>
           </div>
 
@@ -653,19 +689,9 @@ export default function AddSubscription() {
               PlansServersSelectTypeEnum.CUSTOM && (
               <div className="flex gap-2 items-center ">
                 <TgStar type="gold" w={14} />
-                {(calculateServersPrice(
-                  isAllBaseServers,
-                  isAllPremiumServers,
-                  baseServersCount,
-                  subscriptions,
-                ) +
-                  calculatePremiumServersPrice(
-                    isAllBaseServers,
-                    isAllPremiumServers,
-                    premiumServersCount,
-                    subscriptions,
-                  )) *
-                  (user.isPremium ? subscriptions.telegramPremiumRatio : 1)}
+                {user.isTgProgramPartner
+                  ? serversPrice * subscriptions.telegramPartnerProgramRatio
+                  : serversPrice}
               </div>
             )}
           </div>
@@ -830,16 +856,9 @@ export default function AddSubscription() {
             </div>
             <div className="flex gap-2 items-center ">
               <TgStar type="gold" w={14} />
-              {user.isPremium
-                ? isUnlimitTraffic
-                  ? subscriptions.unlimitTrafficPriceStars *
-                    subscriptions.telegramPremiumRatio
-                  : subscriptions.trafficGbPriceStars *
-                    trafficLimitGb *
-                    subscriptions.telegramPremiumRatio
-                : isUnlimitTraffic
-                  ? subscriptions.unlimitTrafficPriceStars
-                  : subscriptions.trafficGbPriceStars * trafficLimitGb}
+              {user.isTgProgramPartner
+                ? trafficPrice * subscriptions.telegramPartnerProgramRatio
+                : trafficPrice}
             </div>
           </div>
 
@@ -934,7 +953,9 @@ export default function AddSubscription() {
           </div>
           <div className="flex gap-2 items-center ">
             <TgStar type="gold" w={14} />
-            {price}
+            {user.isTgProgramPartner
+              ? price * subscriptions.telegramPartnerProgramRatio
+              : price}
           </div>
         </div>
 
@@ -1099,7 +1120,10 @@ export default function AddSubscription() {
               </div>
               <div className="flex flex-row gap-2 items-center">
                 <TgStar type="gold" w={14} />
-                {subscriptions.fixedPriceStars}
+                {user.isTgProgramPartner
+                  ? subscriptions.fixedPriceStars *
+                    subscriptions.telegramPartnerProgramRatio
+                  : subscriptions.fixedPriceStars}
               </div>
               <div className="relative flex items-center">
                 <input
@@ -1170,7 +1194,7 @@ export default function AddSubscription() {
               Выберите хотя бы один сервер!
             </div>
           </div>
-        ) : balance >= finalPrice ? (
+        ) : balance >= nextFinalPrice ? (
           <button
             onClick={() => handleClickPurchaseSubscription()}
             disabled={isLoading}
@@ -1188,7 +1212,7 @@ export default function AddSubscription() {
                 }}></div>
             )}
             Оплатить с баланса <TgStar type={'gold'} w={15} />{' '}
-            {finalPrice.toFixed(2)}
+            {nextFinalPrice.toFixed(2)}
           </button>
         ) : (
           <>
@@ -1204,9 +1228,9 @@ export default function AddSubscription() {
                 className={
                   'flex flex-row gap-2 items-center justify-center px-4 py-2 bg-[var(--surface-container-high)] rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer text-sm'
                 }
-                href={`/tma/payment?amount=${Math.ceil(finalPrice - balance)}`}>
+                href={`/tma/payment?amount=${Math.ceil(nextFinalPrice - balance)}`}>
                 Пополнить баланс на <TgStar type="gold" w={14} />{' '}
-                {Math.ceil(finalPrice - balance)}
+                {Math.ceil(nextFinalPrice - balance)}
               </Link>
             </div>
           </>
@@ -1239,7 +1263,7 @@ export default function AddSubscription() {
                   }}></div>
               )}
               Оплатить напрямую <TgStar type={'original'} w={15} />
-              {Math.ceil(finalPrice)}
+              {Math.ceil(nextFinalPrice)}
             </button>
             <div
               className={
