@@ -46,7 +46,7 @@ export const CLIENT_APPS: ClientAppInterface[] = [
           },
           {
             iconType: IconTypeEnum.APPLE_STORE,
-            title: 'AppStore RUS',
+            title: 'AppStore 🇷🇺',
             link: 'https://apps.apple.com/ru/app/happ-proxy-utility-plus/id6746188973',
           },
           {
@@ -106,7 +106,7 @@ export const CLIENT_APPS: ClientAppInterface[] = [
       },
       {
         platform: PlatformEnum.MACOS,
-        version: 'Chip M1+',
+        version: '12.0+',
         downloadLinks: [
           {
             iconType: IconTypeEnum.APPLE_STORE,
@@ -115,13 +115,8 @@ export const CLIENT_APPS: ClientAppInterface[] = [
           },
           {
             iconType: IconTypeEnum.APPLE_STORE,
-            title: 'AppStore RUS',
+            title: 'AppStore 🇷🇺',
             link: 'https://apps.apple.com/ru/app/happ-proxy-utility-plus/id6746188973',
-          },
-          {
-            iconType: IconTypeEnum.OTHER,
-            title: 'File (not M1)',
-            link: 'https://github.com/Happ-proxy/happ-desktop/releases/',
           },
         ],
       },
