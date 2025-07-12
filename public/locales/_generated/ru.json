@@ -91,7 +91,7 @@
     "invite": {
       "title": "Пригласить друга",
       "invite": "Пригласить",
-      "inTelegram": "В Telegram",
+      "inTelegram": "В Telegram bot",
       "inTMA": "В Telegram mini app",
       "inWebApp": "В webApp"
     },
