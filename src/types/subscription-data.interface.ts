@@ -27,6 +27,7 @@ export interface SubscriptionResponseInterface {
   threeYearRatioPayment: number
   indefinitelyRatio: number
   fixedPriceStars: number
+  telegramPartnerProgramRatio: number
   subscriptions: SubscriptionDataInterface[]
 }
 
