@@ -495,7 +495,7 @@ export default function AddSubscription() {
         value: (
           <div className="flex flex-row gap-2 items-center">
             <TgStar type="gold" w={14} />
-            {nextFinalPrice}
+            {nextFinalPrice.toFixed(2)}
           </div>
         ),
         isVisible: true,
@@ -543,9 +543,10 @@ export default function AddSubscription() {
           </div>
           <div className="flex gap-2 items-center ">
             <TgStar type="gold" w={14} />
-            {user.isTgProgramPartner
+            {(user.isTgProgramPartner
               ? price * subscriptions.telegramPartnerProgramRatio
-              : price}
+              : price
+            ).toFixed(2)}
           </div>
         </div>
 
@@ -614,9 +615,10 @@ export default function AddSubscription() {
             </div>
             <div className="flex gap-2 items-center ">
               <TgStar type="gold" w={14} />
-              {user.isTgProgramPartner
+              {(user.isTgProgramPartner
                 ? devicePrice * subscriptions.telegramPartnerProgramRatio
-                : devicePrice}
+                : devicePrice
+              ).toFixed(2)}
             </div>
           </div>
 
@@ -689,9 +691,10 @@ export default function AddSubscription() {
               PlansServersSelectTypeEnum.CUSTOM && (
               <div className="flex gap-2 items-center ">
                 <TgStar type="gold" w={14} />
-                {user.isTgProgramPartner
+                {(user.isTgProgramPartner
                   ? serversPrice * subscriptions.telegramPartnerProgramRatio
-                  : serversPrice}
+                  : serversPrice
+                ).toFixed(2)}
               </div>
             )}
           </div>
@@ -856,9 +859,10 @@ export default function AddSubscription() {
             </div>
             <div className="flex gap-2 items-center ">
               <TgStar type="gold" w={14} />
-              {user.isTgProgramPartner
+              {(user.isTgProgramPartner
                 ? trafficPrice * subscriptions.telegramPartnerProgramRatio
-                : trafficPrice}
+                : trafficPrice
+              ).toFixed(2)}
             </div>
           </div>
 
@@ -953,9 +957,10 @@ export default function AddSubscription() {
           </div>
           <div className="flex gap-2 items-center ">
             <TgStar type="gold" w={14} />
-            {user.isTgProgramPartner
+            {(user.isTgProgramPartner
               ? price * subscriptions.telegramPartnerProgramRatio
-              : price}
+              : price
+            ).toFixed(2)}
           </div>
         </div>
 
@@ -1120,10 +1125,11 @@ export default function AddSubscription() {
               </div>
               <div className="flex flex-row gap-2 items-center">
                 <TgStar type="gold" w={14} />
-                {user.isTgProgramPartner
+                {(user.isTgProgramPartner
                   ? subscriptions.fixedPriceStars *
                     subscriptions.telegramPartnerProgramRatio
-                  : subscriptions.fixedPriceStars}
+                  : subscriptions.fixedPriceStars
+                ).toFixed(2)}
               </div>
               <div className="relative flex items-center">
                 <input
