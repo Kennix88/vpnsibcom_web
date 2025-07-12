@@ -21,6 +21,8 @@ export interface UserDataInterface {
   languageCode: string
   currencyCode: CurrencyEnum
   referralsCount: number
+  isTgProgramPartner: boolean
+  tgProgramPartnerExpiredAt?: Date
   balance: UserBalanceInterface
 }
 
