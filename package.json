@@ -1,6 +1,6 @@
 {
   "name": "vpnsibcom_web",
-  "version": "0.0.0",
+  "version": "1.0.0-beta",
   "license": "CC BY-NC-SA 4.0",
   "private": false,
   "scripts": {
