@@ -31,7 +31,7 @@ export function Auth({ children }: PropsWithChildren) {
     }
 
     authorize()
-  }, [initDataRaw])
+  }, [initDataRaw, setUser, setAccessToken, reset])
 
   useEffect(() => {
     const getRates = async () => {
@@ -40,7 +40,7 @@ export function Auth({ children }: PropsWithChildren) {
       setRates(data.rates)
     }
     getRates()
-  }, [])
+  }, [setCurrencies, setRates])
 
   useEffect(() => {
     if (user) {

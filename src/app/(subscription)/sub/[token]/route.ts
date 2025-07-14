@@ -2,21 +2,17 @@
 import { publicApiClient } from '@app/core/publicApiClient'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
+import { NextRequest } from 'next/server'
 
 export async function GET(
-  request: Request,
-  { params }: { params: { token: string } },
+  req: NextRequest,
+  context: { params: Promise<{ token: string }> },
 ) {
   // Get token from params asynchronously
-  const { token } = await params
+  const { token } = await context.params
 
   const headersList = await headers()
   const agent = headersList.get('User-Agent')
-
-  console.log({
-    agent,
-  })
-  console.log(JSON.stringify(await params, null, 2))
 
   headersList.forEach((value, key) => console.log(`${key}: ${value}`))
 

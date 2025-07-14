@@ -42,7 +42,7 @@ export default function Page() {
       }
     }
     updateUser()
-  }, [])
+  }, [setUser])
 
   return (
     <TmaPage back={true}>

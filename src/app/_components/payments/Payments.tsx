@@ -16,6 +16,7 @@ import { motion } from 'framer-motion'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'use-intl'
+import { Suspense } from 'react'
 
 const quickAmounts = [50, 100, 500, 700, 1000, 2000, 3000, 5000, 10000, 15000]
 
@@ -29,7 +30,8 @@ type Props = {
   isTma?: boolean
 }
 
-export default function Payments({ isTma = false }: Props) {
+// Inner component that uses useSearchParams
+function PaymentsContent({ isTma = false }: Props) {
   const t = useTranslations('billing.payment')
   const { user, setUser } = useUserStore()
   const location = usePathname()
@@ -141,5 +143,14 @@ export default function Payments({ isTma = false }: Props) {
         />
       )}
     </div>
+  )
+}
+
+// Main component with Suspense boundary
+export default function Payments(props: Props) {
+  return (
+    <Suspense fallback={<div className="flex flex-col gap-4 items-center pb-[100px]">Loading...</div>}>
+      <PaymentsContent {...props} />
+    </Suspense>
   )
 }

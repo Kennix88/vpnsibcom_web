@@ -1,10 +1,11 @@
 'use client'
 
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
+import { Suspense } from 'react'
 
-export default function LoginPage() {
-  const router = useRouter()
+// Inner component that uses useSearchParams
+function LoginContent() {
   const params = useSearchParams()
   const redirect = params.get('redirect') || '/app'
 
@@ -33,5 +34,14 @@ export default function LoginPage() {
         Or open in Telegram
       </a>
     </div>
+  )
+}
+
+// Main page component with Suspense boundary
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginContent />
+    </Suspense>
   )
 }

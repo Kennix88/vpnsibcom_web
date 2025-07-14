@@ -26,7 +26,7 @@ export default function Page() {
       }
     }
     getReferrals()
-  }, [])
+  }, [setUser, setReferralsData])
 
   return (
     <TmaPage back={false}>

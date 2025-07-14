@@ -2,8 +2,10 @@
 
 import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
+import { Suspense } from 'react'
 
-export default function DeeplinkRedirectPage() {
+// Inner component that uses useSearchParams
+function DeeplinkRedirect() {
   const searchParams = useSearchParams()
 
   useEffect(() => {
@@ -40,5 +42,14 @@ export default function DeeplinkRedirectPage() {
     <div className="flex items-center justify-center h-screen bg-[var(--background)] text-[var(--on-background)] text-sm">
       Redirection to the app…
     </div>
+  )
+}
+
+// Main page component with Suspense boundary
+export default function DeeplinkRedirectPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center h-screen bg-[var(--background)] text-[var(--on-background)] text-sm">Loading...</div>}>
+      <DeeplinkRedirect />
+    </Suspense>
   )
 }

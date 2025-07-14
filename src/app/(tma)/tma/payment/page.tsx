@@ -25,7 +25,7 @@ export default function Page() {
     }
     getMethods()
     return () => {}
-  }, [])
+  }, [setMethods, setUser])
 
   return (
     <TmaPage back={true}>

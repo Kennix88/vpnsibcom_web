@@ -1,21 +1,15 @@
-import {
-  isColorDark,
-  isRGB,
-  retrieveLaunchParams,
-} from '@telegram-apps/sdk-react'
+import { retrieveLaunchParams } from '@telegram-apps/sdk-react'
+import Image from 'next/image'
 import { useMemo } from 'react'
 
 export function EnvUnsupported() {
-  const [platform, isDark] = useMemo(() => {
+  useMemo(() => {
     try {
       const lp = retrieveLaunchParams()
-      const { bg_color: bgColor } = lp.tgWebAppThemeParams
-      return [
-        lp.tgWebAppPlatform,
-        bgColor && isRGB(bgColor) ? isColorDark(bgColor) : false,
-      ]
+      // Just retrieve launch params to check if they're available
+      return lp.tgWebAppPlatform
     } catch {
-      return ['android', false]
+      return 'android'
     }
   }, [])
 
@@ -23,10 +17,12 @@ export function EnvUnsupported() {
     <div key={'unsupported'}>
       <h1>Oops</h1>
       <div>You are using too old Telegram client to run this application</div>
-      <img
+      <Image
         alt="Telegram sticker"
         src="https://xelene.me/telegram.gif"
-        style={{ display: 'block', width: '144px', height: '144px' }}
+        width={144}
+        height={144}
+        style={{ display: 'block' }}
       />
     </div>
   )

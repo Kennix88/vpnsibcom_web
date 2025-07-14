@@ -142,7 +142,7 @@ export default function AddSubscription() {
     getServers()
     getPlans()
     return () => {}
-  }, [])
+  }, [setPlansData, setServersData, setUser, selectPlan])
 
   useEffect(() => {
     if (!subscriptions || !user) return

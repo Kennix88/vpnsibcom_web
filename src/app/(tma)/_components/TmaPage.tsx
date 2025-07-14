@@ -30,7 +30,7 @@ export function TmaPage({
       backButton.hide()
       backButton.isVisible() // false
     }
-  }, [back])
+  }, [back, router])
 
   return <>{children}</>
 }
