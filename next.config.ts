@@ -21,6 +21,9 @@ const nextConfig: NextConfig = {
   //   buildActivity: false,
   // },
   // allowedDevOrigins: ['local-origin.dev', '*.local-origin.dev'],
+  
+  // Для Docker-контейнера в продакшене
+  output: 'standalone',
 }
 
 export default withNextIntl(nextConfig)

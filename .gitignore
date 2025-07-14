@@ -4,6 +4,7 @@
 # public/locales/_generated/
 
 .env.development
+.env.production
 .env
 .enb.*
 *.log

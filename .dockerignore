@@ -1,0 +1,42 @@
+# Версионный контроль
+.git
+.github
+.gitignore
+
+# Зависимости
+node_modules
+
+# Кэш и логи
+.next/cache
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Локальные файлы среды разработки
+.env*.local
+.env.development
+.env.test
+
+# Файлы IDE
+.idea
+.vscode
+*.sublime-project
+*.sublime-workspace
+
+# Тестовые файлы
+__tests__
+*.test.ts
+*.test.tsx
+
+# Документация и другие файлы, не нужные для сборки
+README.md
+CONTRIBUTING.md
+LICENSE
+SECURITY.md
+DOCKER*
+docker-compose*
+
+# Другие файлы, которые не нужны в продакшене
+*.log
+*.md
+!README.md
