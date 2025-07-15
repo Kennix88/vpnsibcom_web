@@ -1,8 +1,7 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
-import { Suspense } from 'react'
+import { Suspense, useEffect } from 'react'
 
 // Inner component that uses useSearchParams
 function DeeplinkRedirect() {
@@ -24,13 +23,13 @@ function DeeplinkRedirect() {
 
       if (opened) {
         // Успешно открылось — закроем текущую
-        setTimeout(() => window.close(), 300)
+        setTimeout(() => window.close(), 30000)
       } else {
         // Не удалось открыть — fallback
         window.location.href = url
 
         // Всё равно пробуем закрыть через секунду
-        setTimeout(() => window.close(), 1000)
+        setTimeout(() => window.close(), 30000)
       }
     } catch (e) {
       console.error('Invalid link', e)
@@ -48,7 +47,12 @@ function DeeplinkRedirect() {
 // Main page component with Suspense boundary
 export default function DeeplinkRedirectPage() {
   return (
-    <Suspense fallback={<div className="flex items-center justify-center h-screen bg-[var(--background)] text-[var(--on-background)] text-sm">Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center h-screen bg-[var(--background)] text-[var(--on-background)] text-sm">
+          Loading...
+        </div>
+      }>
       <DeeplinkRedirect />
     </Suspense>
   )
