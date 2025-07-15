@@ -120,25 +120,26 @@ export default function Page() {
               {user && user.roleName.toUpperCase()}
             </div>
           </div>
-          {user?.roleDiscount && user?.roleDiscount > 0 && (
-            <div
-              className={
-                'flex flex-row flex-wrap items-center justify-between gap-2 py-2'
-              }>
+          {user?.roleDiscount &&
+            (user && 100 - 100 * user.roleDiscount) > 0 && (
               <div
                 className={
-                  'font-medium text-[var(--on-background)]/80 font-mono'
+                  'flex flex-row flex-wrap items-center justify-between gap-2 py-2'
                 }>
-                {t('discount')}:
+                <div
+                  className={
+                    'font-medium text-[var(--on-background)]/80 font-mono'
+                  }>
+                  {t('discount')}:
+                </div>
+                <div
+                  className={
+                    'text-sm font-bold font-mono text-[var(--on-primary-container)] flex flex-row gap-2 transition-all duration-200 hover:brightness-110 active:scale-[0.97]'
+                  }>
+                  {user && 100 - 100 * user.roleDiscount}%
+                </div>
               </div>
-              <div
-                className={
-                  'text-sm font-bold font-mono text-[var(--on-primary-container)] flex flex-row gap-2 transition-all duration-200 hover:brightness-110 active:scale-[0.97]'
-                }>
-                {user && 100 - 100 * user.roleDiscount}%
-              </div>
-            </div>
-          )}
+            )}
 
           <div className={'flex flex-col gap-2 py-2'}>
             <div
