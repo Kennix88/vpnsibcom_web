@@ -32,93 +32,115 @@ interface ApiResponse<T> {
   message?: string
 }
 
-/**
- * Creates and configures Axios instance for API requests
- */
+type FailedRequest = {
+  resolve: (value: AxiosResponse) => void
+  reject: (reason?: any) => void
+}
+
+let isRefreshing = false
+let failedQueue: FailedRequest[] = []
+
+function processQueue(error: any, token?: string) {
+  failedQueue.forEach(({ resolve, reject }) => {
+    if (error) {
+      reject(error)
+    } else {
+      const originalRequest = error?.config as AxiosRequestConfig & {
+        _retry?: boolean
+      }
+
+      const newToken = useUserStore.getState().accessToken
+      if (newToken && originalRequest?.headers) {
+        originalRequest.headers = {
+          ...originalRequest.headers,
+          Authorization: `Bearer ${newToken}`,
+        } as AxiosRequestHeaders
+      }
+
+      axios(originalRequest).then(resolve).catch(reject)
+    }
+  })
+  failedQueue = []
+}
+
 const createApiInstance = (): AxiosInstance => {
   const instance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL,
-    withCredentials: true, // для отправки httpOnly куки (refresh)
-    timeout: 30000, // 15 seconds timeout
+    withCredentials: true,
+    timeout: 30000,
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
     },
   })
 
-  // Request interceptor: add authorization token
-  instance.interceptors.request.use(
-    (config) => {
-      try {
-        const token = useUserStore.getState().accessToken
-        if (token && config.headers) {
-          // Безопасное обновление заголовков
-          config.headers = {
-            ...config.headers,
-            Authorization: `Bearer ${token}`,
-          } as AxiosRequestHeaders
-        }
-        return config
-      } catch (error) {
-        console.error('Request interceptor error:', error)
-        return config
-      }
-    },
-    (error: AxiosError): Promise<AxiosError> => {
-      console.error('Request interceptor rejection:', error)
-      return Promise.reject(error)
-    },
-  )
+  instance.interceptors.request.use((config) => {
+    const token = useUserStore.getState().accessToken
+    if (token && config.headers) {
+      config.headers = {
+        ...config.headers,
+        Authorization: `Bearer ${token}`,
+      } as AxiosRequestHeaders
+    }
+    return config
+  })
 
-  // Response interceptor: handle 401 errors with token refresh
   instance.interceptors.response.use(
     (response: AxiosResponse): AxiosResponse => response,
     async (error: AxiosError): Promise<any> => {
       const originalRequest = error.config as AxiosRequestConfig & {
         _retry?: boolean
       }
+
       const store = useUserStore.getState()
 
-      // Exit if already tried refresh or not 401
-      if (originalRequest._retry || error.response?.status !== 401) {
+      if (
+        error.response?.status !== 401 ||
+        originalRequest._retry ||
+        originalRequest.url?.includes('/auth/refresh')
+      ) {
         return Promise.reject(error)
       }
 
       originalRequest._retry = true
 
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({
+            resolve,
+            reject,
+          })
+        })
+      }
+
+      isRefreshing = true
+
       try {
-        // Attempt to refresh token
         const { data } = await axios.post<ApiResponse<{ accessToken: string }>>(
           `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
           {},
           { withCredentials: true },
         )
 
-        const newAccessToken = data.data.accessToken
+        const newToken = data.data.accessToken
+        store.setAccessToken(newToken)
 
-        // Update token in store
-        store.setAccessToken(newAccessToken)
+        processQueue(null, newToken)
 
-        // Update authorization header and retry request
         if (originalRequest.headers) {
-          // Безопасное обновление заголовков
           originalRequest.headers = {
             ...originalRequest.headers,
-            Authorization: `Bearer ${newAccessToken}`,
-          } as AxiosRequestHeaders
-        } else {
-          // Создание заголовков, если их нет
-          originalRequest.headers = {
-            Authorization: `Bearer ${newAccessToken}`,
+            Authorization: `Bearer ${newToken}`,
           } as AxiosRequestHeaders
         }
 
-        return instance(originalRequest)
+        return axios(originalRequest)
       } catch (refreshError) {
-        // Reset user state on refresh failure
-        console.error('Token refresh failed:', refreshError)
         store.reset()
+        processQueue(refreshError)
         return Promise.reject(refreshError)
+      } finally {
+        isRefreshing = false
       }
     },
   )
@@ -129,11 +151,6 @@ const createApiInstance = (): AxiosInstance => {
 // Create API instance
 const api = createApiInstance()
 
-/**
- * Handles API errors consistently
- * @param error Error from API request
- * @returns Rejected promise with formatted error
- */
 const handleApiError = (error: unknown): Promise<never> => {
   if (axios.isAxiosError(error)) {
     const status = error.response?.status
@@ -141,7 +158,6 @@ const handleApiError = (error: unknown): Promise<never> => {
 
     console.error(`API Error (${status}): ${message}`, error)
 
-    // Handle specific error codes
     if (status === 429) {
       return Promise.reject(
         new Error('Слишком много запросов. Пожалуйста, попробуйте позже.'),
@@ -178,7 +194,14 @@ export const authApiClient = {
         }>
       >('/auth/telegram', { initData })
 
-      return data.data
+      const { accessToken, user } = data.data
+
+      // Обновляем хранилище сразу, чтобы interceptor не дергал refresh
+      const store = useUserStore.getState()
+      store.setAccessToken(accessToken)
+      store.setUser(user)
+
+      return { accessToken, user }
     } catch (error) {
       return handleApiError(error)
     }
