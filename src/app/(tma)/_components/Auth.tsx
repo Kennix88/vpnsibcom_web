@@ -11,27 +11,18 @@ import { PropsWithChildren, useEffect } from 'react'
 
 export function Auth({ children }: PropsWithChildren) {
   const initDataRaw = retrieveRawInitData()
-  const { setUser, setAccessToken, reset, user, accessToken } = useUserStore()
+  const { reset, user, accessToken } = useUserStore()
 
   const { setCurrencies, setRates } = useCurrencyStore()
 
   useEffect(() => {
-    const authorize = async () => {
-      if (!initDataRaw) return
+    if (!initDataRaw) return
 
-      try {
-        const { user, accessToken } =
-          await authApiClient.telegramLogin(initDataRaw)
-        setUser(user)
-        setAccessToken(accessToken)
-      } catch (err) {
-        console.error('Authorization failed', err)
-        reset()
-      }
-    }
-
-    authorize()
-  }, [initDataRaw, setUser, setAccessToken, reset])
+    authApiClient.telegramLogin(initDataRaw).catch((err) => {
+      console.error('Authorization failed', err)
+      reset()
+    })
+  }, [initDataRaw, reset])
 
   useEffect(() => {
     const getRates = async () => {
