@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from 'next/server'
 
 /**
  * Health check endpoint for Docker and monitoring systems
@@ -10,9 +10,9 @@ export async function GET() {
     status: 'ok',
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
-    version: process.env.npm_package_version || '1.0.0-beta',
+    version: process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0-beta',
     environment: process.env.NODE_ENV,
-  };
+  }
 
-  return NextResponse.json(healthInfo, { status: 200 });
+  return NextResponse.json(healthInfo, { status: 200 })
 }
