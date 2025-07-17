@@ -14,6 +14,7 @@ import {
   SubscriptionResponseInterface,
 } from '@app/types/subscription-data.interface'
 import { UserDataInterface } from '@app/types/user-data.interface'
+import { retrieveRawInitData } from '@telegram-apps/sdk-react'
 import axios, {
   AxiosError,
   AxiosInstance,
@@ -140,14 +141,35 @@ const createApiInstance = (): AxiosInstance => {
         store.reset()
         processQueue(refreshError)
 
-        // 💡 Получаем текущий путь
+        // 🧠 Попробуем silent re-auth через Telegram initData
+        const initData = retrieveRawInitData()
+
+        if (initData && typeof window !== 'undefined') {
+          try {
+            const { accessToken, user } =
+              await authApiClient.telegramLogin(initData)
+            store.setAccessToken(accessToken)
+            store.setUser(user)
+
+            // Повтор запроса с новым accessToken
+            if (originalRequest.headers) {
+              originalRequest.headers = {
+                ...originalRequest.headers,
+                Authorization: `Bearer ${accessToken}`,
+              } as AxiosRequestHeaders
+            }
+
+            return axios(originalRequest)
+          } catch (e) {
+            // Ошибка silent login — редиректим
+          }
+        }
+
+        // 🚨 fallback редирект, если re-login не сработал
         const pathname =
           typeof window !== 'undefined' ? window.location.pathname : ''
-
-        // 🧭 Определяем, куда редиректить
         const redirectTo = pathname.startsWith('/tma') ? '/tma' : '/app/login'
 
-        // 🔄 Перенаправляем и перезапускаем страницу
         if (typeof window !== 'undefined') {
           window.location.replace(redirectTo)
         }
