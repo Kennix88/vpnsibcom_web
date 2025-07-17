@@ -25,7 +25,7 @@ import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { JSX, useEffect, useState } from 'react'
+import { JSX, useCallback, useEffect, useState } from 'react'
 import { BiServer, BiSolidMask } from 'react-icons/bi'
 import { FaCircleInfo, FaShieldHeart } from 'react-icons/fa6'
 import { IoLogoGithub, IoShieldHalf } from 'react-icons/io5'
@@ -90,29 +90,32 @@ export default function AddSubscription() {
   const [planSelected, setPlanSelected] = useState<PlansInterface | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const selectPlan = (plan: PlansInterface) => {
-    setPlanSelected(plan)
-    setDevicesCount(plan.devicesCount)
-    setIsAllBaseServers(plan.isAllBaseServers)
-    setIsAllPremiumServers(plan.isAllPremiumServers)
-    setIsUnlimitTraffic(plan.isUnlimitTraffic)
-    setTrafficLimitGb(plan.trafficLimitGb ? plan.trafficLimitGb : 0)
+  const selectPlan = useCallback(
+    (plan: PlansInterface) => {
+      setPlanSelected(plan)
+      setDevicesCount(plan.devicesCount)
+      setIsAllBaseServers(plan.isAllBaseServers)
+      setIsAllPremiumServers(plan.isAllPremiumServers)
+      setIsUnlimitTraffic(plan.isUnlimitTraffic)
+      setTrafficLimitGb(plan.trafficLimitGb ?? 0)
 
-    if (!serversData || !planSelected) return
-    if (isAllBaseServers && isAllPremiumServers) {
-      setServersSelected([])
-      setBaseServersCount(serversData.baseServersCount)
-      setPremiumServersCount(serversData.premiumServersCount)
-    } else if (isAllBaseServers && !isAllPremiumServers) {
-      setServersSelected([])
-      setBaseServersCount(serversData.baseServersCount)
-      setPremiumServersCount(0)
-    } else {
-      setServersSelected([])
-      setBaseServersCount(0)
-      setPremiumServersCount(0)
-    }
-  }
+      if (!serversData || !plan) return
+      if (plan.isAllBaseServers && plan.isAllPremiumServers) {
+        setServersSelected([])
+        setBaseServersCount(serversData.baseServersCount)
+        setPremiumServersCount(serversData.premiumServersCount)
+      } else if (plan.isAllBaseServers && !plan.isAllPremiumServers) {
+        setServersSelected([])
+        setBaseServersCount(serversData.baseServersCount)
+        setPremiumServersCount(0)
+      } else {
+        setServersSelected([])
+        setBaseServersCount(0)
+        setPremiumServersCount(0)
+      }
+    },
+    [serversData],
+  )
 
   useEffect(() => {
     const getServers = async () => {
