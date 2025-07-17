@@ -68,7 +68,7 @@ const createApiInstance = (): AxiosInstance => {
   const instance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     withCredentials: true,
-    timeout: 30000,
+    timeout: 180 * 1000,
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
