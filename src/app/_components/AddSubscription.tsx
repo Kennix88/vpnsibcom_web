@@ -145,7 +145,7 @@ export default function AddSubscription() {
     getServers()
     getPlans()
     return () => {}
-  }, [setPlansData, setServersData, setUser, selectPlan])
+  }, [])
 
   useEffect(() => {
     if (!subscriptions || !user) return
@@ -202,9 +202,9 @@ export default function AddSubscription() {
         discount: subscriptions.indefinitelyRatio,
       },
     ]
-
+    
     setPeriodButtons(buttons)
-    setPeriodButton(buttons[3])
+    setPeriodButton(buttons[3]) // По умолчанию выбираем 1 месяц
   }, [subscriptions, user])
 
   if (
@@ -361,7 +361,8 @@ export default function AddSubscription() {
     isAllBaseServers: isAllBaseServers,
     isAllPremiumServers,
     isUnlimitTraffic,
-    userDiscount: user.roleDiscount,
+    userDiscount:
+      user.roleDiscount < 0 ? 0 : user.roleDiscount > 1 ? 1 : user.roleDiscount,
     plan: planSelected,
     settings: subscriptions,
   })
