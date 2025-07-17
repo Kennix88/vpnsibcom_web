@@ -139,6 +139,19 @@ const createApiInstance = (): AxiosInstance => {
       } catch (refreshError) {
         store.reset()
         processQueue(refreshError)
+
+        // 💡 Получаем текущий путь
+        const pathname =
+          typeof window !== 'undefined' ? window.location.pathname : ''
+
+        // 🧭 Определяем, куда редиректить
+        const redirectTo = pathname.startsWith('/tma') ? '/tma' : '/app/login'
+
+        // 🔄 Перенаправляем и перезапускаем страницу
+        if (typeof window !== 'undefined') {
+          window.location.replace(redirectTo)
+        }
+
         return Promise.reject(refreshError)
       } finally {
         isRefreshing = false
