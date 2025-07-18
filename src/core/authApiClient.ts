@@ -41,25 +41,9 @@ type FailedRequest = {
 let isRefreshing = false
 let failedQueue: FailedRequest[] = []
 
-function processQueue(error: any, token?: string) {
-  failedQueue.forEach(({ resolve, reject }) => {
-    if (error) {
-      reject(error)
-    } else {
-      const originalRequest = error?.config as AxiosRequestConfig & {
-        _retry?: boolean
-      }
-
-      const newToken = useUserStore.getState().accessToken
-      if (newToken && originalRequest?.headers) {
-        originalRequest.headers = {
-          ...originalRequest.headers,
-          Authorization: `Bearer ${newToken}`,
-        } as AxiosRequestHeaders
-      }
-
-      axios(originalRequest).then(resolve).catch(reject)
-    }
+function processQueue(error: any) {
+  failedQueue.forEach(({ reject }) => {
+    reject(error)
   })
   failedQueue = []
 }
@@ -108,10 +92,7 @@ const createApiInstance = (): AxiosInstance => {
 
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
-          failedQueue.push({
-            resolve,
-            reject,
-          })
+          failedQueue.push({ resolve, reject })
         })
       }
 
@@ -127,45 +108,31 @@ const createApiInstance = (): AxiosInstance => {
         const newToken = data.data.accessToken
         store.setAccessToken(newToken)
 
-        processQueue(null, newToken)
+        processQueue(null) // ⛔ Не повторяем запросы
 
-        if (originalRequest.headers) {
-          originalRequest.headers = {
-            ...originalRequest.headers,
-            Authorization: `Bearer ${newToken}`,
-          } as AxiosRequestHeaders
-        }
-
-        return axios(originalRequest)
+        return Promise.reject(error) // ❌ Не повторяем оригинальный запрос
       } catch (refreshError) {
         store.reset()
         processQueue(refreshError)
 
-        // 🧠 Попробуем silent re-auth через Telegram initData
+        // Silent re-auth через Telegram initData
         const initData = retrieveRawInitData()
 
         if (initData && typeof window !== 'undefined') {
           try {
             const { accessToken, user } =
               await authApiClient.telegramLogin(initData)
+
             store.setAccessToken(accessToken)
             store.setUser(user)
 
-            // Повтор запроса с новым accessToken
-            if (originalRequest.headers) {
-              originalRequest.headers = {
-                ...originalRequest.headers,
-                Authorization: `Bearer ${accessToken}`,
-              } as AxiosRequestHeaders
-            }
-
-            return axios(originalRequest)
-          } catch (e) {
-            // Ошибка silent login — редиректим
+            return Promise.reject(error) // ❌ Без повтора запроса
+          } catch {
+            // Не удалось - идем в redirect
           }
         }
 
-        // 🚨 fallback редирект, если re-login не сработал
+        // Redirect fallback
         const pathname =
           typeof window !== 'undefined' ? window.location.pathname : ''
         const redirectTo = pathname.startsWith('/tma') ? '/tma' : '/app/login'
