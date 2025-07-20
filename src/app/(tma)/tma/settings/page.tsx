@@ -120,7 +120,12 @@ export default function Page() {
               {user && user.roleName.toUpperCase()}
             </div>
           </div>
-          {user && user.roleDiscount && 100 - 100 * user.roleDiscount > 0 && (
+          {/*
+            Conditional rendering for discount section.
+            Ensures user and roleDiscount are defined, and the calculated discount is greater than 0.
+            user.roleDiscount is checked explicitly for null/undefined to allow 0 as a valid discount value.
+          */}
+          {user && (user.roleDiscount !== null && user.roleDiscount !== undefined) && (100 - 100 * user.roleDiscount > 0) && (
             <div
               className={
                 'flex flex-row flex-wrap items-center justify-between gap-2 py-2'
