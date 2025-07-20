@@ -16,22 +16,45 @@ export function Auth({ children }: PropsWithChildren) {
   const { setCurrencies, setRates } = useCurrencyStore()
 
   useEffect(() => {
-    if (!initDataRaw) return
+    const initialize = async () => {
+      await reset()
+    }
+    initialize()
+  }, [reset])
 
-    authApiClient.telegramLogin(initDataRaw).catch((err) => {
-      console.error('Authorization failed', err)
-      reset()
-    })
+  useEffect(() => {
+    const initAuth = async () => {
+      if (!initDataRaw) {
+        console.warn('No Telegram initData found')
+        return
+      }
+
+      try {
+        await authApiClient.telegramLogin(initDataRaw)
+      } catch (err) {
+        console.error('Authorization failed', err)
+        await reset()
+      }
+    }
+
+    initAuth()
   }, [initDataRaw, reset])
 
   useEffect(() => {
     const getRates = async () => {
-      const data = await authApiClient.getCurrency()
-      setCurrencies(data.currencies)
-      setRates(data.rates)
+      try {
+        if (user && accessToken) {
+          const data = await authApiClient.getCurrency()
+          setCurrencies(data.currencies)
+          setRates(data.rates)
+        }
+      } catch (error) {
+        console.error('Failed to fetch currency rates', error)
+      }
     }
+
     getRates()
-  }, [setCurrencies, setRates])
+  }, [user, accessToken, setCurrencies, setRates])
 
   useEffect(() => {
     if (user) {
