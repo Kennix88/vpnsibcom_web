@@ -142,9 +142,9 @@ class ApiClient {
       return this.instance(originalRequest)
     } catch (refreshError) {
       return this.handleRefreshError(refreshError as Error, {
-        redirectTo: originalRequest.url?.startsWith('/tma')
-          ? '/tma'
-          : '/app/login',
+        redirectTo: originalRequest.url?.includes('/app')
+          ? '/app/login'
+          : '/tma',
       })
     } finally {
       this.isRefreshing = false
