@@ -4,7 +4,6 @@ import { authApiClient } from '@app/core/authApiClient'
 import { publicApiClient } from '@app/core/publicApiClient'
 import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
 import { PlansServersSelectTypeEnum } from '@app/enums/plans-servers-select-type.enum'
-import { PlansEnum } from '@app/enums/plans.enum'
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
 import { usePlansStore } from '@app/store/plans.store'
 import { useServersStore } from '@app/store/servers.store'
@@ -15,8 +14,6 @@ import { SubscriptionResponseInterface } from '@app/types/subscription-data.inte
 import { UserDataInterface } from '@app/types/user-data.interface'
 import { calculateSubscriptionCost } from '@app/utils/calculate-subscription-cost.util'
 import { invoice } from '@telegram-apps/sdk-react'
-import clsx from 'clsx'
-import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -31,15 +28,12 @@ import {
 } from 'react-icons/md'
 import { TbCloudNetwork } from 'react-icons/tb'
 import { toast } from 'react-toastify'
-import TgStar from '../TgStar'
-import { DEVICES_COUNTS } from './constants'
-import {
-  calculateDevicePrice,
-  getDevicesCountButtonColor,
-  getServersText,
-} from './functions'
+import { DevicesSelection } from './DevicesSelection'
+import { getServersText } from './functions'
 import { PaymentActions } from './PaymentActions'
 import { PaymentPeriod } from './PaymentPeriod'
+import { PlanSelection } from './PlanSelection'
+import { PrivilegesList } from './PrivilegesList'
 import { ServersSelection } from './ServersSelection'
 import { SubscriptionOptions } from './SubscriptionOptions'
 import { SubscriptionSummary } from './SubscriptionSummary'
@@ -49,171 +43,6 @@ export interface PeriodButtonInterface {
   key: SubscriptionPeriodEnum
   label: string
   discount: number
-}
-
-// Компонент: Выбор тарифа
-const PlanSelection = ({
-  plans,
-  planSelected,
-  onSelect,
-  user,
-  subscriptions,
-  price,
-}: {
-  plans: PlansInterface[]
-  planSelected: PlansInterface | null
-  onSelect: (plan: PlansInterface) => void
-  user: UserDataInterface
-  subscriptions: SubscriptionResponseInterface
-  price: number
-}) => (
-  <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
-    <div className="flex gap-2 items-end justify-between w-full px-4 ">
-      <div className="opacity-50 flex flex-row gap-2 items-center">Тариф</div>
-      <div className="flex gap-2 items-center ">
-        <TgStar type="gold" w={14} />
-        {(user.isTgProgramPartner
-          ? price * subscriptions.telegramPartnerProgramRatio
-          : price
-        ).toFixed(2)}
-      </div>
-    </div>
-
-    <motion.div
-      layout
-      className="text-sm bg-[var(--surface-container-lowest)] rounded-xl flex flex-row flex-wrap gap-2 items-center p-4 w-full shadow-md">
-      {plans
-        .sort((a, b) => {
-          const indexA = Object.values(PlansEnum).indexOf(a.key)
-          const indexB = Object.values(PlansEnum).indexOf(b.key)
-
-          const safeIndexA = indexA === -1 ? Infinity : indexA
-          const safeIndexB = indexB === -1 ? Infinity : indexB
-
-          return safeIndexA - safeIndexB
-        })
-        .map((btn) => {
-          const isActive = btn.key === planSelected?.key
-          const bgOpacity = isActive ? 0.3 : 0.15
-          return (
-            <motion.button
-              key={btn.key}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => onSelect(btn)}
-              className={clsx(
-                'flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-sm font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]',
-              )}
-              style={{
-                backgroundColor: `rgba(216, 197, 255, ${bgOpacity})`,
-                border: isActive
-                  ? `1px solid rgba(216, 197, 255, 0.7)`
-                  : '1px solid transparent',
-              }}>
-              {btn.name}
-            </motion.button>
-          )
-        })}
-    </motion.div>
-  </div>
-)
-
-// Компонент: Список привилегий
-const PrivilegesList = ({
-  privileges,
-}: {
-  privileges: Array<{ key: string; icon: React.ReactNode; text: string }>
-}) => (
-  <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
-    <motion.div
-      layout
-      className="text-sm bg-[var(--surface-container-lowest)] divide-y divide-[var(--primary)] rounded-xl flex flex-col p-4 py-2 w-full shadow-md">
-      {privileges.map((el) => (
-        <motion.div
-          key={el.key}
-          className="flex flex-row gap-3 items-center px-4 py-2 text-sm font-mono">
-          {el.icon} {el.text}
-        </motion.div>
-      ))}
-    </motion.div>
-  </div>
-)
-
-// Компонент: Выбор устройств
-const DevicesSelection = ({
-  devicesCount,
-  setDevicesCount,
-  user,
-  subscriptions,
-}: {
-  devicesCount: number
-  setDevicesCount: (val: number) => void
-  user: UserDataInterface
-  subscriptions: SubscriptionResponseInterface
-}) => {
-  const devicePrice = calculateDevicePrice(user, subscriptions, devicesCount)
-
-  return (
-    <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
-      <div className="flex gap-2 items-end justify-between w-full px-4 ">
-        <div className="opacity-50 flex flex-row gap-2 items-center">
-          Устройства
-        </div>
-        <div className="flex gap-2 items-center ">
-          <TgStar type="gold" w={14} />
-          {(user.isTgProgramPartner
-            ? devicePrice * subscriptions.telegramPartnerProgramRatio
-            : devicePrice
-          ).toFixed(2)}
-        </div>
-      </div>
-
-      <motion.div
-        layout
-        className="text-sm bg-[var(--surface-container-lowest)] rounded-xl flex flex-row flex-wrap gap-2 items-center p-4 w-full shadow-md">
-        <button
-          onClick={() => setDevicesCount(Math.max(1, devicesCount - 1))}
-          className="flex grow items-center justify-center text-white px-3 py-1.5 rounded-md cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97] "
-          style={{ backgroundColor: 'rgba(216, 197, 255, 0.15)' }}>
-          -
-        </button>
-        <input
-          type="number"
-          value={devicesCount}
-          onChange={(e) =>
-            setDevicesCount(Math.max(1, parseInt(e.target.value) || 1))
-          }
-          className="border max-w-[100px] border-[var(--on-surface)]/50 rounded-md px-2 py-1 bg-transparent focus:border-[var(--primary)] focus:outline-none"
-        />
-        <button
-          onClick={() => setDevicesCount(devicesCount + 1)}
-          className="flex grow items-center justify-center text-white px-3 py-1.5 rounded-md cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97] "
-          style={{ backgroundColor: 'rgba(216, 197, 255, 0.15)' }}>
-          +
-        </button>
-
-        {DEVICES_COUNTS.map((val) => {
-          const isActive = devicesCount === val
-          const rgb = getDevicesCountButtonColor(val)
-          const bgOpacity = isActive ? 0.3 : 0.15
-          return (
-            <motion.button
-              key={val}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setDevicesCount(val)}
-              className="flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-sm font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]"
-              style={{
-                backgroundColor: `rgba(${rgb}, ${bgOpacity})`,
-                border: isActive
-                  ? `1px solid rgba(${rgb}, 0.7)`
-                  : '1px solid transparent',
-              }}>
-              {val}
-            </motion.button>
-          )
-        })}
-      </motion.div>
-    </div>
-  )
 }
 
 // Основной компонент
