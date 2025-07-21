@@ -1,6 +1,6 @@
 'use client'
 import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
-import AddSubscription from '@app/app/_components/AddSubscription'
+import AddSubscription from '@app/app/_components/add-subscription/AddSubscription'
 
 export default function Page() {
   return (
