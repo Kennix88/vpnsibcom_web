@@ -50,6 +50,7 @@ const ServersSelection = ({
   subscriptions: SubscriptionResponseInterface
 }) => {
   const serversPrice = useMemo(() => {
+    if (user.roleDiscount == 0) return 0
     const basePrice =
       calculateServersPrice(
         isAllBaseServers,

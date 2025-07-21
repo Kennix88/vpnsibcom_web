@@ -199,6 +199,13 @@ export default function AddSubscription() {
       return { price: 0, finalPrice: 0, nextFinalPrice: 0 }
     }
 
+    if (user.roleDiscount == 0)
+      return {
+        price: 0,
+        finalPrice: 0,
+        nextFinalPrice: 0,
+      }
+
     const basePrice = calculateSubscriptionCost({
       period: periodButton.key,
       periodMultiplier,

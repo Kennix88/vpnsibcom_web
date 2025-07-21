@@ -17,6 +17,7 @@ export const calculateDevicePrice = (
   subscriptions: SubscriptionResponseInterface,
   devicesCount: number,
 ) => {
+  if (user.roleDiscount == 0) return 0
   const basePrice = subscriptions.devicesPriceStars * devicesCount
   return user.isPremium
     ? basePrice * subscriptions.telegramPremiumRatio
@@ -60,6 +61,7 @@ export const calculateTrafficPrice = (
   isUnlimit: boolean,
   limitGb: number,
 ) => {
+  if (user.roleDiscount == 0) return 0
   const basePrice = isUnlimit
     ? subscriptions.unlimitTrafficPriceStars
     : subscriptions.trafficGbPriceStars * limitGb
