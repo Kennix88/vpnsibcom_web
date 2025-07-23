@@ -1,5 +1,4 @@
 import { UserDataInterface } from '@app/types/user-data.interface'
-import axios from 'axios'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
@@ -11,17 +10,17 @@ interface UserState {
   reset: () => Promise<void>
 }
 
-async function clearAuthCookies() {
-  try {
-    await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/auth/logout`,
-      {},
-      { withCredentials: true },
-    )
-  } catch (error) {
-    console.error('Failed to clear auth cookies', error)
-  }
-}
+// async function clearAuthCookies() {
+//   try {
+//     await axios.post(
+//       `${process.env.NEXT_PUBLIC_API_URL}/auth/logout`,
+//       {},
+//       { withCredentials: true },
+//     )
+//   } catch (error) {
+//     console.error('Failed to clear auth cookies', error)
+//   }
+// }
 
 export const useUserStore = create<UserState>()(
   persist(
@@ -31,7 +30,7 @@ export const useUserStore = create<UserState>()(
       setUser: (user) => set({ user }),
       setAccessToken: (accessToken) => set({ accessToken }),
       reset: async () => {
-        await clearAuthCookies()
+        // await clearAuthCookies()
         set({ user: null, accessToken: null })
       },
     }),
