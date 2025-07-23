@@ -1,6 +1,7 @@
 'use client'
 
 import { config } from '@app/config/client'
+import { UserDataInterface } from '@app/types/user-data.interface'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { FaCircleInfo } from 'react-icons/fa6'
@@ -8,6 +9,7 @@ import TgStar from '../TgStar'
 
 // Компонент: Кнопки оплаты
 export const PaymentActions = ({
+  user,
   isAllBaseServers,
   isAllPremiumServers,
   serversSelected,
@@ -18,14 +20,15 @@ export const PaymentActions = ({
   onInvoicePayment,
   tBill,
 }: {
+  user: UserDataInterface
   isAllBaseServers: boolean
   isAllPremiumServers: boolean
   serversSelected: string[]
   balance: number
   nextFinalPrice: number
   isLoading: boolean
-  onBalancePayment: () => void
-  onInvoicePayment: () => void
+  onBalancePayment: () => Promise<void>
+  onInvoicePayment: () => Promise<void>
   tBill: (key: string) => string
 }) => {
   const hasSelectedServers =
@@ -54,7 +57,13 @@ export const PaymentActions = ({
               style={{ width: '15px', height: '15px', borderWidth: '2px' }}
             />
           )}
-          Оплатить с баланса <TgStar type="gold" w={15} />{' '}
+          {user.roleDiscount > 0 ? (
+            <>
+              Оплатить с баланса <TgStar type="gold" w={15} />{' '}
+            </>
+          ) : (
+            <>Добавить БЕСПЛАТНО</>
+          )}
           {nextFinalPrice.toFixed(2)}
         </button>
       ) : (
@@ -72,7 +81,7 @@ export const PaymentActions = ({
         </div>
       )}
 
-      {hasSelectedServers && (
+      {hasSelectedServers && user.roleDiscount > 0 && (
         <>
           <div className="w-full flex gap-2 items-center px-4">
             <div className="h-[1px] grow bg-[var(--primary)]"></div>
