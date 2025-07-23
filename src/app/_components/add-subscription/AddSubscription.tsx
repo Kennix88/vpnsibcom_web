@@ -10,8 +10,6 @@ import { useServersStore } from '@app/store/servers.store'
 import { useSubscriptionsStore } from '@app/store/subscriptions.store'
 import { useUserStore } from '@app/store/user.store'
 import { PlansInterface } from '@app/types/plans.interface'
-import { SubscriptionResponseInterface } from '@app/types/subscription-data.interface'
-import { UserDataInterface } from '@app/types/user-data.interface'
 import { calculateSubscriptionCost } from '@app/utils/calculate-subscription-cost.util'
 import { invoice } from '@telegram-apps/sdk-react'
 import { useTranslations } from 'next-intl'
@@ -45,20 +43,17 @@ export interface PeriodButtonInterface {
   discount: number
 }
 
-// Основной компонент
 export default function AddSubscription() {
   const tBill = useTranslations('billing.payment')
   const location = usePathname()
   const url = location.includes('/tma') ? '/tma' : '/app'
   const router = useRouter()
 
-  // Zustand stores
   const { subscriptions, setSubscriptions } = useSubscriptionsStore()
   const { user, setUser } = useUserStore()
   const { serversData, setServersData } = useServersStore()
   const { plansData, setPlansData } = usePlansStore()
 
-  // Состояния компонента
   const [periodButton, setPeriodButton] =
     useState<PeriodButtonInterface | null>(null)
   const [periodButtons, setPeriodButtons] = useState<PeriodButtonInterface[]>(
@@ -78,7 +73,6 @@ export default function AddSubscription() {
   const [planSelected, setPlanSelected] = useState<PlansInterface | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
-  // Мемоизированные значения
   const balance = useMemo(() => {
     return user?.balance.isUseWithdrawalBalance
       ? user.balance.paymentBalance + user.balance.withdrawalBalance
@@ -113,7 +107,6 @@ export default function AddSubscription() {
     [serversData],
   )
 
-  // Привилегии тарифа
   const privileges = useMemo(
     () => [
       {
@@ -160,21 +153,13 @@ export default function AddSubscription() {
         icon: <BiSolidMask />,
         text: 'Маскировка вашего трафика',
       },
-      {
-        key: 'no-ads',
-        icon: <MdAdsClick />,
-        text: 'Отсутвие рекламы',
-      },
+      { key: 'no-ads', icon: <MdAdsClick />, text: 'Отсутвие рекламы' },
       {
         key: 'devices-support',
         icon: <MdOutlineDevicesOther />,
         text: 'Широкая поддержка устройств',
       },
-      {
-        key: 'xray',
-        icon: <IoShieldHalf />,
-        text: 'Надежное ядро XRAY',
-      },
+      { key: 'xray', icon: <IoShieldHalf />, text: 'Надежное ядро XRAY' },
       {
         key: 'opensource',
         icon: <IoLogoGithub />,
@@ -193,18 +178,10 @@ export default function AddSubscription() {
     ],
   )
 
-  // Расчет цены
   const { price, nextFinalPrice } = useMemo(() => {
     if (!user || !subscriptions || !planSelected || !periodButton) {
-      return { price: 0, finalPrice: 0, nextFinalPrice: 0 }
+      return { price: 0, nextFinalPrice: 0 }
     }
-
-    if (user.roleDiscount == 0)
-      return {
-        price: 0,
-        finalPrice: 0,
-        nextFinalPrice: 0,
-      }
 
     const basePrice = calculateSubscriptionCost({
       period: periodButton.key,
@@ -230,11 +207,7 @@ export default function AddSubscription() {
       ? withFixedPrice * subscriptions.telegramPartnerProgramRatio
       : withFixedPrice
 
-    return {
-      price: basePrice,
-      finalPrice: withFixedPrice,
-      nextFinalPrice: withPartnerDiscount,
-    }
+    return { price: basePrice, nextFinalPrice: withPartnerDiscount }
   }, [
     user,
     subscriptions,
@@ -251,14 +224,18 @@ export default function AddSubscription() {
     isFixedPrice,
   ])
 
-  // Загрузка данных при монтировании
+  // Загрузка серверов и тарифов
   useEffect(() => {
+    let ignore = false
+
     const fetchData = async () => {
       try {
         const [servers, plans] = await Promise.all([
           authApiClient.getServers(),
           publicApiClient.getPlans(),
         ])
+
+        if (ignore) return
 
         setServersData({
           baseServersCount: servers.baseServersCount,
@@ -268,22 +245,36 @@ export default function AddSubscription() {
         setBaseServersCount(servers.baseServersCount)
         setPremiumServersCount(servers.premiumServersCount)
         setUser(servers.user)
-
         setPlansData(plans)
-        selectPlan(plans.plans[0])
       } catch {
-        toast.error('Error updating data')
+        if (!ignore) toast.error('Error updating data')
       }
     }
 
     fetchData()
-  }, [selectPlan, setPlansData, setServersData, setUser])
+    return () => {
+      ignore = true
+    }
+  }, [
+    setServersData,
+    setBaseServersCount,
+    setPremiumServersCount,
+    setUser,
+    setPlansData,
+  ])
 
-  // Установка периодов оплаты
+  // Выбор тарифа после загрузки
+  useEffect(() => {
+    if (plansData?.plans?.length) {
+      selectPlan(plansData.plans[0])
+    }
+  }, [plansData, selectPlan])
+
+  // Установка кнопок периодов
   useEffect(() => {
     if (!subscriptions || !user) return
 
-    const buttons = [
+    const buttons: PeriodButtonInterface[] = [
       {
         key: SubscriptionPeriodEnum.HOUR,
         label: '1 час',
@@ -333,14 +324,13 @@ export default function AddSubscription() {
     ]
 
     setPeriodButtons(buttons)
-    setPeriodButton(buttons[3]) // По умолчанию выбираем 1 месяц
+    setPeriodButton(buttons[3])
   }, [subscriptions, user])
 
-  // Обработчики действий
   const handlePurchase = async (isInvoice = false) => {
-    if (!planSelected || !periodButton) return
-
+    if (isLoading || !planSelected || !periodButton) return
     setIsLoading(true)
+
     try {
       const payload = {
         period: periodButton.key,
@@ -356,12 +346,7 @@ export default function AddSubscription() {
         planKey: planSelected.key,
       }
 
-      const update: {
-        subscriptions: SubscriptionResponseInterface
-        user: UserDataInterface
-        linkPay?: string
-        isTmaIvoice?: boolean
-      } = isInvoice
+      const update = isInvoice
         ? await authApiClient.purchaseInvoiceSubscription({
             ...payload,
             method: PaymentMethodEnum.STARS,
@@ -371,8 +356,8 @@ export default function AddSubscription() {
       setUser(update.user)
       setSubscriptions(update.subscriptions)
 
-      if (isInvoice && update.linkPay) {
-        await invoice.open(update.linkPay, 'url')
+      if (isInvoice && 'linkPay' in update && update.linkPay) {
+        await invoice.open(update.linkPay.toString(), 'url')
       }
 
       router.push(url)
@@ -383,10 +368,6 @@ export default function AddSubscription() {
     }
   }
 
-  const handleClickPurchaseSubscription = () => handlePurchase(false)
-  const handleClickPurchaseInvoiceSubscription = () => handlePurchase(true)
-
-  // Проверка условий рендеринга
   if (
     !subscriptions ||
     !user ||
@@ -491,14 +472,15 @@ export default function AddSubscription() {
       />
 
       <PaymentActions
+        user={user}
         isAllBaseServers={isAllBaseServers}
         isAllPremiumServers={isAllPremiumServers}
         serversSelected={serversSelected}
         balance={balance}
         nextFinalPrice={nextFinalPrice}
         isLoading={isLoading}
-        onBalancePayment={handleClickPurchaseSubscription}
-        onInvoicePayment={handleClickPurchaseInvoiceSubscription}
+        onBalancePayment={() => handlePurchase()}
+        onInvoicePayment={() => handlePurchase(true)}
         tBill={tBill}
       />
     </div>
