@@ -353,8 +353,8 @@ export default function AddSubscription() {
           })
         : await authApiClient.purchaseSubscription(payload)
 
-      setUser(update.user)
-      setSubscriptions(update.subscriptions)
+      await setUser(update.user)
+      await setSubscriptions(update.subscriptions)
 
       if (isInvoice && 'linkPay' in update && update.linkPay) {
         await invoice.open(update.linkPay.toString(), 'url')
