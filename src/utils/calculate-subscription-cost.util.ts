@@ -189,6 +189,7 @@ function calculatePriceByPeriod(
   userDiscount: number,
   settings: SubscriptionCostSettings,
 ): number {
+  if (userDiscount == 0) return 0
   let price: number
 
   switch (period) {
