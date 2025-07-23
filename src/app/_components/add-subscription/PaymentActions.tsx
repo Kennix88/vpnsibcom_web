@@ -60,11 +60,11 @@ export const PaymentActions = ({
           {user.roleDiscount > 0 ? (
             <>
               Оплатить с баланса <TgStar type="gold" w={15} />{' '}
+              {nextFinalPrice.toFixed(2)}
             </>
           ) : (
             <>Добавить БЕСПЛАТНО</>
           )}
-          {nextFinalPrice.toFixed(2)}
         </button>
       ) : (
         <div className="bg-[var(--surface-container)] text-[var(--on-surface)] rounded-md flex flex-col gap-2 py-2 px-4 w-full max-w-[400px]">

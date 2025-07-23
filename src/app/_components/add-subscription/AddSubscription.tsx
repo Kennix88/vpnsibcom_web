@@ -393,40 +393,43 @@ export default function AddSubscription() {
       <PrivilegesList privileges={privileges} />
 
       {planSelected.serversSelectType === PlansServersSelectTypeEnum.CUSTOM && (
-        <>
-          <DevicesSelection
-            devicesCount={devicesCount}
-            setDevicesCount={setDevicesCount}
-            user={user}
-            subscriptions={subscriptions}
-          />
+        <DevicesSelection
+          devicesCount={devicesCount}
+          setDevicesCount={setDevicesCount}
+          user={user}
+          subscriptions={subscriptions}
+        />
+      )}
 
-          <ServersSelection
-            serversData={serversData}
-            planSelected={planSelected}
-            serversSelected={serversSelected}
-            setServersSelected={setServersSelected}
-            isAllBaseServers={isAllBaseServers}
-            setIsAllBaseServers={setIsAllBaseServers}
-            isAllPremiumServers={isAllPremiumServers}
-            setIsAllPremiumServers={setIsAllPremiumServers}
-            setBaseServersCount={setBaseServersCount}
-            setPremiumServersCount={setPremiumServersCount}
-            baseServersCount={baseServersCount}
-            premiumServersCount={premiumServersCount}
-            user={user}
-            subscriptions={subscriptions}
-          />
+      {planSelected.serversSelectType !==
+        PlansServersSelectTypeEnum.NOT_SELECTED && (
+        <ServersSelection
+          serversData={serversData}
+          planSelected={planSelected}
+          serversSelected={serversSelected}
+          setServersSelected={setServersSelected}
+          isAllBaseServers={isAllBaseServers}
+          setIsAllBaseServers={setIsAllBaseServers}
+          isAllPremiumServers={isAllPremiumServers}
+          setIsAllPremiumServers={setIsAllPremiumServers}
+          setBaseServersCount={setBaseServersCount}
+          setPremiumServersCount={setPremiumServersCount}
+          baseServersCount={baseServersCount}
+          premiumServersCount={premiumServersCount}
+          user={user}
+          subscriptions={subscriptions}
+        />
+      )}
 
-          <TrafficSelection
-            trafficLimitGb={trafficLimitGb}
-            setTrafficLimitGb={setTrafficLimitGb}
-            isUnlimitTraffic={isUnlimitTraffic}
-            setIsUnlimitTraffic={setIsUnlimitTraffic}
-            user={user}
-            subscriptions={subscriptions}
-          />
-        </>
+      {planSelected.serversSelectType === PlansServersSelectTypeEnum.CUSTOM && (
+        <TrafficSelection
+          trafficLimitGb={trafficLimitGb}
+          setTrafficLimitGb={setTrafficLimitGb}
+          isUnlimitTraffic={isUnlimitTraffic}
+          setIsUnlimitTraffic={setIsUnlimitTraffic}
+          user={user}
+          subscriptions={subscriptions}
+        />
       )}
 
       <PaymentPeriod
