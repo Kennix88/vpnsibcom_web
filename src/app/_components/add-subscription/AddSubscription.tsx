@@ -10,6 +10,8 @@ import { useServersStore } from '@app/store/servers.store'
 import { useSubscriptionsStore } from '@app/store/subscriptions.store'
 import { useUserStore } from '@app/store/user.store'
 import { PlansInterface } from '@app/types/plans.interface'
+import { SubscriptionResponseInterface } from '@app/types/subscription-data.interface'
+import { UserDataInterface } from '@app/types/user-data.interface'
 import { calculateSubscriptionCost } from '@app/utils/calculate-subscription-cost.util'
 import { invoice } from '@telegram-apps/sdk-react'
 import { useTranslations } from 'next-intl'
@@ -49,7 +51,7 @@ export default function AddSubscription() {
   const url = location.includes('/tma') ? '/tma' : '/app'
   const router = useRouter()
 
-  const { subscriptions, setSubscriptions } = useSubscriptionsStore()
+  const { subscriptions } = useSubscriptionsStore()
   const { user, setUser } = useUserStore()
   const { serversData, setServersData } = useServersStore()
   const { plansData, setPlansData } = usePlansStore()
@@ -346,25 +348,29 @@ export default function AddSubscription() {
         planKey: planSelected.key,
       }
 
-      const update = isInvoice
+      const update: {
+        subscriptions: SubscriptionResponseInterface
+        user: UserDataInterface
+        linkPay?: string
+        isTmaIvoice?: boolean
+      } = isInvoice
         ? await authApiClient.purchaseInvoiceSubscription({
             ...payload,
             method: PaymentMethodEnum.STARS,
           })
         : await authApiClient.purchaseSubscription(payload)
 
-      await setUser(update.user)
-      await setSubscriptions(update.subscriptions)
+      // await setUser(update.user)
+      // await setSubscriptions(update.subscriptions)
 
-      if (isInvoice && 'linkPay' in update && update.linkPay) {
-        await invoice.open(update.linkPay.toString(), 'url')
+      if (isInvoice && update.linkPay) {
+        await invoice.open(update.linkPay, 'url')
       }
-
-      router.push(url)
     } catch {
       toast.error('Error updating data')
     } finally {
       setIsLoading(false)
+      router.push(url)
     }
   }
 
