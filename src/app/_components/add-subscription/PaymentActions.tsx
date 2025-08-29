@@ -32,7 +32,7 @@ export const PaymentActions = ({
   tBill: (key: string) => string
 }) => {
   const hasSelectedServers =
-    (isAllBaseServers && isAllPremiumServers) || serversSelected.length > 0
+    isAllBaseServers || isAllPremiumServers || serversSelected.length > 0
 
   return (
     <div className="flex flex-col gap-2 items-center w-full">
