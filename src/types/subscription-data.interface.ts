@@ -1,6 +1,7 @@
 import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
 import { PlansEnum } from '@app/enums/plans.enum'
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
+import { TrafficResetEnum } from '@app/enums/traffic-reset.enum'
 import { ServerDataInterface } from './servers-data.interface'
 
 export interface GetSubscriptionConfigResponseInterface {
@@ -48,6 +49,7 @@ export interface SubscriptionDataInterface {
   isAllPremiumServers: boolean
   trafficLimitGb?: number
   isUnlimitTraffic: boolean
+  trafficReset: TrafficResetEnum
 
   lastUserAgent?: string
   dataLimit?: number
