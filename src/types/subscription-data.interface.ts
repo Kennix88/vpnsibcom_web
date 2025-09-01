@@ -34,6 +34,7 @@ export interface SubscriptionResponseInterface {
 
 export interface SubscriptionDataInterface {
   id: string
+  name: string
   period: SubscriptionPeriodEnum
   periodMultiplier: number
   planKey: PlansEnum
