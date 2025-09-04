@@ -14,7 +14,7 @@
 [![REPO](https://img.shields.io/github/stars/Kennix88/vpnsibcom_web?style=for-the-badge&color=0891b2&labelColor=1c1917&logo=github&label=vpnsibcom_web)](https://github.com/Kennix88/vpnsibcom_web)
 [![REPO](https://img.shields.io/github/stars/Kennix88/vpnsibcom_api?style=for-the-badge&color=0891b2&labelColor=1c1917&logo=github&label=vpnsibcom_api)](https://github.com/Kennix88/vpnsibcom_api)
 
-[![Telegram Open Dev Community](https://img.shields.io/endpoint?label=open%20dev%20community&style=for-the-badge&color=0891b2&labelColor=1c1917&url=https%3A%2F%2Ftg.sumanjay.workers.dev%2Fodevcmty)](https://t.me/odevcmty)
+[![Telegram Solyanka Community](https://img.shields.io/endpoint?label=Solyanka%20community&style=for-the-badge&color=0891b2&labelColor=1c1917&url=https%3A%2F%2Ftg.sumanjay.workers.dev%2Fsolycmty)](https://t.me/solycmty)
 ![Title](https://img.shields.io/badge/Repository%3A-blue?style=for-the-badge&color=3C5280)
 [![release](https://img.shields.io/github/package-json/v/Kennix88/vpnsibcom_web?style=for-the-badge&color=0891b2&labelColor=1c1917)](https://github.com/Kennix88/vpnsibcom_web/releases)
 [![CC BY-NC-SA 4.0][cc-by-nc-sa-shield]][cc-by-nc-sa]
@@ -63,6 +63,7 @@
 ### Настройка переменных окружения
 
 1. Скопируйте файл `.env.example` в `.env.production`:
+
    ```bash
    cp .env.example .env.production
    ```
@@ -137,17 +138,17 @@ This repository is available under the [Creative Commons Attribution-NonCommerci
 
 If you want to support me, I will be very happy about it. 🥺👉👈
 
-- TON or Jettons(NOT, DOGS, X, HMSTR, STON, GEM, JETTON etc) or TON NFT or TG-Names: `UQAjDnbTYmkesnuG0DZv-PeMo3lY-B-K6mfArUBEEdAb4xaJ`
-- USDT (TON): `UQAjDnbTYmkesnuG0DZv-PeMo3lY-B-K6mfArUBEEdAb4xaJ`
-- USDT (TRC20): `TPYpSQoK7CBvdNBsQRjsNdxFB54Uon8687`
+- TON or Jettons or TON NFT or TG-Names: `UQAjDnbTYmkesnuG0DZv-PeMo3lY-B-K6mfArUBEEdAb4xaJ`
+- USDT (TON): `UQAx6-hmc4Rivjtg9ynmMxMY8-DUHvQ4oEYAmTexrDSvJL9C`
+- USDT (TRC20): `TLE1PXm5WR3MzDH5TXueVqRciMENHv289w`
+- USDT (SOL): `EN8uqaN6EVL8SmqvjU8VjyV7RSequNHY2NgH3poekLpd`
+- USDT (ERC20): `0xBEE3bC268B49308B7dddCA791233d763a0D85B8F`
 - BTC: `1Ai9bL7862KQrcHymkakgaEAsDL5M3uNyX`
-- Binance ID: `91467512`
-- ByBit ID: `249886061`
-- KuCoin ID: `208825167`
-- GateIO ID: `18943532`
-- BingX ID: `27667379`
-- OKX ID: `178528329853476864`
+- ETH: `0xBEE3bC268B49308B7dddCA791233d763a0D85B8F`
+- XAUT (TON): `UQAx6-hmc4Rivjtg9ynmMxMY8-DUHvQ4oEYAmTexrDSvJL9C`
+- XAUT (ERC20): `0xBEE3bC268B49308B7dddCA791233d763a0D85B8F`
 - Telegram Wallet: [@kennix88](https://t.me/Kennix88)
+- Donation Alerts: [—> GO <—](https://www.donationalerts.com/r/kennixdev)
 
 [cc-by-nc-sa]: http://creativecommons.org/licenses/by-nc-sa/4.0/
 [cc-by-nc-sa-image]: https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png
