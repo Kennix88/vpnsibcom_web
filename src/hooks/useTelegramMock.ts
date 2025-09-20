@@ -7,6 +7,9 @@ import {
   themeParamsState,
 } from '@telegram-apps/sdk-react'
 
+
+import { useEffect, useState } from 'react'
+
 /**
  * Mocks Telegram environment in development mode.
  */
