@@ -1,10 +1,7 @@
 'use client'
 
-import { SubscriptionResponseInterface } from '@app/types/subscription-data.interface'
-import { UserDataInterface } from '@app/types/user-data.interface'
 import { motion } from 'framer-motion'
 import { FaCircleInfo } from 'react-icons/fa6'
-import TgStar from '../TgStar'
 import TooltipWrapper from '../TooltipWrapper'
 
 // Компонент: Опции подписки
@@ -13,15 +10,11 @@ export const SubscriptionOptions = ({
   setIsAutoRenewal,
   isFixedPrice,
   setIsFixedPrice,
-  user,
-  subscriptions,
 }: {
   isAutoRenewal: boolean
   setIsAutoRenewal: (val: boolean) => void
   isFixedPrice: boolean
   setIsFixedPrice: (val: boolean) => void
-  user: UserDataInterface
-  subscriptions: SubscriptionResponseInterface
 }) => (
   <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
     <div className="px-4 opacity-50 flex flex-row gap-2 items-center w-full">
@@ -72,7 +65,7 @@ export const SubscriptionOptions = ({
       </motion.div>
 
       <motion.div className="flex flex-row gap-3 items-center justify-between px-4 py-2 text-sm font-mono">
-        <div className="flex gap-2 items-center">
+        {/* <div className="flex gap-2 items-center">
           <TooltipWrapper
             prompt={'При продлениях цена никогда не изменится!'}
             color="info"
@@ -88,7 +81,7 @@ export const SubscriptionOptions = ({
               subscriptions.telegramPartnerProgramRatio
             : subscriptions.fixedPriceStars
           ).toFixed(2)}
-        </div>
+        </div> */}
         <div className="relative flex items-center">
           <input
             type="checkbox"

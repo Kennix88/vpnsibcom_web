@@ -6,7 +6,7 @@ import { PlansInterface } from '@app/types/plans.interface'
 import { SubscriptionResponseInterface } from '@app/types/subscription-data.interface'
 import { UserDataInterface } from '@app/types/user-data.interface'
 import { motion } from 'framer-motion'
-import TgStar from '../TgStar'
+import TgStar from '../Currency'
 import { PeriodButtonInterface } from './AddSubscription'
 import { PERIOD_MULTIPLIERS } from './constants'
 import { getButtonColor } from './functions'
@@ -42,7 +42,7 @@ export const PaymentPeriod = ({
           Периодичность оплаты
         </div>
         <div className="flex gap-2 items-center ">
-          <TgStar type="gold" w={14} />
+          <TgStar type="star" w={14} />
           {(user.isTgProgramPartner
             ? price * subscriptions.telegramPartnerProgramRatio
             : price

@@ -15,7 +15,7 @@ import {
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useMemo } from 'react'
-import TgStar from '../TgStar'
+import TgStar from '../Currency'
 
 export // Компонент: Выбор серверов
 const ServersSelection = ({
@@ -118,7 +118,7 @@ const ServersSelection = ({
         {planSelected.serversSelectType ===
           PlansServersSelectTypeEnum.CUSTOM && (
           <div className="flex gap-2 items-center ">
-            <TgStar type="gold" w={14} />
+            <TgStar type="star" w={14} />
             {(user.isTgProgramPartner
               ? serversPrice * subscriptions.telegramPartnerProgramRatio
               : serversPrice

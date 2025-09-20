@@ -3,7 +3,7 @@
 import { SubscriptionResponseInterface } from '@app/types/subscription-data.interface'
 import { UserDataInterface } from '@app/types/user-data.interface'
 import { motion } from 'framer-motion'
-import TgStar from '../TgStar'
+import TgStar from '../Currency'
 import { TRAFFIC_GBS } from './constants'
 import { calculateTrafficPrice, getDevicesCountButtonColor } from './functions'
 
@@ -37,7 +37,7 @@ export const TrafficSelection = ({
           Ежедневный трафик ГБ
         </div>
         <div className="flex gap-2 items-center ">
-          <TgStar type="gold" w={14} />
+          <TgStar type="star" w={14} />
           {(user.isTgProgramPartner
             ? trafficPrice * subscriptions.telegramPartnerProgramRatio
             : trafficPrice
