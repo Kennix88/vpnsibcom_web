@@ -1,7 +1,12 @@
 export default function addSuffixToNumberUtil(
-  number: number,
+  number: number | undefined,
   fixed: number = 3,
 ): string {
+  // Return '0' if number is undefined
+  if (number === undefined) {
+    return '0'
+  }
+  
   const suffixes = ['', 'K', 'M', 'B', 'T', 'Q', 'S', 'O', 'N', 'D', 'U', 'D']
   let suffixIndex = 0
 
