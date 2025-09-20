@@ -1,7 +1,6 @@
 import chokidar from 'chokidar'
 import path from 'path'
 import { buildTranslations } from '../src/core/i18n/build-translations'
-import { logger } from '../src/utils/logger'
 
 // Only run in development mode
 if (process.env.NODE_ENV !== 'production') {
@@ -23,7 +22,7 @@ if (process.env.NODE_ENV !== 'production') {
     .on('unlink', handleChange)
 
   // Build translations initially
-  buildTranslations(true).catch(logger.error)
+  buildTranslations(true).catch(console.error)
 
   async function handleChange(filePath: string) {
     // console.log(`Translation file changed: ${filePath}`);
