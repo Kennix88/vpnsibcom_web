@@ -7,14 +7,12 @@ import clsx from 'clsx'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { useTranslations } from 'use-intl'
-import Modal from './Modal'
 
 export function FreePlanActivated() {
   const { user, setUser } = useUserStore()
   const [isLoading, setIsLoading] = useState(false)
   const { setSubscriptions } = useSubscriptionsStore()
   const t = useTranslations('freePlan')
-  const [isOpenModal, setIsOpenModal] = useState(false)
 
   if (!user || !user.isFreePlanAvailable) return null
 
@@ -35,10 +33,10 @@ export function FreePlanActivated() {
   return (
     <div className="flex flex-col gap-4 p-4 bg-[var(--surface-container-lowest)] rounded-md w-full max-w-[400px] font-mono">
       <div className="text-sm ">
-        🎁 {t('trialAvailable', { days: user.freePlanDays ?? 0 })}
+        🎁 {t('trialAvailable', { gb: user.trialGb ?? 0 })}
       </div>
       <button
-        onClick={() => setIsOpenModal(true)}
+        onClick={() => handleClick()}
         disabled={isLoading}
         className={clsx(
           'flex flex-row gap-2 items-center justify-center bg-[var(--primary)] text-[var(--on-primary)] font-medium text-sm px-4 py-2 rounded-md w-full transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer max-w-[400px]',
@@ -51,15 +49,6 @@ export function FreePlanActivated() {
         )}
         {t('activate')}
       </button>
-      <Modal
-        isOpen={isOpenModal}
-        onClose={() => setIsOpenModal(false)}
-        title={t('modalTitle')}
-        variant="warning"
-        actionText={t('modalAction')}
-        onAction={() => handleClick()}>
-        {t('modalConfirmation')}
-      </Modal>
     </div>
   )
 }

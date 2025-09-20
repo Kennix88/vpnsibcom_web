@@ -1,6 +1,6 @@
 'use client'
 
-import TgStar from '@app/app/_components/TgStar'
+import TgStar from '@app/app/_components/Currency'
 import { authApiClient } from '@app/core/authApiClient'
 import { CurrencyEnum } from '@app/enums/currency.enum'
 import { useCurrencyStore } from '@app/store/currency.store'
@@ -84,7 +84,7 @@ export default function CurrencySwitcher() {
                   }}>
                   <span className="font-mono font-bold">{currency.key}</span>-
                   {currency.key == CurrencyEnum.XTR && (
-                    <TgStar type={'gold'} w={15} />
+                    <TgStar type={'tg-star'} w={15} />
                   )}
                   <span className="opacity-80">{currency.symbol}</span>
                 </button>
