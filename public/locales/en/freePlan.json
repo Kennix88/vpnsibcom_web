@@ -1,5 +1,5 @@
 {
-  "trialAvailable": "A trial period of {days} days is available to you.",
+  "trialAvailable": "You have access to {gb} Gb of bonus traffic for an unlimited Trial subscription.",
   "activate": "Activate",
   "activationFailed": "Couldn't activate the free plan",
   "modalTitle": "Trial Period Activation",

@@ -2,19 +2,32 @@
   "addSubscription": "Добавить подписку",
   "yourSubscriptions": "Ваши подписки",
   "noSubscriptions": "У вас нет активных подписок",
+  "loading": "Загрузка данных подписки...",
+  "notFound": "Подписка не найдена",
   "renewSubscription": "Продлить подписку",
   "autoRenewalEnabled": "Автопродление включено",
   "autoRenewalDisabled": "Автопродление отключено",
   "subscriptionDeleted": "Подписка была успешно удалена",
   "subscriptionDataUpdated": "Данные подписки были успешно обновлены",
   "subscriptionRenewed": "Подписка успешно продлена",
+  "changeServers": "Изменить сервера",
+  "changeServersTitle": "Смена серверов",
+  "save": "Сохранить",
+  "success": {
+    "serversUpdated": "Сервера успешно обновлены"
+  },
   "errors": {
     "loadFailed": "Не удалось загрузить подписки",
     "disableAutoRenewalFailed": "Ошибка отключения автопродления!",
     "enableAutoRenewalFailed": "Ошибка включения автопродления!",
     "deleteSubscriptionFailed": "Ошибка удаления подписки!",
     "resetSubscriptionFailed": "Ошибка сброса данных подписки!",
-    "renewSubscriptionFailed": "Не удалось продлить подписку!"
+    "renewSubscriptionFailed": "Не удалось продлить подписку!",
+    "fetchingServers": "Не удалось загрузить сервера",
+    "updatingServers": "Не удалось обновить сервера",
+    "serverLimitReached": "Вы достигли лимита по серверам",
+    "serverLimitReachedPremium": "Вы достигли лимита по премиум серверам",
+    "serverLimitReachedBase": "Вы достигли лимита по базовым серверам"
   },
   "periods": {
     "trial": "Пробный период",
