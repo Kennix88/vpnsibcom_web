@@ -1,4 +1,4 @@
-import { PlansServersSelectTypeEnum } from '@app/enums/plans-servers-select-type.enum'
+import { PlansEnum } from '@app/enums/plans.enum'
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
 import { PlansInterface } from '@app/types/plans.interface'
 
@@ -23,6 +23,7 @@ interface SubscriptionCostSettings {
   threeYearRatioPayment: number
   indefinitelyRatio: number
   telegramPremiumRatio: number
+  telegramPartnerProgramRatio: number
 }
 
 /**
@@ -30,6 +31,7 @@ interface SubscriptionCostSettings {
  */
 interface SubscriptionCostParams {
   isPremium: boolean
+  isTgProgramPartner: boolean
   period: SubscriptionPeriodEnum
   periodMultiplier: number
   devicesCount: number
@@ -47,7 +49,7 @@ interface SubscriptionCostParams {
 /**
  * Calculate subscription cost based on period and user discount
  * @param params - Subscription parameters object
- * @returns Cost in Stars
+ * @returns Цена в Stars? Всегда целочисленная!
  */
 export function calculateSubscriptionCost(
   params: SubscriptionCostParams,
@@ -56,6 +58,7 @@ export function calculateSubscriptionCost(
     period,
     periodMultiplier,
     isPremium,
+    isTgProgramPartner,
     devicesCount,
     serversCount = 0,
     premiumServersCount = 0,
@@ -68,7 +71,47 @@ export function calculateSubscriptionCost(
     settings,
   } = params
 
+  // Валидируем скидку
+  if (userDiscount < 0 || userDiscount > 1) {
+    throw new Error(
+      `Unusual user discount value: ${userDiscount}, expected between 0-1`,
+    )
+  }
+
+  // Дропаем нулевую цену, если скидка 100%
   if (userDiscount == 0) return 0
+
+  // Для Триала и Трафик тарифа считаем сразу цену
+  if (plan.key == PlansEnum.TRIAL || plan.key == PlansEnum.TRAFFIC) {
+    if (trafficLimitGb == null || trafficLimitGb <= 0) {
+      throw new Error('The traffic must be greater than 0')
+    }
+    return roundingUpPrice(
+      trafficLimitGb *
+        roundingUpPrice(settings.trafficGbPriceStars / 30) *
+        (isPremium ? settings.telegramPremiumRatio : 1) *
+        (isTgProgramPartner ? settings.telegramPartnerProgramRatio : 1) *
+        userDiscount,
+    )
+  }
+
+  // Для остальных кроме кастома, считаем цену
+  if (plan.key !== PlansEnum.CUSTOM) {
+    if (!plan.priceStars) {
+      throw new Error('Plan price Stars is not defined')
+    }
+    return roundingUpPrice(
+      calculatePriceByPeriod(
+        period,
+        periodMultiplier,
+        plan.priceStars,
+        settings,
+      ) *
+        (isPremium ? settings.telegramPremiumRatio : 1) *
+        (isTgProgramPartner ? settings.telegramPartnerProgramRatio : 1) *
+        userDiscount,
+    )
+  }
 
   // Validate input parameters
   if (devicesCount < 0) {
@@ -87,12 +130,6 @@ export function calculateSubscriptionCost(
     (trafficLimitGb !== null && trafficLimitGb < 0 && !isUnlimitTraffic)
   ) {
     throw new Error('Traffic limit cannot be negative')
-  }
-
-  if (userDiscount <= 0 || userDiscount > 1) {
-    console.warn(
-      `Unusual user discount value: ${userDiscount}, expected between 0-1`,
-    )
   }
 
   // Calculate device price
@@ -120,27 +157,36 @@ export function calculateSubscriptionCost(
       ? settings.unlimitTrafficPriceStars
       : trafficLimitGb * settings.trafficGbPriceStars
 
-  // Apply premium ratio if applicable
-  const premiumRatio = isPremium ? settings.telegramPremiumRatio : 1
-
   // Calculate base price
   const basePrice =
-    plan.serversSelectType !== PlansServersSelectTypeEnum.CUSTOM &&
-    plan.priceStars
-      ? plan.priceStars * premiumRatio
-      : (devicePrice + serversPrice + premiumServersPrice + trafficPrice) *
-        premiumRatio
+    devicePrice + serversPrice + premiumServersPrice + trafficPrice
 
-  // Calculate final price based on subscription period
-  const finalPrice = calculatePriceByPeriod(
-    period,
-    periodMultiplier,
-    basePrice,
-    userDiscount,
-    settings,
+  return roundingUpPrice(
+    calculatePriceByPeriod(period, periodMultiplier, basePrice, settings) *
+      (isPremium ? settings.telegramPremiumRatio : 1) *
+      (isTgProgramPartner ? settings.telegramPartnerProgramRatio : 1) *
+      userDiscount,
   )
+}
 
-  return finalPrice
+export function calculateMbPay(
+  cost: number,
+  trafficGbPriceStars: number,
+): number {
+  if (cost <= 0) return 0
+  return roundingUpPrice(
+    (cost / roundingUpPrice(trafficGbPriceStars / 30)) * 1024,
+  )
+}
+
+export function roundUp(value: number, decimals: number = 5) {
+  const factor = Math.pow(10, decimals)
+  return Math.ceil(value * factor) / factor
+}
+
+export function roundingUpPrice(n: number): number {
+  const rounding = Math.ceil(n)
+  return rounding < 1 ? 1 : rounding
 }
 
 /**
@@ -182,90 +228,42 @@ export function calculatePremiumServersPrice(
 /**
  * Calculate final price based on subscription period
  */
-function calculatePriceByPeriod(
+export function calculatePriceByPeriod(
   period: SubscriptionPeriodEnum,
   periodMultiplier: number,
   basePrice: number,
-  userDiscount: number,
   settings: SubscriptionCostSettings,
 ): number {
-  if (userDiscount == 0) return 0
-  let price: number
-
   switch (period) {
     case SubscriptionPeriodEnum.HOUR:
-      price =
-        (basePrice / 30 / 24) *
-        settings.hourRatioPayment *
-        userDiscount *
-        periodMultiplier
-      break
+      return (
+        (basePrice / 30 / 24) * settings.hourRatioPayment * periodMultiplier
+      )
     case SubscriptionPeriodEnum.DAY:
-      price =
-        (basePrice / 30) *
-        settings.dayRatioPayment *
-        userDiscount *
-        periodMultiplier
-      break
+      return (basePrice / 30) * settings.dayRatioPayment * periodMultiplier
     case SubscriptionPeriodEnum.WEEK:
-      price =
-        (basePrice / 4) *
-        settings.weekRatioPayment *
-        userDiscount *
-        periodMultiplier
-      break
+      return (basePrice / 4) * settings.weekRatioPayment * periodMultiplier
     case SubscriptionPeriodEnum.MONTH:
-      price = basePrice * userDiscount * periodMultiplier
-      break
+      return basePrice * periodMultiplier
     case SubscriptionPeriodEnum.THREE_MONTH:
-      price =
-        basePrice *
-        3 *
-        settings.threeMouthesRatioPayment *
-        userDiscount *
-        periodMultiplier
-      break
+      return (
+        basePrice * 3 * settings.threeMouthesRatioPayment * periodMultiplier
+      )
     case SubscriptionPeriodEnum.SIX_MONTH:
-      price =
-        basePrice *
-        6 *
-        settings.sixMouthesRatioPayment *
-        userDiscount *
-        periodMultiplier
-      break
+      return basePrice * 6 * settings.sixMouthesRatioPayment * periodMultiplier
     case SubscriptionPeriodEnum.YEAR:
-      price =
-        basePrice *
-        12 *
-        settings.oneYearRatioPayment *
-        userDiscount *
-        periodMultiplier
-      break
+      return basePrice * 12 * settings.oneYearRatioPayment * periodMultiplier
     case SubscriptionPeriodEnum.TWO_YEAR:
-      price =
-        basePrice *
-        24 *
-        settings.twoYearRatioPayment *
-        userDiscount *
-        periodMultiplier
-      break
+      return basePrice * 24 * settings.twoYearRatioPayment * periodMultiplier
     case SubscriptionPeriodEnum.THREE_YEAR:
-      price =
-        basePrice *
-        36 *
-        settings.threeYearRatioPayment *
-        userDiscount *
-        periodMultiplier
-      break
+      return basePrice * 36 * settings.threeYearRatioPayment * periodMultiplier
     case SubscriptionPeriodEnum.INDEFINITELY:
-      price = basePrice * settings.indefinitelyRatio * userDiscount
-      break
+      return basePrice * settings.indefinitelyRatio
     case SubscriptionPeriodEnum.TRIAL:
-      return 1 // Trial period is free (minimum 1 Star)
+      return basePrice
+    case SubscriptionPeriodEnum.TRAFFIC:
+      return basePrice
     default:
-      price = basePrice * userDiscount * periodMultiplier
+      throw new Error(`Некорректный период`)
   }
-
-  // Ensure minimum price is 0.01 Stars
-  return Number((price < 0.01 ? 0.01 : price).toFixed(2))
 }
