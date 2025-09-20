@@ -1,0 +1,212 @@
+'use client'
+
+import { authApiClient } from '@app/core/authApiClient'
+import { CurrencyEnum } from '@app/enums/currency.enum'
+import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
+import { useCurrencyStore } from '@app/store/currency.store'
+import { useSubscriptionsStore } from '@app/store/subscriptions.store'
+import { useUserStore } from '@app/store/user.store'
+import { SubscriptionDataInterface } from '@app/types/subscription-data.interface'
+import {
+  calculateSubscriptionCost,
+  roundUp,
+} from '@app/utils/calculate-subscription-cost.util'
+import { fxUtil } from '@app/utils/fx.util'
+import { motion } from 'framer-motion'
+import { useState } from 'react'
+import { FaPlus } from 'react-icons/fa6'
+import { toast } from 'react-toastify'
+import Currency from '../Currency'
+import Modal from '../Modal'
+import { TRAFFIC_GBS } from '../add-subscription/constants'
+import { getDevicesCountButtonColor } from '../add-subscription/functions'
+
+export default function AddTrafficButton({
+  subscription,
+}: {
+  subscription: SubscriptionDataInterface
+}) {
+  const { rates } = useCurrencyStore()
+  const { subscriptions, setSubscriptions } = useSubscriptionsStore()
+  const { user, setUser } = useUserStore()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
+  const [trafficLimitGb, setTrafficLimitGb] = useState(1)
+
+  if (
+    (subscription.period !== SubscriptionPeriodEnum.TRIAL &&
+      subscription.period !== SubscriptionPeriodEnum.TRAFFIC) ||
+    !user ||
+    !subscriptions
+  )
+    return null
+
+  const balance = user.balance.payment
+  const price = calculateSubscriptionCost({
+    period: subscription.period,
+    periodMultiplier: subscription.periodMultiplier,
+    isPremium: user.isPremium,
+    isTgProgramPartner: user.isTgProgramPartner,
+    devicesCount: subscription.devicesCount,
+    serversCount: subscription.baseServersCount,
+    premiumServersCount: subscription.premiumServersCount,
+    trafficLimitGb: trafficLimitGb,
+    isAllBaseServers: subscription.isAllBaseServers,
+    isAllPremiumServers: subscription.isAllPremiumServers,
+    isUnlimitTraffic: false,
+    userDiscount: user.roleDiscount,
+    plan: subscription.plan,
+    settings: subscriptions,
+  })
+
+  const addTraffic = async (subscription: SubscriptionDataInterface) => {
+    try {
+      setIsLoading(true)
+      const data = await authApiClient.renewSubscription(subscription.id)
+
+      setUser(data.user)
+      setSubscriptions(data.subscriptions)
+      toast.success('Трафик успешно добавлен')
+    } catch {
+      toast.error('Ошибка добавления трафика')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  return (
+    <>
+      <button
+        onClick={() => {
+          setIsOpenModal(true)
+        }}
+        disabled={isLoading}
+        className={`grow p-2 rounded-md bg-[var(--secondary-container)] text-[var(--on-secondary-container)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex gap-2 items-center `}>
+        <FaPlus size={18} />
+        Добавить трафик
+      </button>
+
+      <Modal
+        isOpen={isOpenModal}
+        onClose={() => setIsOpenModal(false)}
+        title={'Добавление трафика'}>
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
+            <div className="flex gap-2 items-end justify-between w-full px-4 ">
+              <div className="opacity-50 flex flex-row gap-2 items-center">
+                Трафик
+              </div>
+              <div className="flex gap-2 items-center ">
+                <Currency type="star" w={18} />
+                {price}
+              </div>
+            </div>
+
+            <motion.div
+              layout
+              className="text-sm bg-[var(--surface-container-lowest)] rounded-xl flex flex-row flex-wrap gap-2 items-center p-4 w-full shadow-md">
+              <button
+                onClick={() => {
+                  setTrafficLimitGb(Math.max(1, trafficLimitGb - 1))
+                }}
+                className="flex grow items-center justify-center text-white px-3 py-1.5 rounded-md cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97] "
+                style={{ backgroundColor: 'rgba(216, 197, 255, 0.15)' }}>
+                -
+              </button>
+              <input
+                type="number"
+                value={trafficLimitGb}
+                onChange={(e) => {
+                  setTrafficLimitGb(Math.max(1, parseInt(e.target.value) || 1))
+                }}
+                className="border max-w-[100px] border-[var(--on-surface)]/50 rounded-md px-2 py-1 bg-transparent focus:border-[var(--primary)] focus:outline-none"
+              />
+              <button
+                onClick={() => {
+                  setTrafficLimitGb(trafficLimitGb + 1)
+                }}
+                className="flex grow items-center justify-center text-white px-3 py-1.5 rounded-md cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97] "
+                style={{ backgroundColor: 'rgba(216, 197, 255, 0.15)' }}>
+                +
+              </button>
+
+              {TRAFFIC_GBS.map((val) => {
+                const isActive = trafficLimitGb === val
+                const rgb = getDevicesCountButtonColor(val)
+                const bgOpacity = isActive ? 0.3 : 0.15
+                return (
+                  <motion.button
+                    key={val}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => {
+                      setTrafficLimitGb(val)
+                    }}
+                    className="flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-sm font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]"
+                    style={{
+                      backgroundColor: `rgba(${rgb}, ${bgOpacity})`,
+                      border: isActive
+                        ? `1px solid rgba(${rgb}, 0.7)`
+                        : '1px solid transparent',
+                    }}>
+                    {val}
+                  </motion.button>
+                )
+              })}
+            </motion.div>
+          </div>
+
+          <div className="grow flex flex-col gap-2">
+            <div className="px-4 opacity-50 flex flex-wrap items-center gap-2 font-mono">
+              Докупить {trafficLimitGb} ГБ
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                onClick={() => {
+                  addTraffic(subscription)
+                }}
+                disabled={isLoading || price > balance}
+                className={`py-1 px-2 rounded-md bg-[var(--star-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+                  price > balance
+                    ? 'opacity-50 cursor-not-allowed'
+                    : ' cursor-pointer'
+                } flex gap-1 items-center font-bold font-mono text-sm`}>
+                <Currency type={'star'} w={18} />
+                {price}
+              </button>
+              <button
+                onClick={() => {
+                  addTraffic(subscription)
+                }}
+                disabled={isLoading}
+                className={`py-1 px-2 rounded-md bg-[var(--star-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+                  isLoading
+                    ? 'opacity-50 cursor-not-allowed'
+                    : ' cursor-pointer'
+                } flex gap-1 items-center font-bold font-mono text-sm`}>
+                <Currency type={'tg-star'} w={18} />
+                {price}
+              </button>
+              {rates && (
+                <button
+                  onClick={() => {
+                    addTraffic(subscription)
+                  }}
+                  disabled={isLoading}
+                  className={`py-1 px-2 rounded-md bg-[var(--ton-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+                    isLoading
+                      ? 'opacity-50 cursor-not-allowed'
+                      : ' cursor-pointer'
+                  } flex gap-1 items-center font-bold font-mono text-sm`}>
+                  <Currency type={'ton'} w={18} />
+                  {roundUp(
+                    fxUtil(price, CurrencyEnum.XTR, CurrencyEnum.TON, rates),
+                  )}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </Modal>
+    </>
+  )
+}
