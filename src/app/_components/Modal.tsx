@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { ReactNode, useEffect, useRef } from 'react'
 import { IoClose } from 'react-icons/io5'
 import { useTranslations } from 'use-intl'
+import ScrollHint from './ScrollHint'
 
 export type ModalVariant = 'default' | 'info' | 'warning' | 'error' | 'success'
 
@@ -41,6 +42,7 @@ export default function Modal({
 }: ModalProps) {
   const t = useTranslations('common.modal')
   const modalRef = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
 
   // Определяем цвета в зависимости от варианта
   const variantStyles = {
@@ -222,7 +224,12 @@ export default function Modal({
             )}
 
             {/* Содержимое */}
-            <div className="p-4">{children}</div>
+            <div
+              className="relative p-4 overflow-y-auto max-h-[70vh]"
+              ref={contentRef}>
+              {children}
+              <ScrollHint targetRef={contentRef} />
+            </div>
 
             {/* Кнопки */}
             {(showCancelButton || onAction) && (

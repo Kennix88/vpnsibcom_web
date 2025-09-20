@@ -1,5 +1,6 @@
 'use client'
 
+
 import { useSearchParams } from 'next/navigation'
 import { Suspense, useEffect } from 'react'
 

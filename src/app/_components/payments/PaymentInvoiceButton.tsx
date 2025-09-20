@@ -1,6 +1,9 @@
 'use client'
 
-import TgStar from '@app/app/_components/TgStar'
+import {
+  default as Currency,
+  default as TgStar,
+} from '@app/app/_components/Currency'
 import { config } from '@app/config/client'
 import { authApiClient } from '@app/core/authApiClient'
 import { CurrencyEnum } from '@app/enums/currency.enum'
@@ -8,6 +11,7 @@ import { CurrencyInterface } from '@app/types/currency.interface'
 import { PaymentMethodsDataInterface } from '@app/types/payment-methods-data.interface'
 import { RatesInterface } from '@app/types/rates.interface'
 import { UserDataInterface } from '@app/types/user-data.interface'
+import { roundUp } from '@app/utils/calculate-subscription-cost.util'
 import { fxUtil } from '@app/utils/fx.util'
 import { invoice } from '@telegram-apps/sdk-react'
 import clsx from 'clsx'
@@ -79,25 +83,41 @@ export default function PaymentInvoiceButton({
   if (isTma)
     return (
       <>
-        <button
-          onClick={() => handleClick()}
-          disabled={isLoading}
-          className={clsx(
-            'flex flex-row gap-2 items-center justify-center bg-[var(--surface-container-lowest)] font-medium text-sm px-4 py-2 rounded-md w-full transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer max-w-[400px]',
-            isLoading && 'opacity-50 pointer-events-none',
-          )}>
-          {isLoading && (
-            <div
-              className={'loader'}
-              style={{
-                width: '15px',
-                height: '15px',
-                borderWidth: '2px',
-              }}></div>
-          )}
-          {t('pay')} {convertedAmount.toFixed(0)}{' '}
-          <TgStar type={'original'} w={15} />
-        </button>
+        <div className="w-full flex flex-col gap-2">
+          <div className="px-4 opacity-50 flex flex-wrap items-center gap-2 font-mono">
+            Оплатить
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={() => {
+                handleClick()
+              }}
+              disabled={isLoading}
+              className={`py-1 px-2 rounded-md bg-[var(--star-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+                isLoading ? 'opacity-50 cursor-not-allowed' : ' cursor-pointer'
+              } flex gap-1 items-center font-bold font-mono text-sm`}>
+              <Currency type={'tg-star'} w={18} />
+              {amount}
+            </button>
+            {rates && (
+              <button
+                onClick={() => {
+                  handleClick()
+                }}
+                disabled={isLoading}
+                className={`py-1 px-2 rounded-md bg-[var(--ton-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+                  isLoading
+                    ? 'opacity-50 cursor-not-allowed'
+                    : ' cursor-pointer'
+                } flex gap-1 items-center font-bold font-mono text-sm`}>
+                <Currency type={'ton'} w={18} />
+                {roundUp(
+                  fxUtil(amount, CurrencyEnum.XTR, CurrencyEnum.TON, rates),
+                )}
+              </button>
+            )}
+          </div>
+        </div>
         <div
           className={
             'bg-[var(--surface-container)] text-[var(--on-surface)] rounded-md flex flex-col gap-2 py-2 px-4 w-full max-w-[400px]'
@@ -112,7 +132,7 @@ export default function PaymentInvoiceButton({
               'flex flex-row gap-2 items-center justify-center px-4 py-2 bg-[var(--surface-container-high)] rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer text-sm'
             }
             target={'_blank'}>
-            {t('splitBay')} <TgStar type={'original'} w={15} />
+            {t('splitBay')} <TgStar type={'tg-star'} w={15} />
           </Link>
         </div>
       </>
@@ -133,7 +153,7 @@ export default function PaymentInvoiceButton({
               <div className={'flex flex-row gap-2 items-center'}>
                 {(method.commission * 100 - 100).toFixed(2)}%{' '}
                 {currency?.key == CurrencyEnum.XTR ? (
-                  <TgStar type={'gold'} w={15} />
+                  <TgStar type={'star'} w={15} />
                 ) : currency?.key !== currency?.symbol ? (
                   `${currency?.key}-${currency?.symbol}`
                 ) : (
@@ -147,7 +167,7 @@ export default function PaymentInvoiceButton({
             <div className={'opacity-50'}>{t('toBalance')}:</div>
             <div className={'flex flex-row gap-2 items-center'}>
               {amount.toFixed(2)}
-              <TgStar type={'gold'} w={15} />
+              <TgStar type={'star'} w={15} />
             </div>
           </div>
         </div>
@@ -169,7 +189,7 @@ export default function PaymentInvoiceButton({
           )}
           {t('pay')} ≈ {convertedAmount.toFixed(2)}{' '}
           {currency?.key == CurrencyEnum.XTR ? (
-            <TgStar type={'gold'} w={15} />
+            <TgStar type={'star'} w={15} />
           ) : currency?.key !== currency?.symbol ? (
             `${currency?.key}-${currency?.symbol}`
           ) : (

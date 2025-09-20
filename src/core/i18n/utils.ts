@@ -1,3 +1,4 @@
+import { readFileSync } from 'fs'
 import fs from 'fs/promises'
 import path from 'path'
 
@@ -51,12 +52,12 @@ export async function loadTranslations(
             result[namespace] = translations
           }
         } catch (error) {
-          // console.error(`Error loading translation file ${itemPath}:`, error);
+          console.error(`Error loading translation file ${itemPath}:`, error)
         }
       }
     }
   } catch (error) {
-    // console.error(`Error accessing directory ${dir}:`, error);
+    console.error(`Error accessing directory ${dir}:`, error)
   }
 
   return result

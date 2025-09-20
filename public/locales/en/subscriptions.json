@@ -2,19 +2,32 @@
   "addSubscription": "Add subscription",
   "yourSubscriptions": "Your subscriptions",
   "noSubscriptions": "You don't have any subscriptions yet",
+  "loading": "Loading subscription data...",
+  "notFound": "Subscription not found",
   "renewSubscription": "Renew subscription",
   "autoRenewalEnabled": "Auto-renewal enabled",
   "autoRenewalDisabled": "Auto-renewal disabled",
   "subscriptionDeleted": "Subscription has been successfully deleted",
   "subscriptionDataUpdated": "Subscription data has been successfully updated",
   "subscriptionRenewed": "Subscription has been successfully renewed",
+  "changeServers": "Change servers",
+  "changeServersTitle": "Change servers",
+  "save": "Save",
+  "success": {
+    "serversUpdated": "Servers have been successfully updated"
+  },
   "errors": {
     "loadFailed": "Failed to load subscriptions",
     "disableAutoRenewalFailed": "Failed to disable auto-renewal!",
     "enableAutoRenewalFailed": "Failed to enable auto-renewal!",
     "deleteSubscriptionFailed": "Failed to delete subscription!",
     "resetSubscriptionFailed": "Failed to reset subscription data!",
-    "renewSubscriptionFailed": "Failed to renew subscription!"
+    "renewSubscriptionFailed": "Failed to renew subscription!",
+    "fetchingServers": "Failed to load servers",
+    "updatingServers": "Failed to update servers",
+    "serverLimitReached": "You have reached the server limit",
+    "serverLimitReachedPremium": "You have reached the premium server limit",
+    "serverLimitReachedBase": "You have reached the base server limit"
   },
   "periods": {
     "trial": "Trial period",

@@ -7,14 +7,13 @@ import { RatesInterface } from '@app/types/rates.interface'
 import { ReferralsDataInterface } from '@app/types/referrals-data-interface'
 import { ServersResponseDataInterface } from '@app/types/servers-data.interface'
 import {
-  ChangeSubscriptionConditionsDataInterface,
-  CreateInvoiceSubscriptionDataInterface,
   CreateSubscriptionDataInterface,
   GetSubscriptionConfigResponseInterface,
   SubscriptionResponseInterface,
 } from '@app/types/subscription-data.interface'
 import { UserDataInterface } from '@app/types/user-data.interface'
 import { retrieveRawInitData } from '@telegram-apps/sdk-react'
+
 import axios, {
   AxiosError,
   AxiosHeaders,
@@ -276,15 +275,6 @@ class ApiClient {
     })
   }
 
-  async updateWithdrawalBalanceUsage(isUse: boolean) {
-    return this.safeRequest<UserDataInterface>(async () => {
-      const { data } = await this.instance.post<
-        ApiResponse<{ user: UserDataInterface }>
-      >('/user/withdrawal-usage', { isUse })
-      return data.data.user
-    })
-  }
-
   async updateCurrencyUser(code: CurrencyEnum) {
     return this.safeRequest<UserDataInterface>(async () => {
       const { data } = await this.instance.post<
@@ -414,44 +404,6 @@ class ApiClient {
     })
   }
 
-  async purchaseInvoiceSubscription(
-    params: CreateInvoiceSubscriptionDataInterface,
-  ) {
-    return this.safeRequest<{
-      subscriptions: SubscriptionResponseInterface
-      user: UserDataInterface
-      linkPay: string
-      isTmaIvoice: boolean
-    }>(async () => {
-      const { data } = await this.instance.post<
-        ApiResponse<{
-          subscriptions: SubscriptionResponseInterface
-          user: UserDataInterface
-          linkPay: string
-          isTmaIvoice: boolean
-        }>
-      >('/subscriptions/purchase-invoice', params)
-      return data.data
-    })
-  }
-
-  async changeSubscriptionConditions(
-    params: ChangeSubscriptionConditionsDataInterface,
-  ) {
-    return this.safeRequest<{
-      subscriptions: SubscriptionResponseInterface
-      user: UserDataInterface
-    }>(async () => {
-      const { data } = await this.instance.post<
-        ApiResponse<{
-          subscriptions: SubscriptionResponseInterface
-          user: UserDataInterface
-        }>
-      >('/subscriptions/change-conditions', params)
-      return data.data
-    })
-  }
-
   async deleteSubscription(subscriptionId: string) {
     return this.safeRequest<{
       subscriptions: SubscriptionResponseInterface
@@ -531,6 +483,27 @@ class ApiClient {
         await this.instance.get<ApiResponse<ServersResponseDataInterface>>(
           '/servers',
         )
+      return data.data
+    })
+  }
+
+  /**
+   * Updates the servers for a subscription
+   * @param subscriptionId - ID of the subscription to update
+   * @param serverCodes - Array of server codes to assign to the subscription
+   * @returns Promise with updated subscriptions and user data
+   */
+  async updateSubscriptionServers(subscriptionId: string, serverCodes: string[]) {
+    return this.safeRequest<{
+      subscriptions: SubscriptionResponseInterface
+      user: UserDataInterface
+    }>(async () => {
+      const { data } = await this.instance.post<
+        ApiResponse<{
+          subscriptions: SubscriptionResponseInterface
+          user: UserDataInterface
+        }>
+      >('/subscriptions/update-servers', { subscriptionId, serverCodes })
       return data.data
     })
   }

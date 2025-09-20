@@ -1,6 +1,8 @@
 import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
 import { PlansEnum } from '@app/enums/plans.enum'
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
+import { TrafficResetEnum } from '@app/enums/traffic-reset.enum'
+import { PlansInterface } from './plans.interface'
 import { ServerDataInterface } from './servers-data.interface'
 
 export interface GetSubscriptionConfigResponseInterface {
@@ -26,28 +28,27 @@ export interface SubscriptionResponseInterface {
   twoYearRatioPayment: number
   threeYearRatioPayment: number
   indefinitelyRatio: number
-  fixedPriceStars: number
   telegramPartnerProgramRatio: number
   subscriptions: SubscriptionDataInterface[]
 }
 
 export interface SubscriptionDataInterface {
   id: string
+  name: string
   period: SubscriptionPeriodEnum
   periodMultiplier: number
-  planKey: PlansEnum
+  plan: PlansInterface
   isActive: boolean
   isInvoicing: boolean
   isCreated: boolean
   isAutoRenewal: boolean
   nextRenewalStars?: number
-  isFixedPrice: boolean
-  fixedPriceStars?: number
   devicesCount: number
   isAllBaseServers: boolean
   isAllPremiumServers: boolean
   trafficLimitGb?: number
   isUnlimitTraffic: boolean
+  trafficReset: TrafficResetEnum
 
   lastUserAgent?: string
   dataLimit?: number
@@ -80,24 +81,16 @@ export interface MarzbanResponseInterface {
 
 export interface CreateSubscriptionDataInterface {
   planKey: PlansEnum
+  method: PaymentMethodEnum | 'BALANCE' | 'TRAFFIC'
+  name: string
   period: SubscriptionPeriodEnum
   periodMultiplier: number
-  isAutoRenewal: boolean
-  isFixedPrice: boolean
+  isAutoRenewal?: boolean
   devicesCount: number
   isAllBaseServers: boolean
   isAllPremiumServers: boolean
-  servers: string[]
+  trafficReset: TrafficResetEnum
+  servers?: string[]
   trafficLimitGb?: number
   isUnlimitTraffic: boolean
-}
-
-export interface CreateInvoiceSubscriptionDataInterface
-  extends CreateSubscriptionDataInterface {
-  method: PaymentMethodEnum
-}
-
-export interface ChangeSubscriptionConditionsDataInterface
-  extends CreateSubscriptionDataInterface {
-  subscriptionId: string
 }

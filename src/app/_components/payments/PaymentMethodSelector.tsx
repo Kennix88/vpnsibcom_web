@@ -1,8 +1,8 @@
 'use client'
 
+import TgStar from '@app/app/_components/Currency'
 import Loader from '@app/app/_components/Loader'
 import { PaymentMethodIcons } from '@app/app/_components/payments/payment-method-icons'
-import TgStar from '@app/app/_components/TgStar'
 import { TonWalletConnect } from '@app/app/_components/ton/TonWalletConnect'
 import TooltipWrapper from '@app/app/_components/TooltipWrapper'
 import { config } from '@app/config/client'
@@ -146,7 +146,7 @@ export const PaymentMethodSelector = ({
               'flex flex-row gap-2 items-center justify-center px-4 py-2 bg-[var(--surface-container-high)] rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer text-sm'
             }
             target={'_blank'}>
-            {t('splitBay')} <TgStar type={'original'} w={15} />
+            {t('splitBay')} <TgStar type={'tg-star'} w={15} />
           </Link>
         </div>
 

@@ -8,7 +8,7 @@ import { UserDataInterface } from '@app/types/user-data.interface'
 import { motion } from 'framer-motion'
 import { useMemo } from 'react'
 import { FaCircleInfo } from 'react-icons/fa6'
-import TgStar from '../TgStar'
+import TgStar from '../Currency'
 import TooltipWrapper from '../TooltipWrapper'
 import { PeriodButtonInterface } from './AddSubscription'
 
@@ -133,7 +133,7 @@ export const SubscriptionSummary = ({
         name: 'К оплате за период',
         value: (
           <div className="flex flex-row gap-2 items-center">
-            <TgStar type="gold" w={14} />
+            <TgStar type="star" w={14} />
             {price}
           </div>
         ),
@@ -160,8 +160,7 @@ export const SubscriptionSummary = ({
         name: 'К оплате разово',
         value: (
           <div className="flex flex-row gap-2 items-center">
-            <TgStar type="gold" w={14} />
-            {subscriptions.fixedPriceStars}
+            <TgStar type="star" w={14} />! ! {subscriptions.trafficGbPriceStars}
           </div>
         ),
         isVisible:
@@ -174,7 +173,7 @@ export const SubscriptionSummary = ({
         name: 'Всего к оплате',
         value: (
           <div className="flex flex-row gap-2 items-center">
-            <TgStar type="gold" w={14} />
+            <TgStar type="star" w={14} />
             {nextFinalPrice.toFixed(2)}
           </div>
         ),
@@ -193,7 +192,6 @@ export const SubscriptionSummary = ({
       periodButton,
       periodMultiplier,
       user,
-      isFixedPrice,
       isAutoRenewal,
       price,
       nextFinalPrice,

@@ -6,6 +6,7 @@ import { setServerLocale } from '@app/core/i18n/locale.server'
 import { useCurrencyStore } from '@app/store/currency.store'
 import { useUserStore } from '@app/store/user.store'
 import { retrieveRawInitData } from '@telegram-apps/sdk-react'
+
 import { TonConnectUIProvider } from '@tonconnect/ui-react'
 import { PropsWithChildren, useEffect } from 'react'
 

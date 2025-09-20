@@ -1,53 +1,60 @@
 'use client'
 
-import TgStar from '@app/app/_components/TgStar'
+import Currency from '@app/app/_components/Currency'
 import { useUserStore } from '@app/store/user.store'
 import addSuffixToNumberUtil from '@app/utils/add-suffix-to-number.util'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { FaPlus, FaRegSnowflake } from 'react-icons/fa6'
+import { TiWarning } from 'react-icons/ti'
 
 export default function Balance({
   type = 'payment',
-  isAdd = false,
 }: {
-  type?: 'payment' | 'withdraw' | 'hold' | 'total'
-  isAdd?: boolean
+  type?: 'payment' | 'wager' | 'hold' | 'ticket' | 'traffic'
 }) {
   const location = usePathname()
   const url = location === '/app' ? '/app' : '/tma'
   const { user } = useUserStore()
-  const balance = user
-    ? type == 'payment'
-      ? user.balance.isUseWithdrawalBalance && isAdd
-        ? user.balance.withdrawalBalance + user.balance.paymentBalance
-        : user.balance.paymentBalance
-      : type == 'withdraw'
-        ? user.balance.withdrawalBalance
-        : type == 'hold'
-          ? user.balance.holdBalance
-          : user.balance.totalEarnedWithdrawalBalance
-    : 0
+  // Safely access balance properties with fallback to 0
+  const balance =
+    user && user.balance
+      ? type === 'payment'
+        ? user.balance.payment
+        : type === 'wager'
+          ? user.balance.wager
+          : type === 'hold'
+            ? user.balance.hold
+            : type === 'ticket'
+              ? user.balance.tickets
+              : type === 'traffic'
+                ? user.balance.traffic
+                : 0
+      : 0
 
   return (
     <div className="relative">
       <div
-        className={`absolute z-0 top-0 left-0 right-0 bottom-0 border-[2px] ${type == 'payment' ? 'border-[var(--tg-star-gold)]' : type == 'withdraw' || type == 'total' ? 'border-[var(--tg-star-purple)]' : 'border-[var(--tg-star-ice)]'} bg-gradient-to-r ${type == 'payment' ? 'from-[var(--tg-star-gold)]' : type == 'withdraw' || type == 'total' ? 'from-[var(--tg-star-purple)]' : 'from-[var(--tg-star-ice)]'} to-[var(--surface-container-low)] rounded-lg opacity-50`}
+        className={`absolute z-0 top-0 left-0 right-0 bottom-0 border-[2px] ${type == 'payment' ? 'border-[var(--star)] from-[var(--star)]' : type == 'wager' ? 'border-[var(--wager)] from-[var(--wager)]' : type == 'ticket' ? 'border-[var(--ticket)] from-[var(--ticket)]' : type == 'traffic' ? 'border-[var(--traffic)] from-[var(--traffic)]' : 'border-[var(--ice)] from-[var(--ice)]'} bg-gradient-to-r to-[var(--surface-container-low)] rounded-lg opacity-50`}
       />
       <div
         className={`flex flex-row items-center pl-2 ${type == 'payment' ? 'pr-1' : 'pr-2'} py-1 gap-2 rounded-lg relative z-10`}>
         <div className="flex flex-row items-center justify-center">
           {type == 'hold' ? (
-            <FaRegSnowflake className={'text-[var(--tg-star-ice)]'} />
+            <FaRegSnowflake className={'text-[var(--ice)]'} />
+          ) : type == 'wager' ? (
+            <TiWarning className={'text-[var(--wager)]'} />
           ) : (
-            <TgStar
-              w={15}
+            <Currency
+              w={18}
               type={
                 type == 'payment'
-                  ? 'gold'
-                  : type == 'withdraw' || type == 'total'
-                    ? 'purple'
-                    : 'ice'
+                  ? 'star'
+                  : type == 'ticket'
+                    ? 'ticket'
+                    : type == 'traffic'
+                      ? 'traffic'
+                      : 'star'
               }
             />
           )}

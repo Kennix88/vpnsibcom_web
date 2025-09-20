@@ -3,7 +3,7 @@
 import { SubscriptionResponseInterface } from '@app/types/subscription-data.interface'
 import { UserDataInterface } from '@app/types/user-data.interface'
 import { motion } from 'framer-motion'
-import TgStar from '../TgStar'
+import TgStar from '../Currency'
 import { DEVICES_COUNTS } from './constants'
 import { calculateDevicePrice, getDevicesCountButtonColor } from './functions'
 
@@ -28,7 +28,7 @@ export const DevicesSelection = ({
           Устройства
         </div>
         <div className="flex gap-2 items-center ">
-          <TgStar type="gold" w={14} />
+          <TgStar type="star" w={14} />
           {(user.isTgProgramPartner
             ? devicePrice * subscriptions.telegramPartnerProgramRatio
             : devicePrice

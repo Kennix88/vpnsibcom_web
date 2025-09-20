@@ -6,7 +6,7 @@ import { SubscriptionResponseInterface } from '@app/types/subscription-data.inte
 import { UserDataInterface } from '@app/types/user-data.interface'
 import clsx from 'clsx'
 import { motion } from 'framer-motion'
-import TgStar from '../TgStar'
+import TgStar from '../Currency'
 
 export const PlanSelection = ({
   plans,
@@ -27,7 +27,7 @@ export const PlanSelection = ({
     <div className="flex gap-2 items-end justify-between w-full px-4 ">
       <div className="opacity-50 flex flex-row gap-2 items-center">Тариф</div>
       <div className="flex gap-2 items-center ">
-        <TgStar type="gold" w={14} />
+        <TgStar type="star" w={14} />
         {(user.isTgProgramPartner
           ? price * subscriptions.telegramPartnerProgramRatio
           : price

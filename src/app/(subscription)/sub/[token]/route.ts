@@ -1,5 +1,6 @@
 'use server'
 import { publicApiClient } from '@app/core/publicApiClient'
+import { getTranslations } from 'next-intl/server'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { NextRequest } from 'next/server'
@@ -8,6 +9,8 @@ export async function GET(
   req: NextRequest,
   context: { params: Promise<{ token: string }> },
 ) {
+  // Получаем переводы для сообщений об ошибках
+  const t = await getTranslations('subscriptions')
   // Get token from params asynchronously
   const { token } = await context.params
 
@@ -27,14 +30,20 @@ export async function GET(
     )
 
     if (!resData || !resData.marzbanSubRes) {
-      return new Response('Not Found', {
+      console.error(
+        `[Subscription Error] Subscription data not found for token: ${token}`,
+      )
+      return new Response(t('notFound'), {
         status: 404,
+        headers: {
+          'Content-Type': 'text/plain; charset=utf-8',
+        },
       })
     }
 
     let links = ''
 
-    resData.subscription.links.map((el) => (links = links + el + `\n`))
+    resData.subscription.links.map((el: string) => (links = links + el + `\n`))
 
     const announce =
       resData.subscription.announce &&
@@ -50,9 +59,11 @@ export async function GET(
         'support-url': process.env.NEXT_PUBLIC_BOT_URL || '',
         'profile-web-page-url': resData.subscription.subscriptionUrl,
         'profile-update-interval': '1',
-        'profile-title': `base64:${Buffer.from(`VPNsib - ${resData.subscription.id}`).toString('base64')}`,
+        'profile-title': `base64:${Buffer.from(`${resData.subscription.name} - VPNsib`).toString('base64')}`,
         ...(announce && { announce }),
       },
     })
-  } else redirect(`/sub/${token}/info`)
+  } else {
+    redirect(`/sub/${token}/info`)
+  }
 }

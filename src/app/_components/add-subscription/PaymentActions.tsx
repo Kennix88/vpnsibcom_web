@@ -5,7 +5,7 @@ import { UserDataInterface } from '@app/types/user-data.interface'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { FaCircleInfo } from 'react-icons/fa6'
-import TgStar from '../TgStar'
+import TgStar from '../Currency'
 
 // Компонент: Кнопки оплаты
 export const PaymentActions = ({
@@ -32,7 +32,7 @@ export const PaymentActions = ({
   tBill: (key: string) => string
 }) => {
   const hasSelectedServers =
-    (isAllBaseServers && isAllPremiumServers) || serversSelected.length > 0
+    isAllBaseServers || isAllPremiumServers || serversSelected.length > 0
 
   return (
     <div className="flex flex-col gap-2 items-center w-full">
@@ -59,7 +59,7 @@ export const PaymentActions = ({
           )}
           {user.roleDiscount > 0 ? (
             <>
-              Оплатить с баланса <TgStar type="gold" w={15} />{' '}
+              Оплатить с баланса <TgStar type="star" w={15} />{' '}
               {nextFinalPrice.toFixed(2)}
             </>
           ) : (
@@ -75,7 +75,7 @@ export const PaymentActions = ({
           <Link
             className="flex flex-row gap-2 items-center justify-center px-4 py-2 bg-[var(--surface-container-high)] rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer text-sm"
             href={`/tma/payment?amount=${Math.ceil(nextFinalPrice - balance)}`}>
-            Пополнить баланс на <TgStar type="gold" w={14} />{' '}
+            Пополнить баланс на <TgStar type="star" w={14} />{' '}
             {Math.ceil(nextFinalPrice - balance)}
           </Link>
         </div>
@@ -102,7 +102,7 @@ export const PaymentActions = ({
                 style={{ width: '15px', height: '15px', borderWidth: '2px' }}
               />
             )}
-            Оплатить напрямую <TgStar type="original" w={15} />{' '}
+            Оплатить напрямую <TgStar type="tg-star" w={15} />{' '}
             {Math.ceil(nextFinalPrice)}
           </button>
 
@@ -115,7 +115,7 @@ export const PaymentActions = ({
               href={config.SPLIT_TG_REF_URL}
               className="flex flex-row gap-2 items-center justify-center px-4 py-2 bg-[var(--surface-container-high)] rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer text-sm"
               target="_blank">
-              {tBill('splitBay')} <TgStar type="original" w={15} />
+              {tBill('splitBay')} <TgStar type="tg-star" w={15} />
             </Link>
           </div>
         </>

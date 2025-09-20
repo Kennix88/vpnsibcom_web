@@ -2,12 +2,9 @@
 import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
 import Avatar from '@app/app/_components/Avatar'
 import Balance from '@app/app/_components/Balance'
-import CurrencySwitcher from '@app/app/_components/CurrencySwitcher'
 import LanguageSwitcher from '@app/app/_components/LanguageSwitcher'
-import TgStar from '@app/app/_components/TgStar'
 import { TonWalletConnect } from '@app/app/_components/ton/TonWalletConnect'
 import { TonWalletManager } from '@app/app/_components/ton/TonWalletManager'
-import WithdrawalSwitch from '@app/app/_components/WithdrawalSwitch'
 import { authApiClient } from '@app/core/authApiClient'
 import { useSlicedAddress } from '@app/hooks/useSlicedAddress'
 import { useUserStore } from '@app/store/user.store'
@@ -60,8 +57,8 @@ export default function Page() {
         </div>
         <div className={'flex flex-row gap-2 items-center justify-center'}>
           <Balance type={'payment'} />
-          <Balance type={'withdraw'} />
-          <Balance type={'hold'} />
+          <Balance type={'ticket'} />
+          <Balance type={'traffic'} />
         </div>
         <div
           className={
@@ -120,30 +117,29 @@ export default function Page() {
               {user && user.roleName.toUpperCase()}
             </div>
           </div>
-          {/*
-            Conditional rendering for discount section.
-            Ensures user and roleDiscount are defined, and the calculated discount is greater than 0.
-            user.roleDiscount is checked explicitly for null/undefined to allow 0 as a valid discount value.
-          */}
-          {user && (user.roleDiscount !== null && user.roleDiscount !== undefined) && (100 - 100 * user.roleDiscount > 0) && (
-            <div
-              className={
-                'flex flex-row flex-wrap items-center justify-between gap-2 py-2'
-              }>
+
+          {user &&
+            user.roleDiscount !== null &&
+            user.roleDiscount !== undefined &&
+            100 - 100 * user.roleDiscount > 0 && (
               <div
                 className={
-                  'font-medium text-[var(--on-background)]/80 font-mono'
+                  'flex flex-row flex-wrap items-center justify-between gap-2 py-2'
                 }>
-                {t('discount')}:
+                <div
+                  className={
+                    'font-medium text-[var(--on-background)]/80 font-mono'
+                  }>
+                  {t('discount')}:
+                </div>
+                <div
+                  className={
+                    'text-sm font-bold font-mono text-[var(--on-primary-container)] flex flex-row gap-2 transition-all duration-200 hover:brightness-110 active:scale-[0.97]'
+                  }>
+                  {100 - 100 * user.roleDiscount}%
+                </div>
               </div>
-              <div
-                className={
-                  'text-sm font-bold font-mono text-[var(--on-primary-container)] flex flex-row gap-2 transition-all duration-200 hover:brightness-110 active:scale-[0.97]'
-                }>
-                {100 - 100 * user.roleDiscount}%
-              </div>
-            </div>
-          )}
+            )}
 
           <div className={'flex flex-col gap-2 py-2'}>
             <div
@@ -168,27 +164,10 @@ export default function Page() {
             </div>
             <TonWalletManager />
           </div>
-          <div
-            className={
-              'flex flex-row flex-wrap items-center justify-between gap-2 py-2'
-            }>
-            <div
-              className={
-                'font-medium text-[var(--on-background)]/80 font-mono flex flex-row gap-1 items-center flex-wrap'
-              }>
-              {t('usage')} <TgStar w={15} type={'purple'} /> {t('inPayments')}:
-            </div>
-            <div
-              className={
-                'text-sm font-bold font-mono text-[var(--on-primary-container)] flex flex-row gap-2 transition-all duration-200 hover:brightness-110 active:scale-[0.97]'
-              }>
-              <WithdrawalSwitch size={0.75} />
-            </div>
-          </div>
         </div>
         <div className={'flex flex-row gap-2 flex-wrap justify-center'}>
           <LanguageSwitcher />
-          <CurrencySwitcher />
+          {/* <CurrencySwitcher /> */}
         </div>
       </div>
     </TmaPage>

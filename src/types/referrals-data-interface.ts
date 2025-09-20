@@ -17,14 +17,16 @@ export interface ReferralsDataInterface {
   lvl1TotalPaymentsRewarded: number
   lvl2TotalPaymentsRewarded: number
   lvl3TotalPaymentsRewarded: number
-  lvl1TotalWithdrawalsRewarded: number
-  lvl2TotalWithdrawalsRewarded: number
-  lvl3TotalWithdrawalsRewarded: number
+  lvl1TotalTrafficRewarded: number
+  lvl2TotalTrafficRewarded: number
+  lvl3TotalTrafficRewarded: number
   lvl1Percent: number
   lvl2Percent: number
   lvl3Percent: number
   inviteReward: number
   invitePremiumReward: number
+  inviteFriendReward: number
+  invitePremiumFriendReward: number
   lvl1Count: number
   lvl2Count: number
   lvl3Count: number
@@ -41,5 +43,5 @@ export interface ReferralDataInterface {
   username?: string
   photoUrl?: string
   totalPaymentsRewarded: number
-  totalWithdrawalsRewarded: number
+  totalTrafficRewarded: number
 }

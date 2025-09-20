@@ -16,12 +16,15 @@ export default function Version() {
         <Github size={18} />
         Open-Source
       </Link>
-      <Link
-        href={config.TELEGRAM_KENNIXDEV_URL || ''}
-        target="_blank"
-        className="text-[var(--primary)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer w-full text-center">
-        by KennixDev
-      </Link>
+      <div className="flex gap-2 items-center justify-center ">
+        <div className="text-nowrap">Developed by</div>
+        <Link
+          href={config.TELEGRAM_KENNIXDEV_URL || ''}
+          target="_blank"
+          className="text-[var(--primary)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer w-full text-center">
+          KennixDev
+        </Link>
+      </div>
     </div>
   )
 }

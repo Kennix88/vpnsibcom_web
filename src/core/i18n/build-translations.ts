@@ -3,6 +3,7 @@ import path from 'path'
 import { defaultLocale, locales } from './config'
 import { deepMergeWithFallback, loadTranslations } from './utils'
 
+
 /**
  * Builds and saves all translations to consolidated files
  * @param isDev - Whether running in development mode
@@ -44,7 +45,7 @@ export async function buildTranslations(isDev: boolean = false): Promise<void> {
         // Default locale file doesn't exist, continue with directory translations
       }
     } catch (error) {
-      // console.error(`Error loading default locale:`, error)
+      console.error(`Error loading default locale:`, error)
     }
 
     // Save default locale
@@ -95,7 +96,7 @@ export async function buildTranslations(isDev: boolean = false): Promise<void> {
           messages = JSON.parse(content)
         } catch {
           // Neither locale directory nor file exists
-          // console.warn(`No translations found for locale: ${locale}`)
+          console.warn(`No translations found for locale: ${locale}`)
         }
       }
 
@@ -119,7 +120,7 @@ export async function buildTranslations(isDev: boolean = false): Promise<void> {
 
     // console.log('All translations built successfully!')
   } catch (error) {
-    // console.error('Error building translations:', error)
+    console.error('Error rebuilding translations:', error)
   }
 }
 
