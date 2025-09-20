@@ -15,6 +15,7 @@ export default function Page() {
         <GreenCheck />
         <FreePlanActivated />
         <Subscriptions />
+        <br />
         <SocialButtons />
         <Version />
       </div>
