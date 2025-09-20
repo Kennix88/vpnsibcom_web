@@ -1,5 +1,6 @@
 export const config = {
   apiUrl: process.env.NEXT_PUBLIC_API_URL,
+  appUrl: process.env.NEXT_PUBLIC_APP_URL,
   tonManifestUrl:
     process.env.NEXT_PUBLIC_TON_CONNECT_MANIFEST_URL ||
     process.env.TON_CONNECT_MANIFEST_URL,
