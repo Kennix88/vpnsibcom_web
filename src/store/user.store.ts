@@ -18,7 +18,7 @@ interface UserState {
 //       { withCredentials: true },
 //     )
 //   } catch (error) {
-//     console.error('Failed to clear auth cookies', error)
+// logger.error('Failed to clear auth cookies', error as Error)
 //   }
 // }
 
