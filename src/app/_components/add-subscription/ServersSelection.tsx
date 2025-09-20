@@ -15,7 +15,7 @@ import {
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useMemo } from 'react'
-import TgStar from '../TgStar'
+import TgStar from '../Currency'
 
 export // Компонент: Выбор серверов
 const ServersSelection = ({
@@ -118,7 +118,7 @@ const ServersSelection = ({
         {planSelected.serversSelectType ===
           PlansServersSelectTypeEnum.CUSTOM && (
           <div className="flex gap-2 items-center ">
-            <TgStar type="gold" w={14} />
+            <TgStar type="star" w={14} />
             {(user.isTgProgramPartner
               ? serversPrice * subscriptions.telegramPartnerProgramRatio
               : serversPrice
@@ -139,6 +139,9 @@ const ServersSelection = ({
                 setIsAllBaseServers(!isAllBaseServers)
                 if (isAllBaseServers) {
                   setBaseServersCount(0)
+                  if (isAllPremiumServers) {
+                    setIsAllPremiumServers(false)
+                  }
                 } else {
                   setServersSelected([])
                   setBaseServersCount(serversData.baseServersCount)
@@ -161,6 +164,9 @@ const ServersSelection = ({
                 if (isAllPremiumServers) {
                   setPremiumServersCount(0)
                 } else {
+                  if (!isAllBaseServers) {
+                    setIsAllBaseServers(true)
+                  }
                   setServersSelected([])
                   setPremiumServersCount(serversData.premiumServersCount)
                 }
@@ -205,25 +211,28 @@ const ServersSelection = ({
                 key={server.code}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => handleServerSelect(server)}
-                className="flex flex-wrap gap-2 grow items-center justify-center text-white px-2 py-1.5 rounded-md text-xs font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]"
+                className="flex flex-col gap-0.5 grow items-center justify-center text-white px-2 py-1.5 rounded-md text-[11px] font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]"
                 style={{
                   backgroundColor: `rgba(216, 197, 255, ${bgOpacity})`,
                   border: isActive
                     ? `1px solid rgba(216, 197, 255, 0.7)`
                     : '1px solid transparent',
                 }}>
-                {server.isPremium && (
-                  <div className="flex items-center justify-center h-5 w-5 bg-[var(--gold-container)] rounded-md">
-                    ⭐
-                  </div>
-                )}
-                <Image
-                  src={`/flags/${server.flagKey}.svg`}
-                  alt="flag"
-                  width={20}
-                  height={20}
-                />
-                {server.code.toUpperCase()} [{server.network}GBit] {server.name}
+                <div className="flex gap-2 grow flex-wrap">
+                  {server.isPremium && (
+                    <div className="flex items-center justify-center h-5 w-5 bg-[var(--gold-container)] rounded-md">
+                      ⭐
+                    </div>
+                  )}
+                  <Image
+                    src={`/flags/${server.flagKey}.svg`}
+                    alt="flag"
+                    width={20}
+                    height={20}
+                  />
+                  {server.code.toUpperCase()} [{server.network}GBit]
+                </div>
+                <div className="flex gap-2 grow flex-wrap">{server.name}</div>
               </motion.button>
             )
           })}

@@ -1,15 +1,14 @@
 'use client'
-import TgStar from '@app/app/_components/TgStar'
+import TgStar from '@app/app/_components/Currency'
 import TooltipWrapper from '@app/app/_components/TooltipWrapper'
 import { useRefferlsStore } from '@app/store/referrals.store'
-import { useUserStore } from '@app/store/user.store'
 import addSuffixToNumberUtil from '@app/utils/add-suffix-to-number.util'
 import { FaCircleInfo } from 'react-icons/fa6'
 import { useTranslations } from 'use-intl'
 
 export default function FriendsStatistics() {
   const { referralsData } = useRefferlsStore()
-  const { user } = useUserStore()
+  // const { user } = useUserStore()
   const t = useTranslations('friends')
 
   return (
@@ -34,7 +33,7 @@ export default function FriendsStatistics() {
           <div className="flex flex-col divide-y divide-[var(--on-surface)]/50">
             <div
               className={
-                'bg-[var(--surface-container-high)] rounded-t-md grid grid-cols-2  flex flex-row justify-between py-2 px-4'
+                'bg-[var(--surface-container-high)] rounded-t-md grid grid-cols-2 justify-between py-2 px-4'
               }>
               <div
                 className={
@@ -42,15 +41,12 @@ export default function FriendsStatistics() {
                 }>
                 {t('total')}
               </div>
-              <div
-                className={
-                  'grid grid-cols-2 items-center divide-x divide-[var(--on-surface)]/50'
-                }>
+              <div className={'grid grid-cols-2 items-center'}>
                 <div
                   className={
-                    'flex px-2 justify-center flex-row gap-1 items-center'
+                    'flex justify-center flex-row gap-1 items-center px-2 py-1 rounded-l-md bg-[var(--star-container-rgba)]'
                   }>
-                  <TgStar w={15} type={'gold'} />
+                  <TgStar w={18} type={'star'} />
                   {referralsData &&
                     addSuffixToNumberUtil(
                       referralsData.lvl1TotalPaymentsRewarded +
@@ -61,33 +57,28 @@ export default function FriendsStatistics() {
                 </div>
                 <div
                   className={
-                    'flex pl-2 justify-center flex-row gap-1 items-center'
+                    'flex justify-center flex-row gap-1 items-center px-2 py-1 rounded-r-md bg-[var(--traffic-container-rgba)]'
                   }>
-                  <TgStar w={15} type={'purple'} />
-                  {user &&
+                  <TgStar w={18} type={'traffic'} />
+                  {referralsData &&
                     addSuffixToNumberUtil(
-                      user.balance.totalEarnedWithdrawalBalance,
-                      2,
+                      referralsData.lvl1TotalTrafficRewarded +
+                        referralsData.lvl2TotalTrafficRewarded +
+                        referralsData.lvl3TotalTrafficRewarded,
                     )}
                 </div>
               </div>
             </div>
-            <div
-              className={
-                'grid grid-cols-2  flex flex-row justify-between py-2 px-4'
-              }>
+            <div className={'grid grid-cols-2 justify-between py-2 px-4'}>
               <div className={'opacity-50 flex flex-row gap-2 items-center'}>
                 1 {t('level')}
               </div>
-              <div
-                className={
-                  'grid grid-cols-2 items-center divide-x divide-[var(--on-surface)]/50'
-                }>
+              <div className={'grid grid-cols-2 items-center'}>
                 <div
                   className={
-                    'flex px-2 justify-center flex-row gap-1 items-center'
+                    'flex justify-center flex-row gap-1 items-center px-2 py-1 rounded-l-md bg-[var(--star-container-rgba)]'
                   }>
-                  <TgStar w={15} type={'gold'} />
+                  <TgStar w={18} type={'star'} />
                   {referralsData &&
                     addSuffixToNumberUtil(
                       referralsData.lvl1TotalPaymentsRewarded,
@@ -95,32 +86,26 @@ export default function FriendsStatistics() {
                 </div>
                 <div
                   className={
-                    'flex pl-2 justify-center flex-row gap-1 items-center'
+                    'flex justify-center flex-row gap-1 items-center px-2 py-1 rounded-r-md bg-[var(--traffic-container-rgba)]'
                   }>
-                  <TgStar w={15} type={'purple'} />
+                  <TgStar w={18} type={'traffic'} />
                   {referralsData &&
                     addSuffixToNumberUtil(
-                      referralsData.lvl1TotalWithdrawalsRewarded,
+                      referralsData.lvl3TotalTrafficRewarded,
                     )}
                 </div>
               </div>
             </div>
-            <div
-              className={
-                'grid grid-cols-2  flex flex-row justify-between py-2 px-4'
-              }>
+            <div className={'grid grid-cols-2 justify-between py-2 px-4'}>
               <div className={'opacity-50 flex flex-row gap-2 items-center'}>
                 2 {t('level')}
               </div>
-              <div
-                className={
-                  'grid grid-cols-2 items-center divide-x divide-[var(--on-surface)]/50'
-                }>
+              <div className={'grid grid-cols-2 items-center'}>
                 <div
                   className={
-                    'flex px-2 justify-center flex-row gap-1 items-center'
+                    'flex justify-center flex-row gap-1 items-center px-2 py-1 rounded-l-md bg-[var(--star-container-rgba)]'
                   }>
-                  <TgStar w={15} type={'gold'} />
+                  <TgStar w={18} type={'star'} />
                   {referralsData &&
                     addSuffixToNumberUtil(
                       referralsData.lvl2TotalPaymentsRewarded,
@@ -128,32 +113,26 @@ export default function FriendsStatistics() {
                 </div>
                 <div
                   className={
-                    'flex pl-2 justify-center flex-row gap-1 items-center'
+                    'flex justify-center flex-row gap-1 items-center px-2 py-1 rounded-r-md bg-[var(--traffic-container-rgba)]'
                   }>
-                  <TgStar w={15} type={'purple'} />
+                  <TgStar w={18} type={'traffic'} />
                   {referralsData &&
                     addSuffixToNumberUtil(
-                      referralsData.lvl2TotalWithdrawalsRewarded,
+                      referralsData.lvl2TotalTrafficRewarded,
                     )}
                 </div>
               </div>
             </div>
-            <div
-              className={
-                'grid grid-cols-2  flex flex-row justify-between py-2 px-4'
-              }>
+            <div className={'grid grid-cols-2 justify-between py-2 px-4'}>
               <div className={'opacity-50 flex flex-row gap-2 items-center'}>
                 3 {t('level')}
               </div>
-              <div
-                className={
-                  'grid grid-cols-2 items-center divide-x divide-[var(--on-surface)]/50'
-                }>
+              <div className={'grid grid-cols-2 items-center'}>
                 <div
                   className={
-                    'flex px-2 justify-center flex-row gap-1 items-center'
+                    'flex justify-center flex-row gap-1 items-center px-2 py-1 rounded-l-md bg-[var(--star-container-rgba)]'
                   }>
-                  <TgStar w={15} type={'gold'} />
+                  <TgStar w={18} type={'star'} />
                   {referralsData &&
                     addSuffixToNumberUtil(
                       referralsData.lvl3TotalPaymentsRewarded,
@@ -161,12 +140,12 @@ export default function FriendsStatistics() {
                 </div>
                 <div
                   className={
-                    'flex pl-2 justify-center flex-row gap-1 items-center'
+                    'flex justify-center flex-row gap-1 items-center px-2 py-1 rounded-r-md bg-[var(--traffic-container-rgba)]'
                   }>
-                  <TgStar w={15} type={'purple'} />
+                  <TgStar w={18} type={'traffic'} />
                   {referralsData &&
                     addSuffixToNumberUtil(
-                      referralsData.lvl3TotalWithdrawalsRewarded,
+                      referralsData.lvl3TotalTrafficRewarded,
                     )}
                 </div>
               </div>

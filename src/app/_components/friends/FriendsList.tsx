@@ -1,6 +1,6 @@
 'use client'
 import Avatar from '@app/app/_components/Avatar'
-import TgStar from '@app/app/_components/TgStar'
+import TgStar from '@app/app/_components/Currency'
 import { useRefferlsStore } from '@app/store/referrals.store'
 import addSuffixToNumberUtil from '@app/utils/add-suffix-to-number.util'
 import limitLengthString from '@app/utils/limit-length-string.util'
@@ -103,13 +103,19 @@ export default function FriendsList() {
                       className={
                         'flex flex-row justify-between gap-4 items-center'
                       }>
-                      <div className={'flex flex-row gap-1 items-center'}>
-                        <TgStar w={15} type={'gold'} />
+                      <div
+                        className={
+                          'flex flex-row gap-1 items-center px-2 py-1 rounded-md bg-[var(--star-container-rgba)]'
+                        }>
+                        <TgStar w={15} type={'star'} />
                         {addSuffixToNumberUtil(ref.totalPaymentsRewarded)}
                       </div>
-                      <div className={'flex flex-row gap-1 items-center'}>
-                        <TgStar w={15} type={'purple'} />
-                        {addSuffixToNumberUtil(ref.totalWithdrawalsRewarded)}
+                      <div
+                        className={
+                          'flex flex-row gap-1 items-center px-2 py-1 rounded-md bg-[var(--traffic-container-rgba)]'
+                        }>
+                        <TgStar w={15} type={'traffic'} />
+                        {addSuffixToNumberUtil(ref.totalTrafficRewarded)}
                       </div>
                     </div>
                   </div>

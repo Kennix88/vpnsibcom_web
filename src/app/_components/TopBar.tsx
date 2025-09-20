@@ -11,10 +11,14 @@ export default function TopBar() {
   const url = location === '/app' ? '/app' : '/tma'
   return (
     <div className="flex flex-row gap-2 justify-between items-center w-full">
-      <Link href={url + '/settings'}>
+      <Link href={url + '/profile'}>
         <Avatar url={user?.photoUrl} className={'cursor-pointer'} />
       </Link>
-      <Balance type={'payment'} isAdd={true} />
+      <div className={'flex justify-end items-center gap-2'}>
+        <Balance type={'payment'} />
+        <Balance type={'ticket'} />
+        <Balance type={'traffic'} />
+      </div>
       {/* <div
         className={
           'flex justify-center bg-[var(--secondary-container)] rounded-md items-center p-1 cursor-pointer'

@@ -2,15 +2,18 @@
 
 import { authApiClient } from '@app/core/authApiClient'
 import { publicApiClient } from '@app/core/publicApiClient'
-import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
 import { PlansServersSelectTypeEnum } from '@app/enums/plans-servers-select-type.enum'
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
+import { TrafficResetEnum } from '@app/enums/traffic-reset.enum'
 import { usePlansStore } from '@app/store/plans.store'
 import { useServersStore } from '@app/store/servers.store'
 import { useSubscriptionsStore } from '@app/store/subscriptions.store'
 import { useUserStore } from '@app/store/user.store'
 import { PlansInterface } from '@app/types/plans.interface'
-import { SubscriptionResponseInterface } from '@app/types/subscription-data.interface'
+import {
+  CreateSubscriptionDataInterface,
+  SubscriptionResponseInterface,
+} from '@app/types/subscription-data.interface'
 import { UserDataInterface } from '@app/types/user-data.interface'
 import { calculateSubscriptionCost } from '@app/utils/calculate-subscription-cost.util'
 import { invoice } from '@telegram-apps/sdk-react'
@@ -76,9 +79,7 @@ export default function AddSubscription() {
   const [isLoading, setIsLoading] = useState(false)
 
   const balance = useMemo(() => {
-    return user?.balance.isUseWithdrawalBalance
-      ? user.balance.paymentBalance + user.balance.withdrawalBalance
-      : user?.balance.paymentBalance || 0
+    return user?.balance.payment || 0
   }, [user])
 
   const selectPlan = useCallback(
@@ -180,15 +181,16 @@ export default function AddSubscription() {
     ],
   )
 
-  const { price, nextFinalPrice } = useMemo(() => {
+  const price = useMemo(() => {
     if (!user || !subscriptions || !planSelected || !periodButton) {
-      return { price: 0, nextFinalPrice: 0 }
+      return 0
     }
 
-    const basePrice = calculateSubscriptionCost({
+    return calculateSubscriptionCost({
       period: periodButton.key,
       periodMultiplier,
       isPremium: user.isPremium,
+      isTgProgramPartner: user.isTgProgramPartner,
       devicesCount,
       serversCount: baseServersCount,
       premiumServersCount,
@@ -196,20 +198,10 @@ export default function AddSubscription() {
       isAllBaseServers,
       isAllPremiumServers,
       isUnlimitTraffic,
-      userDiscount: Math.min(Math.max(user.roleDiscount, 0), 1),
+      userDiscount: user.roleDiscount,
       plan: planSelected,
       settings: subscriptions,
     })
-
-    const withFixedPrice = isFixedPrice
-      ? basePrice + subscriptions.fixedPriceStars
-      : basePrice
-
-    const withPartnerDiscount = user.isTgProgramPartner
-      ? withFixedPrice * subscriptions.telegramPartnerProgramRatio
-      : withFixedPrice
-
-    return { price: basePrice, nextFinalPrice: withPartnerDiscount }
   }, [
     user,
     subscriptions,
@@ -223,7 +215,6 @@ export default function AddSubscription() {
     isAllBaseServers,
     isAllPremiumServers,
     isUnlimitTraffic,
-    isFixedPrice,
   ])
 
   // Загрузка серверов и тарифов
@@ -329,15 +320,18 @@ export default function AddSubscription() {
     setPeriodButton(buttons[3])
   }, [subscriptions, user])
 
+  // TODO: Изменить функцию покупки подписки
   const handlePurchase = async (isInvoice = false) => {
     if (isLoading || !planSelected || !periodButton) return
     setIsLoading(true)
 
     try {
-      const payload = {
+      const payload: CreateSubscriptionDataInterface = {
+        name: 'sub',
+        method: 'BALANCE',
         period: periodButton.key,
+        trafficReset: TrafficResetEnum.DAY,
         periodMultiplier,
-        isFixedPrice,
         devicesCount,
         isAllBaseServers,
         isAllPremiumServers,
@@ -353,12 +347,7 @@ export default function AddSubscription() {
         user: UserDataInterface
         linkPay?: string
         isTmaIvoice?: boolean
-      } = isInvoice
-        ? await authApiClient.purchaseInvoiceSubscription({
-            ...payload,
-            method: PaymentMethodEnum.STARS,
-          })
-        : await authApiClient.purchaseSubscription(payload)
+      } = await authApiClient.purchaseSubscription(payload)
 
       // await setUser(update.user)
       // await setSubscriptions(update.subscriptions)
@@ -456,8 +445,8 @@ export default function AddSubscription() {
           setIsAutoRenewal={setIsAutoRenewal}
           isFixedPrice={isFixedPrice}
           setIsFixedPrice={setIsFixedPrice}
-          user={user}
-          subscriptions={subscriptions}
+          // user={user}
+          // subscriptions={subscriptions}
         />
       )}
 
@@ -476,7 +465,7 @@ export default function AddSubscription() {
         isFixedPrice={isFixedPrice}
         isAutoRenewal={isAutoRenewal}
         price={price}
-        nextFinalPrice={nextFinalPrice}
+        nextFinalPrice={price}
         subscriptions={subscriptions}
       />
 
@@ -486,7 +475,7 @@ export default function AddSubscription() {
         isAllPremiumServers={isAllPremiumServers}
         serversSelected={serversSelected}
         balance={balance}
-        nextFinalPrice={nextFinalPrice}
+        nextFinalPrice={price}
         isLoading={isLoading}
         onBalancePayment={() => handlePurchase()}
         onInvoicePayment={() => handlePurchase(true)}

@@ -4,6 +4,7 @@ import { Metadata } from 'next'
 import { getLocale } from 'next-intl/server'
 // import 'normalize.css/normalize.css'
 import { CheckPlatform } from '@app/app/(tma)/tma/_components/CheckPlatform'
+import Script from 'next/script'
 import React from 'react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -11,7 +12,7 @@ import '../../_assets/globals.css'
 
 export const metadata: Metadata = {
   title: 'TMA - VPNsib',
-  description: 'VPNsibcom is an open source VPN service.',
+  description: 'VPNsib is an open source VPN service.',
 }
 
 export default async function TmaLayout({
@@ -22,6 +23,14 @@ export default async function TmaLayout({
   const locale = await getLocale()
   return (
     <html lang={locale} className={'dark'}>
+      <head>
+        <Script id="graspil">
+          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({key:i});
+            var f=d.getElementsByTagName(s)[0],j=d.createElement(s);
+            j.async=true;j.src="https://w.graspil.com";f.parentNode.insertBefore(j,f);
+          })(window,document,"script","graspil","2a2cda3309436dbb3a6bc4d817020929");`}
+        </Script>
+      </head>
       <body className="bg-[var(--background)]">
         <I18nProvider>
           <TelegramProvider>

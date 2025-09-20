@@ -1,8 +1,8 @@
 'use client'
 
+import TgStar from '@app/app/_components/Currency'
 import PaymentInvoiceButton from '@app/app/_components/payments/PaymentInvoiceButton'
 import { PaymentMethodSelector } from '@app/app/_components/payments/PaymentMethodSelector'
-import TgStar from '@app/app/_components/TgStar'
 import { CurrencyEnum } from '@app/enums/currency.enum'
 import { PaymentMethodTypeEnum } from '@app/enums/payment-method-type.enum'
 import { useCurrencyStore } from '@app/store/currency.store'
@@ -14,9 +14,8 @@ import { fxUtil } from '@app/utils/fx.util'
 import clsx from 'clsx'
 import { motion } from 'framer-motion'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useTranslations } from 'use-intl'
-import { Suspense } from 'react'
 
 const quickAmounts = [50, 100, 500, 700, 1000, 2000, 3000, 5000, 10000, 15000]
 
@@ -72,7 +71,7 @@ function PaymentsContent({ isTma = false }: Props) {
           layout
           className="text-sm bg-[var(--surface-container-lowest)] rounded-xl flex flex-col gap-4 py-5 px-4 w-full shadow-md">
           <div className="flex flex-row gap-2 items-center justify-center w-full">
-            <TgStar w={15} type="gold" />
+            <TgStar w={15} type="star" />
             <input
               type="number"
               placeholder={t('enterSum')}
@@ -112,7 +111,7 @@ function PaymentsContent({ isTma = false }: Props) {
                       ? `1px solid rgba(${rgb}, 0.7)`
                       : '1px solid transparent',
                   }}>
-                  <TgStar w={15} type="gold" /> {val.toLocaleString('ru-RU')}
+                  <TgStar w={15} type="star" /> {val.toLocaleString('ru-RU')}
                 </motion.button>
               )
             })}
@@ -149,7 +148,12 @@ function PaymentsContent({ isTma = false }: Props) {
 // Main component with Suspense boundary
 export default function Payments(props: Props) {
   return (
-    <Suspense fallback={<div className="flex flex-col gap-4 items-center pb-[100px]">Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="flex flex-col gap-4 items-center pb-[100px]">
+          Loading...
+        </div>
+      }>
       <PaymentsContent {...props} />
     </Suspense>
   )

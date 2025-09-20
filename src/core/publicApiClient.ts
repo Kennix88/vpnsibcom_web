@@ -1,5 +1,6 @@
 import { PlansResponseDataInterface } from '@app/types/plans.interface'
 import { GetSubscriptionConfigResponseInterface } from '@app/types/subscription-data.interface'
+
 import axios, {
   AxiosError,
   AxiosHeaders,

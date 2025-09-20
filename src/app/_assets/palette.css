@@ -1,29 +1,52 @@
 :root {
-  --tg-star-gold: #fec73d;
-  --on-tg-star-gold: #3a2e00;
-  --tg-star-gold-container: #ffd978;
-  --on-tg-star-gold-container: #241c00;
+  /* Star (FEBD04) */
+  --star: #febd04;
+  --on-star: #3a2e00;
+  --star-container: #ffe08f;
+  --on-star-container: #241c00;
+  --star-container-rgba: rgba(254, 189, 4, 0.3);
 
-  --tg-star-purple: #7f60ec;
-  --on-tg-star-purple: #ffffff;
-  --tg-star-purple-container: #ece5ff;
-  --on-tg-star-purple-container: #25008e;
+  /* Ton (0088CC) */
+  --ton: #0088cc;
+  --on-ton: #ffffff;
+  --ton-container: #b3e3ff;
+  --on-ton-container: #001f2f;
+  --ton-container-rgba: rgba(0, 136, 204, 0.3);
 
-  --tg-star-ice: #6090c7;
-  --on-tg-star-ice: #ffffff;
-  --tg-star-ice-container: #d3e4ff;
-  --on-tg-star-ice-container: #001c3a;
+  /* Ticket (EF6470) */
+  --ticket: #ef6470;
+  --on-ticket: #ffffff;
+  --ticket-container: #ffd9dd;
+  --on-ticket-container: #40000e;
+  --ticket-container-rgba: rgba(239, 100, 112, 0.3);
+
+  /* Traffic (00BBD4) */
+  --traffic: #00bbd4;
+  --on-traffic: #ffffff;
+  --traffic-container: #b5f2fa;
+  --on-traffic-container: #00292f;
+  --traffic-container-rgba: rgba(0, 187, 212, 0.3);
+
+  /* Wager (D63A3A) */
+  --wager: #d63a3a;
+  --on-wager: #ffffff;
+  --wager-container: #ffdad6;
+  --on-wager-container: #410001;
+  --wager-container-rgba: rgba(214, 58, 58, 0.3);
+
+  /* Ice */
+  --ice: #6090c7;
+  --on-ice: #ffffff;
+  --ice-container: #d3e4ff;
+  --on-container: #001c3a;
+  --ice-container-rgba: rgba(96, 144, 199, 0.3);
 
   --color-green: 31, 156, 86;
   --color-red: 193, 53, 44;
   --color-gold: 159, 114, 34;
 
-  --gold-container: rgba(254, 199, 61, 0.3);
-  --purple-container: rgba(127, 96, 236, 0.3);
-  --ice-container: rgba(96, 144, 199, 0.3);
-
   /* === PRIMARY === */
-  --primary: rgb(216, 197, 255);
+  --primary: #d8c5ff;
   --on-primary: #381e72;
   --primary-container: #4f378a;
   --on-primary-container: #f2e9ff;

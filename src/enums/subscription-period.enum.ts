@@ -1,5 +1,6 @@
 export enum SubscriptionPeriodEnum {
   TRIAL = 'TRIAL',
+  TRAFFIC = 'TRAFFIC',
   HOUR = 'HOUR',
   DAY = 'DAY',
   WEEK = 'WEEK',

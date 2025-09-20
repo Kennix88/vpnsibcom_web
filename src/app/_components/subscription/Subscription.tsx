@@ -11,6 +11,7 @@ import { formatBytes } from '@app/utils/format-bytes.util'
 import limitLengthString from '@app/utils/limit-length-string.util'
 import { differenceInMinutes, formatDistanceToNow, intlFormat } from 'date-fns'
 import { motion } from 'framer-motion'
+
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import QRCodeStyling from 'qr-code-styling'
@@ -29,9 +30,9 @@ import { PiSpeedometerBold } from 'react-icons/pi'
 import { SiAdobeindesign } from 'react-icons/si'
 import { TbDotsVertical, TbQrcode } from 'react-icons/tb'
 import { toast } from 'react-toastify'
+import TgStar from '../Currency'
 import LanguageSwitcher from '../LanguageSwitcher'
 import Modal from '../Modal'
-import TgStar from '../TgStar'
 import AppsList from './AppsList'
 import LinksList from './LinksList'
 
@@ -61,9 +62,15 @@ export default function Subscription({
   const qrCodeRef = useRef<QRCodeStyling | null>(null)
   const [tab, setTab] = useState<'apps' | 'links'>('apps')
 
+  const [loading, setLoading] = useState<boolean>(true)
+  const [error, setError] = useState<string | null>(null)
+
   useEffect(() => {
     const getSubscription = async () => {
       try {
+        setLoading(true)
+        setError(null)
+
         if (!isToken) {
           const get = await authApiClient.getSubscriptionDataById(token)
           setSubscription(get.subscription)
@@ -71,12 +78,31 @@ export default function Subscription({
           const get = await publicApiClient.getSubscriptionDataByToken(token)
           setSubscription(get.subscription)
         }
-      } catch {
-        toast.error('Error updating data')
+      } catch (err) {
+        console.error(
+          `[Subscription Error] Failed to load subscription data:`,
+          err,
+        )
+        // Проверяем тип ошибки для более информативного сообщения
+        if (err instanceof Error) {
+          // Если ошибка содержит 404, значит подписка не найдена
+          if (err.message.includes('404')) {
+            setError(t('notFound'))
+            toast.error(t('notFound'))
+          } else {
+            setError(t('errors.loadFailed'))
+            toast.error(t('errors.loadFailed'))
+          }
+        } else {
+          setError(t('errors.loadFailed'))
+          toast.error(t('errors.loadFailed'))
+        }
+      } finally {
+        setLoading(false)
       }
     }
     getSubscription()
-  }, [isToken, token])
+  }, [isToken, token, t])
 
   useEffect(() => {
     if (!isOpenModalQR || !qrRef.current) return
@@ -120,8 +146,32 @@ export default function Subscription({
     qrCodeRef.current.append(qrRef.current)
   }, [isOpenModalQR, subscription])
 
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center w-full h-full p-4 gap-4">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[var(--primary)]"></div>
+        <div className="text-lg font-medium">{t('loading')}</div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center w-full h-full p-4 gap-4">
+        <div className="text-[var(--error)] text-lg font-medium">{error}</div>
+        <div className="text-sm text-[var(--on-surface-variant)]">
+          {t('notFound')}
+        </div>
+      </div>
+    )
+  }
+
   if (!subscription) {
-    return null
+    return (
+      <div className="flex flex-col items-center justify-center w-full h-full p-4 gap-4">
+        <div className="text-lg font-medium">{t('notFound')}</div>
+      </div>
+    )
   }
 
   /**
@@ -249,11 +299,7 @@ export default function Subscription({
     }
   }
 
-  const balance = user
-    ? user.balance.isUseWithdrawalBalance
-      ? user.balance.paymentBalance + user.balance.withdrawalBalance
-      : user.balance.paymentBalance
-    : 0
+  const balance = user ? user.balance.payment : 0
 
   return (
     <div className="w-full flex justify-center font-mono">
@@ -279,7 +325,7 @@ export default function Subscription({
           <div className="pb-4 flex flex-col gap-2">
             <div className="flex gap-2 items-center justify-between px-4 ">
               <div className="rounded-md px-2 py-1 bg-[var(--tertiary-container)] text-[var(--on-tertiary-container)] text-sm font-bold">
-                {subscription.planKey}
+                {subscription.plan.name}
               </div>
               <div
                 className={`flex items-center gap-2 rounded-md px-2 py-1 ${
@@ -478,7 +524,7 @@ export default function Subscription({
                                   ? 'opacity-50 cursor-not-allowed'
                                   : ' cursor-pointer'
                               } flex gap-2 items-center `}>
-                              <TgStar type={'gold'} w={18} />
+                              <TgStar type={'star'} w={18} />
                               Продлить с баланса
                             </button>
                             <Modal
@@ -655,7 +701,7 @@ export default function Subscription({
                   ? 'var(--on-primary)'
                   : 'var(--on-surface-container)',
             }}>
-            Конфигурации
+            Конфигурации (Pro)
           </button>
         </div>
         {tab == 'apps' ? (
