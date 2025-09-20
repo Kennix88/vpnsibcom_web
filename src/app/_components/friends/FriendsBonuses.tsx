@@ -1,5 +1,5 @@
 'use client'
-import TgStar from '@app/app/_components/TgStar'
+import TgStar from '@app/app/_components/Currency'
 import TooltipWrapper from '@app/app/_components/TooltipWrapper'
 import { useRefferlsStore } from '@app/store/referrals.store'
 import { FaCircleInfo } from 'react-icons/fa6'
@@ -33,18 +33,32 @@ export default function FriendsBonuses() {
               <div className={'opacity-50 flex flex-row gap-2 items-center'}>
                 Standard
               </div>
-              <div className={'flex flex-row gap-1 items-center'}>
-                <TgStar w={15} type={'gold'} />
-                {referralsData?.inviteReward}
+              <div
+                className={
+                  'flex flex-row gap-1 items-center px-2 py-1 rounded-md bg-[var(--traffic-container-rgba)]'
+                }>
+                <TgStar w={18} type={'traffic'} />
+                <div>
+                  {referralsData?.inviteReward
+                    ? referralsData?.inviteReward * 1024
+                    : 0}
+                </div>
               </div>
             </div>
             <div className={'flex flex-row justify-between py-2 px-4'}>
               <div className={'opacity-50 flex flex-row gap-2 items-center'}>
                 Premium
               </div>
-              <div className={'flex flex-row gap-1 items-center'}>
-                <TgStar w={15} type={'gold'} />
-                {referralsData?.invitePremiumReward}
+              <div
+                className={
+                  'flex flex-row gap-1 items-center px-2 py-1 rounded-md bg-[var(--traffic-container-rgba)]'
+                }>
+                <TgStar w={18} type={'traffic'} />
+                <div>
+                  {referralsData?.invitePremiumReward
+                    ? referralsData?.invitePremiumReward * 1024
+                    : 0}
+                </div>
               </div>
             </div>
           </div>
@@ -73,9 +87,12 @@ export default function FriendsBonuses() {
                   <FaCircleInfo />
                 </TooltipWrapper>
               </div>
-              <div className={'flex flex-row gap-1 items-center'}>
+              <div
+                className={
+                  'flex flex-row gap-1 items-center px-2 py-1 rounded-md bg-[var(--star-container-rgba)]'
+                }>
                 {referralsData && 100 * referralsData.lvl1Percent}%
-                <TgStar w={15} type={'purple'} />
+                <TgStar w={18} type={'star'} />
               </div>
             </div>
             <div className={'flex flex-row justify-between py-2 px-4'}>
@@ -88,9 +105,12 @@ export default function FriendsBonuses() {
                   <FaCircleInfo />
                 </TooltipWrapper>
               </div>
-              <div className={'flex flex-row gap-1 items-center'}>
+              <div
+                className={
+                  'flex flex-row gap-1 items-center px-2 py-1 rounded-md bg-[var(--star-container-rgba)]'
+                }>
                 {referralsData && 100 * referralsData.lvl2Percent}%
-                <TgStar w={15} type={'purple'} />
+                <TgStar w={18} type={'star'} />
               </div>
             </div>
             <div className={'flex flex-row justify-between py-2 px-4'}>
@@ -103,9 +123,12 @@ export default function FriendsBonuses() {
                   <FaCircleInfo />
                 </TooltipWrapper>
               </div>
-              <div className={'flex flex-row gap-1 items-center'}>
+              <div
+                className={
+                  'flex flex-row gap-1 items-center px-2 py-1 rounded-md bg-[var(--star-container-rgba)]'
+                }>
                 {referralsData && 100 * referralsData.lvl3Percent}%
-                <TgStar w={15} type={'purple'} />
+                <TgStar w={18} type={'star'} />
               </div>
             </div>
           </div>
