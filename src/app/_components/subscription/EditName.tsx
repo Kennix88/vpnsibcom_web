@@ -1,18 +1,45 @@
 'use client'
 
+import { authApiClient } from '@app/core/authApiClient'
+import { useSubscriptionsStore } from '@app/store/subscriptions.store'
+import { useUserStore } from '@app/store/user.store'
 import { useState } from 'react'
 import { AiOutlineStop } from 'react-icons/ai'
 import { FaCheck, FaPen } from 'react-icons/fa6'
+import { toast } from 'react-toastify'
 
 export default function EditName({
   name,
+  subscriptionId,
   isEdit,
 }: {
   name: string
+  subscriptionId: string
   isEdit: boolean
 }) {
   const [inputName, setInputName] = useState(name)
   const [isEditName, setIsEditName] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const { setSubscriptions } = useSubscriptionsStore()
+  const { setUser } = useUserStore()
+
+  const editNameSubscription = async (subscriptionId: string, name: string) => {
+    try {
+      setIsLoading(true)
+      const data = await authApiClient.editSubscriptionName(
+        subscriptionId,
+        name,
+      )
+
+      setUser(data.user)
+      setSubscriptions(data.subscriptions)
+      toast.success('Subscription name updated')
+    } catch {
+      toast.error('Failed to update subscription name')
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   if (!isEdit) return <div>{inputName}</div>
   if (isEditName)
@@ -27,6 +54,7 @@ export default function EditName({
           onChange={(e) => setInputName(e.target.value)}
         />
         <button
+          disabled={isLoading}
           className="transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer p-1 rounded-md bg-[var(--error)] text-[var(--on-error)] font-extrabold"
           onClick={() => {
             setInputName(name)
@@ -35,8 +63,10 @@ export default function EditName({
           <AiOutlineStop size={14} />
         </button>
         <button
+          disabled={isLoading}
           className="transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer p-1 rounded-md bg-[var(--success)] text-[var(--on-success)] font-extrabold"
           onClick={() => {
+            editNameSubscription(subscriptionId, inputName)
             setIsEditName(false)
           }}>
           <FaCheck size={14} />

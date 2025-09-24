@@ -217,6 +217,7 @@ export default function SubscriptionElement({
             <EditName
               name={limitLengthString(subscription.name, 25)}
               isEdit={true}
+              subscriptionId={subscription.id}
             />
           </div>
         </div>
