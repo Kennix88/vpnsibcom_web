@@ -408,6 +408,21 @@ class ApiClient {
     })
   }
 
+  async editSubscriptionName(subscriptionId: string, name: string) {
+    return this.safeRequest<{
+      subscriptions: SubscriptionResponseInterface
+      user: UserDataInterface
+    }>(async () => {
+      const { data } = await this.instance.post<
+        ApiResponse<{
+          subscriptions: SubscriptionResponseInterface
+          user: UserDataInterface
+        }>
+      >('/subscriptions/edit-name/' + subscriptionId, { name })
+      return data.data
+    })
+  }
+
   async deleteSubscription(subscriptionId: string) {
     return this.safeRequest<{
       subscriptions: SubscriptionResponseInterface
