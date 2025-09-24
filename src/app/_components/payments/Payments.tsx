@@ -12,7 +12,9 @@ import { motion } from 'framer-motion'
 import { Suspense, useState } from 'react'
 import { useTranslations } from 'use-intl'
 
-const quickAmounts = [50, 100, 500, 700, 1000, 2000, 3000, 5000, 10000, 15000]
+const quickAmounts = [
+  50, 100, 500, 700, 1000, 2000, 3000, 5000, 10000, 25000, 50000,
+]
 
 const getButtonColor = (amount: number) => {
   if (amount < 1000) return 'var(--color-green)'
@@ -56,15 +58,17 @@ function PaymentsContent() {
           layout
           className="text-sm bg-[var(--surface-container-lowest)] rounded-xl flex flex-col gap-4 py-5 px-4 w-full shadow-md">
           <div className="flex flex-row gap-2 items-center justify-center w-full">
-            <TgStar w={15} type="star" />
+            <TgStar w={18} type="star" />
             <input
               type="number"
               placeholder={t('enterSum')}
+              min={1}
+              max={5000000}
               value={amount || ''}
               onChange={(e) =>
-                setAmount(e.target.value ? parseInt(e.target.value) : 700)
+                setAmount(e.target.value ? parseInt(e.target.value) : 1)
               }
-              className="border max-w-[250px] border-[var(--on-surface)]/50 rounded-md px-2 py-1 bg-transparent focus:border-[var(--primary)] focus:outline-none"
+              className="border grow max-w-[250px] border-[var(--on-surface)]/50 rounded-md px-2 py-1 font-bold bg-transparent focus:border-[var(--primary)] focus:outline-none"
             />
             <div className={'text-xs opacity-50'}>
               ≈{' '}
@@ -88,7 +92,7 @@ function PaymentsContent() {
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setAmount(val)}
                   className={clsx(
-                    'flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-sm font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]',
+                    'flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-sm font-bold font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]',
                   )}
                   style={{
                     backgroundColor: `rgba(${rgb}, ${bgOpacity})`,
@@ -96,7 +100,7 @@ function PaymentsContent() {
                       ? `1px solid rgba(${rgb}, 0.7)`
                       : '1px solid transparent',
                   }}>
-                  <TgStar w={15} type="star" /> {val.toLocaleString('ru-RU')}
+                  <TgStar w={18} type="star" /> {val}
                 </motion.button>
               )
             })}
