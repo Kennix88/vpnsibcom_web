@@ -24,12 +24,14 @@ export default async function TmaLayout({
   return (
     <html lang={locale} className={'dark'}>
       <head>
-        <Script id="graspil">
-          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({key:i});
-            var f=d.getElementsByTagName(s)[0],j=d.createElement(s);
-            j.async=true;j.src="https://w.graspil.com";f.parentNode.insertBefore(j,f);
-          })(window,document,"script","graspil","2a2cda3309436dbb3a6bc4d817020929");`}
-        </Script>
+        {process.env.NEXT_PUBLIC_GRASPIL_ID && (
+          <Script id="graspil">
+            {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({key:i});
+												var f=d.getElementsByTagName(s)[0],j=d.createElement(s);
+												j.async=true;j.src="https://w.graspil.com";f.parentNode.insertBefore(j,f);
+											})(window,document,"script","graspil","${process.env.NEXT_PUBLIC_GRASPIL_ID}");`}
+          </Script>
+        )}
       </head>
       <body className="bg-[var(--background)]">
         <I18nProvider>

@@ -345,13 +345,17 @@ class ApiClient {
     return this.safeRequest<{
       user: UserDataInterface
       linkPay: string
-      isTmaIvoice: boolean
+      isTonPayment: boolean
+      amountTon: number
+      token: string
     }>(async () => {
       const { data } = await this.instance.post<
         ApiResponse<{
           user: UserDataInterface
           linkPay: string
-          isTmaIvoice: boolean
+          isTonPayment: boolean
+          amountTon: number
+          token: string
         }>
       >('/payments/invoice', params)
       return data.data
@@ -493,7 +497,10 @@ class ApiClient {
    * @param serverCodes - Array of server codes to assign to the subscription
    * @returns Promise with updated subscriptions and user data
    */
-  async updateSubscriptionServers(subscriptionId: string, serverCodes: string[]) {
+  async updateSubscriptionServers(
+    subscriptionId: string,
+    serverCodes: string[],
+  ) {
     return this.safeRequest<{
       subscriptions: SubscriptionResponseInterface
       user: UserDataInterface

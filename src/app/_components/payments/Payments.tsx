@@ -2,19 +2,14 @@
 
 import TgStar from '@app/app/_components/Currency'
 import PaymentInvoiceButton from '@app/app/_components/payments/PaymentInvoiceButton'
-import { PaymentMethodSelector } from '@app/app/_components/payments/PaymentMethodSelector'
 import { CurrencyEnum } from '@app/enums/currency.enum'
-import { PaymentMethodTypeEnum } from '@app/enums/payment-method-type.enum'
 import { useCurrencyStore } from '@app/store/currency.store'
-import { usePaymentMethodsStore } from '@app/store/payment-methods.store'
 import { useUserStore } from '@app/store/user.store'
-import { PaymentMethodsDataInterface } from '@app/types/payment-methods-data.interface'
 import addSuffixToNumberUtil from '@app/utils/add-suffix-to-number.util'
 import { fxUtil } from '@app/utils/fx.util'
 import clsx from 'clsx'
 import { motion } from 'framer-motion'
-import { usePathname, useSearchParams } from 'next/navigation'
-import { Suspense, useEffect, useState } from 'react'
+import { Suspense, useState } from 'react'
 import { useTranslations } from 'use-intl'
 
 const quickAmounts = [50, 100, 500, 700, 1000, 2000, 3000, 5000, 10000, 15000]
@@ -25,37 +20,27 @@ const getButtonColor = (amount: number) => {
   return 'var(--color-red)'
 }
 
-type Props = {
-  isTma?: boolean
-}
-
 // Inner component that uses useSearchParams
-function PaymentsContent({ isTma = false }: Props) {
+function PaymentsContent() {
   const t = useTranslations('billing.payment')
   const { user, setUser } = useUserStore()
-  const location = usePathname()
-  const url = location.includes('/tma') ? '/tma' : '/app'
-  const { methods } = usePaymentMethodsStore()
   const [amount, setAmount] = useState<number>(700)
   const { rates, currencies } = useCurrencyStore()
-  const [selectedMethod, setSelectedMethod] =
-    useState<PaymentMethodsDataInterface | null>()
-  const searchParams = useSearchParams()
 
-  useEffect(() => {
-    if (!methods) return
-    if (url == '/tma')
-      setSelectedMethod(
-        methods.find((m) => m.type == PaymentMethodTypeEnum.STARS) ||
-          methods[0],
-      )
-    else setSelectedMethod(methods[0])
-    if (searchParams.has('amount')) {
-      setAmount(parseInt(searchParams.get('amount') || '700'))
-    }
-  }, [methods])
+  // useEffect(() => {
+  //   if (!methods) return
+  //   if (url == '/tma')
+  //     setSelectedMethod(
+  //       methods.find((m) => m.type == PaymentMethodTypeEnum.STARS) ||
+  //         methods[0],
+  //     )
+  //   else setSelectedMethod(methods[0])
+  //   if (searchParams.has('amount')) {
+  //     setAmount(parseInt(searchParams.get('amount') || '700'))
+  //   }
+  // }, [methods])
 
-  if (!methods || !user || !rates || !currencies) return null
+  if (!user || !rates || !currencies) return null
   const currency = currencies.find((c) => c.key === user.currencyCode)
 
   if (!currency) return null
@@ -118,7 +103,7 @@ function PaymentsContent({ isTma = false }: Props) {
           </div>
         </motion.div>
       </div>
-      {url !== '/tma' && (
+      {/* {url !== '/tma' && (
         <PaymentMethodSelector
           methods={methods}
           currencies={currencies}
@@ -129,24 +114,19 @@ function PaymentsContent({ isTma = false }: Props) {
           onSelect={(method) => setSelectedMethod(method)}
           isTma={isTma}
         />
-      )}
+      )} */}
 
-      {selectedMethod && (
-        <PaymentInvoiceButton
-          method={selectedMethod}
-          currencies={currencies}
-          amount={amount}
-          rates={rates}
-          setUser={(user) => setUser(user)}
-          isTma={isTma}
-        />
-      )}
+      <PaymentInvoiceButton
+        amount={amount}
+        rates={rates}
+        setUser={(user) => setUser(user)}
+      />
     </div>
   )
 }
 
 // Main component with Suspense boundary
-export default function Payments(props: Props) {
+export default function Payments() {
   return (
     <Suspense
       fallback={
@@ -154,7 +134,7 @@ export default function Payments(props: Props) {
           Loading...
         </div>
       }>
-      <PaymentsContent {...props} />
+      <PaymentsContent />
     </Suspense>
   )
 }
