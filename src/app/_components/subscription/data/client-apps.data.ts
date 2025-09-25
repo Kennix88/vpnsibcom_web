@@ -154,4 +154,283 @@ export const CLIENT_APPS: ClientAppInterface[] = [
       },
     ],
   },
+  {
+    key: ClientAppsEnum.SHADOWROCKET,
+    name: 'ShadowRocket',
+    isPaid: true,
+    isRequired: false,
+    color: '#2473BF',
+    icon: '/clients/shadowrocket.svg',
+    deepLink: 'sub://{URL}',
+    routing: [],
+    platforms: [
+      {
+        platform: PlatformEnum.IOS,
+        version: '13.0+',
+        downloadLinks: [
+          {
+            iconType: IconTypeEnum.APPLE_STORE,
+            title: 'AppStore',
+            link: 'https://apps.apple.com/app/shadowrocket/id932747118',
+          },
+        ],
+      },
+      {
+        platform: PlatformEnum.IPADOS,
+        version: '13.0+',
+        downloadLinks: [
+          {
+            iconType: IconTypeEnum.APPLE_STORE,
+            title: 'AppStore',
+            link: 'https://apps.apple.com/app/shadowrocket/id932747118',
+          },
+        ],
+      },
+      {
+        platform: PlatformEnum.MACOS,
+        version: '11.0+',
+        downloadLinks: [
+          {
+            iconType: IconTypeEnum.APPLE_STORE,
+            title: 'AppStore',
+            link: 'https://apps.apple.com/app/shadowrocket/id932747118',
+          },
+        ],
+      },
+      {
+        platform: PlatformEnum.APPLE_TV,
+        version: '17.0+',
+        downloadLinks: [
+          {
+            iconType: IconTypeEnum.APPLE_STORE,
+            title: 'AppStore',
+            link: 'https://apps.apple.com/app/shadowrocket/id932747118',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: ClientAppsEnum.STREISAND,
+    name: 'Streisand',
+    isPaid: false,
+    isRequired: false,
+    color: '#A755F6',
+    icon: '/clients/streisand.svg',
+    deepLink: 'streisand://import/{URL}#VPNsib',
+    routing: [],
+    platforms: [
+      {
+        platform: PlatformEnum.IOS,
+        version: '13.0+',
+        downloadLinks: [
+          {
+            iconType: IconTypeEnum.APPLE_STORE,
+            title: 'AppStore',
+            link: 'https://apps.apple.com/app/streisand/id6450534064',
+          },
+        ],
+      },
+      {
+        platform: PlatformEnum.IPADOS,
+        version: '13.0+',
+        downloadLinks: [
+          {
+            iconType: IconTypeEnum.APPLE_STORE,
+            title: 'AppStore',
+            link: 'https://apps.apple.com/app/streisand/id6450534064',
+          },
+        ],
+      },
+      {
+        platform: PlatformEnum.MACOS,
+        version: '12.0+',
+        downloadLinks: [
+          {
+            iconType: IconTypeEnum.APPLE_STORE,
+            title: 'AppStore',
+            link: 'https://apps.apple.com/app/streisand/id6450534064',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: ClientAppsEnum.FOXRAY,
+    name: 'FoxRay',
+    isPaid: false,
+    isRequired: false,
+    color: '#017AFF',
+    icon: '/clients/foxray.svg',
+    deepLink: 'foxray://yiguo.dev/sub/add/?url={URL}#VPNsib',
+    routing: [],
+    platforms: [
+      {
+        platform: PlatformEnum.IOS,
+        version: '13.0+',
+        downloadLinks: [
+          {
+            iconType: IconTypeEnum.APPLE_STORE,
+            title: 'AppStore',
+            link: 'https://apps.apple.com/app/foxray/id6448898396',
+          },
+        ],
+      },
+      {
+        platform: PlatformEnum.IPADOS,
+        version: '13.0+',
+        downloadLinks: [
+          {
+            iconType: IconTypeEnum.APPLE_STORE,
+            title: 'AppStore',
+            link: 'https://apps.apple.com/app/foxray/id6448898396',
+          },
+        ],
+      },
+      {
+        platform: PlatformEnum.MACOS,
+        version: '12.0+',
+        downloadLinks: [
+          {
+            iconType: IconTypeEnum.APPLE_STORE,
+            title: 'AppStore',
+            link: 'https://apps.apple.com/app/foxray/id6448898396',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: ClientAppsEnum.V2RAYNG,
+    name: 'v2rayNG',
+    isPaid: false,
+    isRequired: false,
+    color: '#37464f',
+    icon: '/clients/v2rayng.svg',
+    deepLink: 'v2rayng://install-config?url={URL}',
+    routing: [],
+    platforms: [
+      {
+        platform: PlatformEnum.ANDROID,
+        version: '8.0+',
+        downloadLinks: [
+          {
+            iconType: IconTypeEnum.PLAY_MARKET,
+            title: 'Play Market',
+            link: 'https://play.google.com/store/apps/details?id=com.v2ray.ang',
+          },
+          {
+            iconType: IconTypeEnum.OTHER,
+            title: 'APK file [Universal]',
+            link: 'https://github.com/2dust/v2rayNG/releases/download/1.10.23/v2rayNG_1.10.23_universal.apk',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: ClientAppsEnum.V2BOX,
+    name: 'V2Box',
+    isPaid: false,
+    isRequired: false,
+    color: '#000000',
+    icon: '/clients/v2box.svg',
+    deepLink: 'v2box://install-sub?url={URL}&name=VPNsib',
+    routing: [],
+    platforms: [
+      {
+        platform: PlatformEnum.IOS,
+        version: '13.0+',
+        downloadLinks: [
+          {
+            iconType: IconTypeEnum.APPLE_STORE,
+            title: 'AppStore',
+            link: 'https://apps.apple.com/app/v2box-v2ray-client/id6446814690',
+          },
+        ],
+      },
+      {
+        platform: PlatformEnum.IPADOS,
+        version: '13.0+',
+        downloadLinks: [
+          {
+            iconType: IconTypeEnum.APPLE_STORE,
+            title: 'AppStore',
+            link: 'https://apps.apple.com/app/v2box-v2ray-client/id6446814690',
+          },
+        ],
+      },
+      {
+        platform: PlatformEnum.MACOS,
+        version: '12.0+',
+        downloadLinks: [
+          {
+            iconType: IconTypeEnum.APPLE_STORE,
+            title: 'AppStore',
+            link: 'https://apps.apple.com/app/v2box-v2ray-client/id6446814690',
+          },
+        ],
+      },
+      {
+        platform: PlatformEnum.ANDROID,
+        version: '8.0+',
+        downloadLinks: [
+          {
+            iconType: IconTypeEnum.PLAY_MARKET,
+            title: 'Play Market',
+            link: 'https://play.google.com/store/apps/details?id=dev.hexasoftware.v2box',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    key: ClientAppsEnum.HIDDIFY,
+    name: 'Hiddify',
+    isPaid: false,
+    isRequired: false,
+    color: '#455fe9',
+    icon: '/clients/hiddify.svg',
+    deepLink: 'hiddify://install-sub?url={URL}#VPNsib',
+    routing: [],
+    platforms: [
+      {
+        platform: PlatformEnum.ANDROID,
+        version: '8.0+',
+        downloadLinks: [
+          {
+            iconType: IconTypeEnum.PLAY_MARKET,
+            title: 'Play Market',
+            link: 'https://play.google.com/store/apps/details?id=app.hiddify.com',
+          },
+          {
+            iconType: IconTypeEnum.OTHER,
+            title: 'APK file [Universal]',
+            link: 'https://github.com/hiddify/hiddify-next/releases/latest/download/Hiddify-Android-universal.apk',
+          },
+        ],
+      },
+      {
+        platform: PlatformEnum.WINDOWS,
+        version: '10.0+',
+        downloadLinks: [
+          {
+            iconType: IconTypeEnum.OTHER,
+            title: 'OfficialSetup [x64] (.Msix)',
+            link: 'https://github.com/hiddify/hiddify-next/releases/latest/download/Hiddify-Windows-Setup-x64.Msix',
+          },
+          {
+            iconType: IconTypeEnum.OTHER,
+            title: 'Setup [x64] (.exe)',
+            link: 'https://github.com/hiddify/hiddify-next/releases/latest/download/Hiddify-Windows-Setup-x64.exe',
+          },
+          {
+            iconType: IconTypeEnum.OTHER,
+            title: 'Portable [x64] (.zip)',
+            link: 'https://github.com/hiddify/hiddify-next/releases/latest/download/Hiddify-Windows-Portable-x64.zip',
+          },
+        ],
+      },
+    ],
+  },
 ]
