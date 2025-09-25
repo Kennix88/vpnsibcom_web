@@ -5,6 +5,9 @@ import FriendsInviteButtons from '@app/app/_components/friends/FriendsInviteButt
 import FriendsList from '@app/app/_components/friends/FriendsList'
 import FriendsStatistics from '@app/app/_components/friends/FriendsStatistics'
 import FriendsTitle from '@app/app/_components/friends/FriendsTitle'
+import SocialButtons from '@app/app/_components/SocialButtons'
+import TopBar from '@app/app/_components/TopBar'
+import Version from '@app/app/_components/Version'
 import { authApiClient } from '@app/core/authApiClient'
 import { useRefferlsStore } from '@app/store/referrals.store'
 import { useUserStore } from '@app/store/user.store'
@@ -30,12 +33,17 @@ export default function Page() {
 
   return (
     <TmaPage back={false}>
-      <div className="flex flex-row gap-4 flex-wrap justify-center">
+      <TopBar />
+      <div className="flex flex-row gap-4 my-4 flex-wrap justify-center">
         <FriendsTitle />
         <FriendsBonuses />
         <FriendsInviteButtons />
         <FriendsStatistics />
         <FriendsList />
+      </div>
+      <div className="flex flex-col gap-4">
+        <SocialButtons />
+        <Version />
       </div>
     </TmaPage>
   )

@@ -1,6 +1,8 @@
 'use client'
 import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
 import AddSubscription from '@app/app/_components/add-subscription/AddSubscription'
+import SocialButtons from '@app/app/_components/SocialButtons'
+import Version from '@app/app/_components/Version'
 
 export default function Page() {
   return (
@@ -12,6 +14,8 @@ export default function Page() {
         </div>
 
         <AddSubscription />
+        <SocialButtons />
+        <Version />
       </div>
     </TmaPage>
   )
