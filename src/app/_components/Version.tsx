@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 export default function Version() {
   return (
-    <div className="font-mono flex-col flex gap-2 items-center justify-center">
+    <div className="font-mono flex-wrap flex gap-x-4 gap-y-2 items-center justify-center">
       <div>v{config.APP_VERSION}</div>
       {/* <div className="text-[12px]">x</div>
       <Link
@@ -21,7 +21,16 @@ export default function Version() {
           href={config.TELEGRAM_KENNIXDEV_URL || ''}
           target="_blank"
           className="text-[var(--primary)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer w-full text-center">
-          KennixDev
+          @KennixDev
+        </Link>
+      </div>
+      <div className="flex gap-2 items-center justify-center ">
+        <div className="text-nowrap">Sponsored by</div>
+        <Link
+          href={'https://t.me/solycmty'}
+          target="_blank"
+          className="text-[var(--primary)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer w-full text-center">
+          @solycmty
         </Link>
       </div>
     </div>
