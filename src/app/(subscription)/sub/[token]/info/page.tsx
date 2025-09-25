@@ -9,7 +9,7 @@ export default async function Page({
 }) {
   const { token } = await params
   return (
-    <div className="flex flex-col gap-4 items-center font-extralight font-mono w-full">
+    <div className="flex flex-col gap-4 p-4 items-center font-extralight font-mono w-full">
       <Subscription token={token} isToken={true} />
       <SocialButtons />
       <Version />

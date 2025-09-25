@@ -8,7 +8,13 @@ import Image from 'next/image'
 import Link from 'next/link'
 import QRCodeStyling from 'qr-code-styling'
 import { useEffect, useRef, useState } from 'react'
-import { FaAppStoreIos, FaCopy, FaGooglePlay } from 'react-icons/fa6'
+import { AiFillLike } from 'react-icons/ai'
+import {
+  FaAppStoreIos,
+  FaCopy,
+  FaGooglePlay,
+  FaMoneyBill1Wave,
+} from 'react-icons/fa6'
 import { FiExternalLink } from 'react-icons/fi'
 import { TbQrcode } from 'react-icons/tb'
 import Modal from '../Modal'
@@ -91,12 +97,17 @@ export default function AppElement({
         style={{
           background: `${appData.color}`,
         }}>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-4">
           <Image src={appData.icon} alt="icon" width={25} height={25} />
           <span className="font-bold font-mono">{appData.name}</span>
           {appData.isRequired && (
-            <div className="px-2 py-1 bg-[var(--primary)] text-[var(--on-primary)] rounded-md text-xs">
-              Рекомендуется!
+            <div className="px-2 py-1 bg-[var(--primary)] text-[var(--on-primary)] rounded-md text-sm font-bold flex items-center gap-2">
+              <AiFillLike /> Рекомендуется!
+            </div>
+          )}
+          {appData.isPaid && (
+            <div className="px-2 py-1 bg-[var(--warning)] text-[var(--on-warning)] rounded-md text-sm font-bold flex items-center gap-2">
+              <FaMoneyBill1Wave /> Платное!
             </div>
           )}
         </div>

@@ -14,8 +14,10 @@ export default async function Page({
     <TmaPage back={true}>
       <TopBar />
       <Subscription token={id} isToken={false} />
-      <SocialButtons />
-      <Version />
+      <div className="flex flex-col gap-4">
+        <SocialButtons />
+        <Version />
+      </div>
     </TmaPage>
   )
 }

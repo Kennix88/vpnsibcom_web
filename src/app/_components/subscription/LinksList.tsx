@@ -1,10 +1,9 @@
 'use client'
 
 import { useCopyToClipboard } from '@app/utils/copy-to-clipboard.util'
-import Link from 'next/link'
 import QRCodeStyling from 'qr-code-styling'
 import { useEffect, useRef, useState } from 'react'
-import { FaCopy, FaPlus } from 'react-icons/fa6'
+import { FaCopy } from 'react-icons/fa6'
 import { TbQrcode } from 'react-icons/tb'
 import Modal from '../Modal'
 
@@ -77,12 +76,13 @@ export default function LinksList({ links }: { links: string[] }) {
                 {decodeURIComponent(url.hash.split('#')[1])}
               </div>
               <div className="order-2 flex flex-row items-center gap-2 md:order-3">
-                <Link
+                {/* <Link
                   title="Добавить"
-                  href={el}
+                  href={`/deeplink/?link=${encodeURIComponent(el)}`}
+                  target="_blank"
                   className="rounded-md bg-[var(--surface-container)] h-8 cursor-pointer flex items-center gap-2 justify-center px-2">
                   <FaPlus size={16} />
-                </Link>
+                </Link> */}
                 <div
                   title="Копировать URL"
                   onClick={() => copyToClipboard(el)}
