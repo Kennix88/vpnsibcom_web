@@ -11,6 +11,7 @@ export const config = {
   GITHUBREPO_URL: process.env.NEXT_PUBLIC_GITHUBREPO_URL,
   TELEGRAM_CHANNEL_URL: process.env.NEXT_PUBLIC_TELEGRAM_CHANNEL_URL,
   TELEGRAM_CHAT_URL: process.env.NEXT_PUBLIC_TELEGRAM_CHAT_URL,
+  BOT_URL: process.env.NEXT_PUBLIC_BOT_URL,
 }
 
 if (typeof window !== 'undefined' && !config.apiUrl) {
