@@ -12,10 +12,12 @@ export default function EditName({
   name,
   subscriptionId,
   isEdit,
+  isPublic,
 }: {
   name: string
   subscriptionId: string
   isEdit: boolean
+  isPublic: boolean
 }) {
   const [inputName, setInputName] = useState(name)
   const [isEditName, setIsEditName] = useState(false)
@@ -41,7 +43,7 @@ export default function EditName({
     }
   }
 
-  if (!isEdit) return <div>{inputName}</div>
+  if (!isEdit || isPublic) return <div>{inputName}</div>
   if (isEditName)
     return (
       <div className="flex items-center gap-2 grow justify-between">

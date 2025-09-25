@@ -58,7 +58,7 @@ export default function SubscriptionElement({
   const t = useTranslations('subscriptions')
   const copyToClipboard = useCopyToClipboard()
   const { setSubscriptions } = useSubscriptionsStore()
-  const { user, setUser } = useUserStore()
+  const { setUser } = useUserStore()
   const [isOpen, setIsOpen] = useState<boolean>(isDefaultOpen)
 
   const [updatingButtons, setUpdatingButtons] = useState<string | null>(null)
@@ -155,8 +155,6 @@ export default function SubscriptionElement({
     copyToClipboard(url)
   }
 
-  if (!user) return null
-
   return (
     <motion.div
       key={subscription.id}
@@ -218,6 +216,7 @@ export default function SubscriptionElement({
               name={limitLengthString(subscription.name, 25)}
               isEdit={true}
               subscriptionId={subscription.id}
+              isPublic={isPublic}
             />
           </div>
         </div>
@@ -381,8 +380,9 @@ export default function SubscriptionElement({
                         subscription.isAllPremiumServers
                       ? 'Все'
                       : `Обычные ${subscription.baseServersCount} ${
-                          subscription.premiumServersCount > 0 &&
-                          `/ Премиум ${subscription.premiumServersCount}`
+                          subscription.premiumServersCount > 0
+                            ? `/ Премиум ${subscription.premiumServersCount}`
+                            : ''
                         }`}
                 </div>
               </div>
@@ -448,7 +448,8 @@ export default function SubscriptionElement({
                   </div>
                 )}
 
-              {subscription.period !== SubscriptionPeriodEnum.INDEFINITELY &&
+              {!isPublic &&
+                subscription.period !== SubscriptionPeriodEnum.INDEFINITELY &&
                 subscription.period !== SubscriptionPeriodEnum.TRIAL &&
                 subscription.period !== SubscriptionPeriodEnum.TRAFFIC && (
                   <div className="text-xs flex items-center justify-between py-3 px-3 ">
