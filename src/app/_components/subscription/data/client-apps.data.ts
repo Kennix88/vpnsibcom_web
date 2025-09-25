@@ -33,6 +33,11 @@ export const CLIENT_APPS: ClientAppInterface[] = [
             title: 'Testflight GLOBAL',
             link: 'https://testflight.apple.com/join/XMls6Ckd',
           },
+          {
+            iconType: IconTypeEnum.OTHER,
+            title: 'Testflight 🇷🇺',
+            link: 'https://testflight.apple.com/join/1bKEcMub',
+          },
         ],
       },
       {
@@ -53,6 +58,11 @@ export const CLIENT_APPS: ClientAppInterface[] = [
             iconType: IconTypeEnum.OTHER,
             title: 'Testflight GLOBAL',
             link: 'https://testflight.apple.com/join/XMls6Ckd',
+          },
+          {
+            iconType: IconTypeEnum.OTHER,
+            title: 'Testflight 🇷🇺',
+            link: 'https://testflight.apple.com/join/1bKEcMub',
           },
         ],
       },
@@ -128,6 +138,17 @@ export const CLIENT_APPS: ClientAppInterface[] = [
             iconType: IconTypeEnum.OTHER,
             title: 'File',
             link: 'https://github.com/Happ-proxy/happ-desktop/releases/',
+          },
+        ],
+      },
+      {
+        platform: PlatformEnum.APPLE_TV,
+        version: '17.6+',
+        downloadLinks: [
+          {
+            iconType: IconTypeEnum.APPLE_STORE,
+            title: 'AppStore',
+            link: 'https://apps.apple.com/us/app/happ-proxy-utility-for-tv/id6748297274',
           },
         ],
       },
