@@ -423,6 +423,21 @@ class ApiClient {
     })
   }
 
+  async updateServerSubscription(subscriptionId: string, servers: string[]) {
+    return this.safeRequest<{
+      subscriptions: SubscriptionResponseInterface
+      user: UserDataInterface
+    }>(async () => {
+      const { data } = await this.instance.post<
+        ApiResponse<{
+          subscriptions: SubscriptionResponseInterface
+          user: UserDataInterface
+        }>
+      >('/subscriptions/update-server/' + subscriptionId, { servers })
+      return data.data
+    })
+  }
+
   async deleteSubscription(subscriptionId: string) {
     return this.safeRequest<{
       subscriptions: SubscriptionResponseInterface
