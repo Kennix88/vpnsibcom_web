@@ -1,13 +1,17 @@
 'use client'
 
+import { authApiClient } from '@app/core/authApiClient'
 import { PlansServersSelectTypeEnum } from '@app/enums/plans-servers-select-type.enum'
 import { useServersStore } from '@app/store/servers.store'
+import { useSubscriptionsStore } from '@app/store/subscriptions.store'
+import { useUserStore } from '@app/store/user.store'
 import { ServerDataInterface } from '@app/types/servers-data.interface'
 import { SubscriptionDataInterface } from '@app/types/subscription-data.interface'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react'
 import { BiServer } from 'react-icons/bi'
+import { toast } from 'react-toastify'
 import Modal from '../Modal'
 
 export default function ChangeServersButton({
@@ -27,6 +31,8 @@ export default function ChangeServersButton({
   const [premiumServersCount, setPremiumServersCount] = useState<number>(
     subscription.premiumServersCount,
   )
+  const { setSubscriptions } = useSubscriptionsStore()
+  const { setUser } = useUserStore()
 
   const fetchServers = useCallback(async (): Promise<void> => {
     await updateServers()
@@ -80,6 +86,25 @@ export default function ChangeServersButton({
     }
   }
 
+  const handleSave = async () => {
+    try {
+      setIsLoading(true)
+      setIsOpenModal(false)
+      const data = await authApiClient.updateServerSubscription(
+        subscription.id,
+        serversSelected,
+      )
+
+      setUser(data.user)
+      setSubscriptions(data.subscriptions)
+      toast.success('Subscription servers updated')
+    } catch {
+      toast.error('Failed to update subscription servers')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
     <>
       <button
@@ -97,7 +122,7 @@ export default function ChangeServersButton({
         actionButtonColor="primary"
         actionText="Сохранить"
         onAction={() => {
-          setIsOpenModal(false)
+          handleSave()
         }}
         onClose={() => setIsOpenModal(false)}
         title={'Смена сервера'}>
