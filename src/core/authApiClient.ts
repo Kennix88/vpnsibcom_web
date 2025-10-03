@@ -438,6 +438,37 @@ class ApiClient {
     })
   }
 
+  async addTrafficSubscription(
+    subscriptionId: string,
+    traffic: number,
+    method: PaymentMethodEnum | 'BALANCE' | 'TRAFFIC',
+  ) {
+    return this.safeRequest<{
+      subscriptions: SubscriptionResponseInterface
+      user: UserDataInterface
+      invoice?: {
+        linkPay: string
+        isTonPayment: boolean
+        amountTon: number
+        token: string
+      }
+    }>(async () => {
+      const { data } = await this.instance.post<
+        ApiResponse<{
+          subscriptions: SubscriptionResponseInterface
+          user: UserDataInterface
+          invoice?: {
+            linkPay: string
+            isTonPayment: boolean
+            amountTon: number
+            token: string
+          }
+        }>
+      >('/subscriptions/add-traffic/' + subscriptionId, { traffic, method })
+      return data.data
+    })
+  }
+
   async deleteSubscription(subscriptionId: string) {
     return this.safeRequest<{
       subscriptions: SubscriptionResponseInterface
