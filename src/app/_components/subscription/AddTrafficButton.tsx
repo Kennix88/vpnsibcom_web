@@ -2,6 +2,7 @@
 
 import { authApiClient } from '@app/core/authApiClient'
 import { CurrencyEnum } from '@app/enums/currency.enum'
+import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
 import { useCurrencyStore } from '@app/store/currency.store'
 import { useSubscriptionsStore } from '@app/store/subscriptions.store'
@@ -12,6 +13,9 @@ import {
   roundUp,
 } from '@app/utils/calculate-subscription-cost.util'
 import { fxUtil } from '@app/utils/fx.util'
+import { invoice } from '@telegram-apps/sdk-react'
+import { beginCell, toNano } from '@ton/core'
+import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { FaPlus } from 'react-icons/fa6'
@@ -32,6 +36,8 @@ export default function AddTrafficButton({
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [trafficLimitGb, setTrafficLimitGb] = useState(1)
+  const wallet = useTonWallet()
+  const [tonConnectUI] = useTonConnectUI()
 
   if (
     (subscription.period !== SubscriptionPeriodEnum.TRIAL &&
@@ -42,6 +48,7 @@ export default function AddTrafficButton({
     return null
 
   const balance = user.balance.payment
+  const trafficBalance = user.balance.traffic
   const price = calculateSubscriptionCost({
     period: subscription.period,
     periodMultiplier: subscription.periodMultiplier,
@@ -59,17 +66,66 @@ export default function AddTrafficButton({
     settings: subscriptions,
   })
 
-  const addTraffic = async (subscription: SubscriptionDataInterface) => {
+  const addTraffic = async (
+    subscription: SubscriptionDataInterface,
+    trafficLimitGb: number,
+    method: PaymentMethodEnum | 'BALANCE' | 'TRAFFIC',
+  ) => {
     try {
+      if (method === PaymentMethodEnum.TON_TON && !wallet?.account?.address) {
+        try {
+          await tonConnectUI.openModal()
+        } catch {
+          toast.error('Error when opening a wallet')
+        }
+        return
+      }
       setIsLoading(true)
-      const data = await authApiClient.renewSubscription(subscription.id)
+      const data = await authApiClient.addTrafficSubscription(
+        subscription.id,
+        trafficLimitGb,
+        method,
+      )
 
-      setUser(data.user)
-      setSubscriptions(data.subscriptions)
-      toast.success('Трафик успешно добавлен')
+      if (!data.invoice) {
+        setUser(data.user)
+        setSubscriptions(data.subscriptions)
+        toast.success('Трафик успешно добавлен')
+      } else {
+        if (data.invoice?.isTonPayment) {
+          const amountNano = toNano(data.invoice?.amountTon.toString())
+
+          // payload с ID платежа в виде комментария
+          const payload = beginCell()
+            .storeUint(0, 32) // opcode text_comment
+            .storeStringTail(data.invoice?.token || '')
+            .endCell()
+
+          // транзакция
+          const tx = {
+            validUntil: Math.floor(Date.now() / 1000) + 300, // 5 минут
+            messages: [
+              {
+                address: data.invoice?.linkPay || '',
+                amount: amountNano.toString(),
+                payload: payload.toBoc().toString('base64'),
+              },
+            ],
+          }
+
+          try {
+            await tonConnectUI.sendTransaction(tx)
+          } catch (err) {
+            console.error('Ошибка при оплате', err)
+          }
+        } else {
+          await invoice.open(data.invoice?.linkPay || '', 'url')
+        }
+      }
     } catch {
       toast.error('Ошибка добавления трафика')
     } finally {
+      setIsOpenModal(false)
       setIsLoading(false)
     }
   }
@@ -162,47 +218,68 @@ export default function AddTrafficButton({
             <div className="flex flex-wrap items-center gap-2">
               <button
                 onClick={() => {
-                  addTraffic(subscription)
+                  addTraffic(subscription, trafficLimitGb, 'BALANCE')
                 }}
                 disabled={isLoading || price > balance}
-                className={`py-1 px-2 rounded-md bg-[var(--star-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
-                  price > balance
+                className={`py-2 px-4 rounded-md bg-[var(--star-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+                  isLoading || price > balance
                     ? 'opacity-50 cursor-not-allowed'
                     : ' cursor-pointer'
-                } flex gap-1 items-center font-bold font-mono text-sm`}>
+                } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
                 <Currency type={'star'} w={18} />
                 {price}
               </button>
               <button
                 onClick={() => {
-                  addTraffic(subscription)
+                  addTraffic(
+                    subscription,
+                    trafficLimitGb,
+                    PaymentMethodEnum.STARS,
+                  )
                 }}
                 disabled={isLoading}
-                className={`py-1 px-2 rounded-md bg-[var(--star-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+                className={`py-2 px-4 rounded-md bg-[var(--star-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
                   isLoading
                     ? 'opacity-50 cursor-not-allowed'
                     : ' cursor-pointer'
-                } flex gap-1 items-center font-bold font-mono text-sm`}>
+                } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
                 <Currency type={'tg-star'} w={18} />
                 {price}
               </button>
               {rates && (
                 <button
                   onClick={() => {
-                    addTraffic(subscription)
+                    addTraffic(
+                      subscription,
+                      trafficLimitGb,
+                      PaymentMethodEnum.TON_TON,
+                    )
                   }}
                   disabled={isLoading}
-                  className={`py-1 px-2 rounded-md bg-[var(--ton-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+                  className={`py-2 px-4 rounded-md bg-[var(--ton-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
                     isLoading
                       ? 'opacity-50 cursor-not-allowed'
                       : ' cursor-pointer'
-                  } flex gap-1 items-center font-bold font-mono text-sm`}>
+                  } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
                   <Currency type={'ton'} w={18} />
                   {roundUp(
                     fxUtil(price, CurrencyEnum.XTR, CurrencyEnum.TON, rates),
                   )}
                 </button>
               )}
+              <button
+                onClick={() => {
+                  addTraffic(subscription, trafficLimitGb, 'TRAFFIC')
+                }}
+                disabled={isLoading || trafficLimitGb * 1024 > trafficBalance}
+                className={`py-2 px-4 rounded-md bg-[var(--traffic-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+                  isLoading || trafficLimitGb * 1024 > trafficBalance
+                    ? 'opacity-50 cursor-not-allowed'
+                    : ' cursor-pointer'
+                } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
+                <Currency type={'traffic'} w={18} />
+                {trafficLimitGb * 1024}
+              </button>
             </div>
           </div>
         </div>
