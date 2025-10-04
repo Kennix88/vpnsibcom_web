@@ -1,5 +1,6 @@
 import { CurrencyEnum } from '@app/enums/currency.enum'
 import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
+import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
 import { useUserStore } from '@app/store/user.store'
 import { CurrencyInterface } from '@app/types/currency.interface'
 import { PaymentMethodsDataInterface } from '@app/types/payment-methods-data.interface'
@@ -484,17 +485,35 @@ class ApiClient {
     })
   }
 
-  async renewSubscription(subscriptionId: string) {
+  async renewSubscription(
+    subscriptionId: string,
+    method: PaymentMethodEnum | 'BALANCE' | 'TRAFFIC',
+    isSavePeriod: boolean,
+    period: SubscriptionPeriodEnum,
+    periodMultiplier: number,
+  ) {
     return this.safeRequest<{
       subscriptions: SubscriptionResponseInterface
       user: UserDataInterface
+      invoice?: {
+        linkPay: string
+        isTonPayment: boolean
+        amountTon: number
+        token: string
+      }
     }>(async () => {
       const { data } = await this.instance.post<
         ApiResponse<{
           subscriptions: SubscriptionResponseInterface
           user: UserDataInterface
+          invoice?: {
+            linkPay: string
+            isTonPayment: boolean
+            amountTon: number
+            token: string
+          }
         }>
-      >('/subscriptions/renew', { subscriptionId })
+      >('/subscriptions/renew/' + subscriptionId, { subscriptionId })
       return data.data
     })
   }
