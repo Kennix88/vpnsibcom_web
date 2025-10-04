@@ -2,16 +2,20 @@
 
 import { authApiClient } from '@app/core/authApiClient'
 import { CurrencyEnum } from '@app/enums/currency.enum'
+import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
+import { TrafficResetEnum } from '@app/enums/traffic-reset.enum'
 import { useCurrencyStore } from '@app/store/currency.store'
 import { useSubscriptionsStore } from '@app/store/subscriptions.store'
 import { useUserStore } from '@app/store/user.store'
 import { SubscriptionDataInterface } from '@app/types/subscription-data.interface'
 import {
+  calculateDaysByPeriod,
   calculateSubscriptionCost,
   roundUp,
 } from '@app/utils/calculate-subscription-cost.util'
 import { fxUtil } from '@app/utils/fx.util'
+import { addDays, eachDayOfInterval } from 'date-fns'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
@@ -23,6 +27,12 @@ import { getButtonColor } from '../add-subscription/functions'
 import Currency from '../Currency'
 import Modal from '../Modal'
 import FormatPeriod from './FromatPeriod'
+
+export interface TrafficPeriodButtonInterface {
+  key: TrafficResetEnum
+  label: string
+  minDays: number
+}
 
 export default function RenewButton({
   subscription,
@@ -42,6 +52,31 @@ export default function RenewButton({
     [],
   )
   const [periodMultiplier, setPeriodMultiplier] = useState(1)
+  const [trafficPeriodButton, setTrafficPeriodButton] =
+    useState<TrafficPeriodButtonInterface | null>(null)
+
+  const trafficPeriodButtons: TrafficPeriodButtonInterface[] = [
+    {
+      key: TrafficResetEnum.DAY,
+      label: 'Ежедневно',
+      minDays: 0,
+    },
+    {
+      key: TrafficResetEnum.WEEK,
+      label: 'Еженедельно',
+      minDays: 7,
+    },
+    {
+      key: TrafficResetEnum.MONTH,
+      label: 'Ежемесячно',
+      minDays: 30,
+    },
+    {
+      key: TrafficResetEnum.YEAR,
+      label: 'Ежегодно',
+      minDays: 360,
+    },
+  ]
 
   useEffect(() => {
     if (!subscriptions || !user) return
@@ -95,16 +130,30 @@ export default function RenewButton({
       },
     ]
 
+    const findTrafficPeriodButton = trafficPeriodButtons.find(
+      (btn) => btn.key === subscription.trafficReset,
+    )
+
+    setTrafficPeriodButton(findTrafficPeriodButton || null)
     setPeriodButtons(buttons)
     setPeriodButton(buttons[3])
   }, [subscriptions, user])
 
   if (!user || !subscriptions || !periodButton) return null
 
-  const renewSubscription = async (subscription: SubscriptionDataInterface) => {
+  const renewSubscription = async (
+    subscription: SubscriptionDataInterface,
+    method: PaymentMethodEnum | 'BALANCE' | 'TRAFFIC',
+  ) => {
     try {
       setIsLoading(true)
-      const data = await authApiClient.renewSubscription(subscription.id)
+      const data = await authApiClient.renewSubscription(
+        subscription.id,
+        method,
+        isUpdatePeriod,
+        periodButton?.key || subscription.period,
+        periodMultiplier,
+      )
 
       setUser(data.user)
       setSubscriptions(data.subscriptions)
@@ -306,6 +355,74 @@ export default function RenewButton({
                   </div>
                 )}
 
+                {subscription.trafficReset !== TrafficResetEnum.NO_RESET &&
+                  subscription.trafficLimitGb !== undefined &&
+                  !subscription.isUnlimitTraffic && (
+                    <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
+                      <div className="flex gap-2 items-end justify-between w-full px-4 ">
+                        <div className="opacity-50 flex flex-row gap-2 items-center">
+                          Обнуление трафика
+                        </div>
+                        <div>
+                          {trafficPeriodButton?.key == TrafficResetEnum.DAY
+                            ? subscription.trafficLimitGb
+                            : trafficPeriodButton?.key == TrafficResetEnum.WEEK
+                              ? subscription.trafficLimitGb * 7
+                              : trafficPeriodButton?.key ==
+                                  TrafficResetEnum.MONTH
+                                ? subscription.trafficLimitGb * 30
+                                : trafficPeriodButton?.key ==
+                                    TrafficResetEnum.YEAR
+                                  ? subscription.trafficLimitGb * 365
+                                  : ''}{' '}
+                          GB
+                        </div>
+                      </div>
+
+                      <motion.div
+                        layout
+                        className="text-sm bg-[var(--surface-container-lowest)] rounded-xl flex flex-row flex-wrap gap-2 items-center p-4 w-full shadow-md">
+                        {trafficPeriodButtons.map((btn) => {
+                          const isActive = btn.key === trafficPeriodButton?.key
+                          const expiresDays = eachDayOfInterval({
+                            start: new Date(),
+                            end: addDays(
+                              new Date(subscription.expiredAt || new Date()),
+                              calculateDaysByPeriod(
+                                periodButton.key,
+                                periodMultiplier,
+                              ) || 0,
+                            ),
+                          }).length
+                          const isDisabled = btn.minDays >= expiresDays
+                          const bgOpacity = isActive ? 0.3 : 0.15
+                          return (
+                            <motion.button
+                              key={btn.key}
+                              disabled={isDisabled}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={() => {
+                                setTrafficPeriodButton(btn)
+                              }}
+                              className={`flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-sm font-mono transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+                                isDisabled
+                                  ? 'opacity-50 cursor-not-allowed'
+                                  : ' cursor-pointer'
+                              }`}
+                              style={{
+                                backgroundColor: `rgba(216, 197, 255, ${bgOpacity})`,
+                                border: isActive
+                                  ? `1px solid rgba(216, 197, 255, 0.7)`
+                                  : '1px solid transparent',
+                              }}>
+                              {btn.label}
+                            </motion.button>
+                          )
+                        })}
+                      </motion.div>
+                    </div>
+                  )}
+
                 <div className="grow flex flex-col gap-2">
                   <div className="px-4 opacity-50 flex flex-wrap items-center gap-2 font-mono">
                     Продлить на <FormatPeriod period={periodButton.key} />{' '}
@@ -318,41 +435,44 @@ export default function RenewButton({
                   <div className="flex flex-wrap items-center gap-2">
                     <button
                       onClick={() => {
-                        renewSubscription(subscription)
+                        renewSubscription(subscription, 'BALANCE')
                       }}
                       disabled={isLoading || price > balance}
-                      className={`py-1 px-2 rounded-md bg-[var(--star-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+                      className={`py-2 px-4 rounded-md bg-[var(--star-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
                         price > balance
                           ? 'opacity-50 cursor-not-allowed'
                           : ' cursor-pointer'
-                      } flex gap-1 items-center font-bold font-mono text-sm`}>
+                      } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
                       <Currency type={'star'} w={18} />
                       {price}
                     </button>
                     <button
                       onClick={() => {
-                        renewSubscription(subscription)
+                        renewSubscription(subscription, PaymentMethodEnum.STARS)
                       }}
                       disabled={isLoading}
-                      className={`py-1 px-2 rounded-md bg-[var(--star-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+                      className={`py-2 px-4 rounded-md bg-[var(--star-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
                         isLoading
                           ? 'opacity-50 cursor-not-allowed'
                           : ' cursor-pointer'
-                      } flex gap-1 items-center font-bold font-mono text-sm`}>
+                      } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
                       <Currency type={'tg-star'} w={18} />
                       {price}
                     </button>
                     {rates && (
                       <button
                         onClick={() => {
-                          renewSubscription(subscription)
+                          renewSubscription(
+                            subscription,
+                            PaymentMethodEnum.TON_TON,
+                          )
                         }}
                         disabled={isLoading}
-                        className={`py-1 px-2 rounded-md bg-[var(--ton-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+                        className={`py-2 px-4 rounded-md bg-[var(--ton-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
                           isLoading
                             ? 'opacity-50 cursor-not-allowed'
                             : ' cursor-pointer'
-                        } flex gap-1 items-center font-bold font-mono text-sm`}>
+                        } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
                         <Currency type={'ton'} w={18} />
                         {roundUp(
                           fxUtil(
