@@ -4,7 +4,6 @@ import { Metadata } from 'next'
 import { getLocale } from 'next-intl/server'
 // import 'normalize.css/normalize.css'
 import { CheckPlatform } from '@app/app/(tma)/tma/_components/CheckPlatform'
-import Script from 'next/script'
 import React from 'react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -24,14 +23,21 @@ export default async function TmaLayout({
   return (
     <html lang={locale} className={'dark'}>
       <head>
-        {process.env.NEXT_PUBLIC_GRASPIL_ID && (
-          <Script id="graspil">
-            {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({key:i});
-												var f=d.getElementsByTagName(s)[0],j=d.createElement(s);
-												j.async=true;j.src="https://w.graspil.com";f.parentNode.insertBefore(j,f);
-											})(window,document,"script","graspil","${process.env.NEXT_PUBLIC_GRASPIL_ID}");`}
-          </Script>
-        )}
+        {/* {process.env.NEXT_PUBLIC_GRASPIL_ID && (
+          <Script
+            id="graspil"
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{
+              __html: `(function(w,d,s,l,i){
+      if (!Array.isArray(w[l])) { w[l] = []; }
+      w[l].push({key:i});
+      var f=d.getElementsByTagName(s)[0], j=d.createElement(s);
+      j.async=true;j.src="https://w.graspil.com";
+      f.parentNode.insertBefore(j,f);
+    })(window,document,"script","graspil","${process.env.NEXT_PUBLIC_GRASPIL_ID}");`,
+            }}
+          />
+        )} */}
       </head>
       <body className="bg-[var(--background)]">
         <I18nProvider>

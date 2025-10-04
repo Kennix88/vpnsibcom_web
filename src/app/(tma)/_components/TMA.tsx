@@ -1,5 +1,6 @@
 'use client'
 import { Auth } from '@app/app/(tma)/_components/Auth'
+import AnalyticsInit from '@app/app/_components/AnalyticsInit'
 import Loader from '@app/app/_components/Loader'
 import { setServerLocale } from '@app/core/i18n/locale.server'
 import { initTelegramSDK } from '@app/core/initTelegramSDK'
@@ -40,5 +41,10 @@ export function TMA({ children }: PropsWithChildren) {
     return <Loader />
   }
 
-  return <Auth>{children}</Auth>
+  return (
+    <Auth>
+      {children}
+      <AnalyticsInit />
+    </Auth>
+  )
 }
