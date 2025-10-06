@@ -1,6 +1,7 @@
 import { CurrencyEnum } from '@app/enums/currency.enum'
 import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
+import { TrafficResetEnum } from '@app/enums/traffic-reset.enum'
 import { useUserStore } from '@app/store/user.store'
 import { CurrencyInterface } from '@app/types/currency.interface'
 import { PaymentMethodsDataInterface } from '@app/types/payment-methods-data.interface'
@@ -487,10 +488,11 @@ class ApiClient {
 
   async renewSubscription(
     subscriptionId: string,
-    method: PaymentMethodEnum | 'BALANCE' | 'TRAFFIC',
+    method: PaymentMethodEnum | 'BALANCE',
     isSavePeriod: boolean,
     period: SubscriptionPeriodEnum,
     periodMultiplier: number,
+    trafficReset: TrafficResetEnum,
   ) {
     return this.safeRequest<{
       subscriptions: SubscriptionResponseInterface
@@ -513,7 +515,13 @@ class ApiClient {
             token: string
           }
         }>
-      >('/subscriptions/renew/' + subscriptionId, { subscriptionId })
+      >('/subscriptions/renew/' + subscriptionId, {
+        method,
+        isSavePeriod,
+        period,
+        periodMultiplier,
+        trafficReset,
+      })
       return data.data
     })
   }

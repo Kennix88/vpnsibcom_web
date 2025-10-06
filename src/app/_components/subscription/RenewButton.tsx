@@ -15,6 +15,9 @@ import {
   roundUp,
 } from '@app/utils/calculate-subscription-cost.util'
 import { fxUtil } from '@app/utils/fx.util'
+import { invoice } from '@telegram-apps/sdk-react'
+import { beginCell, toNano } from '@ton/core'
+import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react'
 import { addDays, eachDayOfInterval } from 'date-fns'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
@@ -54,6 +57,8 @@ export default function RenewButton({
   const [periodMultiplier, setPeriodMultiplier] = useState(1)
   const [trafficPeriodButton, setTrafficPeriodButton] =
     useState<TrafficPeriodButtonInterface | null>(null)
+  const wallet = useTonWallet()
+  const [tonConnectUI] = useTonConnectUI()
 
   const trafficPeriodButtons: TrafficPeriodButtonInterface[] = [
     {
@@ -143,9 +148,17 @@ export default function RenewButton({
 
   const renewSubscription = async (
     subscription: SubscriptionDataInterface,
-    method: PaymentMethodEnum | 'BALANCE' | 'TRAFFIC',
+    method: PaymentMethodEnum | 'BALANCE',
   ) => {
     try {
+      if (method === PaymentMethodEnum.TON_TON && !wallet?.account?.address) {
+        try {
+          await tonConnectUI.openModal()
+        } catch {
+          toast.error('Error when opening a wallet')
+        }
+        return
+      }
       setIsLoading(true)
       const data = await authApiClient.renewSubscription(
         subscription.id,
@@ -153,15 +166,51 @@ export default function RenewButton({
         isUpdatePeriod,
         periodButton?.key || subscription.period,
         periodMultiplier,
+        trafficPeriodButton?.key == null
+          ? subscription.trafficReset
+          : trafficPeriodButton?.key,
       )
 
-      setUser(data.user)
-      setSubscriptions(data.subscriptions)
-      toast.success(t('subscriptionRenewed'))
+      if (!data.invoice) {
+        setUser(data.user)
+        setSubscriptions(data.subscriptions)
+        toast.success(t('subscriptionRenewed'))
+      } else {
+        if (data.invoice?.isTonPayment) {
+          const amountNano = toNano(data.invoice?.amountTon.toString())
+
+          // payload с ID платежа в виде комментария
+          const payload = beginCell()
+            .storeUint(0, 32) // opcode text_comment
+            .storeStringTail(data.invoice?.token || '')
+            .endCell()
+
+          // транзакция
+          const tx = {
+            validUntil: Math.floor(Date.now() / 1000) + 300, // 5 минут
+            messages: [
+              {
+                address: data.invoice?.linkPay || '',
+                amount: amountNano.toString(),
+                payload: payload.toBoc().toString('base64'),
+              },
+            ],
+          }
+
+          try {
+            await tonConnectUI.sendTransaction(tx)
+          } catch (err) {
+            console.error('Ошибка при оплате', err)
+          }
+        } else {
+          await invoice.open(data.invoice?.linkPay || '', 'url')
+        }
+      }
     } catch {
       toast.error(t('errors.renewSubscriptionFailed'))
     } finally {
       setIsLoading(false)
+      setIsOpenModal(false)
     }
   }
 
