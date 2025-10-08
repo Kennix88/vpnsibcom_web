@@ -33,6 +33,7 @@ const ServersSelection = ({
   baseServersCount,
   user,
   subscriptions,
+		setServerSelected
 }: {
   serversData: ServersDataInterface
   planSelected: PlansInterface
@@ -48,6 +49,7 @@ const ServersSelection = ({
   baseServersCount: number
   user: UserDataInterface
   subscriptions: SubscriptionResponseInterface
+		setServerSelected: (val: ServerDataInterface | null) => void
 }) => {
   const serversPrice = useMemo(() => {
     if (user.roleDiscount == 0) return 0
@@ -76,6 +78,7 @@ const ServersSelection = ({
     if (isSelected) {
       const newSelected = serversSelected.filter((code) => code !== server.code)
       setServersSelected(newSelected)
+			setServerSelected(null)
 
       if (server.isPremium) {
         setPremiumServersCount(Math.max(0, premiumServersCount - 1))
@@ -84,6 +87,7 @@ const ServersSelection = ({
       }
     } else {
       let newSelected: string[]
+							setServerSelected(server)
 
       if (
         planSelected.serversSelectType ===
@@ -113,7 +117,7 @@ const ServersSelection = ({
     <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
       <div className="flex gap-2 items-end justify-between w-full px-4 ">
         <div className="opacity-50 flex flex-row gap-2 items-center">
-          Сервера
+          Выберите сервер
         </div>
         {planSelected.serversSelectType ===
           PlansServersSelectTypeEnum.CUSTOM && (
