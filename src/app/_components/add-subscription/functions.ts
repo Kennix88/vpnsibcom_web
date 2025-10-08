@@ -6,6 +6,12 @@ import { SubscriptionResponseInterface } from '@app/types/subscription-data.inte
 import { UserDataInterface } from '@app/types/user-data.interface'
 import { COLORS } from './constants'
 
+export const getTrafficCountButtonColor = (amount: number) => {
+  if (amount <= 10) return COLORS.GREEN
+  if (amount <= 50) return COLORS.GOLD
+  return COLORS.RED
+}
+
 export const getDevicesCountButtonColor = (amount: number) => {
   if (amount <= 5) return COLORS.GREEN
   if (amount <= 10) return COLORS.GOLD
