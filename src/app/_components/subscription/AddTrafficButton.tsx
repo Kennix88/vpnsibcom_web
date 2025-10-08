@@ -23,7 +23,7 @@ import { toast } from 'react-toastify'
 import Currency from '../Currency'
 import Modal from '../Modal'
 import { TRAFFIC_GBS } from '../add-subscription/constants'
-import { getDevicesCountButtonColor } from '../add-subscription/functions'
+import { getTrafficCountButtonColor } from '../add-subscription/functions'
 
 export default function AddTrafficButton({
   subscription,
@@ -188,7 +188,7 @@ export default function AddTrafficButton({
 
               {TRAFFIC_GBS.map((val) => {
                 const isActive = trafficLimitGb === val
-                const rgb = getDevicesCountButtonColor(val)
+                const rgb = getTrafficCountButtonColor(val)
                 const bgOpacity = isActive ? 0.3 : 0.15
                 return (
                   <motion.button
@@ -237,9 +237,9 @@ export default function AddTrafficButton({
                     PaymentMethodEnum.STARS,
                   )
                 }}
-                disabled={isLoading}
+                disabled={isLoading || price <= 0}
                 className={`py-2 px-4 rounded-md bg-[var(--star-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
-                  isLoading
+                  isLoading || price <= 0
                     ? 'opacity-50 cursor-not-allowed'
                     : ' cursor-pointer'
                 } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
@@ -255,9 +255,9 @@ export default function AddTrafficButton({
                       PaymentMethodEnum.TON_TON,
                     )
                   }}
-                  disabled={isLoading}
+                  disabled={isLoading || price <= 0}
                   className={`py-2 px-4 rounded-md bg-[var(--ton-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
-                    isLoading
+                    isLoading || price <= 0
                       ? 'opacity-50 cursor-not-allowed'
                       : ' cursor-pointer'
                   } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
@@ -271,9 +271,15 @@ export default function AddTrafficButton({
                 onClick={() => {
                   addTraffic(subscription, trafficLimitGb, 'TRAFFIC')
                 }}
-                disabled={isLoading || trafficLimitGb * 1024 > trafficBalance}
+                disabled={
+                  isLoading ||
+                  trafficLimitGb * 1024 > trafficBalance ||
+                  price <= 0
+                }
                 className={`py-2 px-4 rounded-md bg-[var(--traffic-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
-                  isLoading || trafficLimitGb * 1024 > trafficBalance
+                  isLoading ||
+                  trafficLimitGb * 1024 > trafficBalance ||
+                  price <= 0
                     ? 'opacity-50 cursor-not-allowed'
                     : ' cursor-pointer'
                 } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
