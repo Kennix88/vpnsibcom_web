@@ -102,7 +102,7 @@ export function calculateSubscriptionCost(
 
   // Для Триала и Трафик тарифа считаем сразу цену
   if (plan.key == PlansEnum.TRIAL || plan.key == PlansEnum.TRAFFIC) {
-    if (trafficLimitGb == null || trafficLimitGb <= 0) {
+    if (trafficLimitGb == null || trafficLimitGb < 0) {
       throw new Error('The traffic must be greater than 0')
     }
     return roundingUpPrice(
