@@ -499,9 +499,9 @@ export default function RenewButton({
                       onClick={() => {
                         renewSubscription(subscription, PaymentMethodEnum.STARS)
                       }}
-                      disabled={isLoading}
+                      disabled={isLoading || price <= 0}
                       className={`py-2 px-4 rounded-md bg-[var(--star-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
-                        isLoading
+                        isLoading || price <= 0
                           ? 'opacity-50 cursor-not-allowed'
                           : ' cursor-pointer'
                       } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
@@ -516,9 +516,9 @@ export default function RenewButton({
                             PaymentMethodEnum.TON_TON,
                           )
                         }}
-                        disabled={isLoading}
+                        disabled={isLoading || price <= 0}
                         className={`py-2 px-4 rounded-md bg-[var(--ton-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
-                          isLoading
+                          isLoading || price <= 0
                             ? 'opacity-50 cursor-not-allowed'
                             : ' cursor-pointer'
                         } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
