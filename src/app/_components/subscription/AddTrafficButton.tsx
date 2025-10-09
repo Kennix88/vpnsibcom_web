@@ -226,8 +226,14 @@ export default function AddTrafficButton({
                     ? 'opacity-50 cursor-not-allowed'
                     : ' cursor-pointer'
                 } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-                <Currency type={'star'} w={18} />
-                {price}
+                {price <= 0 ? (
+                  '🎁 Добавить бесплатно'
+                ) : (
+                  <>
+                    <Currency type={'star'} w={18} />
+                    {price}
+                  </>
+                )}
               </button>
               <button
                 onClick={() => {
@@ -284,7 +290,7 @@ export default function AddTrafficButton({
                     : ' cursor-pointer'
                 } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
                 <Currency type={'traffic'} w={18} />
-                {trafficLimitGb * 1024}
+                {price <= 0 ? 0 : trafficLimitGb * 1024}
               </button>
             </div>
           </div>
