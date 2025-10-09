@@ -13,16 +13,14 @@ import { useSubscriptionsStore } from '@app/store/subscriptions.store'
 import { useUserStore } from '@app/store/user.store'
 import { PlansInterface } from '@app/types/plans.interface'
 import { ServerDataInterface } from '@app/types/servers-data.interface'
-import {
-  CreateSubscriptionDataInterface,
-  SubscriptionResponseInterface,
-} from '@app/types/subscription-data.interface'
-import { UserDataInterface } from '@app/types/user-data.interface'
+import { CreateSubscriptionDataInterface } from '@app/types/subscription-data.interface'
 import {
   calculateDaysByPeriod,
   calculateSubscriptionCost,
 } from '@app/utils/calculate-subscription-cost.util'
 import { invoice } from '@telegram-apps/sdk-react'
+import { beginCell, toNano } from '@ton/core'
+import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react'
 import { addDays, eachDayOfInterval } from 'date-fns'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
@@ -59,15 +57,17 @@ export interface PeriodButtonInterface {
 }
 
 export default function AddSubscription() {
-  const tBill = useTranslations('billing.payment')
+  const t = useTranslations('billing.payment')
   const location = usePathname()
   const url = location.includes('/tma') ? '/tma' : '/app'
   const router = useRouter()
 
-  const { subscriptions } = useSubscriptionsStore()
+  const { subscriptions, setSubscriptions } = useSubscriptionsStore()
   const { user, setUser } = useUserStore()
   const { serversData, setServersData } = useServersStore()
   const { plansData, setPlansData } = usePlansStore()
+  const wallet = useTonWallet()
+  const [tonConnectUI] = useTonConnectUI()
 
   const [periodButton, setPeriodButton] =
     useState<PeriodButtonInterface | null>(null)
@@ -371,17 +371,26 @@ export default function AddSubscription() {
     setPeriodButton(buttons[3])
   }, [subscriptions, user])
 
-  // TODO: Изменить функцию покупки подписки
-  const handlePurchase = async (method: PaymentMethodEnum | 'BALANCE') => {
+  const handlePurchase = async (
+    method: PaymentMethodEnum | 'BALANCE' | 'TRAFFIC',
+  ) => {
     if (isLoading || !planSelected || !periodButton) return
+    if (method === PaymentMethodEnum.TON_TON && !wallet?.account?.address) {
+      try {
+        await tonConnectUI.openModal()
+      } catch {
+        toast.error('Error when opening a wallet')
+      }
+      return
+    }
     setIsLoading(true)
 
     try {
       const payload: CreateSubscriptionDataInterface = {
-        name: 'sub',
-        method: 'BALANCE',
+        name,
+        method,
         period: periodButton.key,
-        trafficReset: TrafficResetEnum.DAY,
+        trafficReset,
         periodMultiplier,
         devicesCount,
         isAllBaseServers,
@@ -393,18 +402,42 @@ export default function AddSubscription() {
         planKey: planSelected.key,
       }
 
-      const update: {
-        subscriptions: SubscriptionResponseInterface
-        user: UserDataInterface
-        linkPay?: string
-        isTmaIvoice?: boolean
-      } = await authApiClient.purchaseSubscription(payload)
+      const data = await authApiClient.purchaseSubscription(payload)
 
-      // await setUser(update.user)
-      // await setSubscriptions(update.subscriptions)
+      if (!data.invoice) {
+        setUser(data.user)
+        setSubscriptions(data.subscriptions)
+        toast.success('Subscription purchased successfully')
+      } else {
+        if (data.invoice?.isTonPayment) {
+          const amountNano = toNano(data.invoice?.amountTon.toString())
 
-      if (update.linkPay) {
-        await invoice.open(update.linkPay, 'url')
+          // payload с ID платежа в виде комментария
+          const payload = beginCell()
+            .storeUint(0, 32) // opcode text_comment
+            .storeStringTail(data.invoice?.token || '')
+            .endCell()
+
+          // транзакция
+          const tx = {
+            validUntil: Math.floor(Date.now() / 1000) + 300, // 5 минут
+            messages: [
+              {
+                address: data.invoice?.linkPay || '',
+                amount: amountNano.toString(),
+                payload: payload.toBoc().toString('base64'),
+              },
+            ],
+          }
+
+          try {
+            await tonConnectUI.sendTransaction(tx)
+          } catch (err) {
+            console.error('Ошибка при оплате', err)
+          }
+        } else {
+          await invoice.open(data.invoice?.linkPay || '', 'url')
+        }
       }
     } catch {
       toast.error('Error updating data')
@@ -608,12 +641,15 @@ export default function AddSubscription() {
       />
 
       <PaymentActions
+        planSelected={planSelected}
         isAllBaseServers={isAllBaseServers}
         isAllPremiumServers={isAllPremiumServers}
         serversSelected={serversSelected}
         balance={balance}
         price={price}
         isLoading={isLoading}
+        trafficLimitGb={trafficLimitGb}
+        trafficBalance={user.balance.traffic}
         onPayment={(method) => handlePurchase(method)}
       />
     </div>
