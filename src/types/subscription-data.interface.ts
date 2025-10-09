@@ -39,8 +39,6 @@ export interface SubscriptionDataInterface {
   periodMultiplier: number
   plan: PlansInterface
   isActive: boolean
-  isInvoicing: boolean
-  isCreated: boolean
   isAutoRenewal: boolean
   nextRenewalStars?: number
   devicesCount: number
