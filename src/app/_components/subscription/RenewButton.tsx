@@ -238,7 +238,7 @@ export default function RenewButton({
       {subscription.period !== SubscriptionPeriodEnum.TRIAL &&
         subscription.period !== SubscriptionPeriodEnum.TRAFFIC &&
         subscription.period !== SubscriptionPeriodEnum.INDEFINITELY &&
-        subscription.nextRenewalStars && (
+        subscription.nextRenewalStars !== undefined && (
           <>
             <button
               onClick={() => {
@@ -492,8 +492,14 @@ export default function RenewButton({
                           ? 'opacity-50 cursor-not-allowed'
                           : ' cursor-pointer'
                       } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-                      <Currency type={'star'} w={18} />
-                      {price}
+                      {price <= 0 ? (
+                        '🎁 Продлить бесплатно'
+                      ) : (
+                        <>
+                          <Currency type={'star'} w={18} />
+                          {price}
+                        </>
+                      )}
                     </button>
                     <button
                       onClick={() => {
