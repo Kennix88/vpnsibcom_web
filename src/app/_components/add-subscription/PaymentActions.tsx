@@ -3,6 +3,7 @@
 import { CurrencyEnum } from '@app/enums/currency.enum'
 import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
 import { useCurrencyStore } from '@app/store/currency.store'
+import { PlansInterface } from '@app/types/plans.interface'
 import { roundUp } from '@app/utils/calculate-subscription-cost.util'
 import { fxUtil } from '@app/utils/fx.util'
 import { FaCircleInfo } from 'react-icons/fa6'
@@ -18,14 +19,22 @@ export const PaymentActions = ({
   price,
   isLoading,
   onPayment,
+  trafficBalance,
+  trafficLimitGb,
+  planSelected,
 }: {
+  planSelected: PlansInterface
   isAllBaseServers: boolean
   isAllPremiumServers: boolean
   serversSelected: string[]
   balance: number
   price: number
   isLoading: boolean
-  onPayment: (method: PaymentMethodEnum | 'BALANCE') => Promise<void>
+  trafficLimitGb: number
+  trafficBalance: number
+  onPayment: (
+    method: PaymentMethodEnum | 'BALANCE' | 'TRAFFIC',
+  ) => Promise<void>
 }) => {
   const { rates } = useCurrencyStore()
   const hasSelectedServers =
@@ -56,8 +65,14 @@ export const PaymentActions = ({
                   ? 'opacity-50 cursor-not-allowed'
                   : ' cursor-pointer'
               } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-              <Currency type={'star'} w={18} />
-              {price}
+              {price <= 0 ? (
+                '🎁 Добавить бесплатно'
+              ) : (
+                <>
+                  <Currency type={'star'} w={18} />
+                  {price}
+                </>
+              )}
             </button>
             <button
               onClick={() => {
@@ -87,6 +102,27 @@ export const PaymentActions = ({
                 {roundUp(
                   fxUtil(price, CurrencyEnum.XTR, CurrencyEnum.TON, rates),
                 )}
+              </button>
+            )}
+            {planSelected.key == 'TRAFFIC' && (
+              <button
+                onClick={() => {
+                  onPayment('TRAFFIC')
+                }}
+                disabled={
+                  isLoading ||
+                  trafficLimitGb * 1024 > trafficBalance ||
+                  price <= 0
+                }
+                className={`py-2 px-4 rounded-md bg-[var(--traffic-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+                  isLoading ||
+                  trafficLimitGb * 1024 > trafficBalance ||
+                  price <= 0
+                    ? 'opacity-50 cursor-not-allowed'
+                    : ' cursor-pointer'
+                } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
+                <Currency type={'traffic'} w={18} />
+                {price <= 0 ? 0 : trafficLimitGb * 1024}
               </button>
             )}
           </div>
