@@ -399,11 +399,23 @@ class ApiClient {
     return this.safeRequest<{
       subscriptions: SubscriptionResponseInterface
       user: UserDataInterface
+      invoice?: {
+        linkPay: string
+        isTonPayment: boolean
+        amountTon: number
+        token: string
+      }
     }>(async () => {
       const { data } = await this.instance.post<
         ApiResponse<{
           subscriptions: SubscriptionResponseInterface
           user: UserDataInterface
+          invoice?: {
+            linkPay: string
+            isTonPayment: boolean
+            amountTon: number
+            token: string
+          }
         }>
       >('/subscriptions/purchase', params)
       return data.data
