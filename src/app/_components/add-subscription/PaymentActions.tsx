@@ -17,6 +17,7 @@ export const PaymentActions = ({
   serversSelected,
   balance,
   price,
+  priceNoDiscount,
   isLoading,
   onPayment,
   trafficBalance,
@@ -29,6 +30,7 @@ export const PaymentActions = ({
   serversSelected: string[]
   balance: number
   price: number
+  priceNoDiscount: number
   isLoading: boolean
   trafficLimitGb: number
   trafficBalance: number
@@ -70,7 +72,14 @@ export const PaymentActions = ({
               ) : (
                 <>
                   <Currency type={'star'} w={18} />
-                  {price}
+                  <div>
+                    {price}
+                    {/* {price !== priceNoDiscount && (
+                      <span className="opacity-70 text-[12px] line-through">
+                        ({priceNoDiscount})
+                      </span>
+                    )} */}
+                  </div>
                 </>
               )}
             </button>
@@ -85,7 +94,14 @@ export const PaymentActions = ({
                   : ' cursor-pointer'
               } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
               <Currency type={'tg-star'} w={18} />
-              {price}
+              <div>
+                {price}
+                {/* {price !== priceNoDiscount && (
+                  <span className="opacity-70 text-[12px] line-through">
+                    ({priceNoDiscount})
+                  </span>
+                )} */}
+              </div>
             </button>
             {rates && (
               <button
@@ -99,9 +115,25 @@ export const PaymentActions = ({
                     : ' cursor-pointer'
                 } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
                 <Currency type={'ton'} w={18} />
-                {roundUp(
-                  fxUtil(price, CurrencyEnum.XTR, CurrencyEnum.TON, rates),
-                )}
+                <div>
+                  {roundUp(
+                    fxUtil(price, CurrencyEnum.XTR, CurrencyEnum.TON, rates),
+                  )}
+                  {/* {price !== priceNoDiscount && (
+                    <span className="opacity-70 text-[12px] line-through">
+                      (
+                      {roundUp(
+                        fxUtil(
+                          priceNoDiscount,
+                          CurrencyEnum.XTR,
+                          CurrencyEnum.TON,
+                          rates,
+                        ),
+                      )}
+                      )
+                    </span>
+                  )} */}
+                </div>
               </button>
             )}
             {planSelected.key == 'TRAFFIC' && (
