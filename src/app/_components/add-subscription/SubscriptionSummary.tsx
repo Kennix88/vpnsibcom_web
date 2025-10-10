@@ -26,6 +26,7 @@ export const SubscriptionSummary = ({
   user,
   isAutoRenewal,
   price,
+  priceNoDiscount,
   subscriptions,
   name,
   trafficReset,
@@ -42,6 +43,7 @@ export const SubscriptionSummary = ({
   user: UserDataInterface
   isAutoRenewal: boolean
   price: number
+  priceNoDiscount: number
   subscriptions: SubscriptionResponseInterface
   name: string
   trafficReset: TrafficResetEnum
@@ -123,6 +125,7 @@ export const SubscriptionSummary = ({
         name: 'Скидка за период',
         value: <div>{getFinalPercent(periodButton.discount)}%</div>,
         isVisible:
+          planSelected.key !== PlansEnum.TRAFFIC &&
           periodButton.key !== SubscriptionPeriodEnum.INDEFINITELY &&
           getFinalPercent(periodButton.discount) > 0,
       },
@@ -146,9 +149,16 @@ export const SubscriptionSummary = ({
       {
         name: 'К оплате',
         value: (
-          <div className="flex flex-row gap-2 items-center">
+          <div className="flex gap-2 items-center">
             <TgStar type="star" w={14} />
-            {price}
+            <div>
+              {price}
+              {price !== priceNoDiscount && (
+                <span className="opacity-70 text-[12px] line-through">
+                  ({priceNoDiscount})
+                </span>
+              )}
+            </div>
           </div>
         ),
         isVisible: true,
