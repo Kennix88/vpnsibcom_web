@@ -17,6 +17,7 @@ import { CreateSubscriptionDataInterface } from '@app/types/subscription-data.in
 import {
   calculateDaysByPeriod,
   calculateSubscriptionCost,
+  calculateSubscriptionCostNoDiscount,
 } from '@app/utils/calculate-subscription-cost.util'
 import { invoice } from '@telegram-apps/sdk-react'
 import { beginCell, toNano } from '@ton/core'
@@ -232,27 +233,47 @@ export default function AddSubscription() {
     ],
   )
 
-  const price = useMemo(() => {
+  const { price, priceNoDiscount } = useMemo(() => {
     if (!user || !subscriptions || !planSelected || !periodButton) {
-      return 0
+      return {
+        price: 0,
+        priceNoDiscount: 0,
+      }
     }
 
-    return calculateSubscriptionCost({
-      period: periodButton.key,
-      periodMultiplier,
-      isPremium: user.isPremium,
-      isTgProgramPartner: user.isTgProgramPartner,
-      devicesCount,
-      serversCount: baseServersCount,
-      premiumServersCount,
-      trafficLimitGb,
-      isAllBaseServers,
-      isAllPremiumServers,
-      isUnlimitTraffic,
-      userDiscount: user.roleDiscount,
-      plan: planSelected,
-      settings: subscriptions,
-    })
+    return {
+      price: calculateSubscriptionCost({
+        period: periodButton.key,
+        periodMultiplier,
+        isPremium: user.isPremium,
+        isTgProgramPartner: user.isTgProgramPartner,
+        devicesCount,
+        serversCount: baseServersCount,
+        premiumServersCount,
+        trafficLimitGb,
+        isAllBaseServers,
+        isAllPremiumServers,
+        isUnlimitTraffic,
+        userDiscount: user.roleDiscount,
+        plan: planSelected,
+        settings: subscriptions,
+      }),
+      priceNoDiscount: calculateSubscriptionCostNoDiscount({
+        period: periodButton.key,
+        periodMultiplier,
+        isPremium: user.isPremium,
+        isTgProgramPartner: user.isTgProgramPartner,
+        devicesCount,
+        serversCount: baseServersCount,
+        premiumServersCount,
+        trafficLimitGb,
+        isAllBaseServers,
+        isAllPremiumServers,
+        isUnlimitTraffic,
+        plan: planSelected,
+        settings: subscriptions,
+      }),
+    }
   }, [
     user,
     subscriptions,
@@ -634,6 +655,7 @@ export default function AddSubscription() {
         user={user}
         isAutoRenewal={isAutoRenewal}
         price={price}
+        priceNoDiscount={priceNoDiscount}
         subscriptions={subscriptions}
         name={name}
         trafficReset={trafficReset}
@@ -647,6 +669,7 @@ export default function AddSubscription() {
         serversSelected={serversSelected}
         balance={balance}
         price={price}
+        priceNoDiscount={priceNoDiscount}
         isLoading={isLoading}
         trafficLimitGb={trafficLimitGb}
         trafficBalance={user.balance.traffic}
