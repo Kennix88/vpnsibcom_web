@@ -3,6 +3,7 @@
 import { authApiClient } from '@app/core/authApiClient'
 import { CurrencyEnum } from '@app/enums/currency.enum'
 import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
+import { PlansEnum } from '@app/enums/plans.enum'
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
 import { TrafficResetEnum } from '@app/enums/traffic-reset.enum'
 import { useCurrencyStore } from '@app/store/currency.store'
@@ -12,6 +13,7 @@ import { SubscriptionDataInterface } from '@app/types/subscription-data.interfac
 import {
   calculateDaysByPeriod,
   calculateSubscriptionCost,
+  calculateSubscriptionCostNoDiscount,
   roundUp,
 } from '@app/utils/calculate-subscription-cost.util'
 import { fxUtil } from '@app/utils/fx.util'
@@ -21,7 +23,7 @@ import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react'
 import { addDays, eachDayOfInterval } from 'date-fns'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { MdAutoMode } from 'react-icons/md'
 import { toast } from 'react-toastify'
 import { PeriodButtonInterface } from '../add-subscription/AddSubscription'
@@ -29,7 +31,6 @@ import { PERIOD_MULTIPLIERS } from '../add-subscription/constants'
 import { getButtonColor } from '../add-subscription/functions'
 import Currency from '../Currency'
 import Modal from '../Modal'
-import FormatPeriod from './FromatPeriod'
 
 export interface TrafficPeriodButtonInterface {
   key: TrafficResetEnum
@@ -142,9 +143,129 @@ export default function RenewButton({
     setTrafficPeriodButton(findTrafficPeriodButton || null)
     setPeriodButtons(buttons)
     setPeriodButton(buttons[3])
-  }, [subscriptions, user])
+  }, [subscriptions, user, subscription.trafficReset])
 
+  // Стабильная функция, чтобы не ломать зависимости
+  const getFinalPercent = useCallback((ratio: number) => 100 - ratio * 100, [])
+
+  // price и priceNoDiscount — не хуки, можно считать сразу (всегда)
+  const price = calculateSubscriptionCost({
+    period: periodButton?.key || subscription.period,
+    periodMultiplier,
+    isPremium: user!.isPremium,
+    isTgProgramPartner: user!.isTgProgramPartner,
+    devicesCount: subscription.devicesCount,
+    serversCount: subscription.baseServersCount,
+    premiumServersCount: subscription.premiumServersCount,
+    trafficLimitGb: subscription.trafficLimitGb || 0,
+    isAllBaseServers: subscription.isAllBaseServers,
+    isAllPremiumServers: subscription.isAllPremiumServers,
+    isUnlimitTraffic: subscription.isUnlimitTraffic,
+    userDiscount: user!.roleDiscount,
+    plan: subscription.plan,
+    settings: subscriptions!,
+  })
+
+  const priceNoDiscount = calculateSubscriptionCostNoDiscount({
+    period: periodButton?.key || subscription.period,
+    periodMultiplier,
+    isPremium: user!.isPremium,
+    isTgProgramPartner: user!.isTgProgramPartner,
+    devicesCount: subscription.devicesCount,
+    serversCount: subscription.baseServersCount,
+    premiumServersCount: subscription.premiumServersCount,
+    trafficLimitGb: subscription.trafficLimitGb || 0,
+    isAllBaseServers: subscription.isAllBaseServers,
+    isAllPremiumServers: subscription.isAllPremiumServers,
+    isUnlimitTraffic: subscription.isUnlimitTraffic,
+    plan: subscription.plan,
+    settings: subscriptions!,
+  })
+
+  // useMemo — вызываем всегда, внутри безопасно обрабатываем отсутствие данных
+  const summaryItems = useMemo(() => {
+    if (!user || !subscriptions || !periodButton) return []
+
+    return [
+      {
+        name: 'Трафик',
+        value: (
+          <div>
+            {subscription.isUnlimitTraffic
+              ? 'Безлимит'
+              : subscription.plan.key === PlansEnum.TRAFFIC
+                ? `${subscription.trafficLimitGb} GB`
+                : trafficPeriodButton?.key === TrafficResetEnum.DAY
+                  ? `${subscription.trafficLimitGb} GB ежедневно`
+                  : trafficPeriodButton?.key === TrafficResetEnum.WEEK
+                    ? `${(subscription.trafficLimitGb || 0) * 7} GB еженедельно`
+                    : trafficPeriodButton?.key === TrafficResetEnum.MONTH
+                      ? `${(subscription.trafficLimitGb || 0) * 30} GB ежемесячно`
+                      : `${(subscription.trafficLimitGb || 0) * 365} GB ежегодно`}
+          </div>
+        ),
+        isVisible: true,
+      },
+      {
+        name: 'Период',
+        value: (
+          <div className="flex gap-1 items-center">
+            <div>{periodButton.label}</div>
+            {periodMultiplier > 1 && (
+              <div className="rounded-md w-[22px] h-[22px] justify-center items-center flex bg-[var(--primary)] text-[var(--on-primary)] text-xs font-bold">
+                x{periodMultiplier}
+              </div>
+            )}
+          </div>
+        ),
+        isVisible: subscription.plan.key !== PlansEnum.TRAFFIC,
+      },
+      {
+        name: 'Скидка за период',
+        value: <div>{getFinalPercent(periodButton.discount)}%</div>,
+        isVisible:
+          periodButton.key !== SubscriptionPeriodEnum.INDEFINITELY &&
+          getFinalPercent(periodButton.discount) > 0,
+      },
+      {
+        name: 'Скидка за роль',
+        value: <div>{getFinalPercent(user.roleDiscount)}%</div>,
+        isVisible: getFinalPercent(user.roleDiscount) > 0,
+      },
+      {
+        name: 'К оплате',
+        value: (
+          <div className="flex gap-2 items-center">
+            <Currency type="star" w={14} />
+            <div>
+              {price}
+              {price !== priceNoDiscount && (
+                <span className="opacity-70 text-[12px] line-through">
+                  ({priceNoDiscount})
+                </span>
+              )}
+            </div>
+          </div>
+        ),
+        isVisible: true,
+      },
+    ]
+  }, [
+    subscription,
+    trafficPeriodButton,
+    periodButton,
+    periodMultiplier,
+    user,
+    price,
+    priceNoDiscount,
+    getFinalPercent,
+    subscriptions,
+  ])
+
+  // Теперь guard — рендерим null только после того, как все хуки/мемо вызваны
   if (!user || !subscriptions || !periodButton) return null
+
+  const balance = user.balance.payment
 
   const renewSubscription = async (
     subscription: SubscriptionDataInterface,
@@ -166,9 +287,7 @@ export default function RenewButton({
         isUpdatePeriod,
         periodButton?.key || subscription.period,
         periodMultiplier,
-        trafficPeriodButton?.key == null
-          ? subscription.trafficReset
-          : trafficPeriodButton?.key,
+        trafficPeriodButton?.key ?? subscription.trafficReset,
       )
 
       if (!data.invoice) {
@@ -213,25 +332,6 @@ export default function RenewButton({
       setIsOpenModal(false)
     }
   }
-
-  const balance = user.balance.payment
-  const price = calculateSubscriptionCost({
-    period: periodButton?.key || subscription.period,
-    periodMultiplier,
-    isPremium: user.isPremium,
-    isTgProgramPartner: user.isTgProgramPartner,
-    devicesCount: subscription.devicesCount,
-    serversCount: subscription.baseServersCount,
-    premiumServersCount: subscription.premiumServersCount,
-    trafficLimitGb: subscription.trafficLimitGb || 0,
-    isAllBaseServers: subscription.isAllBaseServers,
-    isAllPremiumServers: subscription.isAllPremiumServers,
-    isUnlimitTraffic: subscription.isUnlimitTraffic,
-    userDiscount: user.roleDiscount,
-    plan: subscription.plan,
-    settings: subscriptions,
-  })
-  const getFinalPercent = (ratio: number) => 100 - ratio * 100
 
   return (
     <>
@@ -413,16 +513,16 @@ export default function RenewButton({
                           Обнуление трафика
                         </div>
                         <div>
-                          {trafficPeriodButton?.key == TrafficResetEnum.DAY
+                          {trafficPeriodButton?.key === TrafficResetEnum.DAY
                             ? subscription.trafficLimitGb
-                            : trafficPeriodButton?.key == TrafficResetEnum.WEEK
-                              ? subscription.trafficLimitGb * 7
-                              : trafficPeriodButton?.key ==
+                            : trafficPeriodButton?.key === TrafficResetEnum.WEEK
+                              ? (subscription.trafficLimitGb || 0) * 7
+                              : trafficPeriodButton?.key ===
                                   TrafficResetEnum.MONTH
-                                ? subscription.trafficLimitGb * 30
-                                : trafficPeriodButton?.key ==
+                                ? (subscription.trafficLimitGb || 0) * 30
+                                : trafficPeriodButton?.key ===
                                     TrafficResetEnum.YEAR
-                                  ? subscription.trafficLimitGb * 365
+                                  ? (subscription.trafficLimitGb || 0) * 365
                                   : ''}{' '}
                           GB
                         </div>
@@ -472,14 +572,31 @@ export default function RenewButton({
                     </div>
                   )}
 
+                <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
+                  <div className="px-4 opacity-50 flex flex-row gap-2 items-center w-full">
+                    Итого
+                  </div>
+
+                  <motion.div
+                    layout
+                    className="text-sm bg-[var(--surface-container-lowest)] divide-y divide-[var(--primary)] rounded-xl flex flex-col p-4 py-2 w-full shadow-md">
+                    {summaryItems.map(
+                      (item) =>
+                        item.isVisible && (
+                          <motion.div
+                            key={item.name}
+                            className="flex flex-row gap-3 items-center justify-between px-4 py-2 text-sm font-mono">
+                            <div className="opacity-50">{item.name}:</div>
+                            {item.value}
+                          </motion.div>
+                        ),
+                    )}
+                  </motion.div>
+                </div>
+
                 <div className="grow flex flex-col gap-2">
                   <div className="px-4 opacity-50 flex flex-wrap items-center gap-2 font-mono">
-                    Продлить на <FormatPeriod period={periodButton.key} />{' '}
-                    {periodMultiplier > 1 && (
-                      <div className="text-xs rounded-md py-1 px-1 justify-center items-center flex bg-[var(--primary)] text-[var(--on-primary)] font-bold ">
-                        x{periodMultiplier}
-                      </div>
-                    )}
+                    Продлить
                   </div>
                   <div className="flex flex-wrap items-center gap-2">
                     <button
