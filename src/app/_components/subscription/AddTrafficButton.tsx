@@ -10,6 +10,7 @@ import { useUserStore } from '@app/store/user.store'
 import { SubscriptionDataInterface } from '@app/types/subscription-data.interface'
 import {
   calculateSubscriptionCost,
+  calculateSubscriptionCostNoDiscount,
   roundUp,
 } from '@app/utils/calculate-subscription-cost.util'
 import { fxUtil } from '@app/utils/fx.util'
@@ -17,7 +18,7 @@ import { invoice } from '@telegram-apps/sdk-react'
 import { beginCell, toNano } from '@ton/core'
 import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react'
 import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { FaPlus } from 'react-icons/fa6'
 import { toast } from 'react-toastify'
 import Currency from '../Currency'
@@ -65,6 +66,57 @@ export default function AddTrafficButton({
     plan: subscription.plan,
     settings: subscriptions,
   })
+
+  const priceNoDiscount = calculateSubscriptionCostNoDiscount({
+    period: subscription.period,
+    periodMultiplier: subscription.periodMultiplier,
+    isPremium: user.isPremium,
+    isTgProgramPartner: user.isTgProgramPartner,
+    devicesCount: subscription.devicesCount,
+    serversCount: subscription.baseServersCount,
+    premiumServersCount: subscription.premiumServersCount,
+    trafficLimitGb: trafficLimitGb,
+    isAllBaseServers: subscription.isAllBaseServers,
+    isAllPremiumServers: subscription.isAllPremiumServers,
+    isUnlimitTraffic: false,
+    plan: subscription.plan,
+    settings: subscriptions,
+  })
+
+  const getFinalPercent = (ratio: number) => 100 - ratio * 100
+
+  const summaryItems = useMemo(
+    () => [
+      {
+        name: 'Трафик',
+        value: <div>{`${trafficLimitGb} GB`}</div>,
+        isVisible: true,
+      },
+      {
+        name: 'Скидка за роль',
+        value: <div>{getFinalPercent(user.roleDiscount)}%</div>,
+        isVisible: getFinalPercent(user.roleDiscount) > 0,
+      },
+      {
+        name: 'К оплате',
+        value: (
+          <div className="flex gap-2 items-center">
+            <Currency type="star" w={14} />
+            <div>
+              {price}
+              {price !== priceNoDiscount && (
+                <span className="opacity-70 text-[12px] line-through">
+                  ({priceNoDiscount})
+                </span>
+              )}
+            </div>
+          </div>
+        ),
+        isVisible: true,
+      },
+    ],
+    [trafficLimitGb, user, price, subscriptions, name],
+  )
 
   const addTraffic = async (
     subscription: SubscriptionDataInterface,
@@ -208,6 +260,28 @@ export default function AddTrafficButton({
                   </motion.button>
                 )
               })}
+            </motion.div>
+          </div>
+
+          <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
+            <div className="px-4 opacity-50 flex flex-row gap-2 items-center w-full">
+              Итого
+            </div>
+
+            <motion.div
+              layout
+              className="text-sm bg-[var(--surface-container-lowest)] divide-y divide-[var(--primary)] rounded-xl flex flex-col p-4 py-2 w-full shadow-md">
+              {summaryItems.map(
+                (item) =>
+                  item.isVisible && (
+                    <motion.div
+                      key={item.name}
+                      className="flex flex-row gap-3 items-center justify-between px-4 py-2 text-sm font-mono">
+                      <div className="opacity-50">{item.name}:</div>
+                      {item.value}
+                    </motion.div>
+                  ),
+              )}
             </motion.div>
           </div>
 
