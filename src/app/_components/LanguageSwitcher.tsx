@@ -87,7 +87,7 @@ export default function LanguageSwitcher({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -5 }}
             transition={{ duration: 0.15 }}
-            className="absolute left-0 mt-2 bg-[var(--surface-container-high)] border border-[var(--outline)] text-[var(--on-surface)var(] rounded-md shadow-xl z-50 overflow-auto max-h-50 w-full min-w-[200px] divide-y divide-[var(--outline)]">
+            className="absolute left-0 mt-2 bg-[var(--surface-container-high)] border border-[var(--outline)] text-[var(--on-surface)var(] rounded-md shadow-xl z-99 overflow-auto max-h-50 w-full min-w-[200px] divide-y divide-[var(--outline)]">
             {localesMap.map((lang) => (
               <li key={lang.key}>
                 <button
