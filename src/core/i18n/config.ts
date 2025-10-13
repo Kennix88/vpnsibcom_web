@@ -56,7 +56,7 @@ export const localesMap = [
   { key: 'pl', title: 'Polski', icon: '/flags/POL.svg', isRTL: false },
   // { key: 'pt', title: 'Português', icon: '/flags/PRT.svg', isRTL: false },
   // { key: 'sr', title: 'Srpski', icon: '/flags/SRB.svg', isRTL: false },
-  // { key: 'es', title: 'Español', icon: '/flags/ESP.svg', isRTL: false },
+  { key: 'es', title: 'Español', icon: '/flags/ESP.svg', isRTL: false },
   { key: 'tr', title: 'Türkçe', icon: '/flags/TUR.svg', isRTL: false },
   { key: 'uk', title: 'Yкраїнська мова', icon: '/flags/UKR.svg', isRTL: false },
   { key: 'ar', title: 'اَلْعَرَبِيَّةُ', icon: '/flags/SAU.svg', isRTL: true },
