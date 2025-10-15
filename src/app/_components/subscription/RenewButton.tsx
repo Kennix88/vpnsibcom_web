@@ -43,7 +43,6 @@ export default function RenewButton({
 }: {
   subscription: SubscriptionDataInterface
 }) {
-  const t = useTranslations('subscriptions')
   const { rates } = useCurrencyStore()
   const { subscriptions, setSubscriptions } = useSubscriptionsStore()
   const { user, setUser } = useUserStore()
@@ -60,26 +59,27 @@ export default function RenewButton({
     useState<TrafficPeriodButtonInterface | null>(null)
   const wallet = useTonWallet()
   const [tonConnectUI] = useTonConnectUI()
+  const t = useTranslations('billing.subscription')
 
   const trafficPeriodButtons: TrafficPeriodButtonInterface[] = [
     {
       key: TrafficResetEnum.DAY,
-      label: 'Ежедневно',
+      label: t('trafficReset.daily'),
       minDays: 0,
     },
     {
       key: TrafficResetEnum.WEEK,
-      label: 'Еженедельно',
+      label: t('trafficReset.weekly'),
       minDays: 7,
     },
     {
       key: TrafficResetEnum.MONTH,
-      label: 'Ежемесячно',
+      label: t('trafficReset.monthly'),
       minDays: 30,
     },
     {
       key: TrafficResetEnum.YEAR,
-      label: 'Ежегодно',
+      label: t('trafficReset.yearly'),
       minDays: 360,
     },
   ]
@@ -90,48 +90,52 @@ export default function RenewButton({
     const buttons: PeriodButtonInterface[] = [
       {
         key: SubscriptionPeriodEnum.HOUR,
-        label: '1 час',
+        label: t('period.hour'),
         discount: subscriptions.hourRatioPayment,
       },
       {
         key: SubscriptionPeriodEnum.DAY,
-        label: '1 день',
+        label: t('period.day'),
         discount: subscriptions.dayRatioPayment,
       },
       {
         key: SubscriptionPeriodEnum.WEEK,
-        label: '1 неделя',
+        label: t('period.week'),
         discount: subscriptions.weekRatioPayment,
       },
-      { key: SubscriptionPeriodEnum.MONTH, label: '1 месяц', discount: 1 },
+      {
+        key: SubscriptionPeriodEnum.MONTH,
+        label: t('period.month'),
+        discount: 1,
+      },
       {
         key: SubscriptionPeriodEnum.THREE_MONTH,
-        label: '3 месяца',
+        label: t('period.threeMonth'),
         discount: subscriptions.threeMouthesRatioPayment,
       },
       {
         key: SubscriptionPeriodEnum.SIX_MONTH,
-        label: '6 месяцев',
+        label: t('period.sixMonth'),
         discount: subscriptions.sixMouthesRatioPayment,
       },
       {
         key: SubscriptionPeriodEnum.YEAR,
-        label: '1 год',
+        label: t('period.year'),
         discount: subscriptions.oneYearRatioPayment,
       },
       {
         key: SubscriptionPeriodEnum.TWO_YEAR,
-        label: '2 года',
+        label: t('period.twoYear'),
         discount: subscriptions.twoYearRatioPayment,
       },
       {
         key: SubscriptionPeriodEnum.THREE_YEAR,
-        label: '3 года',
+        label: t('period.threeYear'),
         discount: subscriptions.threeYearRatioPayment,
       },
       {
         key: SubscriptionPeriodEnum.INDEFINITELY,
-        label: 'Бессрочно',
+        label: t('period.indefinitely'),
         discount: subscriptions.indefinitelyRatio,
       },
     ]
@@ -188,26 +192,26 @@ export default function RenewButton({
 
     return [
       {
-        name: 'Трафик',
+        name: t('summary.traffic'),
         value: (
           <div>
             {subscription.isUnlimitTraffic
-              ? 'Безлимит'
+              ? t('summary.unlimit')
               : subscription.plan.key === PlansEnum.TRAFFIC
                 ? `${subscription.trafficLimitGb} GB`
                 : trafficPeriodButton?.key === TrafficResetEnum.DAY
-                  ? `${subscription.trafficLimitGb} GB ежедневно`
+                  ? `${subscription.trafficLimitGb} GB ${t('summary.daily')}`
                   : trafficPeriodButton?.key === TrafficResetEnum.WEEK
-                    ? `${(subscription.trafficLimitGb || 0) * 7} GB еженедельно`
+                    ? `${(subscription.trafficLimitGb || 0) * 7} GB ${t('summary.weekly')}`
                     : trafficPeriodButton?.key === TrafficResetEnum.MONTH
-                      ? `${(subscription.trafficLimitGb || 0) * 30} GB ежемесячно`
-                      : `${(subscription.trafficLimitGb || 0) * 365} GB ежегодно`}
+                      ? `${(subscription.trafficLimitGb || 0) * 30} GB ${t('summary.monthly')}`
+                      : `${(subscription.trafficLimitGb || 0) * 365} GB ${t('summary.yearly')}`}
           </div>
         ),
         isVisible: true,
       },
       {
-        name: 'Период',
+        name: t('summary.period'),
         value: (
           <div className="flex gap-1 items-center">
             <div>{periodButton.label}</div>
@@ -221,19 +225,19 @@ export default function RenewButton({
         isVisible: subscription.plan.key !== PlansEnum.TRAFFIC,
       },
       {
-        name: 'Скидка за период',
+        name: t('summary.periodDiscount'),
         value: <div>{getFinalPercent(periodButton.discount)}%</div>,
         isVisible:
           periodButton.key !== SubscriptionPeriodEnum.INDEFINITELY &&
           getFinalPercent(periodButton.discount) > 0,
       },
       {
-        name: 'Скидка за роль',
+        name: t('summary.roleDiscount'),
         value: <div>{getFinalPercent(user.roleDiscount)}%</div>,
         isVisible: getFinalPercent(user.roleDiscount) > 0,
       },
       {
-        name: 'К оплате',
+        name: t('summary.toPaid'),
         value: (
           <div className="flex gap-2 items-center">
             <Currency type="star" w={14} />
@@ -293,7 +297,7 @@ export default function RenewButton({
       if (!data.invoice) {
         setUser(data.user)
         setSubscriptions(data.subscriptions)
-        toast.success(t('subscriptionRenewed'))
+        toast.success('Subsctription renewed')
       } else {
         if (data.invoice?.isTonPayment) {
           const amountNano = toNano(data.invoice?.amountTon.toString())
@@ -326,7 +330,7 @@ export default function RenewButton({
         }
       }
     } catch {
-      toast.error(t('errors.renewSubscriptionFailed'))
+      toast.error('Error when renewing a subscription')
     } finally {
       setIsLoading(false)
       setIsOpenModal(false)
@@ -347,18 +351,18 @@ export default function RenewButton({
               disabled={isLoading}
               className={`grow p-2 rounded-md bg-[var(--secondary-container)] text-[var(--on-secondary-container)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex gap-2 items-center `}>
               <MdAutoMode size={18} />
-              Продление
+              {t('extension')}
             </button>
 
             <Modal
               isOpen={isOpenModal}
               onClose={() => setIsOpenModal(false)}
-              title={'Продление подписки'}>
+              title={t('subscriptionExtension')}>
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
                   <div className="flex gap-2 items-end justify-between w-full px-4 ">
                     <div className="opacity-50 flex flex-row gap-2 items-center">
-                      Выберите период
+                      {t('selectPeriod')}
                     </div>
                     <div className="flex gap-2 items-center ">
                       <Currency type="star" w={18} />
@@ -402,7 +406,7 @@ export default function RenewButton({
                       SubscriptionPeriodEnum.INDEFINITELY && (
                       <>
                         <div className="w-full flex flex-col gap-1 opacity-50">
-                          Множитель периода
+                          {t('periodMultiplier')}
                         </div>
                         <button
                           onClick={() =>
@@ -469,7 +473,9 @@ export default function RenewButton({
                       className="text-sm bg-[var(--surface-container-lowest)] divide-y divide-[var(--primary)] rounded-xl flex flex-col p-4 py-2 w-full shadow-md">
                       <motion.div className="flex flex-row gap-3 items-center justify-between py-2 text-sm font-mono">
                         <div className="flex gap-2 items-center">
-                          <div className="opacity-50">Запомнить период:</div>
+                          <div className="opacity-50">
+                            {t('options.period')}:
+                          </div>
                         </div>
                         <div className="relative flex items-center">
                           <input
@@ -510,7 +516,7 @@ export default function RenewButton({
                     <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
                       <div className="flex gap-2 items-end justify-between w-full px-4 ">
                         <div className="opacity-50 flex flex-row gap-2 items-center">
-                          Обнуление трафика
+                          {t('trafficReset.title')}
                         </div>
                         <div>
                           {trafficPeriodButton?.key === TrafficResetEnum.DAY
@@ -574,7 +580,7 @@ export default function RenewButton({
 
                 <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
                   <div className="px-4 opacity-50 flex flex-row gap-2 items-center w-full">
-                    Итого
+                    {t('summary.title')}
                   </div>
 
                   <motion.div
@@ -596,7 +602,7 @@ export default function RenewButton({
 
                 <div className="grow flex flex-col gap-2">
                   <div className="px-4 opacity-50 flex flex-wrap items-center gap-2 font-mono">
-                    Продлить
+                    {t('extension')}
                   </div>
                   <div className="flex flex-wrap items-center gap-2">
                     <button
@@ -610,7 +616,7 @@ export default function RenewButton({
                           : ' cursor-pointer'
                       } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
                       {price <= 0 ? (
-                        '🎁 Продлить бесплатно'
+                        t('freeExtension')
                       ) : (
                         <>
                           <Currency type={'star'} w={18} />
