@@ -100,7 +100,8 @@
       "title": "Options",
       "autoRenewal": "Auto-renewal",
       "autoRenewalDescription": "Automatically renew subscription",
-      "info": "Subscription will be automatically renewed from your balance."
+      "info": "Subscription will be automatically renewed from your balance.",
+      "period": "Remember period"
     },
     "traffic": "Traffic",
     "addTraffic": "Add traffic",
