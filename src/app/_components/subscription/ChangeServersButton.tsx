@@ -8,6 +8,7 @@ import { useUserStore } from '@app/store/user.store'
 import { ServerDataInterface } from '@app/types/servers-data.interface'
 import { SubscriptionDataInterface } from '@app/types/subscription-data.interface'
 import { motion } from 'framer-motion'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react'
 import { BiServer } from 'react-icons/bi'
@@ -33,6 +34,7 @@ export default function ChangeServersButton({
   )
   const { setSubscriptions } = useSubscriptionsStore()
   const { setUser } = useUserStore()
+  const t = useTranslations('subscriptions')
 
   const fetchServers = useCallback(async (): Promise<void> => {
     await updateServers()
@@ -114,18 +116,18 @@ export default function ChangeServersButton({
         disabled={isLoading}
         className={`grow p-2 rounded-md bg-[var(--secondary-container)] text-[var(--on-secondary-container)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex gap-2 items-center `}>
         <BiServer size={18} />
-        Сменить сервер
+        {t('changeServer')}
       </button>
 
       <Modal
         isOpen={isOpenModal}
         actionButtonColor="primary"
-        actionText="Сохранить"
+        actionText={t('save')}
         onAction={() => {
           handleSave()
         }}
         onClose={() => setIsOpenModal(false)}
-        title={'Смена сервера'}>
+        title={t('changeServerTitle')}>
         <motion.div
           layout
           className="text-sm flex flex-row flex-wrap gap-2 items-center w-full shadow-md">
@@ -177,8 +179,7 @@ export default function ChangeServersButton({
               )
             })}
           <div className="text-xs text-[var(--on-warning-container)] bg-[var(--warning-container)] p-2 w-full rounded-md">
-            ВНИМАНИЕ: Смена сервера происходит в течении 2 минут. После смены
-            сервера, необходимо обновить данные в приложении!
+            {t('changeServerWarning')}
           </div>
         </motion.div>
       </Modal>
