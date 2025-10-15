@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useTranslations } from 'next-intl'
 import TgStar from '../Currency'
 import { TRAFFIC_GBS } from './constants'
 import { getTrafficCountButtonColor } from './functions'
@@ -17,11 +18,12 @@ export const TrafficSelection = ({
   setIsUnlimitTraffic: (val: boolean) => void
   price: number
 }) => {
+  const t = useTranslations('billing.subscription')
   return (
     <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
       <div className="flex gap-2 items-end justify-between w-full px-4 ">
         <div className="opacity-50 flex flex-row gap-2 items-center">
-          Трафик GB
+          {t('traffic')} GB
         </div>
         <div className="flex gap-2 items-center ">
           <TgStar type="star" w={14} />
