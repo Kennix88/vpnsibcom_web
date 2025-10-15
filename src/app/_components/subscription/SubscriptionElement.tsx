@@ -264,7 +264,7 @@ export default function SubscriptionElement({
                     <IoClose size={16} />
                   )}
                   <div className="text-sm">
-                    {subscription.isActive ? 'Активна' : 'Не активна'}
+                    {subscription.isActive ? t('active') : t('notActive')}
                   </div>
                 </div>
                 {subscription.onlineAt &&
@@ -292,7 +292,7 @@ export default function SubscriptionElement({
                         />
                       </div>
                     </div>
-                    <div className="text-sm">Онлайн</div>
+                    <div className="text-sm">{t('online')}</div>
                   </div>
                 ) : (
                   <div className="flex items-center gap-1">
@@ -301,7 +301,7 @@ export default function SubscriptionElement({
                         <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 rounded-full bg-[var(--error)] w-4 h-4 opacity-50" />
                       </div>
                     </div>
-                    <div className="text-sm">Офлайн</div>
+                    <div className="text-sm">{t('offline')}</div>
                   </div>
                 )}
               </div>
@@ -322,7 +322,7 @@ export default function SubscriptionElement({
                 <div className="flex flex-col gap-1 w-full text-xs">
                   <div className="flex gap-2 items-center">
                     <PiSpeedometerBold size={16} />
-                    <div>Трафик:</div>
+                    <div>{t('traffic')}:</div>
                   </div>
 
                   <>
@@ -344,23 +344,24 @@ export default function SubscriptionElement({
                           {formatBytes(subscription.usedTraffic)} /{' '}
                           {formatBytes(subscription.dataLimit || 0)}{' '}
                           {subscription.trafficReset == TrafficResetEnum.DAY
-                            ? 'ежедневно'
+                            ? t('trafficReset.daily')
                             : subscription.trafficReset == TrafficResetEnum.WEEK
-                              ? 'еженедельно'
+                              ? t('trafficReset.weekly')
                               : subscription.trafficReset ==
                                   TrafficResetEnum.MONTH
-                                ? 'ежемесячно'
+                                ? t('trafficReset.monthly')
                                 : subscription.trafficReset ==
                                     TrafficResetEnum.YEAR
-                                  ? 'ежегодно'
+                                  ? t('trafficReset.yearly')
                                   : ''}
                         </div>
                       ) : (
-                        <div>Безлимит</div>
+                        <div>{t('trafficReset.unlimit')}</div>
                       )}
 
                       <div>
-                        Всего: {formatBytes(subscription.lifeTimeUsedTraffic)}
+                        {t('inTotal')}:{' '}
+                        {formatBytes(subscription.lifeTimeUsedTraffic)}
                       </div>
                     </div>
                   </>
@@ -370,18 +371,18 @@ export default function SubscriptionElement({
               <div className="text-xs flex flex-wrap gap-2 py-3 px-3  items-center justify-between ">
                 <div className="flex gap-2 items-center">
                   <BiServer size={16} />
-                  Cервера:
+                  {t('servers')}:
                 </div>
                 <div className="text-xs flex gap-1 items-center">
                   {subscription.isAllBaseServers &&
                   !subscription.isAllPremiumServers
-                    ? 'Все обычные'
+                    ? t('fullServers')
                     : subscription.isAllBaseServers &&
                         subscription.isAllPremiumServers
-                      ? 'Все'
-                      : `Обычные ${subscription.baseServersCount} ${
+                      ? t('allBase')
+                      : `${t('base')} ${subscription.baseServersCount} ${
                           subscription.premiumServersCount > 0
-                            ? `/ Премиум ${subscription.premiumServersCount}`
+                            ? `/${t('premium')} ${subscription.premiumServersCount}`
                             : ''
                         }`}
                 </div>
@@ -389,10 +390,10 @@ export default function SubscriptionElement({
 
               <div className="text-xs flex items-center justify-between py-3 px-3 ">
                 <div className="flex gap-2 items-center">
-                  <MdDevices size={16} /> Устройства:{' '}
+                  <MdDevices size={16} /> {t('devices')}:{' '}
                 </div>
                 <div className="text-xs flex gap-1 items-center">
-                  до {subscription.devicesCount} шт.
+                  {subscription.devicesCount}
                 </div>
               </div>
 
@@ -402,7 +403,7 @@ export default function SubscriptionElement({
                   <div className="flex gap-2 text-xs flex-wrap justify-between items-center py-3 px-3 ">
                     <div className="flex gap-2 items-center">
                       <FaArrowRotateRight size={14} />
-                      Переодичность оплаты:
+                      {t('period')}:
                     </div>
                     <div className="text-xs flex gap-1 items-center">
                       <div>
@@ -423,7 +424,7 @@ export default function SubscriptionElement({
                   <div className="flex gap-2 text-xs flex-wrap justify-between items-center py-3 px-3 ">
                     <div className="flex gap-2 items-center">
                       <FaClockRotateLeft size={14} />
-                      Истекает:
+                      {t('expires')}:
                     </div>
                     <div className="text-xs flex gap-1 items-center">
                       {subscription.isActive && subscription.expiredAt && (
@@ -454,7 +455,7 @@ export default function SubscriptionElement({
                 subscription.period !== SubscriptionPeriodEnum.TRAFFIC && (
                   <div className="text-xs flex items-center justify-between py-3 px-3 ">
                     <div className="flex gap-2 items-center">
-                      <MdAutoMode size={16} /> Автопродление:{' '}
+                      <MdAutoMode size={16} /> {t('autoRenewal')}:{' '}
                     </div>
                     <AutoRenewalSwitch subscription={subscription} size={0.6} />
                   </div>
@@ -472,12 +473,12 @@ export default function SubscriptionElement({
               onClick={() => setIsOpenAction(subscription.id)}
               className="p-2 rounded-md bg-[var(--surface-container)] text-[var(--on-surface-variant)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex gap-2 items-center text-xs">
               <TbDotsVertical size={18} />
-              Действия
+              {t('actions')}
             </button>
             <Modal
               isOpen={isOpenAction === subscription.id}
               onClose={() => setIsOpenAction(null)}
-              title={'Действия'}
+              title={t('actions')}
               variant="default">
               <div className="flex flex-wrap items-center gap-2">
                 <RenewButton subscription={subscription} />
@@ -493,7 +494,7 @@ export default function SubscriptionElement({
                   disabled={updatingButtons === subscription.id}
                   className={`grow p-2 rounded-md bg-[var(--warning)] text-[var(--on-warning)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex gap-2 items-center `}>
                   <FaArrowsRotate size={18} />
-                  Сбросить данные
+                  {t('modals.refresh.button')}
                 </button>
 
                 <Modal
@@ -513,7 +514,7 @@ export default function SubscriptionElement({
                   disabled={updatingButtons === subscription.id}
                   className={`grow p-2 rounded-md bg-[var(--error)] text-[var(--on-error)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex gap-2 items-center `}>
                   <HiTrash size={18} />
-                  Удалить
+                  {t('modals.delete.button')}
                 </button>
 
                 <Modal
@@ -541,13 +542,13 @@ export default function SubscriptionElement({
             <Modal
               isOpen={isOpenModalQR === subscription.id}
               onClose={() => setIsOpenModalQR(null)}
-              title={'QR-код подписки'}
+              title={t('modals.qr.title')}
               variant="default">
               <div className="flex flex-col items-center gap-4 p-4">
                 <div ref={qrRef} className="qr-code-container"></div>
                 <div className="text-sm text-center">
-                  Отсканируйте в клиентском приложении (Happ, Straisand,
-                  ShadowRocket, v2rayNG, FoXray и др.)
+                  {t('modals.qr.description')} (Happ, Straisand, ShadowRocket,
+                  v2rayNG, FoXray...)
                 </div>
               </div>
             </Modal>
@@ -576,8 +577,7 @@ export default function SubscriptionElement({
             <Link
               href={`/tma/subscription/${subscription.id}`}
               className="flex gap-2 items-center justify-center p-2 rounded-md bg-[var(--primary)] text-[var(--on-primary)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] text-sm font-extrabold tracking-wider  ">
-              {/* TODO: Добавить перевод */}
-              <TbPlugConnected size={18} /> Подключение
+              <TbPlugConnected size={18} /> {t('connection')}
             </Link>
           </div>
         )}
