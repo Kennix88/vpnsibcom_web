@@ -8,6 +8,7 @@ import { ServerDataInterface } from '@app/types/servers-data.interface'
 import { SubscriptionResponseInterface } from '@app/types/subscription-data.interface'
 import { UserDataInterface } from '@app/types/user-data.interface'
 import { motion } from 'framer-motion'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useMemo } from 'react'
 import TgStar from '../Currency'
@@ -49,36 +50,37 @@ export const SubscriptionSummary = ({
   trafficReset: TrafficResetEnum
   serverSelected: ServerDataInterface | null
 }) => {
+  const t = useTranslations('billing.subscription.summary')
   const getFinalPercent = (ratio: number) => 100 - ratio * 100
 
   const summaryItems = useMemo(
     () => [
       {
-        name: 'Имя',
+        name: t('name'),
         value: <div>{name}</div>,
         isVisible: true,
       },
       {
-        name: 'Трафик',
+        name: t('traffic'),
         value: (
           <div>
             {isUnlimitTraffic
-              ? 'Безлимит'
+              ? t('unlimit')
               : planSelected.key === PlansEnum.TRAFFIC
                 ? `${trafficLimitGb} GB`
-                : `${trafficReset == TrafficResetEnum.DAY ? `${trafficLimitGb} GB ежедневно` : trafficReset == TrafficResetEnum.WEEK ? `${trafficLimitGb * 7} GB еженедельно` : trafficReset == TrafficResetEnum.MONTH ? `${trafficLimitGb * 30} GB ежемесячно` : `${trafficLimitGb * 365} GB ежегодно`}`}
+                : `${trafficReset == TrafficResetEnum.DAY ? `${trafficLimitGb} GB ${t('daily')}` : trafficReset == TrafficResetEnum.WEEK ? `${trafficLimitGb * 7} GB ${t('weekly')}` : trafficReset == TrafficResetEnum.MONTH ? `${trafficLimitGb * 30} GB ${t('monthly')}` : `${trafficLimitGb * 365} GB ${t('yearly')}`}`}
           </div>
         ),
         isVisible: true,
       },
       {
-        name: 'Сервера',
+        name: t('servers'),
         value: (
           <div className="flex gap-2 items-center">
             {isAllBaseServers && isAllPremiumServers ? (
-              'Доступ ко всем'
+              t('fullServers')
             ) : isAllBaseServers ? (
-              'Все базовые'
+              t('allBase')
             ) : serverSelected ? (
               <div className="flex flex-col gap-0.5 grow items-center justify-center text-white rounded-md text-[11px] font-mono ]">
                 <div className="flex gap-2 grow flex-wrap">
@@ -101,14 +103,14 @@ export const SubscriptionSummary = ({
                 </div>
               </div>
             ) : (
-              <>Не задан!</>
+              <> {t('notServers')}</>
             )}
           </div>
         ),
         isVisible: true,
       },
       {
-        name: 'Период',
+        name: t('period'),
         value: (
           <div className="flex gap-1 items-center">
             <div>{periodButton.label}</div>
@@ -122,7 +124,7 @@ export const SubscriptionSummary = ({
         isVisible: planSelected.key !== PlansEnum.TRAFFIC,
       },
       {
-        name: 'Скидка за период',
+        name: t('periodDiscount'),
         value: <div>{getFinalPercent(periodButton.discount)}%</div>,
         isVisible:
           planSelected.key !== PlansEnum.TRAFFIC &&
@@ -130,15 +132,15 @@ export const SubscriptionSummary = ({
           getFinalPercent(periodButton.discount) > 0,
       },
       {
-        name: 'Скидка за роль',
+        name: t('roleDiscount'),
         value: <div>{getFinalPercent(user.roleDiscount)}%</div>,
         isVisible: getFinalPercent(user.roleDiscount) > 0,
       },
       {
-        name: 'Авто продление',
+        name: t('autoRenewal'),
         value: (
           <div className="flex flex-row gap-2 items-center">
-            {isAutoRenewal ? 'Да' : 'Нет'}
+            {isAutoRenewal ? t('yes') : t('no')}
           </div>
         ),
         isVisible:
@@ -147,7 +149,7 @@ export const SubscriptionSummary = ({
           isAutoRenewal,
       },
       {
-        name: 'К оплате',
+        name: t('toPaid'),
         value: (
           <div className="flex gap-2 items-center">
             <TgStar type="star" w={14} />
@@ -186,7 +188,7 @@ export const SubscriptionSummary = ({
   return (
     <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
       <div className="px-4 opacity-50 flex flex-row gap-2 items-center w-full">
-        Итого
+        {t('title')}
       </div>
 
       <motion.div
