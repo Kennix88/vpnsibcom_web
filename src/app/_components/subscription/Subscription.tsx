@@ -98,7 +98,7 @@ export default function Subscription({
     <div className="w-full flex justify-center font-mono">
       <div className="max-w-lg flex w-full flex-col gap-4 py-4">
         <div className="flex flex-wrap justify-between gap-2">
-          <h1 className="text-2xl font-bold uppercase">Подписка</h1>
+          <h1 className="text-2xl font-bold uppercase">{t('title')}</h1>
           {isToken && <LanguageSwitcher isPublic={true} />}
         </div>
         <SubscriptionElement
@@ -122,7 +122,7 @@ export default function Subscription({
                   ? 'var(--on-primary)'
                   : 'var(--on-surface-container)',
             }}>
-            Подключение
+            {t('connection')}
           </button>
           <button
             onClick={() => setTab('links')}
@@ -137,7 +137,7 @@ export default function Subscription({
                   ? 'var(--on-primary)'
                   : 'var(--on-surface-container)',
             }}>
-            Конфигурации (Pro)
+            {t('configs')} (Pro)
           </button>
         </div>
         {tab == 'apps' ? (
