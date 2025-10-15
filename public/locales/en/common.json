@@ -4,6 +4,7 @@
     "accept": "Accept",
     "close": "Close"
   },
+  "scrolling": "Scroll down",
   "clipboard": {
     "copied": "Copied to clipboard!",
     "failed": "Failed to copy!"
