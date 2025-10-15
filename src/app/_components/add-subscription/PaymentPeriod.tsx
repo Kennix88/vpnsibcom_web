@@ -2,6 +2,7 @@
 
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
 import { motion } from 'framer-motion'
+import { useTranslations } from 'next-intl'
 import TgStar from '../Currency'
 import { PeriodButtonInterface } from './AddSubscription'
 import { PERIOD_MULTIPLIERS } from './constants'
@@ -24,12 +25,13 @@ export const PaymentPeriod = ({
   price: number
 }) => {
   const getFinalPercent = (ratio: number) => 100 - ratio * 100
+  const t = useTranslations('billing.subscription')
 
   return (
     <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
       <div className="flex gap-2 items-end justify-between w-full px-4 ">
         <div className="opacity-50 flex flex-row gap-2 items-center">
-          Выберите период
+          {t('selectPeriod')}
         </div>
         <div className="flex gap-2 items-center ">
           <TgStar type="star" w={14} />
@@ -69,7 +71,7 @@ export const PaymentPeriod = ({
         {periodButton.key !== SubscriptionPeriodEnum.INDEFINITELY && (
           <>
             <div className="w-full flex flex-col gap-1 opacity-50">
-              Множитель периода
+              {t('periodMultiplier')}
             </div>
             <button
               onClick={() =>
