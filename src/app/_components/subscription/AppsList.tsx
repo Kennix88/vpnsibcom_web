@@ -2,6 +2,7 @@
 
 import { detectPlatform } from '@app/utils/platform-detect.util'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useTranslations } from 'next-intl'
 import { useEffect, useRef, useState } from 'react'
 import { FaCaretDown } from 'react-icons/fa6'
 import AppElement from './AppElement'
@@ -14,6 +15,7 @@ export default function AppsList({
 }: {
   subscriptionUrl: string
 }) {
+  const t = useTranslations('subscriptions')
   const platforms: { key: PlatformEnum; name: string }[] = [
     {
       key: PlatformEnum.ANDROID,
@@ -85,7 +87,7 @@ export default function AppsList({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-4 justify-end">
-        <div>Платформа:</div>
+        <div>{t('platform')}:</div>
         <div
           ref={containerRef}
           className="relative inline-block text-sm text-left ">
