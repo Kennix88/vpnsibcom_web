@@ -1,6 +1,7 @@
 'use client'
 
 import { useCopyToClipboard } from '@app/utils/copy-to-clipboard.util'
+import { useTranslations } from 'next-intl'
 import QRCodeStyling from 'qr-code-styling'
 import { useEffect, useRef, useState } from 'react'
 import { FaCopy } from 'react-icons/fa6'
@@ -13,6 +14,7 @@ export default function LinksList({ links }: { links: string[] }) {
   const qrRef = useRef<HTMLDivElement>(null)
   const qrCodeRef = useRef<QRCodeStyling | null>(null)
   const [link, setLink] = useState<string | null>(null)
+  const t = useTranslations('subscriptions.instruction')
 
   useEffect(() => {
     if (!isOpenModalQRAdd || !qrRef.current || !link) return
@@ -84,13 +86,13 @@ export default function LinksList({ links }: { links: string[] }) {
                   <FaPlus size={16} />
                 </Link> */}
                 <div
-                  title="Копировать URL"
+                  title={t('copyUrl')}
                   onClick={() => copyToClipboard(el)}
                   className="rounded-md bg-[var(--surface-container)] h-8 cursor-pointer flex items-center gap-2 justify-center px-2">
                   <FaCopy size={16} />
                 </div>
                 <button
-                  title="Открыть QR-код"
+                  title={t('openQR')}
                   className="rounded-md bg-[var(--surface-container)] h-8 cursor-pointer flex items-center gap-2 justify-center px-2"
                   onClick={() => {
                     setLink(el)
@@ -101,13 +103,11 @@ export default function LinksList({ links }: { links: string[] }) {
                 <Modal
                   isOpen={isOpenModalQRAdd}
                   onClose={() => setIsOpenModalQRAdd(false)}
-                  title={'QR-код подписки'}
+                  title={t('openQR')}
                   variant="default">
                   <div className="flex flex-col items-center gap-4 p-4">
                     <div ref={qrRef} className="qr-code-container"></div>
-                    <div className="text-sm text-center">
-                      Отсканируйте в телефоне
-                    </div>
+                    <div className="text-sm text-center">{t('scanPhone')}</div>
                   </div>
                 </Modal>
               </div>
