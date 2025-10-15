@@ -11,6 +11,7 @@ import { fxUtil } from '@app/utils/fx.util'
 import { invoice } from '@telegram-apps/sdk-react'
 import { beginCell, toNano } from '@ton/core'
 import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react'
+import { useTranslations } from 'next-intl'
 import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
@@ -34,6 +35,7 @@ export default function PaymentInvoiceButton({
   const [isLoading, setIsLoading] = useState(false)
   const wallet = useTonWallet()
   const router = useRouter()
+  const t = useTranslations('billing.payment')
 
   if (amount < 0) return null
 
@@ -94,7 +96,7 @@ export default function PaymentInvoiceButton({
     <>
       <div className="w-full flex flex-col gap-2">
         <div className="px-4 opacity-50 flex flex-wrap items-center gap-2 font-mono">
-          Оплатить
+          {t('pay')}
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <button
