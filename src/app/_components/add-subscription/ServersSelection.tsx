@@ -13,6 +13,7 @@ import {
   calculateServersPrice,
 } from '@app/utils/calculate-subscription-cost.util'
 import { motion } from 'framer-motion'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useMemo } from 'react'
 import TgStar from '../Currency'
@@ -33,7 +34,7 @@ const ServersSelection = ({
   baseServersCount,
   user,
   subscriptions,
-		setServerSelected
+  setServerSelected,
 }: {
   serversData: ServersDataInterface
   planSelected: PlansInterface
@@ -49,8 +50,9 @@ const ServersSelection = ({
   baseServersCount: number
   user: UserDataInterface
   subscriptions: SubscriptionResponseInterface
-		setServerSelected: (val: ServerDataInterface | null) => void
+  setServerSelected: (val: ServerDataInterface | null) => void
 }) => {
+  const t = useTranslations('billing.subscription')
   const serversPrice = useMemo(() => {
     if (user.roleDiscount == 0) return 0
     const basePrice =
@@ -78,7 +80,7 @@ const ServersSelection = ({
     if (isSelected) {
       const newSelected = serversSelected.filter((code) => code !== server.code)
       setServersSelected(newSelected)
-			setServerSelected(null)
+      setServerSelected(null)
 
       if (server.isPremium) {
         setPremiumServersCount(Math.max(0, premiumServersCount - 1))
@@ -87,7 +89,7 @@ const ServersSelection = ({
       }
     } else {
       let newSelected: string[]
-							setServerSelected(server)
+      setServerSelected(server)
 
       if (
         planSelected.serversSelectType ===
@@ -117,7 +119,7 @@ const ServersSelection = ({
     <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
       <div className="flex gap-2 items-end justify-between w-full px-4 ">
         <div className="opacity-50 flex flex-row gap-2 items-center">
-          Выберите сервер
+          {t('selectServer')}
         </div>
         {planSelected.serversSelectType ===
           PlansServersSelectTypeEnum.CUSTOM && (
@@ -158,7 +160,7 @@ const ServersSelection = ({
                   ? `1px solid rgba(216, 197, 255, 0.7)`
                   : '1px solid transparent',
               }}>
-              Базовые
+              {t('base')}
             </motion.button>
 
             <motion.button
@@ -182,12 +184,12 @@ const ServersSelection = ({
                   ? `1px solid rgba(216, 197, 255, 0.7)`
                   : '1px solid transparent',
               }}>
-              Премиум
+              {t('premium')}
             </motion.button>
 
             <div className="w-full flex gap-2 items-center">
               <div className="h-[1px] grow bg-[var(--primary)]"></div>
-              <div className="text-[var(--primary)]">или на выбор</div>
+              <div className="text-[var(--primary)]">{t('orSelect')}</div>
               <div className="h-[1px] grow bg-[var(--primary)]"></div>
             </div>
           </>
