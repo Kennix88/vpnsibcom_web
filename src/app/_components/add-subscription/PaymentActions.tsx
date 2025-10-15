@@ -6,6 +6,7 @@ import { useCurrencyStore } from '@app/store/currency.store'
 import { PlansInterface } from '@app/types/plans.interface'
 import { roundUp } from '@app/utils/calculate-subscription-cost.util'
 import { fxUtil } from '@app/utils/fx.util'
+import { useTranslations } from 'next-intl'
 import { FaCircleInfo } from 'react-icons/fa6'
 import Currency from '../Currency'
 import Split from '../payments/Split'
@@ -39,6 +40,7 @@ export const PaymentActions = ({
   ) => Promise<void>
 }) => {
   const { rates } = useCurrencyStore()
+  const t = useTranslations('billing.subscription')
   const hasSelectedServers =
     isAllBaseServers || isAllPremiumServers || serversSelected.length > 0
 
@@ -48,13 +50,13 @@ export const PaymentActions = ({
         <div className="bg-[var(--warning-container)] text-[var(--on-warning-container)] rounded-md flex flex-col gap-2 py-2 px-4 w-full max-w-[400px]">
           <div className="flex flex-row gap-2 items-center text-xs">
             <FaCircleInfo />
-            Выберите сервер!
+            {t('selectServer')}
           </div>
         </div>
       ) : (
         <>
           <div className="px-4 opacity-50 flex flex-wrap items-center gap-2 font-mono">
-            Оплатить
+            {t('pay')}
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <button
@@ -68,7 +70,7 @@ export const PaymentActions = ({
                   : ' cursor-pointer'
               } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
               {price <= 0 ? (
-                '🎁 Добавить бесплатно'
+                t('addFree')
               ) : (
                 <>
                   <Currency type={'star'} w={18} />
