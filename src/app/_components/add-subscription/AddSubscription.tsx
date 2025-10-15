@@ -58,7 +58,7 @@ export interface PeriodButtonInterface {
 }
 
 export default function AddSubscription() {
-  const t = useTranslations('billing.payment')
+  const t = useTranslations('billing')
   const location = usePathname()
   const url = location.includes('/tma') ? '/tma' : '/app'
   const router = useRouter()
@@ -92,26 +92,26 @@ export default function AddSubscription() {
   const [trafficReset, setTrafficReset] = useState<TrafficResetEnum>(
     TrafficResetEnum.DAY,
   )
-  const [name, setName] = useState<string>('Subscription 1')
+  const [name, setName] = useState<string>(t('subscription.name.default'))
   const trafficPeriodButtons: TrafficPeriodButtonInterface[] = [
     {
       key: TrafficResetEnum.DAY,
-      label: 'Ежедневно',
+      label: t('subscription.trafficReset.daily'),
       minDays: 0,
     },
     {
       key: TrafficResetEnum.WEEK,
-      label: 'Еженедельно',
+      label: t('subscription.trafficReset.weekly'),
       minDays: 7,
     },
     {
       key: TrafficResetEnum.MONTH,
-      label: 'Ежемесячно',
+      label: t('subscription.trafficReset.monthly'),
       minDays: 30,
     },
     {
       key: TrafficResetEnum.YEAR,
-      label: 'Ежегодно',
+      label: t('subscription.trafficReset.yearly'),
       minDays: 360,
     },
   ]
@@ -157,7 +157,7 @@ export default function AddSubscription() {
             {
               key: 'traffic-plan',
               icon: '🤔',
-              text: 'Без срока окончания, оплата только за трафик!',
+              text: t('subscription.privileges.trafficPlan'),
             },
           ]
         : []),
@@ -166,8 +166,8 @@ export default function AddSubscription() {
         icon: <MdDevices />,
         text:
           planSelected?.serversSelectType === PlansServersSelectTypeEnum.CUSTOM
-            ? 'Нужное количество устройств'
-            : `До ${devicesCount} одновременных устройств`,
+            ? t('subscription.privileges.customDevices')
+            : t('subscription.privileges.devices', { count: devicesCount }),
       },
       {
         key: 'servers',
@@ -178,6 +178,7 @@ export default function AddSubscription() {
           isAllPremiumServers,
           baseServersCount,
           premiumServersCount,
+          t,
         ),
       },
       {
@@ -185,39 +186,61 @@ export default function AddSubscription() {
         icon: <TbCloudNetwork />,
         text:
           planSelected?.serversSelectType === PlansServersSelectTypeEnum.CUSTOM
-            ? 'Нужное количество трафика'
+            ? t('subscription.privileges.customTraffic')
             : planSelected?.key === PlansEnum.TRAFFIC
-              ? 'Нужное количество трафика'
+              ? t('subscription.privileges.customTraffic')
               : isUnlimitTraffic
-                ? 'Безлимитный трафик'
-                : `${trafficReset == TrafficResetEnum.DAY ? `${trafficLimitGb} GB трафика ежедневно` : trafficReset == TrafficResetEnum.WEEK ? `${trafficLimitGb * 7} GB трафика еженедельно` : trafficReset == TrafficResetEnum.MONTH ? `${trafficLimitGb * 30} GB трафика ежемесячно` : `${trafficLimitGb * 365} GB трафика ежегодно`}`,
+                ? t('subscription.privileges.traffic')
+                : trafficReset == TrafficResetEnum.DAY
+                  ? t('subscription.privileges.dailyTraffic', {
+                      count: trafficLimitGb,
+                    })
+                  : trafficReset == TrafficResetEnum.WEEK
+                    ? t('subscription.privileges.weeklyTraffic', {
+                        count: trafficLimitGb * 7,
+                      })
+                    : trafficReset == TrafficResetEnum.MONTH
+                      ? t('subscription.privileges.monthlyTraffic', {
+                          count: trafficLimitGb * 30,
+                        })
+                      : t('subscription.privileges.yearlyTraffic', {
+                          count: trafficLimitGb * 365,
+                        }),
       },
       {
         key: 'security',
         icon: <FaShieldHeart />,
-        text: 'Защищенное соединение',
+        text: t('subscription.privileges.security'),
       },
       {
         key: 'speed',
         icon: <MdTraffic />,
-        text: 'Без ограничений на скорость',
+        text: t('subscription.privileges.speed'),
       },
       {
         key: 'masking',
         icon: <BiSolidMask />,
-        text: 'Маскировка вашего трафика',
+        text: t('subscription.privileges.masking'),
       },
-      { key: 'no-ads', icon: <MdAdsClick />, text: 'Отсутвие рекламы' },
+      {
+        key: 'no-ads',
+        icon: <MdAdsClick />,
+        text: t('subscription.privileges.noAds'),
+      },
       {
         key: 'devices-support',
         icon: <MdOutlineDevicesOther />,
-        text: 'Широкая поддержка устройств',
+        text: t('subscription.privileges.devicesSupport'),
       },
-      { key: 'xray', icon: <IoShieldHalf />, text: 'Надежное ядро XRAY' },
+      {
+        key: 'xray',
+        icon: <IoShieldHalf />,
+        text: t('subscription.privileges.xray'),
+      },
       {
         key: 'opensource',
         icon: <IoLogoGithub />,
-        text: 'Открытый исходный код',
+        text: t('subscription.privileges.opensource'),
       },
     ],
     [
@@ -230,6 +253,7 @@ export default function AddSubscription() {
       isUnlimitTraffic,
       trafficLimitGb,
       trafficReset,
+      t,
     ],
   )
 
@@ -342,55 +366,59 @@ export default function AddSubscription() {
     const buttons: PeriodButtonInterface[] = [
       {
         key: SubscriptionPeriodEnum.HOUR,
-        label: '1 час',
+        label: t('subscription.period.hour'),
         discount: subscriptions.hourRatioPayment,
       },
       {
         key: SubscriptionPeriodEnum.DAY,
-        label: '1 день',
+        label: t('subscription.period.day'),
         discount: subscriptions.dayRatioPayment,
       },
       {
         key: SubscriptionPeriodEnum.WEEK,
-        label: '1 неделя',
+        label: t('subscription.period.week'),
         discount: subscriptions.weekRatioPayment,
       },
-      { key: SubscriptionPeriodEnum.MONTH, label: '1 месяц', discount: 1 },
+      {
+        key: SubscriptionPeriodEnum.MONTH,
+        label: t('subscription.period.month'),
+        discount: 1,
+      },
       {
         key: SubscriptionPeriodEnum.THREE_MONTH,
-        label: '3 месяца',
+        label: t('subscription.period.threeMonth'),
         discount: subscriptions.threeMouthesRatioPayment,
       },
       {
         key: SubscriptionPeriodEnum.SIX_MONTH,
-        label: '6 месяцев',
+        label: t('subscription.period.sixMonth'),
         discount: subscriptions.sixMouthesRatioPayment,
       },
       {
         key: SubscriptionPeriodEnum.YEAR,
-        label: '1 год',
+        label: t('subscription.period.year'),
         discount: subscriptions.oneYearRatioPayment,
       },
       {
         key: SubscriptionPeriodEnum.TWO_YEAR,
-        label: '2 года',
+        label: t('subscription.period.twoYear'),
         discount: subscriptions.twoYearRatioPayment,
       },
       {
         key: SubscriptionPeriodEnum.THREE_YEAR,
-        label: '3 года',
+        label: t('subscription.period.threeYear'),
         discount: subscriptions.threeYearRatioPayment,
       },
       {
         key: SubscriptionPeriodEnum.INDEFINITELY,
-        label: 'Бессрочно',
+        label: t('subscription.period.indefinitely'),
         discount: subscriptions.indefinitelyRatio,
       },
     ]
 
     setPeriodButtons(buttons)
     setPeriodButton(buttons[3])
-  }, [subscriptions, user])
+  }, [subscriptions, user, t])
 
   const handlePurchase = async (
     method: PaymentMethodEnum | 'BALANCE' | 'TRAFFIC',
@@ -546,7 +574,7 @@ export default function AddSubscription() {
           <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
             <div className="flex gap-2 items-end justify-between w-full px-4 ">
               <div className="opacity-50 flex flex-row gap-2 items-center">
-                Обнуление трафика
+                {t('subscription.trafficReset.title')}
               </div>
               <div>
                 {trafficPeriodButton?.key == TrafficResetEnum.DAY
@@ -605,18 +633,19 @@ export default function AddSubscription() {
           </div>
         )}
 
-      {planSelected.key !== PlansEnum.TRAFFIC && (
-        <SubscriptionOptions
-          isAutoRenewal={isAutoRenewal}
-          setIsAutoRenewal={setIsAutoRenewal}
-          // user={user}
-          // subscriptions={subscriptions}
-        />
-      )}
+      {planSelected.key !== PlansEnum.TRAFFIC &&
+        periodButton.key !== SubscriptionPeriodEnum.INDEFINITELY && (
+          <SubscriptionOptions
+            isAutoRenewal={isAutoRenewal}
+            setIsAutoRenewal={setIsAutoRenewal}
+            // user={user}
+            // subscriptions={subscriptions}
+          />
+        )}
 
       <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
         <div className="px-4 opacity-50 flex flex-row gap-2 items-center w-full">
-          Задайте удобное имя
+          {t('subscription.name.label')}
         </div>
 
         <motion.div
@@ -624,9 +653,7 @@ export default function AddSubscription() {
           className="text-sm bg-[var(--surface-container-lowest)] divide-y divide-[var(--primary)] rounded-xl flex flex-col p-4 py-2 w-full shadow-md">
           <motion.div className="flex gap-2 items-center px-4 py-2 text-sm font-mono">
             <TooltipWrapper
-              prompt={
-                'Имя вашей подписки будет отображаться в списке ваших подписок'
-              }
+              prompt={t('subscription.name.tooltip')}
               color="info"
               placement="top">
               <FaCircleInfo />
@@ -636,6 +663,7 @@ export default function AddSubscription() {
               maxLength={20}
               minLength={1}
               type="text"
+              placeholder={t('subscription.name.placeholder')}
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
