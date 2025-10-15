@@ -18,6 +18,7 @@ import { invoice } from '@telegram-apps/sdk-react'
 import { beginCell, toNano } from '@ton/core'
 import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react'
 import { motion } from 'framer-motion'
+import { useTranslations } from 'next-intl'
 import { useMemo, useState } from 'react'
 import { FaPlus } from 'react-icons/fa6'
 import { toast } from 'react-toastify'
@@ -39,6 +40,7 @@ export default function AddTrafficButton({
   const [trafficLimitGb, setTrafficLimitGb] = useState(1)
   const wallet = useTonWallet()
   const [tonConnectUI] = useTonConnectUI()
+  const t = useTranslations('billing.subscription')
 
   if (
     (subscription.period !== SubscriptionPeriodEnum.TRIAL &&
@@ -88,17 +90,17 @@ export default function AddTrafficButton({
   const summaryItems = useMemo(
     () => [
       {
-        name: 'Трафик',
+        name: t('summary.traffic'),
         value: <div>{`${trafficLimitGb} GB`}</div>,
         isVisible: true,
       },
       {
-        name: 'Скидка за роль',
+        name: t('summary.roleDiscount'),
         value: <div>{getFinalPercent(user.roleDiscount)}%</div>,
         isVisible: getFinalPercent(user.roleDiscount) > 0,
       },
       {
-        name: 'К оплате',
+        name: t('summary.toPaid'),
         value: (
           <div className="flex gap-2 items-center">
             <Currency type="star" w={14} />
@@ -142,7 +144,7 @@ export default function AddTrafficButton({
       if (!data.invoice) {
         setUser(data.user)
         setSubscriptions(data.subscriptions)
-        toast.success('Трафик успешно добавлен')
+        toast.success('Traffic added successfully')
       } else {
         if (data.invoice?.isTonPayment) {
           const amountNano = toNano(data.invoice?.amountTon.toString())
@@ -175,7 +177,7 @@ export default function AddTrafficButton({
         }
       }
     } catch {
-      toast.error('Ошибка добавления трафика')
+      toast.error('Error adding traffic')
     } finally {
       setIsOpenModal(false)
       setIsLoading(false)
@@ -191,18 +193,18 @@ export default function AddTrafficButton({
         disabled={isLoading}
         className={`grow p-2 rounded-md bg-[var(--secondary-container)] text-[var(--on-secondary-container)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex gap-2 items-center `}>
         <FaPlus size={18} />
-        Добавить трафик
+        {t('addTraffic')}
       </button>
 
       <Modal
         isOpen={isOpenModal}
         onClose={() => setIsOpenModal(false)}
-        title={'Добавление трафика'}>
+        title={t('addingTraffic')}>
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
             <div className="flex gap-2 items-end justify-between w-full px-4 ">
               <div className="opacity-50 flex flex-row gap-2 items-center">
-                Трафик
+                {t('traffic')}
               </div>
               <div className="flex gap-2 items-center ">
                 <Currency type="star" w={18} />
@@ -265,7 +267,7 @@ export default function AddTrafficButton({
 
           <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
             <div className="px-4 opacity-50 flex flex-row gap-2 items-center w-full">
-              Итого
+              {t('summary.title')}
             </div>
 
             <motion.div
@@ -287,7 +289,7 @@ export default function AddTrafficButton({
 
           <div className="grow flex flex-col gap-2">
             <div className="px-4 opacity-50 flex flex-wrap items-center gap-2 font-mono">
-              Докупить {trafficLimitGb} ГБ
+              {t('buy')} {trafficLimitGb} GB
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <button
@@ -301,7 +303,7 @@ export default function AddTrafficButton({
                     : ' cursor-pointer'
                 } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
                 {price <= 0 ? (
-                  '🎁 Добавить бесплатно'
+                  t('addFree')
                 ) : (
                   <>
                     <Currency type={'star'} w={18} />
