@@ -1,0 +1,28 @@
+{
+  "modal": {
+    "cancel": "Скасувати",
+    "accept": "Прийняти",
+    "close": "Закрити"
+  },
+  "scrolling": "Прокрутіть вниз",
+  "clipboard": {
+    "copied": "Скопійовано в буфер обміну!",
+    "failed": "Не вдалося скопіювати!"
+  },
+  "freePlan": {
+    "trialAvailable": "Вам доступний пробний період на {days} днів.",
+    "activate": "Активувати",
+    "activationFailed": "Не вдалося активувати безкоштовний план"
+  },
+  "units": {
+    "bytes": "Б",
+    "kilobytes": "КБ",
+    "megabytes": "МБ",
+    "gigabytes": "ГБ",
+    "terabytes": "ТБ",
+    "petabytes": "ПБ",
+    "exabytes": "ЕБ",
+    "zettabytes": "ЗБ",
+    "yottabytes": "ЙБ"
+  }
+}
