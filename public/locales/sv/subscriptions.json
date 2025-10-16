@@ -1,0 +1,116 @@
+{
+  "title": "Prenumeration",
+  "connection": "Anslutning",
+  "configs": "Konfigurationer",
+  "addSubscription": "Lägg till prenumeration",
+  "addSubscriptionTitle": "Lägg till prenumeration",
+  "yourSubscriptions": "Dina prenumerationer",
+  "noSubscriptions": "Du har inga aktiva prenumerationer",
+  "loading": "Laddar prenumerationsdata...",
+  "notFound": "Prenumeration hittades inte",
+  "renewSubscription": "Förnya prenumeration",
+  "autoRenewalEnabled": "Automatisk förnyelse aktiverad",
+  "autoRenewalDisabled": "Automatisk förnyelse inaktiverad",
+  "subscriptionDeleted": "Prenumerationen har tagits bort",
+  "subscriptionDataUpdated": "Prenumerationsdata har uppdaterats",
+  "subscriptionRenewed": "Prenumerationen har förnyats",
+  "changeServer": "Byt server",
+  "changeServerTitle": "Byt server",
+  "changeServerWarning": "VARNING: Serverbyte tar 2 minuter. Efter serverbyte måste du uppdatera data i appen!",
+  "active": "Aktiv",
+  "notActive": "Inaktiv",
+  "online": "Online",
+  "offline": "Offline",
+  "traffic": "Trafik",
+  "trafficReset": {
+    "daily": "Dagligen",
+    "weekly": "Veckovis",
+    "monthly": "Månatligen",
+    "yearly": "Årligen",
+    "unlimit": "Obegränsat"
+  },
+  "inTotal": "Totalt",
+  "servers": "Servrar",
+  "fullServers": "Tillgång till alla",
+  "allBase": "Alla bas",
+  "base": "Bas",
+  "premium": "Premium",
+  "devices": "Enheter",
+  "period": "Betalningsperiod",
+  "expires": "Går ut",
+  "autoRenewal": "Automatisk förnyelse",
+  "actions": "Åtgärder",
+  "save": "Spara",
+  "required": "Rekommenderas!",
+  "paid": "Betald!",
+  "instruction": {
+    "stage1": "Ladda ner appen",
+    "stage2": "Lägg till prenumeration i appen",
+    "copyUrl": "Kopiera prenumerations-URL",
+    "openQR": "QR-kod för prenumeration",
+    "scanApp": "Skanna i appen",
+    "scanPhone": "Skanna i telefonen",
+    "add": "Lägg till i appen"
+  },
+  "platform": "Plattform",
+  "success": {
+    "serversUpdated": "Servrar har uppdaterats"
+  },
+  "errors": {
+    "loadFailed": "Kunde inte ladda prenumerationer",
+    "disableAutoRenewalFailed": "Fel vid inaktivering av automatisk förnyelse!",
+    "enableAutoRenewalFailed": "Fel vid aktivering av automatisk förnyelse!",
+    "deleteSubscriptionFailed": "Fel vid borttagning av prenumeration!",
+    "resetSubscriptionFailed": "Fel vid återställning av prenumerationsdata!",
+    "renewSubscriptionFailed": "Kunde inte förnya prenumerationen!",
+    "fetchingServers": "Kunde inte ladda servrar",
+    "updatingServers": "Kunde inte uppdatera servrar",
+    "serverLimitReached": "Du har nått servergränsen",
+    "serverLimitReachedPremium": "Du har nått gränsen för premiumservrar",
+    "serverLimitReachedBase": "Du har nått gränsen för basservrar"
+  },
+  "periods": {
+    "trial": "Provperiod",
+    "hour": "1 timme",
+    "day": "1 dag",
+    "week": "1 vecka",
+    "month": "1 månad",
+    "threeMonth": "3 månader",
+    "sixMonth": "6 månader",
+    "year": "1 år",
+    "twoYear": "2 år",
+    "threeYear": "3 år",
+    "indefinitely": "Obegränsat"
+  },
+  "modals": {
+    "delete": {
+      "title": "Ta bort prenumeration",
+      "button": "Ta bort",
+      "action": "Ta bort",
+      "message": "Är du säker på att du vill ta bort prenumerationen permanent? Den kan inte återställas! Ingen kompensation ges!"
+    },
+    "qr": {
+      "title": "QR-kod för prenumeration",
+      "description": "Skanna i klientappen"
+    },
+    "refresh": {
+      "title": "Återställ prenumerationsdata",
+      "button": "Återställ data",
+      "action": "Återställ",
+      "message": "Är du säker på att du vill återställa prenumerationsdata? Efter detta kommer nycklarna och prenumerationsadressen att ändras till nya! Du måste lägga till prenumerationen i appen igen! Återställning görs vanligtvis om din prenumeration har läckt ut på nätet eller om någon har fått åtkomst till den!"
+    },
+    "autoRenewal": {
+      "enableTitle": "Aktivera automatisk förnyelse",
+      "disableTitle": "Inaktivera automatisk förnyelse",
+      "enableAction": "Aktivera",
+      "disableAction": "Inaktivera",
+      "enableMessage": "Vill du aktivera automatisk förnyelse av prenumerationen? Medel kommer att dras automatiskt när prenumerationen löper ut.",
+      "disableMessage": "Vill du inaktivera automatisk förnyelse av prenumerationen? Efter utgången kommer prenumerationen att avaktiveras."
+    },
+    "renew": {
+      "title": "Förnya prenumeration",
+      "action": "Förnya",
+      "message": "Vill du förnya prenumerationen? {price} stjärnor kommer att dras från ditt saldo."
+    }
+  }
+}

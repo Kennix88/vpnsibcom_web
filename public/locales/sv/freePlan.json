@@ -1,0 +1,8 @@
+{
+  "trialAvailable": "Du har tillgång till {gb} GB bonusdata för Trial-prenumeration under obegränsad tid.",
+  "activate": "Aktivera",
+  "activationFailed": "Kunde inte aktivera gratisplanen",
+  "modalTitle": "Aktivering av provperiod",
+  "modalAction": "Aktivera",
+  "modalConfirmation": "Vill du verkligen aktivera provperioden?"
+}

@@ -1,0 +1,35 @@
+{
+  "title": "Vänner",
+  "get": "Få belöningar",
+  "for": "för att bjuda in vänner",
+  "level": "nivå",
+  "total": "Totalt",
+  "list": {
+    "title": "Dina vänner",
+    "top": "Topp",
+    "empty": "Ingen här än 🥲"
+  },
+  "bonuses": {
+    "title": "Bonusar",
+    "inviteTitle": "För att bjuda in en vän",
+    "paymentTitle": "För vänners handlingar",
+    "inviteInfo": "Efter första betalningen av en vän eller aktivering av en provperiod!",
+    "paymentInfo": "Få en procentandel av vår inkomst från vänner och de som dina vänner har bjudit in för alltid!",
+    "lvl1Info": "De du bjöd in",
+    "lvl2Info": "De som vänner bjöd in",
+    "lvl3Info": "De som vänners vänner bjöd in 😁"
+  },
+  "invite": {
+    "title": "Bjud in en vän",
+    "message": "Skicka meddelande",
+    "copy": "Kopiera länk",
+    "story": "Skicka till stories"
+  },
+  "statistics": {
+    "title": "Statistik",
+    "earnTitle": "Dina intäkter",
+    "inviteTitle": "Inbjudna",
+    "earnInfo": "Du har tjänat totalt",
+    "inviteInfo": "Inbjudna | Aktiverade | Varav Standard | Varav Premium"
+  }
+}
