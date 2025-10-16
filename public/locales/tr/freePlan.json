@@ -1,0 +1,8 @@
+{
+  "trialAvailable": "Sınırsız süre için Trial aboneliği için {gb} Gb bonus trafik sizin için mevcut.",
+  "activate": "Etkinleştir",
+  "activationFailed": "Ücretsiz plan etkinleştirilemedi",
+  "modalTitle": "Deneme Süresi Aktivasyonu",
+  "modalAction": "Etkinleştir",
+  "modalConfirmation": "Deneme süresini gerçekten etkinleştirmek istiyor musunuz?"
+}

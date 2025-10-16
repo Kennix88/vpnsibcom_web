@@ -1,0 +1,5 @@
+{
+  "loading": "Bağlantı güvenliği kontrol ediliyor...",
+  "danger": "Bağlantınız GÜVENLİ DEĞİL!\nVPN'e bağlanın!",
+  "success": "Bağlantınız güvenli!"
+}

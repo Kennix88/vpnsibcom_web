@@ -1,0 +1,28 @@
+{
+  "modal": {
+    "cancel": "İptal",
+    "accept": "Kabul Et",
+    "close": "Kapat"
+  },
+  "scrolling": "Aşağı kaydır",
+  "clipboard": {
+    "copied": "Panoya kopyalandı!",
+    "failed": "Kopyalanamadı!"
+  },
+  "freePlan": {
+    "trialAvailable": "{days} günlük deneme süresi sizin için mevcut.",
+    "activate": "Etkinleştir",
+    "activationFailed": "Ücretsiz plan etkinleştirilemedi"
+  },
+  "units": {
+    "bytes": "B",
+    "kilobytes": "KB",
+    "megabytes": "MB",
+    "gigabytes": "GB",
+    "terabytes": "TB",
+    "petabytes": "PB",
+    "exabytes": "EB",
+    "zettabytes": "ZB",
+    "yottabytes": "YB"
+  }
+}
