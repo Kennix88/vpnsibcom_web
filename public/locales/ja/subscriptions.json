@@ -1,0 +1,116 @@
+{
+  "title": "サブスクリプション",
+  "connection": "接続",
+  "configs": "設定",
+  "addSubscription": "サブスクリプションを追加",
+  "addSubscriptionTitle": "サブスクリプションの追加",
+  "yourSubscriptions": "あなたのサブスクリプション",
+  "noSubscriptions": "アクティブなサブスクリプションはありません",
+  "loading": "サブスクリプションデータを読み込み中...",
+  "notFound": "サブスクリプションが見つかりません",
+  "renewSubscription": "サブスクリプションを更新",
+  "autoRenewalEnabled": "自動更新が有効です",
+  "autoRenewalDisabled": "自動更新が無効です",
+  "subscriptionDeleted": "サブスクリプションが正常に削除されました",
+  "subscriptionDataUpdated": "サブスクリプションデータが正常に更新されました",
+  "subscriptionRenewed": "サブスクリプションが正常に更新されました",
+  "changeServer": "サーバーを変更",
+  "changeServerTitle": "サーバーの変更",
+  "changeServerWarning": "注意：サーバーの変更には2分かかります。サーバー変更後、アプリケーションのデータを更新する必要があります！",
+  "active": "アクティブ",
+  "notActive": "非アクティブ",
+  "online": "オンライン",
+  "offline": "オフライン",
+  "traffic": "トラフィック",
+  "trafficReset": {
+    "daily": "毎日",
+    "weekly": "毎週",
+    "monthly": "毎月",
+    "yearly": "毎年",
+    "unlimit": "無制限"
+  },
+  "inTotal": "合計",
+  "servers": "サーバー",
+  "fullServers": "すべてにアクセス",
+  "allBase": "すべての基本",
+  "base": "基本",
+  "premium": "プレミアム",
+  "devices": "デバイス",
+  "period": "支払い頻度",
+  "expires": "期限切れ",
+  "autoRenewal": "自動更新",
+  "actions": "アクション",
+  "save": "保存",
+  "required": "推奨！",
+  "paid": "有料！",
+  "instruction": {
+    "stage1": "アプリをダウンロード",
+    "stage2": "アプリにサブスクリプションを追加",
+    "copyUrl": "サブスクリプションURLをコピー",
+    "openQR": "サブスクリプションQRコード",
+    "scanApp": "アプリでスキャン",
+    "scanPhone": "電話でスキャン",
+    "add": "アプリに追加"
+  },
+  "platform": "プラットフォーム",
+  "success": {
+    "serversUpdated": "サーバーが正常に更新されました"
+  },
+  "errors": {
+    "loadFailed": "サブスクリプションの読み込みに失敗しました",
+    "disableAutoRenewalFailed": "自動更新の無効化に失敗しました！",
+    "enableAutoRenewalFailed": "自動更新の有効化に失敗しました！",
+    "deleteSubscriptionFailed": "サブスクリプションの削除に失敗しました！",
+    "resetSubscriptionFailed": "サブスクリプションデータのリセットに失敗しました！",
+    "renewSubscriptionFailed": "サブスクリプションの更新に失敗しました！",
+    "fetchingServers": "サーバーの取得に失敗しました",
+    "updatingServers": "サーバーの更新に失敗しました",
+    "serverLimitReached": "サーバーの制限に達しました",
+    "serverLimitReachedPremium": "プレミアムサーバーの制限に達しました",
+    "serverLimitReachedBase": "基本サーバーの制限に達しました"
+  },
+  "periods": {
+    "trial": "試用期間",
+    "hour": "1時間",
+    "day": "1日",
+    "week": "1週間",
+    "month": "1ヶ月",
+    "threeMonth": "3ヶ月",
+    "sixMonth": "6ヶ月",
+    "year": "1年",
+    "twoYear": "2年",
+    "threeYear": "3年",
+    "indefinitely": "無期限"
+  },
+  "modals": {
+    "delete": {
+      "title": "サブスクリプションの削除",
+      "button": "削除",
+      "action": "削除",
+      "message": "サブスクリプションを完全に削除してもよろしいですか？元に戻すことはできません！補償はありません！"
+    },
+    "qr": {
+      "title": "サブスクリプションQRコード",
+      "description": "クライアントアプリでスキャンしてください"
+    },
+    "refresh": {
+      "title": "サブスクリプションデータのリセット",
+      "button": "データをリセット",
+      "action": "リセット",
+      "message": "サブスクリプションデータをリセットしてもよろしいですか？その後、キーとサブスクリプションアドレスが新しくなります！アプリにサブスクリプションを再度追加する必要があります！通常、サブスクリプションがネットワークに漏洩したり、誰かがアクセスした場合にリセットが行われます！"
+    },
+    "autoRenewal": {
+      "enableTitle": "自動更新を有効にする",
+      "disableTitle": "自動更新を無効にする",
+      "enableAction": "有効にする",
+      "disableAction": "無効にする",
+      "enableMessage": "サブスクリプションの自動更新を有効にしますか？サブスクリプションの有効期限が切れると、自動的に料金が引き落とされます。",
+      "disableMessage": "サブスクリプションの自動更新を無効にしますか？有効期限が切れると、サブスクリプションは非アクティブになります。"
+    },
+    "renew": {
+      "title": "サブスクリプションの更新",
+      "action": "更新",
+      "message": "サブスクリプションを更新しますか？残高から{price}スターが引き落とされます。"
+    }
+  }
+}

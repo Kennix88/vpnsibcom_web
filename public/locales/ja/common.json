@@ -1,0 +1,28 @@
+{
+  "modal": {
+    "cancel": "キャンセル",
+    "accept": "同意する",
+    "close": "閉じる"
+  },
+  "scrolling": "下にスクロール",
+  "clipboard": {
+    "copied": "クリップボードにコピーされました！",
+    "failed": "コピーできませんでした！"
+  },
+  "freePlan": {
+    "trialAvailable": "{days}日間の無料トライアル期間が利用可能です。",
+    "activate": "アクティブ化",
+    "activationFailed": "無料プランをアクティブ化できませんでした"
+  },
+  "units": {
+    "bytes": "B",
+    "kilobytes": "KB",
+    "megabytes": "MB",
+    "gigabytes": "GB",
+    "terabytes": "TB",
+    "petabytes": "PB",
+    "exabytes": "EB",
+    "zettabytes": "ZB",
+    "yottabytes": "YB"
+  }
+}
