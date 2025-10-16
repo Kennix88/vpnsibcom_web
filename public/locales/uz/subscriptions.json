@@ -1,0 +1,116 @@
+{
+  "title": "Obuna",
+  "connection": "Ulanish",
+  "configs": "Konfiguratsiyalar",
+  "addSubscription": "Obuna qo'shish",
+  "addSubscriptionTitle": "Obuna qo'shish",
+  "yourSubscriptions": "Sizning obunalaringiz",
+  "noSubscriptions": "Sizda faol obunalar yo'q",
+  "loading": "Obuna ma'lumotlari yuklanmoqda...",
+  "notFound": "Obuna topilmadi",
+  "renewSubscription": "Obunani uzaytirish",
+  "autoRenewalEnabled": "Avtomatik yangilash yoqilgan",
+  "autoRenewalDisabled": "Avtomatik yangilash o'chirilgan",
+  "subscriptionDeleted": "Obuna muvaffaqiyatli o'chirildi",
+  "subscriptionDataUpdated": "Obuna ma'lumotlari muvaffaqiyatli yangilandi",
+  "subscriptionRenewed": "Obuna muvaffaqiyatli uzaytirildi",
+  "changeServer": "Serverni o'zgartirish",
+  "changeServerTitle": "Serverni o'zgartirish",
+  "changeServerWarning": "DIQQAT: Serverni o'zgartirish 2 daqiqa ichida amalga oshiriladi. Serverni o'zgartirgandan so'ng, ilovadagi ma'lumotlarni yangilash kerak!",
+  "active": "Faol",
+  "notActive": "Faol emas",
+  "online": "Onlayn",
+  "offline": "Oflayn",
+  "traffic": "Trafik",
+  "trafficReset": {
+    "daily": "Har kuni",
+    "weekly": "Har hafta",
+    "monthly": "Har oy",
+    "yearly": "Har yili",
+    "unlimit": "Cheksiz"
+  },
+  "inTotal": "Jami",
+  "servers": "Serverlar",
+  "fullServers": "Barchasiga kirish",
+  "allBase": "Barcha asosiy",
+  "base": "Asosiy",
+  "premium": "Premium",
+  "devices": "Qurilmalar",
+  "period": "To'lov davri",
+  "expires": "Tugaydi",
+  "autoRenewal": "Avtomatik yangilash",
+  "actions": "Harakatlar",
+  "save": "Saqlash",
+  "required": "Tavsiya etiladi!",
+  "paid": "Pullik!",
+  "instruction": {
+    "stage1": "Ilovani yuklab olish",
+    "stage2": "Ilovaga obuna qo'shish",
+    "copyUrl": "Obuna URL manzilini nusxalash",
+    "openQR": "Obuna QR-kodi",
+    "scanApp": "Ilovada skanerlash",
+    "scanPhone": "Telefonda skanerlash",
+    "add": "Ilovaga qo'shish"
+  },
+  "platform": "Platforma",
+  "success": {
+    "serversUpdated": "Serverlar muvaffaqiyatli yangilandi"
+  },
+  "errors": {
+    "loadFailed": "Obunalarni yuklab bo'lmadi",
+    "disableAutoRenewalFailed": "Avtomatik yangilashni o'chirishda xato!",
+    "enableAutoRenewalFailed": "Avtomatik yangilashni yoqishda xato!",
+    "deleteSubscriptionFailed": "Obunani o'chirishda xato!",
+    "resetSubscriptionFailed": "Obuna ma'lumotlarini tiklashda xato!",
+    "renewSubscriptionFailed": "Obunani uzaytirib bo'lmadi!",
+    "fetchingServers": "Serverlarni yuklab bo'lmadi",
+    "updatingServers": "Serverlarni yangilab bo'lmadi",
+    "serverLimitReached": "Serverlar bo'yicha limitga yetdingiz",
+    "serverLimitReachedPremium": "Premium serverlar bo'yicha limitga yetdingiz",
+    "serverLimitReachedBase": "Asosiy serverlar bo'yicha limitga yetdingiz"
+  },
+  "periods": {
+    "trial": "Sinov muddati",
+    "hour": "1 soat",
+    "day": "1 kun",
+    "week": "1 hafta",
+    "month": "1 oy",
+    "threeMonth": "3 oy",
+    "sixMonth": "6 oy",
+    "year": "1 yil",
+    "twoYear": "2 yil",
+    "threeYear": "3 yil",
+    "indefinitely": "Muddatsiz"
+  },
+  "modals": {
+    "delete": {
+      "title": "Obunani o'chirish",
+      "button": "O'chirish",
+      "action": "O'chirish",
+      "message": "Obunani butunlay o'chirib tashlashni xohlaysizmi? Uni tiklab bo'lmaydi! Kompensatsiya ko'zda tutilmagan!"
+    },
+    "qr": {
+      "title": "Obuna QR-kodi",
+      "description": "Mijoz ilovasida skanerlang"
+    },
+    "refresh": {
+      "title": "Obuna ma'lumotlarini tiklash",
+      "button": "Ma'lumotlarni tiklash",
+      "action": "Tiklash",
+      "message": "Obuna ma'lumotlarini tiklashni xohlaysizmi? Shundan so'ng kalitlar va obuna manzili yangilariga o'zgaradi! Obunani ilovaga qayta qo'shish kerak bo'ladi! Odatda, obunangiz tarmoqqa sizib chiqqan yoki kimdir unga kirish huquqiga ega bo'lgan bo'lsa, tiklash amalga oshiriladi!"
+    },
+    "autoRenewal": {
+      "enableTitle": "Avtomatik yangilashni yoqish",
+      "disableTitle": "Avtomatik yangilashni o'chirish",
+      "enableAction": "Yoqish",
+      "disableAction": "O'chirish",
+      "enableMessage": "Obunani avtomatik yangilashni yoqishni xohlaysizmi? Obuna muddati tugagach, mablag'lar avtomatik ravishda yechib olinadi.",
+      "disableMessage": "Obunani avtomatik yangilashni o'chirishni xohlaysizmi? Muddati tugagach, obuna faolsizlantiriladi."
+    },
+    "renew": {
+      "title": "Obunani uzaytirish",
+      "action": "Uzaytirish",
+      "message": "Obunani uzaytirishni xohlaysizmi? Balansingizdan {price} yulduz yechib olinadi."
+    }
+  }
+}

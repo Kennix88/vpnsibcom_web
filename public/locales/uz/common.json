@@ -1,0 +1,28 @@
+{
+  "modal": {
+    "cancel": "Bekor qilish",
+    "accept": "Qabul qilish",
+    "close": "Yopish"
+  },
+  "scrolling": "Pastga aylantiring",
+  "clipboard": {
+    "copied": "Buferga nusxalandi!",
+    "failed": "Nusxalash amalga oshmadi!"
+  },
+  "freePlan": {
+    "trialAvailable": "Sizga {days} kunlik sinov muddati mavjud.",
+    "activate": "Faollashtirish",
+    "activationFailed": "Bepul rejani faollashtirib bo'lmadi"
+  },
+  "units": {
+    "bytes": "B",
+    "kilobytes": "KB",
+    "megabytes": "MB",
+    "gigabytes": "GB",
+    "terabytes": "TB",
+    "petabytes": "PB",
+    "exabytes": "EB",
+    "zettabytes": "ZB",
+    "yottabytes": "YB"
+  }
+}
