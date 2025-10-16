@@ -1,0 +1,8 @@
+{
+  "trialAvailable": "Tienes disponibles {gb} Gb de tráfico de bonificación para la suscripción de prueba por tiempo ilimitado.",
+  "activate": "Activar",
+  "activationFailed": "No se pudo activar el plan gratuito",
+  "modalTitle": "Activación del período de prueba",
+  "modalAction": "Activar",
+  "modalConfirmation": "¿Realmente quieres activar el período de prueba?"
+}

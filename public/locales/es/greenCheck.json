@@ -1,0 +1,5 @@
+{
+  "loading": "Comprobando seguridad de la conexión...",
+  "danger": "¡Tu conexión NO está protegida!\n¡Conéctate a la VPN!",
+  "success": "¡Tu conexión está protegida!"
+}

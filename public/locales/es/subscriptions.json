@@ -1,0 +1,116 @@
+{
+  "title": "Suscripción",
+  "connection": "Conexión",
+  "configs": "Configuraciones",
+  "addSubscription": "Añadir suscripción",
+  "addSubscriptionTitle": "Añadir suscripción",
+  "yourSubscriptions": "Tus suscripciones",
+  "noSubscriptions": "No tienes suscripciones activas",
+  "loading": "Cargando datos de suscripción...",
+  "notFound": "Suscripción no encontrada",
+  "renewSubscription": "Renovar suscripción",
+  "autoRenewalEnabled": "Renovación automática activada",
+  "autoRenewalDisabled": "Renovación automática desactivada",
+  "subscriptionDeleted": "La suscripción ha sido eliminada con éxito",
+  "subscriptionDataUpdated": "Los datos de la suscripción han sido actualizados con éxito",
+  "subscriptionRenewed": "Suscripción renovada con éxito",
+  "changeServer": "Cambiar servidor",
+  "changeServerTitle": "Cambio de servidor",
+  "changeServerWarning": "ATENCIÓN: El cambio de servidor tarda 2 minutos. ¡Después de cambiar el servidor, debes actualizar los datos en la aplicación!",
+  "active": "Activa",
+  "notActive": "Inactiva",
+  "online": "En línea",
+  "offline": "Fuera de línea",
+  "traffic": "Tráfico",
+  "trafficReset": {
+    "daily": "Diario",
+    "weekly": "Semanal",
+    "monthly": "Mensual",
+    "yearly": "Anual",
+    "unlimit": "Ilimitado"
+  },
+  "inTotal": "Total",
+  "servers": "Servidores",
+  "fullServers": "Acceso a todos",
+  "allBase": "Todos los básicos",
+  "base": "Básico",
+  "premium": "Premium",
+  "devices": "Dispositivos",
+  "period": "Frecuencia de pago",
+  "expires": "Expira",
+  "autoRenewal": "Renovación automática",
+  "actions": "Acciones",
+  "save": "Guardar",
+  "required": "¡Recomendado!",
+  "paid": "¡Pagado!",
+  "instruction": {
+    "stage1": "Descargar aplicación",
+    "stage2": "Añadir suscripción a la aplicación",
+    "copyUrl": "Copiar URL de suscripción",
+    "openQR": "Código QR de suscripción",
+    "scanApp": "Escanear en la aplicación",
+    "scanPhone": "Escanear en el teléfono",
+    "add": "Añadir a la aplicación"
+  },
+  "platform": "Plataforma",
+  "success": {
+    "serversUpdated": "Servidores actualizados con éxito"
+  },
+  "errors": {
+    "loadFailed": "No se pudieron cargar las suscripciones",
+    "disableAutoRenewalFailed": "¡Error al desactivar la renovación automática!",
+    "enableAutoRenewalFailed": "¡Error al activar la renovación automática!",
+    "deleteSubscriptionFailed": "¡Error al eliminar la suscripción!",
+    "resetSubscriptionFailed": "¡Error al restablecer los datos de la suscripción!",
+    "renewSubscriptionFailed": "¡No se pudo renovar la suscripción!",
+    "fetchingServers": "No se pudieron cargar los servidores",
+    "updatingServers": "No se pudieron actualizar los servidores",
+    "serverLimitReached": "Has alcanzado el límite de servidores",
+    "serverLimitReachedPremium": "Has alcanzado el límite de servidores premium",
+    "serverLimitReachedBase": "Has alcanzado el límite de servidores básicos"
+  },
+  "periods": {
+    "trial": "Período de prueba",
+    "hour": "1 hora",
+    "day": "1 día",
+    "week": "1 semana",
+    "month": "1 mes",
+    "threeMonth": "3 meses",
+    "sixMonth": "6 meses",
+    "year": "1 año",
+    "twoYear": "2 años",
+    "threeYear": "3 años",
+    "indefinitely": "Indefinidamente"
+  },
+  "modals": {
+    "delete": {
+      "title": "Eliminar suscripción",
+      "button": "Eliminar",
+      "action": "Eliminar",
+      "message": "¿Estás seguro de que quieres eliminar esta suscripción de forma irreversible? ¡No se podrá recuperar! ¡No se proporcionará compensación!"
+    },
+    "qr": {
+      "title": "Código QR de suscripción",
+      "description": "Escanear en la aplicación cliente"
+    },
+    "refresh": {
+      "title": "Restablecer datos de suscripción",
+      "button": "Restablecer datos",
+      "action": "Restablecer",
+      "message": "¿Estás seguro de que quieres restablecer los datos de la suscripción? ¡Después de esto, las claves y la dirección de la suscripción cambiarán a nuevas! ¡Deberás añadir la suscripción a la aplicación de nuevo! ¡Normalmente, el restablecimiento se realiza si tu suscripción se ha filtrado a la red o alguien ha obtenido acceso a ella!"
+    },
+    "autoRenewal": {
+      "enableTitle": "Activar renovación automática",
+      "disableTitle": "Desactivar renovación automática",
+      "enableAction": "Activar",
+      "disableAction": "Desactivar",
+      "enableMessage": "¿Quieres activar la renovación automática de la suscripción? Los fondos se cargarán automáticamente al vencimiento de la suscripción.",
+      "disableMessage": "¿Quieres desactivar la renovación automática de la suscripción? Después del vencimiento, la suscripción se desactivará."
+    },
+    "renew": {
+      "title": "Renovar suscripción",
+      "action": "Renovar",
+      "message": "¿Quieres renovar la suscripción? Se te cobrarán {price} estrellas de tu saldo."
+    }
+  }
+}
