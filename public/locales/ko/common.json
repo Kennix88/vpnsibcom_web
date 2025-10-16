@@ -1,0 +1,28 @@
+{
+  "modal": {
+    "cancel": "취소",
+    "accept": "수락",
+    "close": "닫기"
+  },
+  "scrolling": "아래로 스크롤",
+  "clipboard": {
+    "copied": "클립보드에 복사되었습니다!",
+    "failed": "복사 실패!"
+  },
+  "freePlan": {
+    "trialAvailable": "{days}일 동안 체험 기간을 이용할 수 있습니다.",
+    "activate": "활성화",
+    "activationFailed": "무료 플랜을 활성화하지 못했습니다"
+  },
+  "units": {
+    "bytes": "B",
+    "kilobytes": "KB",
+    "megabytes": "MB",
+    "gigabytes": "GB",
+    "terabytes": "TB",
+    "petabytes": "PB",
+    "exabytes": "EB",
+    "zettabytes": "ZB",
+    "yottabytes": "YB"
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "title": "구독",
+  "connection": "연결",
+  "configs": "구성",
+  "addSubscription": "구독 추가",
+  "addSubscriptionTitle": "구독 추가",
+  "yourSubscriptions": "내 구독",
+  "noSubscriptions": "활성 구독이 없습니다",
+  "loading": "구독 데이터 로드 중...",
+  "notFound": "구독을 찾을 수 없습니다",
+  "renewSubscription": "구독 갱신",
+  "autoRenewalEnabled": "자동 갱신 활성화됨",
+  "autoRenewalDisabled": "자동 갱신 비활성화됨",
+  "subscriptionDeleted": "구독이 성공적으로 삭제되었습니다",
+  "subscriptionDataUpdated": "구독 데이터가 성공적으로 업데이트되었습니다",
+  "subscriptionRenewed": "구독이 성공적으로 갱신되었습니다",
+  "changeServer": "서버 변경",
+  "changeServerTitle": "서버 변경",
+  "changeServerWarning": "주의: 서버 변경은 2분 이내에 이루어집니다. 서버 변경 후 앱에서 데이터를 업데이트해야 합니다!",
+  "active": "활성",
+  "notActive": "비활성",
+  "online": "온라인",
+  "offline": "오프라인",
+  "traffic": "트래픽",
+  "trafficReset": {
+    "daily": "매일",
+    "weekly": "매주",
+    "monthly": "매월",
+    "yearly": "매년",
+    "unlimit": "무제한"
+  },
+  "inTotal": "총",
+  "servers": "서버",
+  "fullServers": "모든 서버에 액세스",
+  "allBase": "모든 기본",
+  "base": "기본",
+  "premium": "프리미엄",
+  "devices": "장치",
+  "period": "결제 주기",
+  "expires": "만료",
+  "autoRenewal": "자동 갱신",
+  "actions": "작업",
+  "save": "저장",
+  "required": "필수!",
+  "paid": "유료!",
+  "instruction": {
+    "stage1": "앱 다운로드",
+    "stage2": "앱에 구독 추가",
+    "copyUrl": "구독 URL 복사",
+    "openQR": "구독 QR 코드",
+    "scanApp": "앱에서 스캔",
+    "scanPhone": "휴대폰에서 스캔",
+    "add": "앱에 추가"
+  },
+  "platform": "플랫폼",
+  "success": {
+    "serversUpdated": "서버가 성공적으로 업데이트되었습니다"
+  },
+  "errors": {
+    "loadFailed": "구독을 로드하지 못했습니다",
+    "disableAutoRenewalFailed": "자동 갱신 비활성화 오류!",
+    "enableAutoRenewalFailed": "자동 갱신 활성화 오류!",
+    "deleteSubscriptionFailed": "구독 삭제 오류!",
+    "resetSubscriptionFailed": "구독 데이터 재설정 오류!",
+    "renewSubscriptionFailed": "구독을 갱신하지 못했습니다!",
+    "fetchingServers": "서버를 로드하지 못했습니다",
+    "updatingServers": "서버를 업데이트하지 못했습니다",
+    "serverLimitReached": "서버 제한에 도달했습니다",
+    "serverLimitReachedPremium": "프리미엄 서버 제한에 도달했습니다",
+    "serverLimitReachedBase": "기본 서버 제한에 도달했습니다"
+  },
+  "periods": {
+    "trial": "체험 기간",
+    "hour": "1시간",
+    "day": "1일",
+    "week": "1주",
+    "month": "1개월",
+    "threeMonth": "3개월",
+    "sixMonth": "6개월",
+    "year": "1년",
+    "twoYear": "2년",
+    "threeYear": "3년",
+    "indefinitely": "무기한"
+  },
+  "modals": {
+    "delete": {
+      "title": "구독 삭제",
+      "button": "삭제",
+      "action": "삭제",
+      "message": "구독을 영구적으로 삭제하시겠습니까? 복구할 수 없습니다! 보상은 제공되지 않습니다!"
+    },
+    "qr": {
+      "title": "구독 QR 코드",
+      "description": "클라이언트 앱에서 스캔"
+    },
+    "refresh": {
+      "title": "구독 데이터 재설정",
+      "button": "데이터 재설정",
+      "action": "재설정",
+      "message": "구독 데이터를 재설정하시겠습니까? 재설정 후 구독 키와 주소가 새 것으로 변경됩니다! 앱에 구독을 다시 추가해야 합니다! 일반적으로 구독이 네트워크에 유출되었거나 누군가 액세스한 경우 재설정합니다!"
+    },
+    "autoRenewal": {
+      "enableTitle": "자동 갱신 활성화",
+      "disableTitle": "자동 갱신 비활성화",
+      "enableAction": "활성화",
+      "disableAction": "비활성화",
+      "enableMessage": "구독 자동 갱신을 활성화하시겠습니까? 구독 만료 시 잔액에서 자동으로 금액이 차감됩니다.",
+      "disableMessage": "구독 자동 갱신을 비활성화하시겠습니까? 만료 후 구독이 비활성화됩니다."
+    },
+    "renew": {
+      "title": "구독 갱신",
+      "action": "갱신",
+      "message": "{price} 스타가 잔액에서 차감되어 구독이 갱신됩니다."
+    }
+  }
+}

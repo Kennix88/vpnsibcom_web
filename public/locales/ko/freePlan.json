@@ -1,0 +1,8 @@
+{
+  "trialAvailable": "무제한 기간 동안 {gb}GB의 보너스 트래픽을 Trial 구독에 사용할 수 있습니다.",
+  "activate": "활성화",
+  "activationFailed": "무료 플랜을 활성화하지 못했습니다",
+  "modalTitle": "체험 기간 활성화",
+  "modalAction": "활성화",
+  "modalConfirmation": "정말로 체험 기간을 활성화하시겠습니까?"
+}

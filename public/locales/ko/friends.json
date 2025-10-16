@@ -1,0 +1,35 @@
+{
+  "title": "친구",
+  "get": "보상 받기",
+  "for": "친구 초대 시",
+  "level": "레벨",
+  "total": "총",
+  "list": {
+    "title": "내 친구",
+    "top": "상위",
+    "empty": "아직 아무도 없습니다 🥲"
+  },
+  "bonuses": {
+    "title": "보너스",
+    "inviteTitle": "친구 초대 시",
+    "paymentTitle": "친구 활동 시",
+    "inviteInfo": "친구가 첫 결제를 하거나 체험 기간을 활성화한 후!",
+    "paymentInfo": "친구와 친구가 초대한 사람들의 활동으로 발생하는 수익의 일정 비율을 영원히 받으세요!",
+    "lvl1Info": "내가 초대한 사람",
+    "lvl2Info": "친구가 초대한 사람",
+    "lvl3Info": "친구의 친구가 초대한 사람 😁"
+  },
+  "invite": {
+    "title": "친구 초대",
+    "message": "메시지 보내기",
+    "copy": "링크 복사",
+    "story": "스토리로 보내기"
+  },
+  "statistics": {
+    "title": "통계",
+    "earnTitle": "내 수익",
+    "inviteTitle": "초대됨",
+    "earnInfo": "총 수익",
+    "inviteInfo": "초대됨 | 활성화됨 | 그 중 스탠다드 | 그 중 프리미엄"
+  }
+}
