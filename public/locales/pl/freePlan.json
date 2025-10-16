@@ -1,0 +1,8 @@
+{
+  "trialAvailable": "Dostępny jest dla Ciebie {gb} GB bonusowego ruchu dla subskrypcji Trial na czas nieokreślony.",
+  "activate": "Aktywuj",
+  "activationFailed": "Nie udało się aktywować darmowego planu",
+  "modalTitle": "Aktywacja okresu próbnego",
+  "modalAction": "Aktywuj",
+  "modalConfirmation": "Czy na pewno chcesz aktywować okres próbny?"
+}

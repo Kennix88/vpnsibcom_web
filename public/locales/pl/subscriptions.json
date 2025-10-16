@@ -1,0 +1,116 @@
+{
+  "title": "Subskrypcja",
+  "connection": "Połączenie",
+  "configs": "Konfiguracje",
+  "addSubscription": "Dodaj subskrypcję",
+  "addSubscriptionTitle": "Dodawanie subskrypcji",
+  "yourSubscriptions": "Twoje subskrypcje",
+  "noSubscriptions": "Nie masz aktywnych subskrypcji",
+  "loading": "Ładowanie danych subskrypcji...",
+  "notFound": "Subskrypcja nie znaleziona",
+  "renewSubscription": "Odnów subskrypcję",
+  "autoRenewalEnabled": "Automatyczne odnawianie włączone",
+  "autoRenewalDisabled": "Automatyczne odnawianie wyłączone",
+  "subscriptionDeleted": "Subskrypcja została pomyślnie usunięta",
+  "subscriptionDataUpdated": "Dane subskrypcji zostały pomyślnie zaktualizowane",
+  "subscriptionRenewed": "Subskrypcja pomyślnie odnowiona",
+  "changeServer": "Zmień serwer",
+  "changeServerTitle": "Zmiana serwera",
+  "changeServerWarning": "UWAGA: Zmiana serwera trwa do 2 minut. Po zmianie serwera należy zaktualizować dane w aplikacji!",
+  "active": "Aktywna",
+  "notActive": "Nieaktywna",
+  "online": "Online",
+  "offline": "Offline",
+  "traffic": "Ruch",
+  "trafficReset": {
+    "daily": "Codziennie",
+    "weekly": "Co tydzień",
+    "monthly": "Co miesiąc",
+    "yearly": "Co rok",
+    "unlimit": "Nielimitowany"
+  },
+  "inTotal": "W sumie",
+  "servers": "Serwery",
+  "fullServers": "Dostęp do wszystkich",
+  "allBase": "Wszystkie podstawowe",
+  "base": "Podstawowe",
+  "premium": "Premium",
+  "devices": "Urządzenia",
+  "period": "Częstotliwość płatności",
+  "expires": "Wygasa",
+  "autoRenewal": "Automatyczne odnawianie",
+  "actions": "Działania",
+  "save": "Zapisz",
+  "required": "Zalecane!",
+  "paid": "Płatne!",
+  "instruction": {
+    "stage1": "Pobierz aplikację",
+    "stage2": "Dodaj subskrypcję do aplikacji",
+    "copyUrl": "Kopiuj URL subskrypcji",
+    "openQR": "Kod QR subskrypcji",
+    "scanApp": "Skanuj w aplikacji",
+    "scanPhone": "Skanuj w telefonie",
+    "add": "Dodaj do aplikacji"
+  },
+  "platform": "Platforma",
+  "success": {
+    "serversUpdated": "Serwery pomyślnie zaktualizowane"
+  },
+  "errors": {
+    "loadFailed": "Nie udało się załadować subskrypcji",
+    "disableAutoRenewalFailed": "Błąd wyłączenia automatycznego odnawiania!",
+    "enableAutoRenewalFailed": "Błąd włączenia automatycznego odnawiania!",
+    "deleteSubscriptionFailed": "Błąd usunięcia subskrypcji!",
+    "resetSubscriptionFailed": "Błąd resetowania danych subskrypcji!",
+    "renewSubscriptionFailed": "Nie udało się odnowić subskrypcji!",
+    "fetchingServers": "Nie udało się załadować serwerów",
+    "updatingServers": "Nie udało się zaktualizować serwerów",
+    "serverLimitReached": "Osiągnięto limit serwerów",
+    "serverLimitReachedPremium": "Osiągnięto limit serwerów premium",
+    "serverLimitReachedBase": "Osiągnięto limit serwerów podstawowych"
+  },
+  "periods": {
+    "trial": "Okres próbny",
+    "hour": "1 godzina",
+    "day": "1 dzień",
+    "week": "1 tydzień",
+    "month": "1 miesiąc",
+    "threeMonth": "3 miesiące",
+    "sixMonth": "6 miesięcy",
+    "year": "1 rok",
+    "twoYear": "2 lata",
+    "threeYear": "3 lata",
+    "indefinitely": "Bezterminowo"
+  },
+  "modals": {
+    "delete": {
+      "title": "Usuwanie subskrypcji",
+      "button": "Usuń",
+      "action": "Usuń",
+      "message": "Czy na pewno chcesz bezpowrotnie usunąć subskrypcję? Nie będzie można jej odzyskać! Nie przewidziano rekompensaty!"
+    },
+    "qr": {
+      "title": "Kod QR subskrypcji",
+      "description": "Skanuj w aplikacji klienta"
+    },
+    "refresh": {
+      "title": "Resetowanie danych subskrypcji",
+      "button": "Zresetuj dane",
+      "action": "Zresetuj",
+      "message": "Czy na pewno chcesz zresetować dane subskrypcji? Po tym klucze i adres subskrypcji zmienią się na nowe! Będziesz musiał ponownie dodać subskrypcję do aplikacji! Zazwyczaj resetuje się, jeśli Twoja subskrypcja wyciekła do sieci lub ktoś uzyskał do niej dostęp!"
+    },
+    "autoRenewal": {
+      "enableTitle": "Włączanie automatycznego odnawiania",
+      "disableTitle": "Wyłączanie automatycznego odnawiania",
+      "enableAction": "Włącz",
+      "disableAction": "Wyłącz",
+      "enableMessage": "Czy chcesz włączyć automatyczne odnawianie subskrypcji? Środki będą pobierane automatycznie po wygaśnięciu subskrypcji.",
+      "disableMessage": "Czy chcesz wyłączyć automatyczne odnawianie subskrypcji? Po wygaśnięciu subskrypcja zostanie dezaktywowana."
+    },
+    "renew": {
+      "title": "Odnawianie subskrypcji",
+      "action": "Odnów",
+      "message": "Czy chcesz odnowić subskrypcję? Z Twojego salda zostanie pobrane {price} gwiazdek."
+    }
+  }
+}
