@@ -1,0 +1,5 @@
+{
+  "loading": "Beveiligingscontrole van de verbinding...",
+  "danger": "Uw verbinding is NIET beveiligd!\nMaak verbinding met VPN!",
+  "success": "Uw verbinding is beveiligd!"
+}

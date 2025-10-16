@@ -1,0 +1,116 @@
+{
+  "title": "Abonnement",
+  "connection": "Verbinding",
+  "configs": "Configuraties",
+  "addSubscription": "Abonnement toevoegen",
+  "addSubscriptionTitle": "Abonnement toevoegen",
+  "yourSubscriptions": "Uw abonnementen",
+  "noSubscriptions": "U heeft geen actieve abonnementen",
+  "loading": "Abonnementsgegevens laden...",
+  "notFound": "Abonnement niet gevonden",
+  "renewSubscription": "Abonnement verlengen",
+  "autoRenewalEnabled": "Automatische verlenging ingeschakeld",
+  "autoRenewalDisabled": "Automatische verlenging uitgeschakeld",
+  "subscriptionDeleted": "Abonnement is succesvol verwijderd",
+  "subscriptionDataUpdated": "Abonnementsgegevens zijn succesvol bijgewerkt",
+  "subscriptionRenewed": "Abonnement succesvol verlengd",
+  "changeServer": "Server wijzigen",
+  "changeServerTitle": "Server wijzigen",
+  "changeServerWarning": "LET OP: Het wijzigen van de server duurt ongeveer 2 minuten. Na het wijzigen van de server moet u de gegevens in de applicatie bijwerken!",
+  "active": "Actief",
+  "notActive": "Niet actief",
+  "online": "Online",
+  "offline": "Offline",
+  "traffic": "Verkeer",
+  "trafficReset": {
+    "daily": "Dagelijks",
+    "weekly": "Wekelijks",
+    "monthly": "Maandelijks",
+    "yearly": "Jaarlijks",
+    "unlimit": "Onbeperkt"
+  },
+  "inTotal": "Totaal",
+  "servers": "Servers",
+  "fullServers": "Toegang tot alles",
+  "allBase": "Alle basis",
+  "base": "Basis",
+  "premium": "Premium",
+  "devices": "Apparaten",
+  "period": "Betalingsfrequentie",
+  "expires": "Verloopt",
+  "autoRenewal": "Automatische verlenging",
+  "actions": "Acties",
+  "save": "Opslaan",
+  "required": "Aanbevolen!",
+  "paid": "Betaald!",
+  "instruction": {
+    "stage1": "Download de app",
+    "stage2": "Voeg abonnement toe aan de app",
+    "copyUrl": "Kopieer abonnements-URL",
+    "openQR": "QR-code abonnement",
+    "scanApp": "Scan in de app",
+    "scanPhone": "Scan op telefoon",
+    "add": "Toevoegen aan app"
+  },
+  "platform": "Platform",
+  "success": {
+    "serversUpdated": "Servers succesvol bijgewerkt"
+  },
+  "errors": {
+    "loadFailed": "Abonnementen konden niet worden geladen",
+    "disableAutoRenewalFailed": "Fout bij uitschakelen automatische verlenging!",
+    "enableAutoRenewalFailed": "Fout bij inschakelen automatische verlenging!",
+    "deleteSubscriptionFailed": "Fout bij verwijderen abonnement!",
+    "resetSubscriptionFailed": "Fout bij resetten abonnementsgegevens!",
+    "renewSubscriptionFailed": "Abonnement kon niet worden verlengd!",
+    "fetchingServers": "Servers konden niet worden geladen",
+    "updatingServers": "Servers konden niet worden bijgewerkt",
+    "serverLimitReached": "U heeft de serverlimiet bereikt",
+    "serverLimitReachedPremium": "U heeft de premium serverlimiet bereikt",
+    "serverLimitReachedBase": "U heeft de basis serverlimiet bereikt"
+  },
+  "periods": {
+    "trial": "Proefperiode",
+    "hour": "1 uur",
+    "day": "1 dag",
+    "week": "1 week",
+    "month": "1 maand",
+    "threeMonth": "3 maanden",
+    "sixMonth": "6 maanden",
+    "year": "1 jaar",
+    "twoYear": "2 jaar",
+    "threeYear": "3 jaar",
+    "indefinitely": "Onbepaald"
+  },
+  "modals": {
+    "delete": {
+      "title": "Abonnement verwijderen",
+      "button": "Verwijderen",
+      "action": "Verwijderen",
+      "message": "Weet u zeker dat u het abonnement permanent wilt verwijderen? Het kan niet worden hersteld! Er wordt geen compensatie geboden!"
+    },
+    "qr": {
+      "title": "QR-code abonnement",
+      "description": "Scan in de client-app"
+    },
+    "refresh": {
+      "title": "Abonnementsgegevens resetten",
+      "button": "Gegevens resetten",
+      "action": "Resetten",
+      "message": "Weet u zeker dat u de abonnementsgegevens wilt resetten? Hierna worden de sleutels en het abonnementsadres gewijzigd in nieuwe! U moet het abonnement opnieuw toevoegen aan de app! Meestal wordt een reset uitgevoerd als uw abonnement is gelekt of als iemand er toegang toe heeft gekregen!"
+    },
+    "autoRenewal": {
+      "enableTitle": "Automatische verlenging inschakelen",
+      "disableTitle": "Automatische verlenging uitschakelen",
+      "enableAction": "Inschakelen",
+      "disableAction": "Uitschakelen",
+      "enableMessage": "Wilt u automatische verlenging van het abonnement inschakelen? Het bedrag wordt automatisch afgeschreven wanneer het abonnement verloopt.",
+      "disableMessage": "Wilt u automatische verlenging van het abonnement uitschakelen? Na het verlopen van het abonnement wordt het gedeactiveerd."
+    },
+    "renew": {
+      "title": "Abonnement verlengen",
+      "action": "Verlengen",
+      "message": "Wilt u het abonnement verlengen? {price} sterren worden van uw saldo afgeschreven."
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "title": "Vrienden",
+  "get": "Ontvang beloningen",
+  "for": "voor het uitnodigen van vrienden",
+  "level": "niveau",
+  "total": "Totaal",
+  "list": {
+    "title": "Jouw vrienden",
+    "top": "Top",
+    "empty": "Nog niemand hier 🥲"
+  },
+  "bonuses": {
+    "title": "Bonussen",
+    "inviteTitle": "Voor het uitnodigen van een vriend",
+    "paymentTitle": "Voor vriendenacties",
+    "inviteInfo": "Na de eerste betaling door een vriend of activering van de proefperiode!",
+    "paymentInfo": "Ontvang voor altijd een percentage van onze inkomsten voor vrienden en degenen die door jouw vrienden zijn uitgenodigd!",
+    "lvl1Info": "Degenen die jij hebt uitgenodigd",
+    "lvl2Info": "Degenen die door vrienden zijn uitgenodigd",
+    "lvl3Info": "Degenen die door vrienden van vrienden zijn uitgenodigd 😁"
+  },
+  "invite": {
+    "title": "Vriend uitnodigen",
+    "message": "Bericht verzenden",
+    "copy": "Link kopiëren",
+    "story": "Verzenden naar verhaal"
+  },
+  "statistics": {
+    "title": "Statistieken",
+    "earnTitle": "Jouw verdiensten",
+    "inviteTitle": "Uitgenodigd",
+    "earnInfo": "Je hebt in totaal verdiend",
+    "inviteInfo": "Uitgenodigd | Geactiveerd | Waarvan Standaard | Waarvan Premium"
+  }
+}
