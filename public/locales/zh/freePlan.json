@@ -1,0 +1,8 @@
+{
+  "trialAvailable": "您有 {gb} GB 奖励流量可用于无限期试用订阅。",
+  "activate": "激活",
+  "activationFailed": "无法激活免费计划",
+  "modalTitle": "激活试用期",
+  "modalAction": "激活",
+  "modalConfirmation": "您确定要激活试用期吗？"
+}

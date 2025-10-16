@@ -1,0 +1,35 @@
+{
+  "title": "朋友",
+  "get": "获得奖励",
+  "for": "邀请朋友",
+  "level": "等级",
+  "total": "总计",
+  "list": {
+    "title": "您的朋友",
+    "top": "顶部",
+    "empty": "这里还没有人🥲"
+  },
+  "bonuses": {
+    "title": "奖励",
+    "inviteTitle": "邀请朋友",
+    "paymentTitle": "朋友的活动",
+    "inviteInfo": "朋友首次付款或激活试用期后！",
+    "paymentInfo": "永久获得您朋友和您朋友邀请的朋友的收入百分比！",
+    "lvl1Info": "您邀请的人",
+    "lvl2Info": "朋友邀请的人",
+    "lvl3Info": "朋友的朋友邀请的人😁"
+  },
+  "invite": {
+    "title": "邀请朋友",
+    "message": "发送消息",
+    "copy": "复制链接",
+    "story": "发送到故事"
+  },
+  "statistics": {
+    "title": "统计",
+    "earnTitle": "您的收益",
+    "inviteTitle": "已邀请",
+    "earnInfo": "您总共赚取了",
+    "inviteInfo": "已邀请 | 已激活 | 其中标准 | 其中高级"
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "title": "订阅",
+  "connection": "连接",
+  "configs": "配置",
+  "addSubscription": "添加订阅",
+  "addSubscriptionTitle": "添加订阅",
+  "yourSubscriptions": "您的订阅",
+  "noSubscriptions": "您没有活跃的订阅",
+  "loading": "正在加载订阅数据...",
+  "notFound": "未找到订阅",
+  "renewSubscription": "续订",
+  "autoRenewalEnabled": "已启用自动续订",
+  "autoRenewalDisabled": "已禁用自动续订",
+  "subscriptionDeleted": "订阅已成功删除",
+  "subscriptionDataUpdated": "订阅数据已成功更新",
+  "subscriptionRenewed": "订阅已成功续订",
+  "changeServer": "更改服务器",
+  "changeServerTitle": "更改服务器",
+  "changeServerWarning": "注意：服务器更改将在2分钟内完成。更改服务器后，您需要更新应用程序中的数据！",
+  "active": "活跃",
+  "notActive": "不活跃",
+  "online": "在线",
+  "offline": "离线",
+  "traffic": "流量",
+  "trafficReset": {
+    "daily": "每日",
+    "weekly": "每周",
+    "monthly": "每月",
+    "yearly": "每年",
+    "unlimit": "无限"
+  },
+  "inTotal": "总计",
+  "servers": "服务器",
+  "fullServers": "访问所有",
+  "allBase": "所有基础",
+  "base": "基础",
+  "premium": "高级",
+  "devices": "设备",
+  "period": "付款周期",
+  "expires": "到期",
+  "autoRenewal": "自动续订",
+  "actions": "操作",
+  "save": "保存",
+  "required": "推荐！",
+  "paid": "付费！",
+  "instruction": {
+    "stage1": "下载应用程序",
+    "stage2": "在应用程序中添加订阅",
+    "copyUrl": "复制订阅URL",
+    "openQR": "订阅二维码",
+    "scanApp": "在应用程序中扫描",
+    "scanPhone": "在手机中扫描",
+    "add": "添加到应用程序"
+  },
+  "platform": "平台",
+  "success": {
+    "serversUpdated": "服务器已成功更新"
+  },
+  "errors": {
+    "loadFailed": "无法加载订阅",
+    "disableAutoRenewalFailed": "禁用自动续订失败！",
+    "enableAutoRenewalFailed": "启用自动续订失败！",
+    "deleteSubscriptionFailed": "删除订阅失败！",
+    "resetSubscriptionFailed": "重置订阅数据失败！",
+    "renewSubscriptionFailed": "无法续订订阅！",
+    "fetchingServers": "无法加载服务器",
+    "updatingServers": "无法更新服务器",
+    "serverLimitReached": "您已达到服务器限制",
+    "serverLimitReachedPremium": "您已达到高级服务器限制",
+    "serverLimitReachedBase": "您已达到基础服务器限制"
+  },
+  "periods": {
+    "trial": "试用期",
+    "hour": "1 小时",
+    "day": "1 天",
+    "week": "1 周",
+    "month": "1 个月",
+    "threeMonth": "3 个月",
+    "sixMonth": "6 个月",
+    "year": "1 年",
+    "twoYear": "2 年",
+    "threeYear": "3 年",
+    "indefinitely": "无限期"
+  },
+  "modals": {
+    "delete": {
+      "title": "删除订阅",
+      "button": "删除",
+      "action": "删除",
+      "message": "您确定要永久删除订阅吗？它将无法恢复！不提供赔偿！"
+    },
+    "qr": {
+      "title": "订阅二维码",
+      "description": "在客户端应用程序中扫描"
+    },
+    "refresh": {
+      "title": "重置订阅数据",
+      "button": "重置数据",
+      "action": "重置",
+      "message": "您确定要重置订阅数据吗？之后，订阅密钥和地址将更改为新的！您需要重新将订阅添加到应用程序中！通常，如果您的订阅泄露或有人访问了它，就会进行重置！"
+    },
+    "autoRenewal": {
+      "enableTitle": "启用自动续订",
+      "disableTitle": "禁用自动续订",
+      "enableAction": "启用",
+      "disableAction": "禁用",
+      "enableMessage": "您想启用自动续订吗？订阅到期时，资金将自动扣除。",
+      "disableMessage": "您想禁用自动续订吗？订阅到期后，它将被停用。"
+    },
+    "renew": {
+      "title": "续订",
+      "action": "续订",
+      "message": "您想续订订阅吗？您的余额将扣除 {price} 星星。"
+    }
+  }
+}
