@@ -1,0 +1,24 @@
+{
+  "modal": { "cancel": "Batal", "accept": "Terima", "close": "Tutup" },
+  "scrolling": "Gulir ke bawah",
+  "clipboard": {
+    "copied": "Disalin ke papan klip!",
+    "failed": "Gagal menyalin!"
+  },
+  "freePlan": {
+    "trialAvailable": "Anda memiliki masa percobaan {days} hari.",
+    "activate": "Aktifkan",
+    "activationFailed": "Gagal mengaktifkan paket gratis"
+  },
+  "units": {
+    "bytes": "B",
+    "kilobytes": "KB",
+    "megabytes": "MB",
+    "gigabytes": "GB",
+    "terabytes": "TB",
+    "petabytes": "PB",
+    "exabytes": "EB",
+    "zettabytes": "ZB",
+    "yottabytes": "YB"
+  }
+}

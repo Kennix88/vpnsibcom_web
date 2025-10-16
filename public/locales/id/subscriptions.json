@@ -1,0 +1,114 @@
+{
+  "title": "Langganan",
+  "connection": "Koneksi",
+  "configs": "Konfigurasi",
+  "addSubscription": "Tambah Langganan",
+  "addSubscriptionTitle": "Menambah Langganan",
+  "yourSubscriptions": "Langganan Anda",
+  "noSubscriptions": "Anda tidak memiliki langganan aktif",
+  "loading": "Memuat data langganan...",
+  "notFound": "Langganan tidak ditemukan",
+  "renewSubscription": "Perbarui Langganan",
+  "autoRenewalEnabled": "Perpanjangan otomatis diaktifkan",
+  "autoRenewalDisabled": "Perpanjangan otomatis dinonaktifkan",
+  "subscriptionDeleted": "Langganan berhasil dihapus",
+  "subscriptionDataUpdated": "Data langganan berhasil diperbarui",
+  "subscriptionRenewed": "Langganan berhasil diperbarui",
+  "changeServer": "Ganti Server",
+  "changeServerTitle": "Mengganti Server",
+  "changeServerWarning": "PERHATIAN: Pergantian server membutuhkan waktu 2 menit. Setelah pergantian server, Anda perlu memperbarui data di aplikasi!",
+  "active": "Aktif",
+  "notActive": "Tidak Aktif",
+  "online": "Online",
+  "offline": "Offline",
+  "traffic": "Trafik",
+  "trafficReset": {
+    "daily": "Harian",
+    "weekly": "Mingguan",
+    "monthly": "Bulanan",
+    "yearly": "Tahunan",
+    "unlimit": "Tanpa Batas"
+  },
+  "inTotal": "Total",
+  "servers": "Server",
+  "fullServers": "Akses ke semua",
+  "allBase": "Semua Dasar",
+  "base": "Dasar",
+  "premium": "Premium",
+  "devices": "Perangkat",
+  "period": "Frekuensi Pembayaran",
+  "expires": "Kedaluwarsa",
+  "autoRenewal": "Perpanjangan Otomatis",
+  "actions": "Tindakan",
+  "save": "Simpan",
+  "required": "Direkomendasikan!",
+  "paid": "Berbayar!",
+  "instruction": {
+    "stage1": "Unduh aplikasi",
+    "stage2": "Tambahkan langganan di aplikasi",
+    "copyUrl": "Salin URL Langganan",
+    "openQR": "Kode QR Langganan",
+    "scanApp": "Pindai di aplikasi",
+    "scanPhone": "Pindai di ponsel",
+    "add": "Tambahkan ke aplikasi"
+  },
+  "platform": "Platform",
+  "success": { "serversUpdated": "Server berhasil diperbarui" },
+  "errors": {
+    "loadFailed": "Gagal memuat langganan",
+    "disableAutoRenewalFailed": "Gagal menonaktifkan perpanjangan otomatis!",
+    "enableAutoRenewalFailed": "Gagal mengaktifkan perpanjangan otomatis!",
+    "deleteSubscriptionFailed": "Gagal menghapus langganan!",
+    "resetSubscriptionFailed": "Gagal mereset data langganan!",
+    "renewSubscriptionFailed": "Gagal memperbarui langganan!",
+    "fetchingServers": "Gagal memuat server",
+    "updatingServers": "Gagal memperbarui server",
+    "serverLimitReached": "Anda telah mencapai batas server",
+    "serverLimitReachedPremium": "Anda telah mencapai batas server premium",
+    "serverLimitReachedBase": "Anda telah mencapai batas server dasar"
+  },
+  "periods": {
+    "trial": "Periode Uji Coba",
+    "hour": "1 jam",
+    "day": "1 hari",
+    "week": "1 minggu",
+    "month": "1 bulan",
+    "threeMonth": "3 bulan",
+    "sixMonth": "6 bulan",
+    "year": "1 tahun",
+    "twoYear": "2 tahun",
+    "threeYear": "3 tahun",
+    "indefinitely": "Tanpa Batas"
+  },
+  "modals": {
+    "delete": {
+      "title": "Menghapus Langganan",
+      "button": "Hapus",
+      "action": "Hapus",
+      "message": "Apakah Anda yakin ingin menghapus langganan ini secara permanen? Tidak dapat dipulihkan! Tidak ada kompensasi yang diberikan!"
+    },
+    "qr": {
+      "title": "Kode QR Langganan",
+      "description": "Pindai di aplikasi klien"
+    },
+    "refresh": {
+      "title": "Reset Data Langganan",
+      "button": "Reset Data",
+      "action": "Reset",
+      "message": "Apakah Anda yakin ingin mereset data langganan? Setelah ini, kunci dan alamat langganan akan berubah menjadi yang baru! Anda perlu menambahkan langganan lagi ke aplikasi! Reset biasanya dilakukan jika langganan Anda bocor ke jaringan atau seseorang mendapatkan akses ke sana!"
+    },
+    "autoRenewal": {
+      "enableTitle": "Mengaktifkan Perpanjangan Otomatis",
+      "disableTitle": "Menonaktifkan Perpanjangan Otomatis",
+      "enableAction": "Aktifkan",
+      "disableAction": "Nonaktifkan",
+      "enableMessage": "Apakah Anda ingin mengaktifkan perpanjangan langganan otomatis? Dana akan didebet secara otomatis saat langganan berakhir.",
+      "disableMessage": "Apakah Anda ingin menonaktifkan perpanjangan langganan otomatis? Setelah langganan berakhir, langganan akan dinonaktifkan."
+    },
+    "renew": {
+      "title": "Perpanjangan Langganan",
+      "action": "Perbarui",
+      "message": "Apakah Anda ingin memperbarui langganan? {price} bintang akan didebet dari saldo Anda."
+    }
+  }
+}
