@@ -1,4 +1,218 @@
 {
+  "common": {
+    "modal": {
+      "cancel": "キャンセル",
+      "accept": "同意する",
+      "close": "閉じる"
+    },
+    "scrolling": "下にスクロール",
+    "clipboard": {
+      "copied": "クリップボードにコピーされました！",
+      "failed": "コピーできませんでした！"
+    },
+    "freePlan": {
+      "trialAvailable": "{days}日間の無料トライアル期間が利用可能です。",
+      "activate": "アクティブ化",
+      "activationFailed": "無料プランをアクティブ化できませんでした"
+    },
+    "units": {
+      "bytes": "B",
+      "kilobytes": "KB",
+      "megabytes": "MB",
+      "gigabytes": "GB",
+      "terabytes": "TB",
+      "petabytes": "PB",
+      "exabytes": "EB",
+      "zettabytes": "ZB",
+      "yottabytes": "YB"
+    }
+  },
+  "freePlan": {
+    "trialAvailable": "無期限のトライアルサブスクリプションで{gb}GBのボーナストラフィックが利用可能です。",
+    "activate": "アクティブ化",
+    "activationFailed": "無料プランをアクティブ化できませんでした",
+    "modalTitle": "試用期間のアクティブ化",
+    "modalAction": "アクティブ化",
+    "modalConfirmation": "試用期間をアクティブ化してもよろしいですか？"
+  },
+  "friends": {
+    "title": "友達",
+    "get": "報酬を獲得",
+    "for": "友達を招待して",
+    "level": "レベル",
+    "total": "合計",
+    "list": {
+      "title": "あなたの友達",
+      "top": "トップ",
+      "empty": "まだ誰もいません 🥲"
+    },
+    "bonuses": {
+      "title": "ボーナス",
+      "inviteTitle": "友達の招待に対して",
+      "paymentTitle": "友達のアクションに対して",
+      "inviteInfo": "友達が初めて支払うか、試用期間をアクティブにした後！",
+      "paymentInfo": "友達や友達が招待した人から、私たちの収益のパーセンテージを永久に獲得しましょう！",
+      "lvl1Info": "あなたが招待した人",
+      "lvl2Info": "友達が招待した人",
+      "lvl3Info": "友達の友達が招待した人 😁"
+    },
+    "invite": {
+      "title": "友達を招待する",
+      "message": "メッセージを送信",
+      "copy": "リンクをコピー",
+      "story": "ストーリーに送信"
+    },
+    "statistics": {
+      "title": "統計",
+      "earnTitle": "あなたの収益",
+      "inviteTitle": "招待済み",
+      "earnInfo": "これまでに獲得した合計",
+      "inviteInfo": "招待済み | アクティブ化済み | そのうちスタンダード | そのうちプレミアム"
+    }
+  },
+  "greenCheck": {
+    "loading": "接続のセキュリティを確認中...",
+    "danger": "あなたの接続は保護されていません！\nVPNに接続してください！",
+    "success": "あなたの接続は保護されています！"
+  },
+  "navbar": {
+    "home": "ホーム",
+    "earning": "収益",
+    "gifts": "ギフト",
+    "friends": "友達",
+    "billing": "請求",
+    "settings": "設定",
+    "profile": "プロフィール",
+    "games": "ゲーム"
+  },
+  "subscriptions": {
+    "title": "サブスクリプション",
+    "connection": "接続",
+    "configs": "設定",
+    "addSubscription": "サブスクリプションを追加",
+    "addSubscriptionTitle": "サブスクリプションの追加",
+    "yourSubscriptions": "あなたのサブスクリプション",
+    "noSubscriptions": "アクティブなサブスクリプションはありません",
+    "loading": "サブスクリプションデータを読み込み中...",
+    "notFound": "サブスクリプションが見つかりません",
+    "renewSubscription": "サブスクリプションを更新",
+    "autoRenewalEnabled": "自動更新が有効です",
+    "autoRenewalDisabled": "自動更新が無効です",
+    "subscriptionDeleted": "サブスクリプションが正常に削除されました",
+    "subscriptionDataUpdated": "サブスクリプションデータが正常に更新されました",
+    "subscriptionRenewed": "サブスクリプションが正常に更新されました",
+    "changeServer": "サーバーを変更",
+    "changeServerTitle": "サーバーの変更",
+    "changeServerWarning": "注意：サーバーの変更には2分かかります。サーバー変更後、アプリケーションのデータを更新する必要があります！",
+    "active": "アクティブ",
+    "notActive": "非アクティブ",
+    "online": "オンライン",
+    "offline": "オフライン",
+    "traffic": "トラフィック",
+    "trafficReset": {
+      "daily": "毎日",
+      "weekly": "毎週",
+      "monthly": "毎月",
+      "yearly": "毎年",
+      "unlimit": "無制限"
+    },
+    "inTotal": "合計",
+    "servers": "サーバー",
+    "fullServers": "すべてにアクセス",
+    "allBase": "すべての基本",
+    "base": "基本",
+    "premium": "プレミアム",
+    "devices": "デバイス",
+    "period": "支払い頻度",
+    "expires": "期限切れ",
+    "autoRenewal": "自動更新",
+    "actions": "アクション",
+    "save": "保存",
+    "required": "推奨！",
+    "paid": "有料！",
+    "instruction": {
+      "stage1": "アプリをダウンロード",
+      "stage2": "アプリにサブスクリプションを追加",
+      "copyUrl": "サブスクリプションURLをコピー",
+      "openQR": "サブスクリプションQRコード",
+      "scanApp": "アプリでスキャン",
+      "scanPhone": "電話でスキャン",
+      "add": "アプリに追加"
+    },
+    "platform": "プラットフォーム",
+    "success": {
+      "serversUpdated": "サーバーが正常に更新されました"
+    },
+    "errors": {
+      "loadFailed": "サブスクリプションの読み込みに失敗しました",
+      "disableAutoRenewalFailed": "自動更新の無効化に失敗しました！",
+      "enableAutoRenewalFailed": "自動更新の有効化に失敗しました！",
+      "deleteSubscriptionFailed": "サブスクリプションの削除に失敗しました！",
+      "resetSubscriptionFailed": "サブスクリプションデータのリセットに失敗しました！",
+      "renewSubscriptionFailed": "サブスクリプションの更新に失敗しました！",
+      "fetchingServers": "サーバーの取得に失敗しました",
+      "updatingServers": "サーバーの更新に失敗しました",
+      "serverLimitReached": "サーバーの制限に達しました",
+      "serverLimitReachedPremium": "プレミアムサーバーの制限に達しました",
+      "serverLimitReachedBase": "基本サーバーの制限に達しました"
+    },
+    "periods": {
+      "trial": "試用期間",
+      "hour": "1時間",
+      "day": "1日",
+      "week": "1週間",
+      "month": "1ヶ月",
+      "threeMonth": "3ヶ月",
+      "sixMonth": "6ヶ月",
+      "year": "1年",
+      "twoYear": "2年",
+      "threeYear": "3年",
+      "indefinitely": "無期限"
+    },
+    "modals": {
+      "delete": {
+        "title": "サブスクリプションの削除",
+        "button": "削除",
+        "action": "削除",
+        "message": "サブスクリプションを完全に削除してもよろしいですか？元に戻すことはできません！補償はありません！"
+      },
+      "qr": {
+        "title": "サブスクリプションQRコード",
+        "description": "クライアントアプリでスキャンしてください"
+      },
+      "refresh": {
+        "title": "サブスクリプションデータのリセット",
+        "button": "データをリセット",
+        "action": "リセット",
+        "message": "サブスクリプションデータをリセットしてもよろしいですか？その後、キーとサブスクリプションアドレスが新しくなります！アプリにサブスクリプションを再度追加する必要があります！通常、サブスクリプションがネットワークに漏洩したり、誰かがアクセスした場合にリセットが行われます！"
+      },
+      "autoRenewal": {
+        "enableTitle": "自動更新を有効にする",
+        "disableTitle": "自動更新を無効にする",
+        "enableAction": "有効にする",
+        "disableAction": "無効にする",
+        "enableMessage": "サブスクリプションの自動更新を有効にしますか？サブスクリプションの有効期限が切れると、自動的に料金が引き落とされます。",
+        "disableMessage": "サブスクリプションの自動更新を無効にしますか？有効期限が切れると、サブスクリプションは非アクティブになります。"
+      },
+      "renew": {
+        "title": "サブスクリプションの更新",
+        "action": "更新",
+        "message": "サブスクリプションを更新しますか？残高から{price}スターが引き落とされます。"
+      }
+    }
+  },
+  "user": {
+    "role": "役割",
+    "discount": "割引",
+    "wallet": "ウォレット",
+    "usage": "使用状況",
+    "inPayments": "支払い中"
+  },
+  "wallet": {
+    "connect": "TONウォレットを接続",
+    "disconnect": "リンク解除",
+    "replace": "交換"
+  },
   "billing": {
     "title": "Billing",
     "description": "The movement of your finances",
@@ -134,214 +348,5 @@
       },
       "purchase": "Purchase"
     }
-  },
-  "common": {
-    "modal": {
-      "cancel": "Cancel",
-      "accept": "Accept",
-      "close": "Close"
-    },
-    "scrolling": "Scroll down",
-    "clipboard": {
-      "copied": "Copied to clipboard!",
-      "failed": "Failed to copy!"
-    },
-    "units": {
-      "bytes": "B",
-      "kilobytes": "KB",
-      "megabytes": "MB",
-      "gigabytes": "GB",
-      "terabytes": "TB",
-      "petabytes": "PB",
-      "exabytes": "EB",
-      "zettabytes": "ZB",
-      "yottabytes": "YB"
-    }
-  },
-  "freePlan": {
-    "trialAvailable": "You have access to {gb} Gb of bonus traffic for an unlimited Trial subscription.",
-    "activate": "Activate",
-    "activationFailed": "Couldn't activate the free plan",
-    "modalTitle": "Trial Period Activation",
-    "modalAction": "Activate",
-    "modalConfirmation": "Do you really want to activate the trial period?"
-  },
-  "friends": {
-    "title": "Friends",
-    "get": "Get Rewards",
-    "for": "for inviting friends",
-    "level": "level",
-    "total": "Total",
-    "list": {
-      "title": "Your friends",
-      "top": "Top",
-      "empty": "There's no one here yet 🥲"
-    },
-    "bonuses": {
-      "title": "Bonuses",
-      "inviteTitle": "For inviting a friend",
-      "paymentTitle": "For the actions of a friend",
-      "inviteInfo": "After the first payment by a friend or activation of the trial period!",
-      "paymentInfo": "Get a percentage of our income for friends and those who have been invited by your friends forever!",
-      "lvl1Info": "Those whom you invited",
-      "lvl2Info": "Those who were invited by friends",
-      "lvl3Info": "Those who were invited by friends of friends 😁"
-    },
-    "invite": {
-      "title": "Invite a friend",
-      "message": "Send a message",
-      "copy": "Copy link",
-      "story": "Send to story"
-    },
-    "statistics": {
-      "title": "Statistics",
-      "earnTitle": "You earn",
-      "inviteTitle": "Invited",
-      "earnInfo": "You've earned it all the time",
-      "inviteInfo": "Invited | Activated | Of these, the Standard | Of these, Premium"
-    }
-  },
-  "greenCheck": {
-    "loading": "Checking the connection security...",
-    "danger": "Your connection is NOT secure!\nConnect a VPN!",
-    "success": "Your connection is secure!"
-  },
-  "navbar": {
-    "home": "Home",
-    "earning": "Earning",
-    "gifts": "Gifts",
-    "friends": "Friends",
-    "billing": "Billing",
-    "settings": "Settings",
-    "profile": "Profile",
-    "games": "Games"
-  },
-  "subscriptions": {
-    "title": "Subscription",
-    "connection": "Connection",
-    "configs": "Configs",
-    "addSubscription": "Add subscription",
-    "addSubscriptionTitle": "Adding a subscription",
-    "yourSubscriptions": "Your subscriptions",
-    "noSubscriptions": "You don't have any subscriptions yet",
-    "loading": "Loading subscription data...",
-    "notFound": "Subscription not found",
-    "renewSubscription": "Renew subscription",
-    "autoRenewalEnabled": "Auto-renewal enabled",
-    "autoRenewalDisabled": "Auto-renewal disabled",
-    "subscriptionDeleted": "Subscription has been successfully deleted",
-    "subscriptionDataUpdated": "Subscription data has been successfully updated",
-    "subscriptionRenewed": "Subscription has been successfully renewed",
-    "changeServer": "Change server",
-    "changeServerTitle": "Change server",
-    "changeServerWarning": "WARNING: Changing the server takes 2 minutes. After changing the server, you need to update the data in the application!",
-    "active": "Active",
-    "notActive": "Not active",
-    "online": "Online",
-    "offline": "Offline",
-    "traffic": "Traffic",
-    "trafficReset": {
-      "daily": "Daily",
-      "weekly": "Weekly",
-      "monthly": "Monthly",
-      "yearly": "Annually",
-      "unlimit": "Unlimited"
-    },
-    "inTotal": "All",
-    "servers": "Servers",
-    "fullServers": "Access to all",
-    "allBase": "All base",
-    "base": "Base",
-    "premium": "Premium",
-    "devices": "Devices",
-    "period": "Payment period",
-    "expires": "Expires",
-    "autoRenewal": "Auto-renewal",
-    "actions": "Actions",
-    "save": "Save",
-    "required": "Recommended!",
-    "paid": "Paid!",
-    "instruction": {
-      "stage1": "Download the application",
-      "stage2": "Add subscription to the application",
-      "copyUrl": "Copy subscription URL",
-      "openQR": "QR-code of the subscription",
-      "scanApp": "Scan in the application",
-      "scanPhone": "Scan in the phone",
-      "add": "Add to the application"
-    },
-    "platform": "Platform",
-    "success": {
-      "serversUpdated": "Servers have been successfully updated"
-    },
-    "errors": {
-      "loadFailed": "Failed to load subscriptions",
-      "disableAutoRenewalFailed": "Failed to disable auto-renewal!",
-      "enableAutoRenewalFailed": "Failed to enable auto-renewal!",
-      "deleteSubscriptionFailed": "Failed to delete subscription!",
-      "resetSubscriptionFailed": "Failed to reset subscription data!",
-      "renewSubscriptionFailed": "Failed to renew subscription!",
-      "fetchingServers": "Failed to load servers",
-      "updatingServers": "Failed to update servers",
-      "serverLimitReached": "You have reached the server limit",
-      "serverLimitReachedPremium": "You have reached the premium server limit",
-      "serverLimitReachedBase": "You have reached the base server limit"
-    },
-    "periods": {
-      "trial": "Trial period",
-      "hour": "1 hour",
-      "day": "1 day",
-      "week": "1 week",
-      "month": "1 month",
-      "threeMonth": "3 months",
-      "sixMonth": "6 months",
-      "year": "1 year",
-      "twoYear": "2 years",
-      "threeYear": "3 years",
-      "indefinitely": "Безсрочно"
-    },
-    "modals": {
-      "delete": {
-        "title": "Deleting a subscription",
-        "button": "Delete",
-        "action": "Delete",
-        "message": "Are you sure you want to permanently delete your subscription? It will be impossible to restore it! No compensation is provided!"
-      },
-      "qr": {
-        "title": "QR code of the subscription",
-        "description": "Scan it in the client application"
-      },
-      "refresh": {
-        "title": "Subscription data reset",
-        "button": "Reset the data",
-        "action": "Reset",
-        "message": "Are you sure you want to reset the subscription data? After this, the keys and subscription address will be changed to new ones! You will need to add the subscription to the application again! Usually, a reset is done if your subscription has leaked to the network or someone has gained access to it!"
-      },
-      "autoRenewal": {
-        "enableTitle": "Enable auto-renewal",
-        "disableTitle": "Disable auto-renewal",
-        "enableAction": "Enable",
-        "disableAction": "Disable",
-        "enableMessage": "Do you want to enable automatic subscription renewal? Funds will be automatically debited when the subscription expires.",
-        "disableMessage": "Do you want to disable automatic subscription renewal? After expiration, the subscription will be deactivated."
-      },
-      "renew": {
-        "title": "Subscription renewal",
-        "action": "Renew",
-        "message": "Do you want to renew your subscription? {price} stars will be deducted from your balance."
-      }
-    }
-  },
-  "user": {
-    "role": "Role",
-    "discount": "Discount",
-    "wallet": "Wallet",
-    "usage": "Usage",
-    "inPayments": "in payments"
-  },
-  "wallet": {
-    "connect": "Connect TON-wallet",
-    "disconnect": "Disconnect",
-    "replace": "Replace"
   }
 }
