@@ -1,0 +1,116 @@
+{
+  "title": "الاشتراك",
+  "connection": "الاتصال",
+  "configs": "التكوينات",
+  "addSubscription": "إضافة اشتراك",
+  "addSubscriptionTitle": "إضافة اشتراك",
+  "yourSubscriptions": "اشتراكاتك",
+  "noSubscriptions": "ليس لديك اشتراكات نشطة",
+  "loading": "جارٍ تحميل بيانات الاشتراك...",
+  "notFound": "الاشتراك غير موجود",
+  "renewSubscription": "تجديد الاشتراك",
+  "autoRenewalEnabled": "التجديد التلقائي ممكّن",
+  "autoRenewalDisabled": "التجديد التلقائي معطل",
+  "subscriptionDeleted": "تم حذف الاشتراك بنجاح",
+  "subscriptionDataUpdated": "تم تحديث بيانات الاشتراك بنجاح",
+  "subscriptionRenewed": "تم تجديد الاشتراك بنجاح",
+  "changeServer": "تغيير الخادم",
+  "changeServerTitle": "تغيير الخادم",
+  "changeServerWarning": "تحذير: يستغرق تغيير الخادم دقيقتين. بعد تغيير الخادم، يجب تحديث البيانات في التطبيق!",
+  "active": "نشط",
+  "notActive": "غير نشط",
+  "online": "متصل",
+  "offline": "غير متصل",
+  "traffic": "حركة المرور",
+  "trafficReset": {
+    "daily": "يومي",
+    "weekly": "أسبوعي",
+    "monthly": "شهري",
+    "yearly": "سنوي",
+    "unlimit": "غير محدود"
+  },
+  "inTotal": "الإجمالي",
+  "servers": "الخوادم",
+  "fullServers": "الوصول إلى الكل",
+  "allBase": "جميع الأساسية",
+  "base": "أساسي",
+  "premium": "مميز",
+  "devices": "الأجهزة",
+  "period": "فترة الدفع",
+  "expires": "ينتهي في",
+  "autoRenewal": "التجديد التلقائي",
+  "actions": "الإجراءات",
+  "save": "حفظ",
+  "required": "مطلوب!",
+  "paid": "مدفوع!",
+  "instruction": {
+    "stage1": "تنزيل التطبيق",
+    "stage2": "إضافة اشتراك إلى التطبيق",
+    "copyUrl": "نسخ رابط الاشتراك",
+    "openQR": "رمز QR للاشتراك",
+    "scanApp": "امسح في التطبيق",
+    "scanPhone": "امسح في الهاتف",
+    "add": "إضافة إلى التطبيق"
+  },
+  "platform": "المنصة",
+  "success": {
+    "serversUpdated": "تم تحديث الخوادم بنجاح"
+  },
+  "errors": {
+    "loadFailed": "فشل تحميل الاشتراكات",
+    "disableAutoRenewalFailed": "فشل تعطيل التجديد التلقائي!",
+    "enableAutoRenewalFailed": "فشل تمكين التجديد التلقائي!",
+    "deleteSubscriptionFailed": "فشل حذف الاشتراك!",
+    "resetSubscriptionFailed": "فشل إعادة تعيين بيانات الاشتراك!",
+    "renewSubscriptionFailed": "فشل تجديد الاشتراك!",
+    "fetchingServers": "فشل جلب الخوادم",
+    "updatingServers": "فشل تحديث الخوادم",
+    "serverLimitReached": "لقد وصلت إلى حد الخوادم",
+    "serverLimitReachedPremium": "لقد وصلت إلى حد الخوادم المميزة",
+    "serverLimitReachedBase": "لقد وصلت إلى حد الخوادم الأساسية"
+  },
+  "periods": {
+    "trial": "فترة تجريبية",
+    "hour": "1 ساعة",
+    "day": "1 يوم",
+    "week": "1 أسبوع",
+    "month": "1 شهر",
+    "threeMonth": "3 أشهر",
+    "sixMonth": "6 أشهر",
+    "year": "1 سنة",
+    "twoYear": "2 سنة",
+    "threeYear": "3 سنوات",
+    "indefinitely": "إلى أجل غير مسمى"
+  },
+  "modals": {
+    "delete": {
+      "title": "حذف الاشتراك",
+      "button": "حذف",
+      "action": "حذف",
+      "message": "هل أنت متأكد أنك تريد حذف الاشتراك نهائيًا؟ لا يمكن استعادته! لا يوجد تعويض!"
+    },
+    "qr": {
+      "title": "رمز QR للاشتراك",
+      "description": "امسح في التطبيق العميل"
+    },
+    "refresh": {
+      "title": "إعادة تعيين بيانات الاشتراك",
+      "button": "إعادة تعيين البيانات",
+      "action": "إعادة تعيين",
+      "message": "هل أنت متأكد أنك تريد إعادة تعيين بيانات الاشتراك؟ بعد ذلك، ستتغير المفاتيح وعنوان الاشتراك إلى مفاتيح جديدة! ستحتاج إلى إضافة الاشتراك إلى التطبيق مرة أخرى! عادةً ما يتم إجراء إعادة التعيين إذا تم تسريب اشتراكك إلى الشبكة أو إذا وصل إليه شخص ما!"
+    },
+    "autoRenewal": {
+      "enableTitle": "تمكين التجديد التلقائي",
+      "disableTitle": "تعطيل التجديد التلقائي",
+      "enableAction": "تمكين",
+      "disableAction": "تعطيل",
+      "enableMessage": "هل تريد تمكين التجديد التلقائي للاشتراك؟ سيتم خصم الأموال تلقائيًا عند انتهاء صلاحية الاشتراك.",
+      "disableMessage": "هل تريد تعطيل التجديد التلقائي للاشتراك؟ بعد انتهاء صلاحية الاشتراك، سيتم إلغاء تنشيطه."
+    },
+    "renew": {
+      "title": "تجديد الاشتراك",
+      "action": "تجديد",
+      "message": "هل تريد تجديد الاشتراك؟ سيتم خصم {price} نجمة من رصيدك."
+    }
+  }
+}
