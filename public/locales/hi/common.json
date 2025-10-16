@@ -1,0 +1,28 @@
+{
+  "modal": {
+    "cancel": "रद्द करें",
+    "accept": "स्वीकार करें",
+    "close": "बंद करें"
+  },
+  "scrolling": "नीचे स्क्रॉल करें",
+  "clipboard": {
+    "copied": "क्लिपबोर्ड पर कॉपी किया गया!",
+    "failed": "कॉपी करने में विफल!"
+  },
+  "freePlan": {
+    "trialAvailable": "आपके पास {days} दिनों के लिए एक परीक्षण अवधि उपलब्ध है।",
+    "activate": "सक्रिय करें",
+    "activationFailed": "मुफ्त योजना सक्रिय करने में विफल"
+  },
+  "units": {
+    "bytes": "बाइट्स",
+    "kilobytes": "किलोबाइट्स",
+    "megabytes": "मेगाबाइट्स",
+    "gigabytes": "गीगाबाइट्स",
+    "terabytes": "टेराबाइट्स",
+    "petabytes": "पेटाबाइट्स",
+    "exabytes": "एक्साबाइट्स",
+    "zettabytes": "ज़ेटाबाइट्स",
+    "yottabytes": "योट्टाबाइट्स"
+  }
+}
