@@ -1,0 +1,8 @@
+{
+  "trialAvailable": "Vous avez {gb} Go de trafic bonus disponible pour l'abonnement d'essai pour une durée illimitée.",
+  "activate": "Activer",
+  "activationFailed": "Échec de l'activation du plan gratuit",
+  "modalTitle": "Activation de la période d'essai",
+  "modalAction": "Activer",
+  "modalConfirmation": "Voulez-vous vraiment activer la période d'essai?"
+}
