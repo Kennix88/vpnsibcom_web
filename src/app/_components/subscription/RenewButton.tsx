@@ -61,28 +61,31 @@ export default function RenewButton({
   const [tonConnectUI] = useTonConnectUI()
   const t = useTranslations('billing.subscription')
 
-  const trafficPeriodButtons: TrafficPeriodButtonInterface[] = [
-    {
-      key: TrafficResetEnum.DAY,
-      label: t('trafficReset.daily'),
-      minDays: 0,
-    },
-    {
-      key: TrafficResetEnum.WEEK,
-      label: t('trafficReset.weekly'),
-      minDays: 7,
-    },
-    {
-      key: TrafficResetEnum.MONTH,
-      label: t('trafficReset.monthly'),
-      minDays: 30,
-    },
-    {
-      key: TrafficResetEnum.YEAR,
-      label: t('trafficReset.yearly'),
-      minDays: 360,
-    },
-  ]
+  const trafficPeriodButtons = useMemo(
+    () => [
+      {
+        key: TrafficResetEnum.DAY,
+        label: t('trafficReset.daily'),
+        minDays: 0,
+      },
+      {
+        key: TrafficResetEnum.WEEK,
+        label: t('trafficReset.weekly'),
+        minDays: 7,
+      },
+      {
+        key: TrafficResetEnum.MONTH,
+        label: t('trafficReset.monthly'),
+        minDays: 30,
+      },
+      {
+        key: TrafficResetEnum.YEAR,
+        label: t('trafficReset.yearly'),
+        minDays: 360,
+      }
+    ],
+    [t]
+  )
 
   useEffect(() => {
     if (!subscriptions || !user) return
@@ -147,7 +150,7 @@ export default function RenewButton({
     setTrafficPeriodButton(findTrafficPeriodButton || null)
     setPeriodButtons(buttons)
     setPeriodButton(buttons[3])
-  }, [subscriptions, user, subscription.trafficReset])
+  }, [subscriptions, user, subscription.trafficReset, t, trafficPeriodButtons])
 
   // Стабильная функция, чтобы не ломать зависимости
   const getFinalPercent = useCallback((ratio: number) => 100 - ratio * 100, [])
@@ -264,6 +267,7 @@ export default function RenewButton({
     priceNoDiscount,
     getFinalPercent,
     subscriptions,
+    t
   ])
 
   // Теперь guard — рендерим null только после того, как все хуки/мемо вызваны
