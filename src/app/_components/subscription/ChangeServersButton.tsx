@@ -38,7 +38,7 @@ export default function ChangeServersButton({
 
   const fetchServers = useCallback(async (): Promise<void> => {
     await updateServers()
-  }, [])
+  }, [updateServers])
 
   useEffect(() => {
     fetchServers()
