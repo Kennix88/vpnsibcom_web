@@ -41,18 +41,21 @@ export default function AddTrafficButton({
   const wallet = useTonWallet()
   const [tonConnectUI] = useTonConnectUI()
   const t = useTranslations('billing.subscription')
-
-  if (
-    (subscription.period !== SubscriptionPeriodEnum.TRIAL &&
-      subscription.period !== SubscriptionPeriodEnum.TRAFFIC) ||
-    !user ||
-    !subscriptions
-  )
-    return null
-
-  const balance = user.balance.payment
-  const trafficBalance = user.balance.traffic
-  const price = calculateSubscriptionCost({
+  
+  // Проверяем валидность подписки
+  const isValidSubscription = 
+    (subscription.period === SubscriptionPeriodEnum.TRIAL ||
+     subscription.period === SubscriptionPeriodEnum.TRAFFIC) &&
+    user &&
+    subscriptions
+  
+  // Определяем все переменные и хуки до любых условных возвратов
+  // Используем дефолтные значения для случая, когда isValidSubscription = false
+  const balance = user?.balance?.payment || 0
+  const trafficBalance = user?.balance?.traffic || 0
+  
+  // Вычисляем цены только если подписка валидна
+  const price = isValidSubscription ? calculateSubscriptionCost({
     period: subscription.period,
     periodMultiplier: subscription.periodMultiplier,
     isPremium: user.isPremium,
@@ -67,9 +70,9 @@ export default function AddTrafficButton({
     userDiscount: user.roleDiscount,
     plan: subscription.plan,
     settings: subscriptions,
-  })
+  }) : 0
 
-  const priceNoDiscount = calculateSubscriptionCostNoDiscount({
+  const priceNoDiscount = isValidSubscription ? calculateSubscriptionCostNoDiscount({
     period: subscription.period,
     periodMultiplier: subscription.periodMultiplier,
     isPremium: user.isPremium,
@@ -83,12 +86,13 @@ export default function AddTrafficButton({
     isUnlimitTraffic: false,
     plan: subscription.plan,
     settings: subscriptions,
-  })
-
+  }) : 0
+  
   const getFinalPercent = (ratio: number) => 100 - ratio * 100
 
+  // Используем useMemo безусловно, до любых условных возвратов
   const summaryItems = useMemo(
-    () => [
+    () => isValidSubscription ? [
       {
         name: t('summary.traffic'),
         value: <div>{`${trafficLimitGb} GB`}</div>,
@@ -116,9 +120,12 @@ export default function AddTrafficButton({
         ),
         isVisible: true,
       },
-    ],
-    [trafficLimitGb, user, price, subscriptions, name],
+    ] : [],
+    [trafficLimitGb, user, price, priceNoDiscount, t, isValidSubscription],
   )
+  
+  // Если подписка невалидна, возвращаем null
+  if (!isValidSubscription) return null
 
   const addTraffic = async (
     subscription: SubscriptionDataInterface,
