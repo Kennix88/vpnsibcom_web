@@ -5,6 +5,7 @@ import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
 import { TrafficResetEnum } from '@app/enums/traffic-reset.enum'
 import { PlansInterface } from '@app/types/plans.interface'
 import { ServerDataInterface } from '@app/types/servers-data.interface'
+
 import { SubscriptionResponseInterface } from '@app/types/subscription-data.interface'
 import { UserDataInterface } from '@app/types/user-data.interface'
 import { motion } from 'framer-motion'
@@ -17,7 +18,7 @@ import { PeriodButtonInterface } from './AddSubscription'
 // Компонент: Итоговая информация
 export const SubscriptionSummary = ({
   planSelected,
-  devicesCount,
+  devicesCount, // eslint-disable-line @typescript-eslint/no-unused-vars
   isUnlimitTraffic,
   trafficLimitGb,
   isAllBaseServers,
@@ -28,7 +29,7 @@ export const SubscriptionSummary = ({
   isAutoRenewal,
   price,
   priceNoDiscount,
-  subscriptions,
+  subscriptions, // eslint-disable-line @typescript-eslint/no-unused-vars
   name,
   trafficReset,
   serverSelected,
@@ -39,13 +40,13 @@ export const SubscriptionSummary = ({
   trafficLimitGb: number
   isAllBaseServers: boolean
   isAllPremiumServers: boolean
+  subscriptions: SubscriptionResponseInterface
   periodButton: PeriodButtonInterface
   periodMultiplier: number
   user: UserDataInterface
   isAutoRenewal: boolean
   price: number
   priceNoDiscount: number
-  subscriptions: SubscriptionResponseInterface
   name: string
   trafficReset: TrafficResetEnum
   serverSelected: ServerDataInterface | null
@@ -168,10 +169,11 @@ export const SubscriptionSummary = ({
     ],
     [
       planSelected,
-      devicesCount,
       isUnlimitTraffic,
       trafficLimitGb,
       trafficReset,
+      priceNoDiscount,
+      t,
       isAllBaseServers,
       isAllPremiumServers,
       serverSelected,
@@ -180,7 +182,7 @@ export const SubscriptionSummary = ({
       user,
       isAutoRenewal,
       price,
-      subscriptions,
+      // subscriptions не используется в useMemo, удаляем
       name,
     ],
   )
