@@ -8,7 +8,7 @@ export const ThemeToggle = () => {
 
   useEffect(() => {
     setTheme(theme)
-  }, [])
+  }, [setTheme, theme])
 
   return (
     <button onClick={toggleTheme}>
