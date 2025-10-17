@@ -18,7 +18,7 @@ export const PaymentActions = ({
   serversSelected,
   balance,
   price,
-  priceNoDiscount,
+
   isLoading,
   onPayment,
   trafficBalance,
