@@ -3,7 +3,7 @@
 import { authApiClient } from '@app/core/authApiClient'
 import { CurrencyEnum } from '@app/enums/currency.enum'
 import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
-import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
+import { PlansEnum } from '@app/enums/plans.enum'
 import { useCurrencyStore } from '@app/store/currency.store'
 import { useSubscriptionsStore } from '@app/store/subscriptions.store'
 import { useUserStore } from '@app/store/user.store'
@@ -41,89 +41,96 @@ export default function AddTrafficButton({
   const wallet = useTonWallet()
   const [tonConnectUI] = useTonConnectUI()
   const t = useTranslations('billing.subscription')
-  
+
   // Проверяем валидность подписки
-  const isValidSubscription = 
-    (subscription.period === SubscriptionPeriodEnum.TRIAL ||
-     subscription.period === SubscriptionPeriodEnum.TRAFFIC) &&
+  const isValidSubscription =
+    (subscription.plan.key === PlansEnum.TRAFFIC ||
+      subscription.plan.key === PlansEnum.TRIAL) &&
     user &&
     subscriptions
-  
+
   // Определяем все переменные и хуки до любых условных возвратов
   // Используем дефолтные значения для случая, когда isValidSubscription = false
   const balance = user?.balance?.payment || 0
   const trafficBalance = user?.balance?.traffic || 0
-  
-  // Вычисляем цены только если подписка валидна
-  const price = isValidSubscription ? calculateSubscriptionCost({
-    period: subscription.period,
-    periodMultiplier: subscription.periodMultiplier,
-    isPremium: user.isPremium,
-    isTgProgramPartner: user.isTgProgramPartner,
-    devicesCount: subscription.devicesCount,
-    serversCount: subscription.baseServersCount,
-    premiumServersCount: subscription.premiumServersCount,
-    trafficLimitGb: trafficLimitGb,
-    isAllBaseServers: subscription.isAllBaseServers,
-    isAllPremiumServers: subscription.isAllPremiumServers,
-    isUnlimitTraffic: false,
-    userDiscount: user.roleDiscount,
-    plan: subscription.plan,
-    settings: subscriptions,
-  }) : 0
 
-  const priceNoDiscount = isValidSubscription ? calculateSubscriptionCostNoDiscount({
-    period: subscription.period,
-    periodMultiplier: subscription.periodMultiplier,
-    isPremium: user.isPremium,
-    isTgProgramPartner: user.isTgProgramPartner,
-    devicesCount: subscription.devicesCount,
-    serversCount: subscription.baseServersCount,
-    premiumServersCount: subscription.premiumServersCount,
-    trafficLimitGb: trafficLimitGb,
-    isAllBaseServers: subscription.isAllBaseServers,
-    isAllPremiumServers: subscription.isAllPremiumServers,
-    isUnlimitTraffic: false,
-    plan: subscription.plan,
-    settings: subscriptions,
-  }) : 0
-  
+  // Вычисляем цены только если подписка валидна
+  const price = isValidSubscription
+    ? calculateSubscriptionCost({
+        period: subscription.period,
+        periodMultiplier: subscription.periodMultiplier,
+        isPremium: user.isPremium,
+        isTgProgramPartner: user.isTgProgramPartner,
+        devicesCount: subscription.devicesCount,
+        serversCount: subscription.baseServersCount,
+        premiumServersCount: subscription.premiumServersCount,
+        trafficLimitGb: trafficLimitGb,
+        isAllBaseServers: subscription.isAllBaseServers,
+        isAllPremiumServers: subscription.isAllPremiumServers,
+        isUnlimitTraffic: false,
+        userDiscount: user.roleDiscount,
+        plan: subscription.plan,
+        settings: subscriptions,
+      })
+    : 0
+
+  const priceNoDiscount = isValidSubscription
+    ? calculateSubscriptionCostNoDiscount({
+        period: subscription.period,
+        periodMultiplier: subscription.periodMultiplier,
+        isPremium: user.isPremium,
+        isTgProgramPartner: user.isTgProgramPartner,
+        devicesCount: subscription.devicesCount,
+        serversCount: subscription.baseServersCount,
+        premiumServersCount: subscription.premiumServersCount,
+        trafficLimitGb: trafficLimitGb,
+        isAllBaseServers: subscription.isAllBaseServers,
+        isAllPremiumServers: subscription.isAllPremiumServers,
+        isUnlimitTraffic: false,
+        plan: subscription.plan,
+        settings: subscriptions,
+      })
+    : 0
+
   const getFinalPercent = (ratio: number) => 100 - ratio * 100
 
   // Используем useMemo безусловно, до любых условных возвратов
   const summaryItems = useMemo(
-    () => isValidSubscription ? [
-      {
-        name: t('summary.traffic'),
-        value: <div>{`${trafficLimitGb} GB`}</div>,
-        isVisible: true,
-      },
-      {
-        name: t('summary.roleDiscount'),
-        value: <div>{getFinalPercent(user.roleDiscount)}%</div>,
-        isVisible: getFinalPercent(user.roleDiscount) > 0,
-      },
-      {
-        name: t('summary.toPaid'),
-        value: (
-          <div className="flex gap-2 items-center">
-            <Currency type="star" w={14} />
-            <div>
-              {price}
-              {price !== priceNoDiscount && (
-                <span className="opacity-70 text-[12px] line-through">
-                  ({priceNoDiscount})
-                </span>
-              )}
-            </div>
-          </div>
-        ),
-        isVisible: true,
-      },
-    ] : [],
+    () =>
+      isValidSubscription
+        ? [
+            {
+              name: t('summary.traffic'),
+              value: <div>{`${trafficLimitGb} GB`}</div>,
+              isVisible: true,
+            },
+            {
+              name: t('summary.roleDiscount'),
+              value: <div>{getFinalPercent(user.roleDiscount)}%</div>,
+              isVisible: getFinalPercent(user.roleDiscount) > 0,
+            },
+            {
+              name: t('summary.toPaid'),
+              value: (
+                <div className="flex gap-2 items-center">
+                  <Currency type="star" w={14} />
+                  <div>
+                    {price}
+                    {price !== priceNoDiscount && (
+                      <span className="opacity-70 text-[12px] line-through">
+                        ({priceNoDiscount})
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ),
+              isVisible: true,
+            },
+          ]
+        : [],
     [trafficLimitGb, user, price, priceNoDiscount, t, isValidSubscription],
   )
-  
+
   // Если подписка невалидна, возвращаем null
   if (!isValidSubscription) return null
 
