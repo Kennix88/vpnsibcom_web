@@ -47,7 +47,8 @@ export default function ChangeServersButton({
   if (
     !serversData ||
     subscription.plan.isAllBaseServers ||
-    subscription.plan.isAllPremiumServers
+    subscription.plan.isAllPremiumServers ||
+    subscription.baseServersCount + subscription.premiumServersCount > 1
   )
     return null
 
