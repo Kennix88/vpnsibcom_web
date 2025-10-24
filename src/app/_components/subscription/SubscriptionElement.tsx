@@ -1,6 +1,7 @@
 'use client'
 
 import { authApiClient } from '@app/core/authApiClient'
+import { PlansEnum } from '@app/enums/plans.enum'
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
 import { TrafficResetEnum } from '@app/enums/traffic-reset.enum'
 import { useLocale } from '@app/hooks/useLocale'
@@ -376,10 +377,10 @@ export default function SubscriptionElement({
                 <div className="text-xs flex gap-1 items-center">
                   {subscription.isAllBaseServers &&
                   !subscription.isAllPremiumServers
-                    ? t('fullServers')
+                    ? t('allBase')
                     : subscription.isAllBaseServers &&
                         subscription.isAllPremiumServers
-                      ? t('allBase')
+                      ? t('fullServers')
                       : `${t('base')} ${subscription.baseServersCount} ${
                           subscription.premiumServersCount > 0
                             ? `/${t('premium')} ${subscription.premiumServersCount}`
@@ -399,7 +400,9 @@ export default function SubscriptionElement({
 
               {subscription.period !== SubscriptionPeriodEnum.INDEFINITELY &&
                 subscription.period !== SubscriptionPeriodEnum.TRIAL &&
-                subscription.period !== SubscriptionPeriodEnum.TRAFFIC && (
+                subscription.period !== SubscriptionPeriodEnum.TRAFFIC &&
+                subscription.plan.key !== PlansEnum.TRAFFIC &&
+                subscription.plan.key !== PlansEnum.TRIAL && (
                   <div className="flex gap-2 text-xs flex-wrap justify-between items-center py-3 px-3 ">
                     <div className="flex gap-2 items-center">
                       <FaArrowRotateRight size={14} />
@@ -420,7 +423,9 @@ export default function SubscriptionElement({
 
               {subscription.period !== SubscriptionPeriodEnum.INDEFINITELY &&
                 subscription.period !== SubscriptionPeriodEnum.TRIAL &&
-                subscription.period !== SubscriptionPeriodEnum.TRAFFIC && (
+                subscription.period !== SubscriptionPeriodEnum.TRAFFIC &&
+                subscription.plan.key !== PlansEnum.TRAFFIC &&
+                subscription.plan.key !== PlansEnum.TRIAL && (
                   <div className="flex gap-2 text-xs flex-wrap justify-between items-center py-3 px-3 ">
                     <div className="flex gap-2 items-center">
                       <FaClockRotateLeft size={14} />
@@ -452,7 +457,9 @@ export default function SubscriptionElement({
               {!isPublic &&
                 subscription.period !== SubscriptionPeriodEnum.INDEFINITELY &&
                 subscription.period !== SubscriptionPeriodEnum.TRIAL &&
-                subscription.period !== SubscriptionPeriodEnum.TRAFFIC && (
+                subscription.period !== SubscriptionPeriodEnum.TRAFFIC &&
+                subscription.plan.key !== PlansEnum.TRAFFIC &&
+                subscription.plan.key !== PlansEnum.TRIAL && (
                   <div className="text-xs flex items-center justify-between py-3 px-3 ">
                     <div className="flex gap-2 items-center">
                       <MdAutoMode size={16} /> {t('autoRenewal')}:{' '}
