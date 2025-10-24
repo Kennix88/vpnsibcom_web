@@ -1,1 +1,352 @@
-{"billing":{"title":"결제","description":"재정 흐름","wallet":{"title":"지갑","payment":"충전","paymentInfo":"결제에 사용되는 계정입니다.","withdrawal":"출금","withdrawalInfo":"자금을 인출할 수 있는 계정입니다.","holdInfo":"보류된 자금.\n곧 지급 계정으로 입금됩니다."},"payment":{"title":"잔액 충전","sum":"충전 금액","enterSum":"금액을 입력하세요","sort":{"all":"모두","crypto":"암호화폐","card":"카드","sbp":"SBP","wallets":"지갑","skins":"스킨"},"method":"결제 방법","split":"Split 플랫폼에서 KYC 없이 Telegram Stars를 최대 40% 할인된 가격으로 구매하세요!","splitBay":"STARS 구매","walletInfo":"TON 지갑을 연결하여 TON, USDT-TON, DOGS, NOT, HMSTR, JETTON 및 기타 TON 네트워크 토큰으로 결제하세요.","limitMessage":"{min}에서 {max} {symbol}까지 사용 가능합니다. 현재: {convertedAmount} {symbol}","commission":"수수료","toBalance":"잔액에 입금될 금액","pay":"결제"},"subscription":{"title":"구독","addSubscription":"구독 추가","pay":"결제","addFree":"🎁 무료 추가","selectPeriod":"기간 선택","periodMultiplier":"기간 배율","selectPlan":"요금제 선택","selectServer":"서버 선택","base":"기본","premium":"프리미엄","orSelect":"또는 선택","name":{"default":"구독","label":"구독 이름","tooltip":"구독 목록에 표시될 구독 이름입니다.","placeholder":"구독 이름을 입력하세요"},"privileges":{"selectServers":"원하는 서버 선택","oneBaseServer":"하나의 기본 서버 선택","oneBaseOrPremiumServer":"하나의 기본 또는 프리미엄 서버 선택","accessAllServers":"모든 서버에 액세스","accessAllBaseServers":"모든 기본 서버에 액세스","accessBaseServers":"{{baseCount}}개의 기본 서버에 액세스","accessBaseAndPremiumServers":"{{baseCount}}개의 기본 및 {{premiumCount}}개의 프리미엄 서버에 액세스","trafficPlan":"만료일 없음, 트래픽에 대해서만 결제!","devices":"최대 {count}개의 동시 장치","customDevices":"원하는 장치 수","servers":"모든 서버에 액세스","baseServers":"기본 서버에 액세스","premiumServers":"프리미엄 서버에 액세스","customServers":"원하는 서버 수","traffic":"무제한 트래픽","customTraffic":"원하는 트래픽 양","dailyTraffic":"매일 {count}GB 트래픽","weeklyTraffic":"매주 {count}GB 트래픽","monthlyTraffic":"매월 {count}GB 트래픽","yearlyTraffic":"매년 {count}GB 트래픽","security":"보안 연결","speed":"속도 제한 없음","masking":"트래픽 마스킹","noAds":"광고 없음","devicesSupport":"광범위한 장치 지원","xray":"신뢰할 수 있는 XRAY 코어","opensource":"오픈 소스"},"trafficReset":{"title":"트래픽 재설정","daily":"매일","weekly":"매주","monthly":"매월","yearly":"매년"},"period":{"hour":"1시간","day":"1일","week":"1주","month":"1개월","threeMonth":"3개월","sixMonth":"6개월","year":"1년","twoYear":"2년","threeYear":"3년","indefinitely":"무기한"},"options":{"title":"옵션","autoRenewal":"자동 갱신","autoRenewalDescription":"구독 자동 갱신","info":"구독은 잔액에서 자동으로 갱신됩니다.","period":"기간 기억"},"traffic":"트래픽","addTraffic":"트래픽 추가","addingTraffic":"트래픽 추가 중","buy":"구매","extension":"연장","subscriptionExtension":"구독 연장","freeExtension":"🎁 무료 연장","summary":{"title":"요약","name":"이름","traffic":"트래픽","unlimit":"무제한","daily":"매일","weekly":"매주","monthly":"매월","yearly":"매년","servers":"서버","fullServers":"모두 액세스","allBase":"모든 기본","notServers":"설정되지 않음!","period":"기간","periodDiscount":"기간 할인","roleDiscount":"역할 할인","autoRenewal":"자동 갱신","yes":"예","no":"아니요","toPaid":"결제 금액"},"purchase":"구매"}},"common":{"modal":{"cancel":"취소","accept":"수락","close":"닫기"},"scrolling":"아래로 스크롤","clipboard":{"copied":"클립보드에 복사되었습니다!","failed":"복사 실패!"},"freePlan":{"trialAvailable":"{days}일 동안 체험 기간을 이용할 수 있습니다.","activate":"활성화","activationFailed":"무료 플랜을 활성화하지 못했습니다"},"units":{"bytes":"B","kilobytes":"KB","megabytes":"MB","gigabytes":"GB","terabytes":"TB","petabytes":"PB","exabytes":"EB","zettabytes":"ZB","yottabytes":"YB"}},"freePlan":{"trialAvailable":"무제한 기간 동안 {gb}GB의 보너스 트래픽을 Trial 구독에 사용할 수 있습니다.","activate":"활성화","activationFailed":"무료 플랜을 활성화하지 못했습니다","modalTitle":"체험 기간 활성화","modalAction":"활성화","modalConfirmation":"정말로 체험 기간을 활성화하시겠습니까?"},"friends":{"title":"친구","get":"보상 받기","for":"친구 초대 시","level":"레벨","total":"총","list":{"title":"내 친구","top":"상위","empty":"아직 아무도 없습니다 🥲"},"bonuses":{"title":"보너스","inviteTitle":"친구 초대 시","paymentTitle":"친구 활동 시","inviteInfo":"친구가 첫 결제를 하거나 체험 기간을 활성화한 후!","paymentInfo":"친구와 친구가 초대한 사람들의 활동으로 발생하는 수익의 일정 비율을 영원히 받으세요!","lvl1Info":"내가 초대한 사람","lvl2Info":"친구가 초대한 사람","lvl3Info":"친구의 친구가 초대한 사람 😁"},"invite":{"title":"친구 초대","message":"메시지 보내기","copy":"링크 복사","story":"스토리로 보내기"},"statistics":{"title":"통계","earnTitle":"내 수익","inviteTitle":"초대됨","earnInfo":"총 수익","inviteInfo":"초대됨 | 활성화됨 | 그 중 스탠다드 | 그 중 프리미엄"}},"greenCheck":{"loading":"연결 보안 확인 중...","danger":"연결이 안전하지 않습니다!\nVPN에 연결하세요!","success":"연결이 안전합니다!"},"navbar":{"home":"홈","earning":"수익","gifts":"선물","friends":"친구","billing":"결제","settings":"설정","profile":"프로필","games":"게임"},"subscriptions":{"title":"구독","connection":"연결","configs":"구성","addSubscription":"구독 추가","addSubscriptionTitle":"구독 추가","yourSubscriptions":"내 구독","noSubscriptions":"활성 구독이 없습니다","loading":"구독 데이터 로드 중...","notFound":"구독을 찾을 수 없습니다","renewSubscription":"구독 갱신","autoRenewalEnabled":"자동 갱신 활성화됨","autoRenewalDisabled":"자동 갱신 비활성화됨","subscriptionDeleted":"구독이 성공적으로 삭제되었습니다","subscriptionDataUpdated":"구독 데이터가 성공적으로 업데이트되었습니다","subscriptionRenewed":"구독이 성공적으로 갱신되었습니다","changeServer":"서버 변경","changeServerTitle":"서버 변경","changeServerWarning":"주의: 서버 변경은 2분 이내에 이루어집니다. 서버 변경 후 앱에서 데이터를 업데이트해야 합니다!","active":"활성","notActive":"비활성","online":"온라인","offline":"오프라인","traffic":"트래픽","trafficReset":{"daily":"매일","weekly":"매주","monthly":"매월","yearly":"매년","unlimit":"무제한"},"inTotal":"총","servers":"서버","fullServers":"모든 서버에 액세스","allBase":"모든 기본","base":"기본","premium":"프리미엄","devices":"장치","period":"결제 주기","expires":"만료","autoRenewal":"자동 갱신","actions":"작업","save":"저장","required":"필수!","paid":"유료!","instruction":{"stage1":"앱 다운로드","stage2":"앱에 구독 추가","copyUrl":"구독 URL 복사","openQR":"구독 QR 코드","scanApp":"앱에서 스캔","scanPhone":"휴대폰에서 스캔","add":"앱에 추가"},"platform":"플랫폼","success":{"serversUpdated":"서버가 성공적으로 업데이트되었습니다"},"errors":{"loadFailed":"구독을 로드하지 못했습니다","disableAutoRenewalFailed":"자동 갱신 비활성화 오류!","enableAutoRenewalFailed":"자동 갱신 활성화 오류!","deleteSubscriptionFailed":"구독 삭제 오류!","resetSubscriptionFailed":"구독 데이터 재설정 오류!","renewSubscriptionFailed":"구독을 갱신하지 못했습니다!","fetchingServers":"서버를 로드하지 못했습니다","updatingServers":"서버를 업데이트하지 못했습니다","serverLimitReached":"서버 제한에 도달했습니다","serverLimitReachedPremium":"프리미엄 서버 제한에 도달했습니다","serverLimitReachedBase":"기본 서버 제한에 도달했습니다"},"periods":{"trial":"체험 기간","hour":"1시간","day":"1일","week":"1주","month":"1개월","threeMonth":"3개월","sixMonth":"6개월","year":"1년","twoYear":"2년","threeYear":"3년","indefinitely":"무기한"},"modals":{"delete":{"title":"구독 삭제","button":"삭제","action":"삭제","message":"구독을 영구적으로 삭제하시겠습니까? 복구할 수 없습니다! 보상은 제공되지 않습니다!"},"qr":{"title":"구독 QR 코드","description":"클라이언트 앱에서 스캔"},"refresh":{"title":"구독 데이터 재설정","button":"데이터 재설정","action":"재설정","message":"구독 데이터를 재설정하시겠습니까? 재설정 후 구독 키와 주소가 새 것으로 변경됩니다! 앱에 구독을 다시 추가해야 합니다! 일반적으로 구독이 네트워크에 유출되었거나 누군가 액세스한 경우 재설정합니다!"},"autoRenewal":{"enableTitle":"자동 갱신 활성화","disableTitle":"자동 갱신 비활성화","enableAction":"활성화","disableAction":"비활성화","enableMessage":"구독 자동 갱신을 활성화하시겠습니까? 구독 만료 시 잔액에서 자동으로 금액이 차감됩니다.","disableMessage":"구독 자동 갱신을 비활성화하시겠습니까? 만료 후 구독이 비활성화됩니다."},"renew":{"title":"구독 갱신","action":"갱신","message":"{price} 스타가 잔액에서 차감되어 구독이 갱신됩니다."}}},"user":{"role":"역할","discount":"할인","wallet":"지갑","usage":"사용량","inPayments":"결제 내역"},"wallet":{"connect":"TON 지갑 연결","disconnect":"연결 해제","replace":"교체"}}
+{
+  "billing": {
+    "title": "결제",
+    "description": "재정 흐름",
+    "wallet": {
+      "title": "지갑",
+      "payment": "충전",
+      "paymentInfo": "결제에 사용되는 계정입니다.",
+      "withdrawal": "출금",
+      "withdrawalInfo": "자금을 인출할 수 있는 계정입니다.",
+      "holdInfo": "보류된 자금.\n곧 지급 계정으로 입금됩니다."
+    },
+    "payment": {
+      "title": "잔액 충전",
+      "sum": "충전 금액",
+      "enterSum": "금액을 입력하세요",
+      "sort": {
+        "all": "모두",
+        "crypto": "암호화폐",
+        "card": "카드",
+        "sbp": "SBP",
+        "wallets": "지갑",
+        "skins": "스킨"
+      },
+      "method": "결제 방법",
+      "split": "Split 플랫폼에서 KYC 없이 Telegram Stars를 최대 40% 할인된 가격으로 구매하세요!",
+      "splitBay": "STARS 구매",
+      "walletInfo": "TON 지갑을 연결하여 TON, USDT-TON, DOGS, NOT, HMSTR, JETTON 및 기타 TON 네트워크 토큰으로 결제하세요.",
+      "limitMessage": "{min}에서 {max} {symbol}까지 사용 가능합니다. 현재: {convertedAmount} {symbol}",
+      "commission": "수수료",
+      "toBalance": "잔액에 입금될 금액",
+      "pay": "결제"
+    },
+    "subscription": {
+      "title": "구독",
+      "addSubscription": "구독 추가",
+      "pay": "결제",
+      "addFree": "🎁 무료 추가",
+      "selectPeriod": "기간 선택",
+      "periodMultiplier": "기간 배율",
+      "selectPlan": "요금제 선택",
+      "selectServer": "서버 선택",
+      "base": "기본",
+      "premium": "프리미엄",
+      "orSelect": "또는 선택",
+      "name": {
+        "default": "구독",
+        "label": "구독 이름",
+        "tooltip": "구독 목록에 표시될 구독 이름입니다.",
+        "placeholder": "구독 이름을 입력하세요"
+      },
+      "privileges": {
+        "selectServers": "원하는 서버 선택",
+        "oneBaseServer": "하나의 기본 서버 선택",
+        "oneBaseOrPremiumServer": "하나의 기본 또는 프리미엄 서버 선택",
+        "accessAllServers": "모든 서버에 액세스",
+        "accessAllBaseServers": "모든 기본 서버에 액세스",
+        "accessBaseServers": "{{baseCount}}개의 기본 서버에 액세스",
+        "accessBaseAndPremiumServers": "{{baseCount}}개의 기본 및 {{premiumCount}}개의 프리미엄 서버에 액세스",
+        "trafficPlan": "만료일 없음, 트래픽에 대해서만 결제!",
+        "devices": "최대 {count}개의 동시 장치",
+        "customDevices": "원하는 장치 수",
+        "servers": "모든 서버에 액세스",
+        "baseServers": "기본 서버에 액세스",
+        "premiumServers": "프리미엄 서버에 액세스",
+        "customServers": "원하는 서버 수",
+        "traffic": "무제한 트래픽",
+        "customTraffic": "원하는 트래픽 양",
+        "dailyTraffic": "매일 {count}GB 트래픽",
+        "weeklyTraffic": "매주 {count}GB 트래픽",
+        "monthlyTraffic": "매월 {count}GB 트래픽",
+        "yearlyTraffic": "매년 {count}GB 트래픽",
+        "security": "보안 연결",
+        "speed": "속도 제한 없음",
+        "masking": "트래픽 마스킹",
+        "noAds": "광고 없음",
+        "devicesSupport": "광범위한 장치 지원",
+        "xray": "신뢰할 수 있는 XRAY 코어",
+        "opensource": "오픈 소스"
+      },
+      "trafficReset": {
+        "title": "트래픽 재설정",
+        "daily": "매일",
+        "weekly": "매주",
+        "monthly": "매월",
+        "yearly": "매년"
+      },
+      "period": {
+        "hour": "1시간",
+        "day": "1일",
+        "week": "1주",
+        "month": "1개월",
+        "threeMonth": "3개월",
+        "sixMonth": "6개월",
+        "year": "1년",
+        "twoYear": "2년",
+        "threeYear": "3년",
+        "indefinitely": "무기한"
+      },
+      "options": {
+        "title": "옵션",
+        "autoRenewal": "자동 갱신",
+        "autoRenewalDescription": "구독 자동 갱신",
+        "info": "구독은 잔액에서 자동으로 갱신됩니다.",
+        "period": "기간 기억"
+      },
+      "traffic": "트래픽",
+      "addTraffic": "트래픽 추가",
+      "addingTraffic": "트래픽 추가 중",
+      "buy": "구매",
+      "extension": "연장",
+      "subscriptionExtension": "구독 연장",
+      "freeExtension": "🎁 무료 연장",
+      "summary": {
+        "title": "요약",
+        "name": "이름",
+        "traffic": "트래픽",
+        "unlimit": "무제한",
+        "daily": "매일",
+        "weekly": "매주",
+        "monthly": "매월",
+        "yearly": "매년",
+        "servers": "서버",
+        "fullServers": "모두 액세스",
+        "allBase": "모든 기본",
+        "notServers": "설정되지 않음!",
+        "period": "기간",
+        "periodDiscount": "기간 할인",
+        "roleDiscount": "역할 할인",
+        "autoRenewal": "자동 갱신",
+        "yes": "예",
+        "no": "아니요",
+        "toPaid": "결제 금액"
+      },
+      "purchase": "구매"
+    }
+  },
+  "common": {
+    "modal": {
+      "cancel": "취소",
+      "accept": "수락",
+      "close": "닫기"
+    },
+    "scrolling": "아래로 스크롤",
+    "clipboard": {
+      "copied": "클립보드에 복사되었습니다!",
+      "failed": "복사 실패!"
+    },
+    "freePlan": {
+      "trialAvailable": "{days}일 동안 체험 기간을 이용할 수 있습니다.",
+      "activate": "활성화",
+      "activationFailed": "무료 플랜을 활성화하지 못했습니다"
+    },
+    "units": {
+      "bytes": "B",
+      "kilobytes": "KB",
+      "megabytes": "MB",
+      "gigabytes": "GB",
+      "terabytes": "TB",
+      "petabytes": "PB",
+      "exabytes": "EB",
+      "zettabytes": "ZB",
+      "yottabytes": "YB"
+    }
+  },
+  "freePlan": {
+    "trialAvailable": "무제한 기간 동안 {gb}GB의 보너스 트래픽을 Trial 구독에 사용할 수 있습니다.",
+    "activate": "활성화",
+    "activationFailed": "무료 플랜을 활성화하지 못했습니다",
+    "modalTitle": "체험 기간 활성화",
+    "modalAction": "활성화",
+    "modalConfirmation": "정말로 체험 기간을 활성화하시겠습니까?"
+  },
+  "friends": {
+    "title": "친구",
+    "get": "보상 받기",
+    "for": "친구 초대 시",
+    "level": "레벨",
+    "total": "총",
+    "list": {
+      "title": "내 친구",
+      "top": "상위",
+      "empty": "아직 아무도 없습니다 🥲"
+    },
+    "bonuses": {
+      "title": "보너스",
+      "inviteTitle": "친구 초대 시",
+      "paymentTitle": "친구 활동 시",
+      "inviteInfo": "친구가 첫 결제를 하거나 체험 기간을 활성화한 후!",
+      "paymentInfo": "친구와 친구가 초대한 사람들의 활동으로 발생하는 수익의 일정 비율을 영원히 받으세요!",
+      "lvl1Info": "내가 초대한 사람",
+      "lvl2Info": "친구가 초대한 사람",
+      "lvl3Info": "친구의 친구가 초대한 사람 😁"
+    },
+    "invite": {
+      "title": "친구 초대",
+      "message": "메시지 보내기",
+      "copy": "링크 복사",
+      "story": "스토리로 보내기"
+    },
+    "statistics": {
+      "title": "통계",
+      "earnTitle": "내 수익",
+      "inviteTitle": "초대됨",
+      "earnInfo": "총 수익",
+      "inviteInfo": "초대됨 | 활성화됨 | 그 중 스탠다드 | 그 중 프리미엄"
+    }
+  },
+  "greenCheck": {
+    "loading": "연결 보안 확인 중...",
+    "danger": "연결이 안전하지 않습니다!\nVPN에 연결하세요!",
+    "success": "연결이 안전합니다!"
+  },
+  "navbar": {
+    "home": "홈",
+    "earning": "수익",
+    "gifts": "선물",
+    "friends": "친구",
+    "billing": "결제",
+    "settings": "설정",
+    "profile": "프로필",
+    "games": "게임"
+  },
+  "subscriptions": {
+    "title": "구독",
+    "connection": "연결",
+    "configs": "구성",
+    "addSubscription": "구독 추가",
+    "addSubscriptionTitle": "구독 추가",
+    "yourSubscriptions": "내 구독",
+    "noSubscriptions": "활성 구독이 없습니다",
+    "loading": "구독 데이터 로드 중...",
+    "notFound": "구독을 찾을 수 없습니다",
+    "renewSubscription": "구독 갱신",
+    "autoRenewalEnabled": "자동 갱신 활성화됨",
+    "autoRenewalDisabled": "자동 갱신 비활성화됨",
+    "subscriptionDeleted": "구독이 성공적으로 삭제되었습니다",
+    "subscriptionDataUpdated": "구독 데이터가 성공적으로 업데이트되었습니다",
+    "subscriptionRenewed": "구독이 성공적으로 갱신되었습니다",
+    "changeServer": "서버 변경",
+    "changeServerTitle": "서버 변경",
+    "changeServerWarning": "주의: 서버 변경은 2분 이내에 이루어집니다. 서버 변경 후 앱에서 데이터를 업데이트해야 합니다!",
+    "active": "활성",
+    "notActive": "비활성",
+    "online": "온라인",
+    "offline": "오프라인",
+    "traffic": "트래픽",
+    "trafficReset": {
+      "daily": "매일",
+      "weekly": "매주",
+      "monthly": "매월",
+      "yearly": "매년",
+      "unlimit": "무제한"
+    },
+    "inTotal": "총",
+    "servers": "서버",
+    "fullServers": "모든 서버에 액세스",
+    "allBase": "모든 기본",
+    "base": "기본",
+    "premium": "프리미엄",
+    "devices": "장치",
+    "period": "결제 주기",
+    "expires": "만료",
+    "autoRenewal": "자동 갱신",
+    "actions": "작업",
+    "save": "저장",
+    "required": "필수!",
+    "paid": "유료!",
+    "instruction": {
+      "stage1": "앱 다운로드",
+      "stage2": "앱에 구독 추가",
+      "copyUrl": "구독 URL 복사",
+      "openQR": "구독 QR 코드",
+      "scanApp": "앱에서 스캔",
+      "scanPhone": "휴대폰에서 스캔",
+      "add": "앱에 추가"
+    },
+    "platform": "플랫폼",
+    "success": {
+      "serversUpdated": "서버가 성공적으로 업데이트되었습니다"
+    },
+    "errors": {
+      "loadFailed": "구독을 로드하지 못했습니다",
+      "disableAutoRenewalFailed": "자동 갱신 비활성화 오류!",
+      "enableAutoRenewalFailed": "자동 갱신 활성화 오류!",
+      "deleteSubscriptionFailed": "구독 삭제 오류!",
+      "resetSubscriptionFailed": "구독 데이터 재설정 오류!",
+      "renewSubscriptionFailed": "구독을 갱신하지 못했습니다!",
+      "fetchingServers": "서버를 로드하지 못했습니다",
+      "updatingServers": "서버를 업데이트하지 못했습니다",
+      "serverLimitReached": "서버 제한에 도달했습니다",
+      "serverLimitReachedPremium": "프리미엄 서버 제한에 도달했습니다",
+      "serverLimitReachedBase": "기본 서버 제한에 도달했습니다"
+    },
+    "periods": {
+      "trial": "체험 기간",
+      "hour": "1시간",
+      "day": "1일",
+      "week": "1주",
+      "month": "1개월",
+      "threeMonth": "3개월",
+      "sixMonth": "6개월",
+      "year": "1년",
+      "twoYear": "2년",
+      "threeYear": "3년",
+      "indefinitely": "무기한"
+    },
+    "modals": {
+      "delete": {
+        "title": "구독 삭제",
+        "button": "삭제",
+        "action": "삭제",
+        "message": "구독을 영구적으로 삭제하시겠습니까? 복구할 수 없습니다! 보상은 제공되지 않습니다!"
+      },
+      "qr": {
+        "title": "구독 QR 코드",
+        "description": "클라이언트 앱에서 스캔"
+      },
+      "refresh": {
+        "title": "구독 데이터 재설정",
+        "button": "데이터 재설정",
+        "action": "재설정",
+        "message": "구독 데이터를 재설정하시겠습니까? 재설정 후 구독 키와 주소가 새 것으로 변경됩니다! 앱에 구독을 다시 추가해야 합니다! 일반적으로 구독이 네트워크에 유출되었거나 누군가 액세스한 경우 재설정합니다!"
+      },
+      "autoRenewal": {
+        "enableTitle": "자동 갱신 활성화",
+        "disableTitle": "자동 갱신 비활성화",
+        "enableAction": "활성화",
+        "disableAction": "비활성화",
+        "enableMessage": "구독 자동 갱신을 활성화하시겠습니까? 구독 만료 시 잔액에서 자동으로 금액이 차감됩니다.",
+        "disableMessage": "구독 자동 갱신을 비활성화하시겠습니까? 만료 후 구독이 비활성화됩니다."
+      },
+      "renew": {
+        "title": "구독 갱신",
+        "action": "갱신",
+        "message": "{price} 스타가 잔액에서 차감되어 구독이 갱신됩니다."
+      }
+    }
+  },
+  "user": {
+    "role": "역할",
+    "discount": "할인",
+    "wallet": "지갑",
+    "usage": "사용량",
+    "inPayments": "결제 내역"
+  },
+  "wallet": {
+    "connect": "TON 지갑 연결",
+    "disconnect": "연결 해제",
+    "replace": "교체"
+  }
+}
