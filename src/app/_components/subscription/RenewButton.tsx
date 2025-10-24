@@ -82,9 +82,9 @@ export default function RenewButton({
         key: TrafficResetEnum.YEAR,
         label: t('trafficReset.yearly'),
         minDays: 360,
-      }
+      },
     ],
-    [t]
+    [t],
   )
 
   useEffect(() => {
@@ -267,7 +267,7 @@ export default function RenewButton({
     priceNoDiscount,
     getFinalPercent,
     subscriptions,
-    t
+    t,
   ])
 
   // Теперь guard — рендерим null только после того, как все хуки/мемо вызваны
@@ -346,6 +346,8 @@ export default function RenewButton({
       {subscription.period !== SubscriptionPeriodEnum.TRIAL &&
         subscription.period !== SubscriptionPeriodEnum.TRAFFIC &&
         subscription.period !== SubscriptionPeriodEnum.INDEFINITELY &&
+        subscription.plan.key !== PlansEnum.TRAFFIC &&
+        subscription.plan.key !== PlansEnum.TRIAL &&
         subscription.nextRenewalStars !== undefined && (
           <>
             <button
