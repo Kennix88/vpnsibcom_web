@@ -25,7 +25,7 @@ import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react'
 import { addDays, eachDayOfInterval } from 'date-fns'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { BiServer, BiSolidMask } from 'react-icons/bi'
 import { FaCircleInfo, FaShieldHeart } from 'react-icons/fa6'
@@ -59,8 +59,6 @@ export interface PeriodButtonInterface {
 
 export default function AddSubscription() {
   const t = useTranslations('billing')
-  const location = usePathname()
-  const url = location.includes('/tma') ? '/tma' : '/app'
   const router = useRouter()
 
   const { subscriptions, setSubscriptions } = useSubscriptionsStore()
@@ -454,8 +452,9 @@ export default function AddSubscription() {
       const data = await authApiClient.purchaseSubscription(payload)
 
       if (!data.invoice) {
-        setUser(data.user)
-        setSubscriptions(data.subscriptions)
+        await setUser(data.user)
+        await setSubscriptions(data.subscriptions)
+        await router.push('/tma')
         toast.success('Subscription purchased successfully')
       } else {
         if (data.invoice?.isTonPayment) {
@@ -492,7 +491,7 @@ export default function AddSubscription() {
       toast.error('Error updating data')
     } finally {
       setIsLoading(false)
-      router.push(url)
+      router.push('/tma')
     }
   }
 
