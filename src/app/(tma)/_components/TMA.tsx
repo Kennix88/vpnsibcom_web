@@ -2,8 +2,10 @@
 import { Auth } from '@app/app/(tma)/_components/Auth'
 import AnalyticsInit from '@app/app/_components/AnalyticsInit'
 import Loader from '@app/app/_components/Loader'
+import { config } from '@app/config/client'
 import { setServerLocale } from '@app/core/i18n/locale.server'
 import { initTelegramSDK } from '@app/core/initTelegramSDK'
+import TelegramAnalytics from '@telegram-apps/analytics'
 import {
   initData,
   retrieveLaunchParams,
@@ -26,6 +28,11 @@ export function TMA({ children }: PropsWithChildren) {
       eruda:
         debug && ['ios', 'android'].includes(launchParams.tgWebAppPlatform),
       mockForMacOS: launchParams.tgWebAppPlatform === 'macos',
+    })
+
+    TelegramAnalytics.init({
+      token: config.TMA_TOKEN,
+      appName: config.TMA_IDENTIFIER,
     })
 
     setInitialized(true)

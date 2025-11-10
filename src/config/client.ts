@@ -12,6 +12,8 @@ export const config = {
   TELEGRAM_CHANNEL_URL: process.env.NEXT_PUBLIC_TELEGRAM_CHANNEL_URL,
   TELEGRAM_CHAT_URL: process.env.NEXT_PUBLIC_TELEGRAM_CHAT_URL,
   BOT_URL: process.env.NEXT_PUBLIC_BOT_URL,
+  TMA_TOKEN: process.env.NEXT_PUBLIC_TMA_TOKEN as string,
+  TMA_IDENTIFIER: process.env.NEXT_PUBLIC_TMA_IDENTIFIER as string,
 }
 
 if (typeof window !== 'undefined' && !config.apiUrl) {
