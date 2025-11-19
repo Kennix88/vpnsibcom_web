@@ -1,3 +1,6 @@
+import { AdsPlaceEnum } from '@app/enums/ads-place.enum'
+import { AdsResInterface } from '@app/enums/ads-res.interface'
+import { AdsTaskTypeEnum } from '@app/enums/ads-task-type.enum'
 import { CurrencyEnum } from '@app/enums/currency.enum'
 import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
@@ -579,6 +582,27 @@ class ApiClient {
         return data.data
       },
     )
+  }
+
+  async getAds(place: AdsPlaceEnum, type: AdsTaskTypeEnum) {
+    return this.safeRequest<AdsResInterface>(async () => {
+      const { data } = await this.instance.get(`/ads/${place}/${type}`)
+      return data
+    })
+  }
+
+  async confirmAds(verifyKey: string, verificationCode?: string) {
+    return this.safeRequest<{
+      success: boolean
+      user: UserDataInterface
+    }>(async () => {
+      const { data } = await this.instance.post(`/ads/confirm`, {
+        verifyKey,
+        verificationCode,
+      })
+
+      return data
+    })
   }
 
   async getServers() {
