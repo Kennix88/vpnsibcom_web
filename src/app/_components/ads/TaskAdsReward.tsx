@@ -66,6 +66,7 @@ export function TaskAdsReward() {
       <AdsgramButton
         blockId={ad.blockId as `${number}` | `int-${number}`}
         verifyKey={ad.verifyKey}
+        fetchAd={fetchAd}
       />
     </div>
   )

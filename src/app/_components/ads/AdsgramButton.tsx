@@ -11,9 +11,11 @@ import { toast } from 'react-toastify'
 export default function AdsgramButton({
   blockId,
   verifyKey,
+  fetchAd,
 }: {
   blockId: `${number}` | `int-${number}`
   verifyKey: string
+  fetchAd: () => Promise<void>
 }) {
   const { setUser } = useUserStore()
   const t = useTranslations('earning')
@@ -27,8 +29,10 @@ export default function AdsgramButton({
     } catch (error) {
       console.error('Failed to load ad', error)
       //
+    } finally {
+      fetchAd()
     }
-  }, [verifyKey, setUser, t])
+  }, [verifyKey, setUser, t, fetchAd])
 
   const onReward = useCallback(() => {
     // alert('Reward')
