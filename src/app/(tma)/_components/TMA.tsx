@@ -30,13 +30,15 @@ export function TMA({ children }: PropsWithChildren) {
       mockForMacOS: launchParams.tgWebAppPlatform === 'macos',
     })
 
+    setInitialized(true)
+  }, [launchParams])
+
+  useEffect(() => {
     TelegramAnalytics.init({
       token: config.TMA_TOKEN,
       appName: config.TMA_IDENTIFIER,
     })
-
-    setInitialized(true)
-  }, [launchParams])
+  }, [])
 
   useEffect(() => {
     if (initDataUser) {
