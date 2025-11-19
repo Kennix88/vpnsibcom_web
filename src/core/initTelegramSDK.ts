@@ -95,18 +95,20 @@ export async function initTelegramSDK(options: {
 
   const getInitData = retrieveLaunchParams()
 
-  if (
-    !getInitData.tgWebAppPlatform.includes('web') &&
-    getInitData.tgWebAppPlatform !== 'tdesktop'
-  ) {
-    if (viewport.requestFullscreen.isAvailable()) {
-      await viewport.requestFullscreen()
-    }
-  } else {
-    if (viewport.expand.isAvailable()) {
-      viewport.expand()
-    }
-  }
+  // if (
+  //   !getInitData.tgWebAppPlatform.includes('web') &&
+  //   getInitData.tgWebAppPlatform !== 'tdesktop'
+  // ) {
+  //   if (viewport.requestFullscreen.isAvailable()) {
+  //     await viewport.requestFullscreen()
+  //   }
+  // } else {
+  //   if (viewport.expand.isAvailable()) {
+  //     viewport.expand()
+  //   }
+  // }
+
+  await viewport.requestFullscreen()
 
   if (settingsButton.show.isAvailable()) {
     settingsButton.show()
