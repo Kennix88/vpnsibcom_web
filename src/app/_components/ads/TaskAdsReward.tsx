@@ -67,10 +67,12 @@ export function TaskAdsReward() {
           )}
         </div>
       </div>
-      <AdsgramButton
-        blockId={ad.blockId as `${number}` | `int-${number}`}
-        verifyKey={ad.verifyKey}
-      />
+      {loading && (
+        <AdsgramButton
+          blockId={ad.blockId as `${number}` | `int-${number}`}
+          verifyKey={ad.verifyKey}
+        />
+      )}
     </div>
   )
 }

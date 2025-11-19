@@ -4,7 +4,7 @@ import { useAdsgram } from '@adsgram/react'
 import { authApiClient } from '@app/core/authApiClient'
 import { useUserStore } from '@app/store/user.store'
 import { useTranslations } from 'next-intl'
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import { MdDoubleArrow } from 'react-icons/md'
 import { toast } from 'react-toastify'
 
@@ -15,12 +15,10 @@ export default function AdsgramButton({
   blockId: `${number}` | `int-${number}`
   verifyKey: string
 }) {
-  const [loading, setLoading] = useState(false)
   const { setUser } = useUserStore()
   const t = useTranslations('earning')
   const handleReward = useCallback(async (): Promise<void> => {
     try {
-      setLoading(true)
       const response = await authApiClient.confirmAds(verifyKey)
       setUser(response.user)
       if (response.success) {
@@ -29,15 +27,13 @@ export default function AdsgramButton({
     } catch (error) {
       console.error('Failed to load ad', error)
       //
-    } finally {
-      setLoading(false)
     }
-  }, [setLoading, verifyKey, setUser, t])
+  }, [verifyKey, setUser, t])
 
   const onReward = useCallback(() => {
     // alert('Reward')
     handleReward()
-  }, [])
+  }, [handleReward])
   const onError = useCallback(() => {
     // alert('Error')
   }, [])

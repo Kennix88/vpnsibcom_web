@@ -15,7 +15,6 @@ import { toast } from 'react-toastify'
 import Currency from '../Currency'
 
 export function AdsgramRewardTask() {
-  const [loading, setLoading] = useState(false)
   const [ad, setAd] = useState<AdsResInterface | null>(null)
   const { setUser } = useUserStore()
   const taskRef = useRef<JSX.IntrinsicElements['adsgram-task']>(null)
@@ -23,7 +22,6 @@ export function AdsgramRewardTask() {
 
   const fetchAd = useCallback(async (): Promise<void> => {
     try {
-      setLoading(true)
       const response = await authApiClient.getAds(
         AdsPlaceEnum.TASK,
         AdsTaskTypeEnum.TASK,
@@ -32,8 +30,6 @@ export function AdsgramRewardTask() {
     } catch (error) {
       console.error('Failed to load ad', error)
       // toast.error(t('errors.loadFailed'))
-    } finally {
-      setLoading(false)
     }
   }, [setAd])
 
@@ -41,24 +37,17 @@ export function AdsgramRewardTask() {
     fetchAd()
   }, [fetchAd])
 
-  const handleReward = useCallback(
-    async (event: CustomEvent<string>): Promise<void> => {
-      try {
-        setLoading(true)
-        const response = await authApiClient.confirmAds(ad?.verifyKey as string)
-        setUser(response.user)
-        if (response.success) {
-          toast.success(t('earned'))
-        }
-      } catch (error) {
-        console.error('Failed to load ad', error)
-        //
-      } finally {
-        setLoading(false)
+  const handleReward = useCallback(async (): Promise<void> => {
+    try {
+      const response = await authApiClient.confirmAds(ad?.verifyKey as string)
+      setUser(response.user)
+      if (response.success) {
+        toast.success(t('earned'))
       }
-    },
-    [setLoading, ad, setUser, t],
-  )
+    } catch (error) {
+      console.error('Failed to load ad', error)
+    }
+  }, [ad, setUser, t])
 
   const handleError = (event: CustomEvent<string>): void => {
     console.error('Task error:', event.detail)
