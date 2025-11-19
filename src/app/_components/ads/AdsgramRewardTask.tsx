@@ -46,8 +46,10 @@ export function AdsgramRewardTask() {
       }
     } catch (error) {
       console.error('Failed to load ad', error)
+    } finally {
+      fetchAd()
     }
-  }, [ad, setUser, t])
+  }, [ad, setUser, t, fetchAd])
 
   const handleError = (event: CustomEvent<string>): void => {
     console.error('Task error:', event.detail)
