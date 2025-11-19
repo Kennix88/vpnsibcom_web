@@ -348,5 +348,12 @@
     "connect": "TON Cüzdanı Bağla",
     "disconnect": "Bağlantıyı Kes",
     "replace": "Değiştir"
+  },
+  "earning": {
+    "title": "Earning",
+    "earned": "Reward received",
+    "rewardTask": {
+      "title": "Watch ad"
+    }
   }
 }

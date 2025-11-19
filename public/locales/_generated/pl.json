@@ -348,5 +348,12 @@
     "connect": "Podłącz portfel TON",
     "disconnect": "Odłącz",
     "replace": "Zastąp"
+  },
+  "earning": {
+    "title": "Earning",
+    "earned": "Reward received",
+    "rewardTask": {
+      "title": "Watch ad"
+    }
   }
 }

@@ -348,5 +348,12 @@
     "connect": "ربط محفظة TON",
     "disconnect": "فصل",
     "replace": "استبدال"
+  },
+  "earning": {
+    "title": "Earning",
+    "earned": "Reward received",
+    "rewardTask": {
+      "title": "Watch ad"
+    }
   }
 }

@@ -348,5 +348,12 @@
     "connect": "Collega portafoglio TON",
     "disconnect": "Scollega",
     "replace": "Sostituisci"
+  },
+  "earning": {
+    "title": "Earning",
+    "earned": "Reward received",
+    "rewardTask": {
+      "title": "Watch ad"
+    }
   }
 }

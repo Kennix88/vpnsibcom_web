@@ -158,6 +158,13 @@
       "yottabytes": "YB"
     }
   },
+  "earning": {
+    "title": "Earning",
+    "earned": "Reward received",
+    "rewardTask": {
+      "title": "Watch ad"
+    }
+  },
   "freePlan": {
     "trialAvailable": "You have access to {gb} Gb of bonus traffic for an unlimited Trial subscription.",
     "activate": "Activate",

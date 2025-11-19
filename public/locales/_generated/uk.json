@@ -348,5 +348,12 @@
     "connect": "Підключити TON-гаманець",
     "disconnect": "Відв'язати",
     "replace": "Замінити"
+  },
+  "earning": {
+    "title": "Earning",
+    "earned": "Reward received",
+    "rewardTask": {
+      "title": "Watch ad"
+    }
   }
 }

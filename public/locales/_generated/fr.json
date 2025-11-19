@@ -348,5 +348,12 @@
     "connect": "Connecter le portefeuille TON",
     "disconnect": "Détacher",
     "replace": "Remplacer"
+  },
+  "earning": {
+    "title": "Earning",
+    "earned": "Reward received",
+    "rewardTask": {
+      "title": "Watch ad"
+    }
   }
 }

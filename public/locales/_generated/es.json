@@ -348,5 +348,12 @@
     "connect": "Conectar billetera TON",
     "disconnect": "Desvincular",
     "replace": "Reemplazar"
+  },
+  "earning": {
+    "title": "Earning",
+    "earned": "Reward received",
+    "rewardTask": {
+      "title": "Watch ad"
+    }
   }
 }

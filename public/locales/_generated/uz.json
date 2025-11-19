@@ -348,5 +348,12 @@
     "connect": "TON-hamyonni ulash",
     "disconnect": "Ajratish",
     "replace": "Almashtirish"
+  },
+  "earning": {
+    "title": "Earning",
+    "earned": "Reward received",
+    "rewardTask": {
+      "title": "Watch ad"
+    }
   }
 }

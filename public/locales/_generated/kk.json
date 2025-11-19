@@ -348,5 +348,12 @@
     "connect": "TON-кошелек қосу",
     "disconnect": "Ажырату",
     "replace": "Ауыстыру"
+  },
+  "earning": {
+    "title": "Earning",
+    "earned": "Reward received",
+    "rewardTask": {
+      "title": "Watch ad"
+    }
   }
 }

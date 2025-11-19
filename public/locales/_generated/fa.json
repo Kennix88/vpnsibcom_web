@@ -348,5 +348,12 @@
     "connect": "اتصال کیف پول TON",
     "disconnect": "قطع اتصال",
     "replace": "جایگزینی"
+  },
+  "earning": {
+    "title": "Earning",
+    "earned": "Reward received",
+    "rewardTask": {
+      "title": "Watch ad"
+    }
   }
 }

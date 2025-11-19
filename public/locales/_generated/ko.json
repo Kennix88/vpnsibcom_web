@@ -348,5 +348,12 @@
     "connect": "TON 지갑 연결",
     "disconnect": "연결 해제",
     "replace": "교체"
+  },
+  "earning": {
+    "title": "Earning",
+    "earned": "Reward received",
+    "rewardTask": {
+      "title": "Watch ad"
+    }
   }
 }

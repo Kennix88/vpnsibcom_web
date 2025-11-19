@@ -163,6 +163,13 @@
       "yottabytes": "ЙБ"
     }
   },
+  "earning": {
+    "title": "Добыча",
+    "earned": "Награда получена",
+    "rewardTask": {
+      "title": "Посмотреть рекламу"
+    }
+  },
   "freePlan": {
     "trialAvailable": "Вам доступно {gb} Gb бонусного трафика для подписки Trial на неограниченный срок.",
     "activate": "Активировать",

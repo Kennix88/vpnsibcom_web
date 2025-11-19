@@ -385,5 +385,12 @@
     "connect": "TON-Wallet verbinden",
     "disconnect": "Trennen",
     "replace": "Ersetzen"
+  },
+  "earning": {
+    "title": "Earning",
+    "earned": "Reward received",
+    "rewardTask": {
+      "title": "Watch ad"
+    }
   }
 }

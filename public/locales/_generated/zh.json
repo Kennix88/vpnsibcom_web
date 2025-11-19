@@ -348,5 +348,12 @@
     "connect": "连接TON钱包",
     "disconnect": "解除绑定",
     "replace": "替换"
+  },
+  "earning": {
+    "title": "Earning",
+    "earned": "Reward received",
+    "rewardTask": {
+      "title": "Watch ad"
+    }
   }
 }

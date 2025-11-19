@@ -348,5 +348,12 @@
     "connect": "TON-वॉलेट कनेक्ट करें",
     "disconnect": "अनलिंक करें",
     "replace": "बदलें"
+  },
+  "earning": {
+    "title": "Earning",
+    "earned": "Reward received",
+    "rewardTask": {
+      "title": "Watch ad"
+    }
   }
 }

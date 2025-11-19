@@ -348,5 +348,12 @@
     "connect": "TON-portemonnee verbinden",
     "disconnect": "Ontkoppelen",
     "replace": "Vervangen"
+  },
+  "earning": {
+    "title": "Earning",
+    "earned": "Reward received",
+    "rewardTask": {
+      "title": "Watch ad"
+    }
   }
 }

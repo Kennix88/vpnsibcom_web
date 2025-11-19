@@ -348,5 +348,12 @@
     "connect": "Anslut TON-plånbok",
     "disconnect": "Koppla från",
     "replace": "Ersätt"
+  },
+  "earning": {
+    "title": "Earning",
+    "earned": "Reward received",
+    "rewardTask": {
+      "title": "Watch ad"
+    }
   }
 }

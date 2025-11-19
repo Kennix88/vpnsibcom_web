@@ -348,5 +348,12 @@
     "connect": "TONウォレットを接続",
     "disconnect": "リンク解除",
     "replace": "交換"
+  },
+  "earning": {
+    "title": "Earning",
+    "earned": "Reward received",
+    "rewardTask": {
+      "title": "Watch ad"
+    }
   }
 }

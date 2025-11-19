@@ -348,5 +348,12 @@
     "connect": "Hubungkan Dompet TON",
     "disconnect": "Putuskan Sambungan",
     "replace": "Ganti"
+  },
+  "earning": {
+    "title": "Earning",
+    "earned": "Reward received",
+    "rewardTask": {
+      "title": "Watch ad"
+    }
   }
 }
