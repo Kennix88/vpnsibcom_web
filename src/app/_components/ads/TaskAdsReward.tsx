@@ -11,13 +11,11 @@ import Currency from '../Currency'
 import AdsgramButton from './AdsgramButton'
 
 export function TaskAdsReward() {
-  const [loading, setLoading] = useState(false)
   const [ad, setAd] = useState<AdsResInterface | null>(null)
   const t = useTranslations('earning')
 
   const fetchAd = useCallback(async (): Promise<void> => {
     try {
-      setLoading(true)
       const response = await authApiClient.getAds(
         AdsPlaceEnum.REWARD_TASK,
         AdsTaskTypeEnum.REWARD,
@@ -26,8 +24,6 @@ export function TaskAdsReward() {
     } catch (error) {
       console.error('Failed to load ad', error)
       // toast.error(t('errors.loadFailed'))
-    } finally {
-      setLoading(false)
     }
   }, [setAd])
 
@@ -67,12 +63,10 @@ export function TaskAdsReward() {
           )}
         </div>
       </div>
-      {loading && (
-        <AdsgramButton
-          blockId={ad.blockId as `${number}` | `int-${number}`}
-          verifyKey={ad.verifyKey}
-        />
-      )}
+      <AdsgramButton
+        blockId={ad.blockId as `${number}` | `int-${number}`}
+        verifyKey={ad.verifyKey}
+      />
     </div>
   )
 }
