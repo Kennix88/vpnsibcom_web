@@ -14,7 +14,7 @@ import {
   roundUp,
 } from '@app/utils/calculate-subscription-cost.util'
 import { fxUtil } from '@app/utils/fx.util'
-import { invoice } from '@telegram-apps/sdk-react'
+import { invoice } from '@tma.js/sdk-react'
 import { beginCell, toNano } from '@ton/core'
 import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react'
 import { motion } from 'framer-motion'
@@ -187,7 +187,7 @@ export default function AddTrafficButton({
             console.error('Ошибка при оплате', err)
           }
         } else {
-          await invoice.open(data.invoice?.linkPay || '', 'url')
+          await invoice.openUrl(data.invoice?.linkPay || '')
         }
       }
     } catch {
