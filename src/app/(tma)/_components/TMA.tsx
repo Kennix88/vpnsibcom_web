@@ -6,11 +6,7 @@ import { config } from '@app/config/client'
 import { setServerLocale } from '@app/core/i18n/locale.server'
 import { initTelegramSDK } from '@app/core/initTelegramSDK'
 import TelegramAnalytics from '@telegram-apps/analytics'
-import {
-  initData,
-  retrieveLaunchParams,
-  useSignal,
-} from '@telegram-apps/sdk-react'
+import { initData, retrieveLaunchParams, useSignal } from '@tma.js/sdk-react'
 import { PropsWithChildren, useEffect, useMemo, useState } from 'react'
 
 export function TMA({ children }: PropsWithChildren) {
