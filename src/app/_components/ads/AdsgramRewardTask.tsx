@@ -40,7 +40,7 @@ export function AdsgramRewardTask() {
   const handleReward = useCallback(async (): Promise<void> => {
     try {
       const response = await authApiClient.confirmAds(ad?.verifyKey as string)
-      setUser(response.user)
+      await setUser(response.user)
       if (response.success) {
         toast.success(t('earned'))
       }
@@ -52,6 +52,7 @@ export function AdsgramRewardTask() {
   }, [ad, setUser, t, fetchAd])
 
   const handleError = (event: CustomEvent<string>): void => {
+    fetchAd()
     console.error('Task error:', event.detail)
   }
 
@@ -66,7 +67,7 @@ export function AdsgramRewardTask() {
   return (
     <AdsgramTask
       blockId={ad.blockId as BlockId}
-      debug={false}
+      // debug={true}
       className="adsgram-task p-2 bg-[var(--surface-container-lowest)] rounded-md font-bold"
       // @ts-expect-error
       ref={taskRef}
@@ -75,20 +76,17 @@ export function AdsgramRewardTask() {
       <span slot="reward" className="text-[12px] mt-2 flex gap-2 flex-wrap">
         {ad.rewards.stars > 0 && (
           <div className="inline-flex gap-1 items-center px-2 py-1 rounded-md bg-[var(--star-container-rgba)] w-fit">
-            <Currency w={18} type={'star'} />
-            {ad.rewards.stars}
+            <Currency w={18} type={'star'} />+{ad.rewards.stars}
           </div>
         )}
         {ad.rewards.traffic > 0 && (
           <div className="inline-flex gap-1 items-center px-2 py-1 rounded-md bg-[var(--traffic-container-rgba)] w-fit">
-            <Currency w={18} type={'traffic'} />
-            {ad.rewards.traffic}
+            <Currency w={18} type={'traffic'} />+{ad.rewards.traffic}
           </div>
         )}
         {ad.rewards.tickets > 0 && (
           <div className="inline-flex gap-1 items-center px-2 py-1 rounded-md bg-[var(--ticket-container-rgba)] w-fit">
-            <Currency w={18} type={'ticket'} />
-            {ad.rewards.tickets}
+            <Currency w={18} type={'ticket'} />+{ad.rewards.tickets}
           </div>
         )}
       </span>
