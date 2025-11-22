@@ -1,9 +1,11 @@
 'use client'
 import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
 import AddSubscription from '@app/app/_components/add-subscription/AddSubscription'
+import AdsonarBanner from '@app/app/_components/ads/AdsonarBanner'
 import SocialButtons from '@app/app/_components/SocialButtons'
 import TopBar from '@app/app/_components/TopBar'
 import Version from '@app/app/_components/Version'
+import { AdsPlaceEnum } from '@app/enums/ads-place.enum'
 import { useTranslations } from 'next-intl'
 
 export default function Page() {
@@ -19,6 +21,7 @@ export default function Page() {
         </div>
 
         <AddSubscription />
+        <AdsonarBanner place={AdsPlaceEnum.BANNER_8} />
         <br />
         <SocialButtons />
         <Version />
