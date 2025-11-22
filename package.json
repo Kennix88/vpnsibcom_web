@@ -1,6 +1,6 @@
 {
   "name": "vpnsibcom_web",
-  "version": "1.2.0-beta",
+  "version": "1.2.1-beta",
   "license": "CC BY-NC-SA 4.0",
   "private": false,
   "scripts": {
@@ -15,7 +15,7 @@
     "@adsgram/react": "^1.0.2",
     "@headlessui/react": "^2.2.1",
     "@telegram-apps/analytics": "^1.4.4",
-    "@telegram-apps/sdk-react": "^3.2.0",
+    "@tma.js/sdk-react": "^3.0.9",
     "@ton/core": "^0.60.1",
     "@ton/crypto": "^3.3.0",
     "@ton/ton": "^15.2.1",
