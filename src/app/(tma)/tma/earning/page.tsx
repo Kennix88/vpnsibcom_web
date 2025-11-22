@@ -1,10 +1,12 @@
 'use client'
 import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
 import { AdsgramRewardTask } from '@app/app/_components/ads/AdsgramRewardTask'
+import AdsonarBanner from '@app/app/_components/ads/AdsonarBanner'
 import { TaskAdsReward } from '@app/app/_components/ads/TaskAdsReward'
 import SocialButtons from '@app/app/_components/SocialButtons'
 import TopBar from '@app/app/_components/TopBar'
 import Version from '@app/app/_components/Version'
+import { AdsPlaceEnum } from '@app/enums/ads-place.enum'
 import { useTranslations } from 'next-intl'
 
 export default function Page() {
@@ -17,6 +19,7 @@ export default function Page() {
         {/* <div className="text-lg font-bold font-mono">Soon...</div> */}
       </div>
       <div className="flex flex-col gap-4 mt-4 pb-[80px]">
+        <AdsonarBanner place={AdsPlaceEnum.BANNER_2} />
         <TaskAdsReward />
         <AdsgramRewardTask />
       </div>
