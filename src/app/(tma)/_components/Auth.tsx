@@ -2,8 +2,6 @@
 import Loader from '@app/app/_components/Loader'
 import { config } from '@app/config/client'
 import { authApiClient } from '@app/core/authApiClient'
-import { setServerLocale } from '@app/core/i18n/locale.server'
-import { useCurrencyStore } from '@app/store/currency.store'
 import { useUserStore } from '@app/store/user.store'
 import { retrieveRawInitData } from '@tma.js/sdk-react'
 
@@ -13,7 +11,6 @@ import { PropsWithChildren, useEffect } from 'react'
 export function Auth({ children }: PropsWithChildren) {
   const initDataRaw = retrieveRawInitData()
   const { user, accessToken, setUser, setAccessToken } = useUserStore()
-  const { setCurrencies, setRates } = useCurrencyStore()
 
   // // helper: sha256 hex of string
   // async function sha256Hex(str: string) {
@@ -25,7 +22,7 @@ export function Auth({ children }: PropsWithChildren) {
   //     .join('')
   // }
 
-  // // helper: clear client-side persisted data (best-effort)
+  // helper: clear client-side persisted data (best-effort)
   // async function clearClientPersistence() {
   //   try {
   //     // 1) reset zustand stores (public reset function)
@@ -73,12 +70,12 @@ export function Auth({ children }: PropsWithChildren) {
   //     }
 
   //     // 5) clear in-memory currency store
-  //     try {
-  //       setCurrencies([])
-  //       setRates(null)
-  //     } catch (e) {
-  //       console.warn('Currency reset failed', e)
-  //     }
+  //     // try {
+  //     //   setCurrencies([])
+  //     //   setRates(null)
+  //     // } catch (e) {
+  //     //   console.warn('Currency reset failed', e)
+  //     // }
   //   } catch (e) {
   //     console.warn('Failed to clear client persistence', e)
   //   }
@@ -87,6 +84,7 @@ export function Auth({ children }: PropsWithChildren) {
   // main effect: detect initData change and re-auth
   useEffect(() => {
     const handleInit = async () => {
+      // await clearClientPersistence()
       if (!initDataRaw) {
         console.warn('No Telegram initData found')
         return
@@ -159,40 +157,6 @@ export function Auth({ children }: PropsWithChildren) {
     handleInit()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initDataRaw])
-
-  useEffect(() => {
-    const getRates = async () => {
-      try {
-        if (user && accessToken) {
-          const data = await authApiClient.getCurrency()
-          setCurrencies(data.currencies)
-          setRates(data.rates)
-        }
-      } catch (error) {
-        console.error('Failed to fetch currency rates', error)
-      }
-    }
-
-    getRates()
-  }, [user, accessToken, setCurrencies, setRates])
-
-  useEffect(() => {
-    if (user) {
-      setServerLocale(user.languageCode)
-    }
-  }, [user])
-
-  useEffect(() => {
-    const getMe = async () => {
-      try {
-        const data = await authApiClient.getMe()
-        setUser(data)
-      } catch (error) {
-        console.error('Failed to fetch user data', error)
-      }
-    }
-    getMe()
-  }, [setUser])
 
   if (!user || !accessToken) {
     return <Loader />
