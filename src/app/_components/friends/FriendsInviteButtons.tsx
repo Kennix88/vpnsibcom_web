@@ -2,7 +2,7 @@
 import { config } from '@app/config/client'
 import { useUserStore } from '@app/store/user.store'
 import { useCopyToClipboard } from '@app/utils/copy-to-clipboard.util'
-import { shareMessage, shareStory } from '@telegram-apps/sdk-react'
+import { shareMessage, shareStory } from '@tma.js/sdk-react'
 import { FaCopy, FaShareNodes } from 'react-icons/fa6'
 import { RiTelegram2Fill } from 'react-icons/ri'
 import { useTranslations } from 'use-intl'
