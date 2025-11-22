@@ -26,7 +26,7 @@ export default async function TmaLayout({
       <head>
         <Script
           id="adsonar"
-          src="https://static.sonartech.io/lib/1.0.0/sonar.js?appId=app_133d2148&isDebug=true"
+          src="https://static.sonartech.io/lib/1.0.0/sonar.js?appId=app_133d2148"
         />
       </head>
       <body className="bg-[var(--background)]">
