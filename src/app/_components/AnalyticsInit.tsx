@@ -1,10 +1,7 @@
 // components/GraspilInit.tsx
 'use client'
 
-import {
-  retrieveLaunchParams,
-  retrieveRawInitData,
-} from '@telegram-apps/sdk-react'
+import { retrieveLaunchParams, retrieveRawInitData } from '@tma.js/sdk-react'
 import Script from 'next/script'
 import { useEffect } from 'react'
 
