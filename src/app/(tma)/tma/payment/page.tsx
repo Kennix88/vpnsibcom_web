@@ -1,10 +1,12 @@
 'use client'
 import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
+import AdsonarBanner from '@app/app/_components/ads/AdsonarBanner'
 import Payments from '@app/app/_components/payments/Payments'
 import SocialButtons from '@app/app/_components/SocialButtons'
 import TopBar from '@app/app/_components/TopBar'
 import Version from '@app/app/_components/Version'
 import { authApiClient } from '@app/core/authApiClient'
+import { AdsPlaceEnum } from '@app/enums/ads-place.enum'
 import { usePaymentMethodsStore } from '@app/store/payment-methods.store'
 import { useUserStore } from '@app/store/user.store'
 import { useEffect } from 'react'
@@ -41,6 +43,7 @@ export default function Page() {
           {/*</div>*/}
         </div>
         <Payments />
+        <AdsonarBanner place={AdsPlaceEnum.BANNER_5} />
       </div>
       <div className="flex flex-col gap-4">
         <SocialButtons />
