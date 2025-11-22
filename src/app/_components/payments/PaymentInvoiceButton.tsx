@@ -8,7 +8,7 @@ import { RatesInterface } from '@app/types/rates.interface'
 import { UserDataInterface } from '@app/types/user-data.interface'
 import { roundUp } from '@app/utils/calculate-subscription-cost.util'
 import { fxUtil } from '@app/utils/fx.util'
-import { invoice } from '@telegram-apps/sdk-react'
+import { invoice } from '@tma.js/sdk-react'
 import { beginCell, toNano } from '@ton/core'
 import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react'
 import { useTranslations } from 'next-intl'
@@ -82,7 +82,7 @@ export default function PaymentInvoiceButton({
           console.error('Ошибка при оплате', err)
         }
       } else {
-        await invoice.open(getInvs.linkPay, 'url')
+        await invoice.openUrl(getInvs.linkPay)
       }
     } catch {
       toast.error('Failed create invoice')
