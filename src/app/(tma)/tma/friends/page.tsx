@@ -1,5 +1,6 @@
 'use client'
 import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
+import AdsonarBanner from '@app/app/_components/ads/AdsonarBanner'
 import FriendsBonuses from '@app/app/_components/friends/FriendsBonuses'
 import FriendsInviteButtons from '@app/app/_components/friends/FriendsInviteButtons'
 import FriendsList from '@app/app/_components/friends/FriendsList'
@@ -9,6 +10,7 @@ import SocialButtons from '@app/app/_components/SocialButtons'
 import TopBar from '@app/app/_components/TopBar'
 import Version from '@app/app/_components/Version'
 import { authApiClient } from '@app/core/authApiClient'
+import { AdsPlaceEnum } from '@app/enums/ads-place.enum'
 import { useRefferlsStore } from '@app/store/referrals.store'
 import { useUserStore } from '@app/store/user.store'
 import { useEffect } from 'react'
@@ -36,6 +38,7 @@ export default function Page() {
       <TopBar />
       <div className="flex flex-row gap-4 my-4 flex-wrap justify-center">
         <FriendsTitle />
+        <AdsonarBanner place={AdsPlaceEnum.BANNER_3} />
         <FriendsBonuses />
         <FriendsInviteButtons />
         <FriendsStatistics />
