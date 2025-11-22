@@ -19,10 +19,11 @@ export default function AdsgramButton({
 }) {
   const { setUser } = useUserStore()
   const t = useTranslations('earning')
-  const handleReward = useCallback(async (): Promise<void> => {
+
+  const onReward = useCallback(async () => {
     try {
       const response = await authApiClient.confirmAds(verifyKey)
-      setUser(response.user)
+      await setUser(response.user)
       if (response.success) {
         toast.success(t('earned'))
       }
@@ -34,18 +35,15 @@ export default function AdsgramButton({
     }
   }, [verifyKey, setUser, t, fetchAd])
 
-  const onReward = useCallback(() => {
-    // alert('Reward')
-    handleReward()
-  }, [handleReward])
   const onError = useCallback(() => {
     // alert('Error')
-  }, [])
+    fetchAd()
+  }, [fetchAd])
   const { show } = useAdsgram({
     blockId,
     onReward,
     onError,
-    debug: false,
+    // debug: true,
   })
   return (
     <button
