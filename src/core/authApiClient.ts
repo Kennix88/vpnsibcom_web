@@ -17,7 +17,7 @@ import {
   SubscriptionResponseInterface,
 } from '@app/types/subscription-data.interface'
 import { UserDataInterface } from '@app/types/user-data.interface'
-import { retrieveRawInitData } from '@telegram-apps/sdk-react'
+import { retrieveRawInitData } from '@tma.js/sdk-react'
 
 import axios, {
   AxiosError,
