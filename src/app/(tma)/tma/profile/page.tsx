@@ -1,5 +1,6 @@
 'use client'
 import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
+import AdsonarBanner from '@app/app/_components/ads/AdsonarBanner'
 import Avatar from '@app/app/_components/Avatar'
 import Balance from '@app/app/_components/Balance'
 import LanguageSwitcher from '@app/app/_components/LanguageSwitcher'
@@ -8,6 +9,7 @@ import { TonWalletConnect } from '@app/app/_components/ton/TonWalletConnect'
 import { TonWalletManager } from '@app/app/_components/ton/TonWalletManager'
 import Version from '@app/app/_components/Version'
 import { authApiClient } from '@app/core/authApiClient'
+import { AdsPlaceEnum } from '@app/enums/ads-place.enum'
 import { useSlicedAddress } from '@app/hooks/useSlicedAddress'
 import { useUserStore } from '@app/store/user.store'
 import { useCopyToClipboard } from '@app/utils/copy-to-clipboard.util'
@@ -171,6 +173,7 @@ export default function Page() {
           <LanguageSwitcher />
           {/* <CurrencySwitcher /> */}
         </div>
+        <AdsonarBanner place={AdsPlaceEnum.BANNER_6} />
       </div>
       <div className="flex flex-col mt-8 gap-4">
         <SocialButtons />
