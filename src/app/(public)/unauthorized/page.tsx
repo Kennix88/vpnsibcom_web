@@ -1,5 +1,5 @@
 'use client'
-import { openLink } from '@telegram-apps/sdk-react'
+import { openLink } from '@tma.js/sdk-react'
 import Link from 'next/link'
 
 export default function UnauthorizedPage() {
