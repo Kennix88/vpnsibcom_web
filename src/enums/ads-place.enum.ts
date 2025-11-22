@@ -2,4 +2,11 @@ export enum AdsPlaceEnum {
   TASK = 'TASK',
   REWARD_TASK = 'REWARD_TASK',
   BANNER = 'BANNER',
+  BANNER_2 = 'BANNER_2',
+  BANNER_3 = 'BANNER_3',
+  BANNER_4 = 'BANNER_4',
+  BANNER_5 = 'BANNER_5',
+  BANNER_6 = 'BANNER_6',
+  BANNER_7 = 'BANNER_7',
+  BANNER_8 = 'BANNER_8',
 }
