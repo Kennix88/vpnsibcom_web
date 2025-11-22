@@ -9,6 +9,7 @@ import React from 'react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import '../../_assets/globals.css'
+import { InitData } from '../_components/InitData'
 
 export const metadata: Metadata = {
   title: 'TMA - VPNsib',
@@ -44,7 +45,9 @@ export default async function TmaLayout({
               pauseOnHover
               theme="dark"
             />
-            <CheckPlatform>{children}</CheckPlatform>
+            <CheckPlatform>
+              <InitData>{children}</InitData>
+            </CheckPlatform>
           </TelegramProvider>
         </I18nProvider>
       </body>
