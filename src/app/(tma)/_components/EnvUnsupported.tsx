@@ -1,4 +1,4 @@
-import { retrieveLaunchParams } from '@telegram-apps/sdk-react'
+import { retrieveLaunchParams } from '@tma.js/sdk-react'
 import Image from 'next/image'
 import { useMemo } from 'react'
 
