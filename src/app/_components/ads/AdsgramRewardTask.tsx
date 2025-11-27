@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 'use client'
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { BlockId } from '@adsgram/common'
 import { AdsgramTask } from '@adsgram/react'
 import { authApiClient } from '@app/core/authApiClient'
