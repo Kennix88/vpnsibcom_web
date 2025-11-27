@@ -1,15 +1,19 @@
 import { AdsNetworkEnum } from './ads-network.enum'
 import { AdsPlaceEnum } from './ads-place.enum'
-import { AdsTaskTypeEnum } from './ads-task-type.enum'
+import { AdsTypeEnum } from './ads-type.enum'
 
 export interface AdsResInterface {
-  type: AdsTaskTypeEnum
+  isNoAds: boolean
+  ad?: AdsDataInterface
+}
+
+export interface AdsDataInterface {
+  type: AdsTypeEnum
   place: AdsPlaceEnum
   network: AdsNetworkEnum
-  blockId: string
   time: Date
+  blockId: string
   rewards: AdsTaskRewardsInterface
-  limit: number
   verifyKey: string
 }
 
