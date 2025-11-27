@@ -26,6 +26,8 @@ export interface UserDataInterface {
   balance: UserBalanceInterface
   inviteUrl: string
   inviteMessageId: string
+  nextAdsRewardAt?: Date
+  nextAdsgramTaskAt?: Date
 }
 
 export interface UserBalanceInterface {
