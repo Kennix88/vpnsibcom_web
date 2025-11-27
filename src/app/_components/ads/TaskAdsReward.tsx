@@ -2,26 +2,30 @@
 import { authApiClient } from '@app/core/authApiClient'
 import { AdsNetworkEnum } from '@app/enums/ads-network.enum'
 import { AdsPlaceEnum } from '@app/enums/ads-place.enum'
-import { AdsResInterface } from '@app/enums/ads-res.interface'
-import { AdsTaskTypeEnum } from '@app/enums/ads-task-type.enum'
+import { AdsDataInterface } from '@app/enums/ads-res.interface'
+import { AdsTypeEnum } from '@app/enums/ads-type.enum'
+import { useUserStore } from '@app/store/user.store'
 import { useTranslations } from 'next-intl'
 import { useCallback, useEffect, useState } from 'react'
 import { FaPlay } from 'react-icons/fa6'
 import Currency from '../Currency'
 import AdsgramButton from './AdsgramButton'
 import AdsonarButton from './AdsonarButton'
+import { CountdownTimer } from './CountdownTimer'
 
 export function TaskAdsReward() {
-  const [ad, setAd] = useState<AdsResInterface | null>(null)
+  const [ad, setAd] = useState<AdsDataInterface | null>(null)
+  const { user } = useUserStore()
   const t = useTranslations('earning')
 
   const fetchAd = useCallback(async (): Promise<void> => {
     try {
       const response = await authApiClient.getAds(
         AdsPlaceEnum.REWARD_TASK,
-        AdsTaskTypeEnum.REWARD,
+        AdsTypeEnum.REWARD,
       )
-      setAd(response)
+      if (!response.isNoAds && response.ad) setAd(response.ad)
+      else setAd(null)
     } catch (error) {
       console.error('Failed to load ad', error)
       // toast.error(t('errors.loadFailed'))
@@ -32,7 +36,7 @@ export function TaskAdsReward() {
     fetchAd()
   }, [fetchAd])
 
-  if (!ad) {
+  if (!ad || !user) {
     return null
   }
 
@@ -61,19 +65,28 @@ export function TaskAdsReward() {
           )}
         </div>
       </div>
-      {ad.network === AdsNetworkEnum.ADSGRAM && (
-        <AdsgramButton
-          blockId={ad.blockId as `${number}` | `int-${number}`}
-          verifyKey={ad.verifyKey}
-          fetchAd={fetchAd}
+      {user.nextAdsRewardAt && new Date(user.nextAdsRewardAt) > new Date() ? (
+        <CountdownTimer
+          expiryDate={user.nextAdsRewardAt}
+          onTimerEnd={fetchAd}
         />
-      )}
-      {ad.network === AdsNetworkEnum.ADSONAR && (
-        <AdsonarButton
-          blockId={ad.blockId}
-          verifyKey={ad.verifyKey}
-          fetchAd={fetchAd}
-        />
+      ) : (
+        <>
+          {ad.network === AdsNetworkEnum.ADSGRAM && (
+            <AdsgramButton
+              blockId={ad.blockId as `${number}` | `int-${number}`}
+              verifyKey={ad.verifyKey}
+              fetchAd={fetchAd}
+            />
+          )}
+          {ad.network === AdsNetworkEnum.ADSONAR && (
+            <AdsonarButton
+              blockId={ad.blockId}
+              verifyKey={ad.verifyKey}
+              fetchAd={fetchAd}
+            />
+          )}
+        </>
       )}
     </div>
   )
