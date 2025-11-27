@@ -1,1 +1,359 @@
-{"billing":{"title":"Faturalandırma","description":"Finansal hareketleriniz","wallet":{"title":"Cüzdan","payment":"Yükle","paymentInfo":"Ödemeler için kullanılan hesap.","withdrawal":"Çek","withdrawalInfo":"Para çekilebilecek hesap.","holdInfo":"Dondurulmuş fonlar.\nYakında ödeme hesabına aktarılacaklar."},"payment":{"title":"Bakiye Yükleme","sum":"Yükleme miktarı","enterSum":"Miktar girin","sort":{"all":"Tümü","crypto":"Kripto Para","card":"Kartlar","sbp":"Hızlı Ödeme Sistemi","wallets":"Cüzdanlar","skins":"Görünümler"},"method":"Ödeme Yöntemi","split":"Telegram Stars'ı KYC olmadan, %40'a varan avantajlarla Split platformunda satın alın!","splitBay":"STARS Satın Al","walletInfo":"TON cüzdanınızı bağlayarak TON, USDT-TON, DOGS, NOT, HMSTR, JETTON ve diğer TON ağı jetonlarıyla ödeme yapın.","limitMessage":"{min} ile {max} {symbol} arasında mevcut. Şu an: {convertedAmount} {symbol}","commission":"Komisyon","toBalance":"Bakiyeye yatırılacak","pay":"Öde"},"subscription":{"title":"Abonelik","addSubscription":"Abonelik Ekle","pay":"Öde","addFree":"🎁 Ücretsiz Ekle","selectPeriod":"Dönem Seçin","periodMultiplier":"Dönem Çarpanı","selectPlan":"Plan Seçin","selectServer":"Sunucu Seçin","base":"Temel","premium":"Premium","orSelect":"veya seçin","name":{"default":"Abonelik","label":"Abonelik Adı","tooltip":"Abonelik listesinde görüntülenecek abonelik adı.","placeholder":"Abonelik adını girin"},"privileges":{"selectServers":"İstediğiniz sunucuları seçin","oneBaseServer":"Bir temel sunucu seçimi","oneBaseOrPremiumServer":"Bir temel veya premium sunucu seçimi","accessAllServers":"Tüm sunuculara erişim","accessAllBaseServers":"Tüm temel sunuculara erişim","accessBaseServers":"{{baseCount}} temel sunucuya erişim","accessBaseAndPremiumServers":"{{baseCount}} temel ve {{premiumCount}} premium sunucuya erişim","trafficPlan":"Süresiz, sadece trafik için ödeme!","devices":"Aynı anda {count} cihaza kadar","customDevices":"İstenen cihaz sayısı","servers":"Tüm sunuculara erişim","baseServers":"Temel sunuculara erişim","premiumServers":"Premium sunuculara erişim","customServers":"İstenen sunucu sayısı","traffic":"Sınırsız trafik","customTraffic":"İstenen trafik miktarı","dailyTraffic":"Günlük {count} GB trafik","weeklyTraffic":"Haftalık {count} GB trafik","monthlyTraffic":"Aylık {count} GB trafik","yearlyTraffic":"Yıllık {count} GB trafik","security":"Güvenli bağlantı","speed":"Hız sınırlaması yok","masking":"Trafiğinizin maskelenmesi","noAds":"Reklamsız","devicesSupport":"Geniş cihaz desteği","xray":"Güvenilir XRAY çekirdeği","opensource":"Açık kaynak"},"trafficReset":{"title":"Trafik Sıfırlama","daily":"Günlük","weekly":"Haftalık","monthly":"Aylık","yearly":"Yıllık"},"period":{"hour":"1 saat","day":"1 gün","week":"1 hafta","month":"1 ay","threeMonth":"3 ay","sixMonth":"6 ay","year":"1 yıl","twoYear":"2 yıl","threeYear":"3 yıl","indefinitely":"Süresiz"},"options":{"title":"Seçenekler","autoRenewal":"Otomatik Yenileme","autoRenewalDescription":"Aboneliği otomatik olarak yenile","info":"Abonelik bakiyenizden otomatik olarak yenilenecektir","period":"Dönemi Hatırla"},"traffic":"Trafik","addTraffic":"Trafik Ekle","addingTraffic":"Trafik Ekleniyor","buy":"Satın Al","extension":"Uzatma","subscriptionExtension":"Abonelik Uzatma","freeExtension":"🎁 Ücretsiz Uzat","summary":{"title":"Toplam","name":"Ad","traffic":"Trafik","unlimit":"Sınırsız","daily":"günlük","weekly":"haftalık","monthly":"aylık","yearly":"yıllık","servers":"Sunucular","fullServers":"Tümüne erişim","allBase":"Tüm temel","notServers":"Ayarlanmadı!","period":"Dönem","periodDiscount":"Dönem İndirimi","roleDiscount":"Rol İndirimi","autoRenewal":"Otomatik Yenileme","yes":"Evet","no":"Hayır","toPaid":"Ödenecek"},"purchase":"Satın Al"}},"common":{"modal":{"cancel":"İptal","accept":"Kabul Et","close":"Kapat"},"scrolling":"Aşağı kaydır","clipboard":{"copied":"Panoya kopyalandı!","failed":"Kopyalanamadı!"},"freePlan":{"trialAvailable":"{days} günlük deneme süresi sizin için mevcut.","activate":"Etkinleştir","activationFailed":"Ücretsiz plan etkinleştirilemedi"},"units":{"bytes":"B","kilobytes":"KB","megabytes":"MB","gigabytes":"GB","terabytes":"TB","petabytes":"PB","exabytes":"EB","zettabytes":"ZB","yottabytes":"YB"}},"freePlan":{"trialAvailable":"Sınırsız süre için Trial aboneliği için {gb} Gb bonus trafik sizin için mevcut.","activate":"Etkinleştir","activationFailed":"Ücretsiz plan etkinleştirilemedi","modalTitle":"Deneme Süresi Aktivasyonu","modalAction":"Etkinleştir","modalConfirmation":"Deneme süresini gerçekten etkinleştirmek istiyor musunuz?"},"friends":{"title":"Arkadaşlar","get":"Ödüller kazanın","for":"arkadaşlarınızı davet ettiğiniz için","level":"seviye","total":"Toplam","list":{"title":"Arkadaşlarınız","top":"En İyi","empty":"Henüz kimse yok 🥲"},"bonuses":{"title":"Bonuslar","inviteTitle":"Arkadaş daveti için","paymentTitle":"Arkadaş eylemleri için","inviteInfo":"Arkadaşınızın ilk ödemesinden veya deneme süresini etkinleştirmesinden sonra!","paymentInfo":"Arkadaşlarınızdan ve arkadaşlarınızın davet ettiği kişilerden elde ettiğimiz gelirin bir yüzdesini sonsuza kadar alın!","lvl1Info":"Sizin davet ettikleriniz","lvl2Info":"Arkadaşlarınızın davet ettikleri","lvl3Info":"Arkadaşlarınızın arkadaşlarının davet ettikleri 😁"},"invite":{"title":"Arkadaş davet et","message":"Mesaj gönder","copy":"Bağlantıyı kopyala","story":"Hikayede paylaş"},"statistics":{"title":"İstatistikler","earnTitle":"Kazancınız","inviteTitle":"Davet edilenler","earnInfo":"Tüm zamanlarda kazandığınız","inviteInfo":"Davet edilenler | Etkinleştirilenler | Bunlardan Standart | Bunlardan Premium"}},"greenCheck":{"loading":"Bağlantı güvenliği kontrol ediliyor...","danger":"Bağlantınız GÜVENLİ DEĞİL!\nVPN'e bağlanın!","success":"Bağlantınız güvenli!"},"navbar":{"home":"Ana Sayfa","earning":"Kazanç","gifts":"Hediyeler","friends":"Arkadaşlar","billing":"Faturalandırma","settings":"Ayarlar","profile":"Profil","games":"Oyunlar"},"subscriptions":{"title":"Abonelik","connection":"Bağlantı","configs":"Yapılandırmalar","addSubscription":"Abonelik Ekle","addSubscriptionTitle":"Abonelik Ekleme","yourSubscriptions":"Abonelikleriniz","noSubscriptions":"Aktif aboneliğiniz yok","loading":"Abonelik verileri yükleniyor...","notFound":"Abonelik bulunamadı","renewSubscription":"Aboneliği Yenile","autoRenewalEnabled":"Otomatik yenileme etkin","autoRenewalDisabled":"Otomatik yenileme devre dışı","subscriptionDeleted":"Abonelik başarıyla silindi","subscriptionDataUpdated":"Abonelik verileri başarıyla güncellendi","subscriptionRenewed":"Abonelik başarıyla yenilendi","changeServer":"Sunucuyu Değiştir","changeServerTitle":"Sunucu Değişikliği","changeServerWarning":"DİKKAT: Sunucu değişikliği 2 dakika içinde gerçekleşir. Sunucu değişikliğinden sonra, uygulamadaki verileri güncellemeniz gerekmektedir!","active":"Aktif","notActive":"Aktif Değil","online":"Çevrimiçi","offline":"Çevrimdışı","traffic":"Trafik","trafficReset":{"daily":"Günlük","weekly":"Haftalık","monthly":"Aylık","yearly":"Yıllık","unlimit":"Sınırsız"},"inTotal":"Toplamda","servers":"Sunucular","fullServers":"Tümüne erişim","allBase":"Tüm temel","base":"Temel","premium":"Premium","devices":"Cihazlar","period":"Ödeme Periyodu","expires":"Sona Eriyor","autoRenewal":"Otomatik Yenileme","actions":"Eylemler","save":"Kaydet","required":"Önerilir!","paid":"Ücretli!","instruction":{"stage1":"Uygulamayı İndir","stage2":"Uygulamaya abonelik ekle","copyUrl":"Abonelik URL'sini Kopyala","openQR":"Abonelik QR Kodu","scanApp":"Uygulamada Tara","scanPhone":"Telefonda Tara","add":"Uygulamaya Ekle"},"platform":"Platform","success":{"serversUpdated":"Sunucular başarıyla güncellendi"},"errors":{"loadFailed":"Abonelikler yüklenemedi","disableAutoRenewalFailed":"Otomatik yenileme devre dışı bırakılamadı!","enableAutoRenewalFailed":"Otomatik yenileme etkinleştirilemedi!","deleteSubscriptionFailed":"Abonelik silinemedi!","resetSubscriptionFailed":"Abonelik verileri sıfırlanamadı!","renewSubscriptionFailed":"Abonelik yenilenemedi!","fetchingServers":"Sunucular yüklenemedi","updatingServers":"Sunucular güncellenemedi","serverLimitReached":"Sunucu limitine ulaşıldı","serverLimitReachedPremium":"Premium sunucu limitine ulaşıldı","serverLimitReachedBase":"Temel sunucu limitine ulaşıldı"},"periods":{"trial":"Deneme Süresi","hour":"1 saat","day":"1 gün","week":"1 hafta","month":"1 ay","threeMonth":"3 ay","sixMonth":"6 ay","year":"1 yıl","twoYear":"2 yıl","threeYear":"3 yıl","indefinitely":"Süresiz"},"modals":{"delete":{"title":"Abonelik Silme","button":"Sil","action":"Sil","message":"Aboneliği kalıcı olarak silmek istediğinizden emin misiniz? Geri alınamaz! Tazminat sağlanmayacaktır!"},"qr":{"title":"Abonelik QR Kodu","description":"Müşteri uygulamasında tarayın"},"refresh":{"title":"Abonelik Verilerini Sıfırla","button":"Verileri Sıfırla","action":"Sıfırla","message":"Abonelik verilerini sıfırlamak istediğinizden emin misiniz? Bundan sonra anahtarlar ve abonelik adresi yenileriyle değişecektir! Aboneliği uygulamaya yeniden eklemeniz gerekecektir! Genellikle aboneliğiniz ağa sızarsa veya birisi ona erişirse sıfırlama yapılır!"},"autoRenewal":{"enableTitle":"Otomatik Yenilemeyi Etkinleştir","disableTitle":"Otomatik Yenilemeyi Devre Dışı Bırak","enableAction":"Etkinleştir","disableAction":"Devre Dışı Bırak","enableMessage":"Aboneliğin otomatik olarak yenilenmesini etkinleştirmek istiyor musunuz? Abonelik süresi dolduğunda fonlar otomatik olarak tahsil edilecektir.","disableMessage":"Aboneliğin otomatik olarak yenilenmesini devre dışı bırakmak istiyor musunuz? Abonelik süresi dolduktan sonra abonelik devre dışı bırakılacaktır."},"renew":{"title":"Abonelik Yenileme","action":"Yenile","message":"Aboneliği yenilemek istiyor musunuz? Bakiyenizden {price} yıldız düşülecektir."}}},"user":{"role":"Rol","discount":"İndirim","wallet":"Cüzdan","usage":"Kullanım","inPayments":"ödemelerde"},"wallet":{"connect":"TON Cüzdanı Bağla","disconnect":"Bağlantıyı Kes","replace":"Değiştir"},"earning":{"title":"Earning","earned":"Reward received","rewardTask":{"title":"Watch ad"}}}
+{
+  "billing": {
+    "title": "Faturalandırma",
+    "description": "Finansal hareketleriniz",
+    "wallet": {
+      "title": "Cüzdan",
+      "payment": "Yükle",
+      "paymentInfo": "Ödemeler için kullanılan hesap.",
+      "withdrawal": "Çek",
+      "withdrawalInfo": "Para çekilebilecek hesap.",
+      "holdInfo": "Dondurulmuş fonlar.\nYakında ödeme hesabına aktarılacaklar."
+    },
+    "payment": {
+      "title": "Bakiye Yükleme",
+      "sum": "Yükleme miktarı",
+      "enterSum": "Miktar girin",
+      "sort": {
+        "all": "Tümü",
+        "crypto": "Kripto Para",
+        "card": "Kartlar",
+        "sbp": "Hızlı Ödeme Sistemi",
+        "wallets": "Cüzdanlar",
+        "skins": "Görünümler"
+      },
+      "method": "Ödeme Yöntemi",
+      "split": "Telegram Stars'ı KYC olmadan, %40'a varan avantajlarla Split platformunda satın alın!",
+      "splitBay": "STARS Satın Al",
+      "walletInfo": "TON cüzdanınızı bağlayarak TON, USDT-TON, DOGS, NOT, HMSTR, JETTON ve diğer TON ağı jetonlarıyla ödeme yapın.",
+      "limitMessage": "{min} ile {max} {symbol} arasında mevcut. Şu an: {convertedAmount} {symbol}",
+      "commission": "Komisyon",
+      "toBalance": "Bakiyeye yatırılacak",
+      "pay": "Öde"
+    },
+    "subscription": {
+      "title": "Abonelik",
+      "addSubscription": "Abonelik Ekle",
+      "pay": "Öde",
+      "addFree": "🎁 Ücretsiz Ekle",
+      "selectPeriod": "Dönem Seçin",
+      "periodMultiplier": "Dönem Çarpanı",
+      "selectPlan": "Plan Seçin",
+      "selectServer": "Sunucu Seçin",
+      "base": "Temel",
+      "premium": "Premium",
+      "orSelect": "veya seçin",
+      "name": {
+        "default": "Abonelik",
+        "label": "Abonelik Adı",
+        "tooltip": "Abonelik listesinde görüntülenecek abonelik adı.",
+        "placeholder": "Abonelik adını girin"
+      },
+      "privileges": {
+        "selectServers": "İstediğiniz sunucuları seçin",
+        "oneBaseServer": "Bir temel sunucu seçimi",
+        "oneBaseOrPremiumServer": "Bir temel veya premium sunucu seçimi",
+        "accessAllServers": "Tüm sunuculara erişim",
+        "accessAllBaseServers": "Tüm temel sunuculara erişim",
+        "accessBaseServers": "{{baseCount}} temel sunucuya erişim",
+        "accessBaseAndPremiumServers": "{{baseCount}} temel ve {{premiumCount}} premium sunucuya erişim",
+        "trafficPlan": "Süresiz, sadece trafik için ödeme!",
+        "devices": "Aynı anda {count} cihaza kadar",
+        "customDevices": "İstenen cihaz sayısı",
+        "servers": "Tüm sunuculara erişim",
+        "baseServers": "Temel sunuculara erişim",
+        "premiumServers": "Premium sunuculara erişim",
+        "customServers": "İstenen sunucu sayısı",
+        "traffic": "Sınırsız trafik",
+        "customTraffic": "İstenen trafik miktarı",
+        "dailyTraffic": "Günlük {count} GB trafik",
+        "weeklyTraffic": "Haftalık {count} GB trafik",
+        "monthlyTraffic": "Aylık {count} GB trafik",
+        "yearlyTraffic": "Yıllık {count} GB trafik",
+        "security": "Güvenli bağlantı",
+        "speed": "Hız sınırlaması yok",
+        "masking": "Trafiğinizin maskelenmesi",
+        "noAds": "Reklamsız",
+        "devicesSupport": "Geniş cihaz desteği",
+        "xray": "Güvenilir XRAY çekirdeği",
+        "opensource": "Açık kaynak"
+      },
+      "trafficReset": {
+        "title": "Trafik Sıfırlama",
+        "daily": "Günlük",
+        "weekly": "Haftalık",
+        "monthly": "Aylık",
+        "yearly": "Yıllık"
+      },
+      "period": {
+        "hour": "1 saat",
+        "day": "1 gün",
+        "week": "1 hafta",
+        "month": "1 ay",
+        "threeMonth": "3 ay",
+        "sixMonth": "6 ay",
+        "year": "1 yıl",
+        "twoYear": "2 yıl",
+        "threeYear": "3 yıl",
+        "indefinitely": "Süresiz"
+      },
+      "options": {
+        "title": "Seçenekler",
+        "autoRenewal": "Otomatik Yenileme",
+        "autoRenewalDescription": "Aboneliği otomatik olarak yenile",
+        "info": "Abonelik bakiyenizden otomatik olarak yenilenecektir",
+        "period": "Dönemi Hatırla"
+      },
+      "traffic": "Trafik",
+      "addTraffic": "Trafik Ekle",
+      "addingTraffic": "Trafik Ekleniyor",
+      "buy": "Satın Al",
+      "extension": "Uzatma",
+      "subscriptionExtension": "Abonelik Uzatma",
+      "freeExtension": "🎁 Ücretsiz Uzat",
+      "summary": {
+        "title": "Toplam",
+        "name": "Ad",
+        "traffic": "Trafik",
+        "unlimit": "Sınırsız",
+        "daily": "günlük",
+        "weekly": "haftalık",
+        "monthly": "aylık",
+        "yearly": "yıllık",
+        "servers": "Sunucular",
+        "fullServers": "Tümüne erişim",
+        "allBase": "Tüm temel",
+        "notServers": "Ayarlanmadı!",
+        "period": "Dönem",
+        "periodDiscount": "Dönem İndirimi",
+        "roleDiscount": "Rol İndirimi",
+        "autoRenewal": "Otomatik Yenileme",
+        "yes": "Evet",
+        "no": "Hayır",
+        "toPaid": "Ödenecek"
+      },
+      "purchase": "Satın Al"
+    }
+  },
+  "common": {
+    "modal": {
+      "cancel": "İptal",
+      "accept": "Kabul Et",
+      "close": "Kapat"
+    },
+    "scrolling": "Aşağı kaydır",
+    "clipboard": {
+      "copied": "Panoya kopyalandı!",
+      "failed": "Kopyalanamadı!"
+    },
+    "freePlan": {
+      "trialAvailable": "{days} günlük deneme süresi sizin için mevcut.",
+      "activate": "Etkinleştir",
+      "activationFailed": "Ücretsiz plan etkinleştirilemedi"
+    },
+    "units": {
+      "bytes": "B",
+      "kilobytes": "KB",
+      "megabytes": "MB",
+      "gigabytes": "GB",
+      "terabytes": "TB",
+      "petabytes": "PB",
+      "exabytes": "EB",
+      "zettabytes": "ZB",
+      "yottabytes": "YB"
+    }
+  },
+  "freePlan": {
+    "trialAvailable": "Sınırsız süre için Trial aboneliği için {gb} Gb bonus trafik sizin için mevcut.",
+    "activate": "Etkinleştir",
+    "activationFailed": "Ücretsiz plan etkinleştirilemedi",
+    "modalTitle": "Deneme Süresi Aktivasyonu",
+    "modalAction": "Etkinleştir",
+    "modalConfirmation": "Deneme süresini gerçekten etkinleştirmek istiyor musunuz?"
+  },
+  "friends": {
+    "title": "Arkadaşlar",
+    "get": "Ödüller kazanın",
+    "for": "arkadaşlarınızı davet ettiğiniz için",
+    "level": "seviye",
+    "total": "Toplam",
+    "list": {
+      "title": "Arkadaşlarınız",
+      "top": "En İyi",
+      "empty": "Henüz kimse yok 🥲"
+    },
+    "bonuses": {
+      "title": "Bonuslar",
+      "inviteTitle": "Arkadaş daveti için",
+      "paymentTitle": "Arkadaş eylemleri için",
+      "inviteInfo": "Arkadaşınızın ilk ödemesinden veya deneme süresini etkinleştirmesinden sonra!",
+      "paymentInfo": "Arkadaşlarınızdan ve arkadaşlarınızın davet ettiği kişilerden elde ettiğimiz gelirin bir yüzdesini sonsuza kadar alın!",
+      "lvl1Info": "Sizin davet ettikleriniz",
+      "lvl2Info": "Arkadaşlarınızın davet ettikleri",
+      "lvl3Info": "Arkadaşlarınızın arkadaşlarının davet ettikleri 😁"
+    },
+    "invite": {
+      "title": "Arkadaş davet et",
+      "message": "Mesaj gönder",
+      "copy": "Bağlantıyı kopyala",
+      "story": "Hikayede paylaş"
+    },
+    "statistics": {
+      "title": "İstatistikler",
+      "earnTitle": "Kazancınız",
+      "inviteTitle": "Davet edilenler",
+      "earnInfo": "Tüm zamanlarda kazandığınız",
+      "inviteInfo": "Davet edilenler | Etkinleştirilenler | Bunlardan Standart | Bunlardan Premium"
+    }
+  },
+  "greenCheck": {
+    "loading": "Bağlantı güvenliği kontrol ediliyor...",
+    "danger": "Bağlantınız GÜVENLİ DEĞİL!\nVPN'e bağlanın!",
+    "success": "Bağlantınız güvenli!"
+  },
+  "navbar": {
+    "home": "Ana Sayfa",
+    "earning": "Kazanç",
+    "gifts": "Hediyeler",
+    "friends": "Arkadaşlar",
+    "billing": "Faturalandırma",
+    "settings": "Ayarlar",
+    "profile": "Profil",
+    "games": "Oyunlar"
+  },
+  "subscriptions": {
+    "title": "Abonelik",
+    "connection": "Bağlantı",
+    "configs": "Yapılandırmalar",
+    "addSubscription": "Abonelik Ekle",
+    "addSubscriptionTitle": "Abonelik Ekleme",
+    "yourSubscriptions": "Abonelikleriniz",
+    "noSubscriptions": "Aktif aboneliğiniz yok",
+    "loading": "Abonelik verileri yükleniyor...",
+    "notFound": "Abonelik bulunamadı",
+    "renewSubscription": "Aboneliği Yenile",
+    "autoRenewalEnabled": "Otomatik yenileme etkin",
+    "autoRenewalDisabled": "Otomatik yenileme devre dışı",
+    "subscriptionDeleted": "Abonelik başarıyla silindi",
+    "subscriptionDataUpdated": "Abonelik verileri başarıyla güncellendi",
+    "subscriptionRenewed": "Abonelik başarıyla yenilendi",
+    "changeServer": "Sunucuyu Değiştir",
+    "changeServerTitle": "Sunucu Değişikliği",
+    "changeServerWarning": "DİKKAT: Sunucu değişikliği 2 dakika içinde gerçekleşir. Sunucu değişikliğinden sonra, uygulamadaki verileri güncellemeniz gerekmektedir!",
+    "active": "Aktif",
+    "notActive": "Aktif Değil",
+    "online": "Çevrimiçi",
+    "offline": "Çevrimdışı",
+    "traffic": "Trafik",
+    "trafficReset": {
+      "daily": "Günlük",
+      "weekly": "Haftalık",
+      "monthly": "Aylık",
+      "yearly": "Yıllık",
+      "unlimit": "Sınırsız"
+    },
+    "inTotal": "Toplamda",
+    "servers": "Sunucular",
+    "fullServers": "Tümüne erişim",
+    "allBase": "Tüm temel",
+    "base": "Temel",
+    "premium": "Premium",
+    "devices": "Cihazlar",
+    "period": "Ödeme Periyodu",
+    "expires": "Sona Eriyor",
+    "autoRenewal": "Otomatik Yenileme",
+    "actions": "Eylemler",
+    "save": "Kaydet",
+    "required": "Önerilir!",
+    "paid": "Ücretli!",
+    "instruction": {
+      "stage1": "Uygulamayı İndir",
+      "stage2": "Uygulamaya abonelik ekle",
+      "copyUrl": "Abonelik URL'sini Kopyala",
+      "openQR": "Abonelik QR Kodu",
+      "scanApp": "Uygulamada Tara",
+      "scanPhone": "Telefonda Tara",
+      "add": "Uygulamaya Ekle"
+    },
+    "platform": "Platform",
+    "success": {
+      "serversUpdated": "Sunucular başarıyla güncellendi"
+    },
+    "errors": {
+      "loadFailed": "Abonelikler yüklenemedi",
+      "disableAutoRenewalFailed": "Otomatik yenileme devre dışı bırakılamadı!",
+      "enableAutoRenewalFailed": "Otomatik yenileme etkinleştirilemedi!",
+      "deleteSubscriptionFailed": "Abonelik silinemedi!",
+      "resetSubscriptionFailed": "Abonelik verileri sıfırlanamadı!",
+      "renewSubscriptionFailed": "Abonelik yenilenemedi!",
+      "fetchingServers": "Sunucular yüklenemedi",
+      "updatingServers": "Sunucular güncellenemedi",
+      "serverLimitReached": "Sunucu limitine ulaşıldı",
+      "serverLimitReachedPremium": "Premium sunucu limitine ulaşıldı",
+      "serverLimitReachedBase": "Temel sunucu limitine ulaşıldı"
+    },
+    "periods": {
+      "trial": "Deneme Süresi",
+      "hour": "1 saat",
+      "day": "1 gün",
+      "week": "1 hafta",
+      "month": "1 ay",
+      "threeMonth": "3 ay",
+      "sixMonth": "6 ay",
+      "year": "1 yıl",
+      "twoYear": "2 yıl",
+      "threeYear": "3 yıl",
+      "indefinitely": "Süresiz"
+    },
+    "modals": {
+      "delete": {
+        "title": "Abonelik Silme",
+        "button": "Sil",
+        "action": "Sil",
+        "message": "Aboneliği kalıcı olarak silmek istediğinizden emin misiniz? Geri alınamaz! Tazminat sağlanmayacaktır!"
+      },
+      "qr": {
+        "title": "Abonelik QR Kodu",
+        "description": "Müşteri uygulamasında tarayın"
+      },
+      "refresh": {
+        "title": "Abonelik Verilerini Sıfırla",
+        "button": "Verileri Sıfırla",
+        "action": "Sıfırla",
+        "message": "Abonelik verilerini sıfırlamak istediğinizden emin misiniz? Bundan sonra anahtarlar ve abonelik adresi yenileriyle değişecektir! Aboneliği uygulamaya yeniden eklemeniz gerekecektir! Genellikle aboneliğiniz ağa sızarsa veya birisi ona erişirse sıfırlama yapılır!"
+      },
+      "autoRenewal": {
+        "enableTitle": "Otomatik Yenilemeyi Etkinleştir",
+        "disableTitle": "Otomatik Yenilemeyi Devre Dışı Bırak",
+        "enableAction": "Etkinleştir",
+        "disableAction": "Devre Dışı Bırak",
+        "enableMessage": "Aboneliğin otomatik olarak yenilenmesini etkinleştirmek istiyor musunuz? Abonelik süresi dolduğunda fonlar otomatik olarak tahsil edilecektir.",
+        "disableMessage": "Aboneliğin otomatik olarak yenilenmesini devre dışı bırakmak istiyor musunuz? Abonelik süresi dolduktan sonra abonelik devre dışı bırakılacaktır."
+      },
+      "renew": {
+        "title": "Abonelik Yenileme",
+        "action": "Yenile",
+        "message": "Aboneliği yenilemek istiyor musunuz? Bakiyenizden {price} yıldız düşülecektir."
+      }
+    }
+  },
+  "user": {
+    "role": "Rol",
+    "discount": "İndirim",
+    "wallet": "Cüzdan",
+    "usage": "Kullanım",
+    "inPayments": "ödemelerde"
+  },
+  "wallet": {
+    "connect": "TON Cüzdanı Bağla",
+    "disconnect": "Bağlantıyı Kes",
+    "replace": "Değiştir"
+  },
+  "earning": {
+    "title": "Earning",
+    "earned": "Reward received",
+    "rewardTask": {
+      "title": "Watch ad"
+    }
+  }
+}
