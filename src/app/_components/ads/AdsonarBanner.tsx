@@ -2,7 +2,7 @@
 
 import { authApiClient } from '@app/core/authApiClient'
 import { AdsPlaceEnum } from '@app/enums/ads-place.enum'
-import { AdsTaskTypeEnum } from '@app/enums/ads-task-type.enum'
+import { AdsTypeEnum } from '@app/enums/ads-type.enum'
 import { useCallback, useEffect, useState } from 'react'
 
 export default function AdsonarBanner({ place }: { place: AdsPlaceEnum }) {
@@ -44,9 +44,11 @@ export default function AdsonarBanner({ place }: { place: AdsPlaceEnum }) {
 
   const fetchAd = useCallback(async (): Promise<void> => {
     try {
-      const response = await authApiClient.getAds(place, AdsTaskTypeEnum.VIEW)
-      setBannerId(response.blockId)
-      showBannerAd(response.blockId)
+      const response = await authApiClient.getAds(place, AdsTypeEnum.VIEW)
+      if (!response.isNoAds && response.ad) {
+        setBannerId(response.ad.blockId)
+        showBannerAd(response.ad.blockId)
+      } else setBannerId(null)
     } catch (error) {
       console.error('Failed to load ad', error)
       // toast.error(t('errors.loadFailed'))
