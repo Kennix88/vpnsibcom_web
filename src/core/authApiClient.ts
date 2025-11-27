@@ -1,6 +1,6 @@
 import { AdsPlaceEnum } from '@app/enums/ads-place.enum'
 import { AdsResInterface } from '@app/enums/ads-res.interface'
-import { AdsTaskTypeEnum } from '@app/enums/ads-task-type.enum'
+import { AdsTypeEnum } from '@app/enums/ads-type.enum'
 import { CurrencyEnum } from '@app/enums/currency.enum'
 import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
@@ -498,7 +498,7 @@ class ApiClient {
     )
   }
 
-  async getAds(place: AdsPlaceEnum, type: AdsTaskTypeEnum) {
+  async getAds(place: AdsPlaceEnum, type: AdsTypeEnum) {
     return this.safeRequest<AdsResInterface>(async () => {
       const { data } = await this.instance.get(`/ads/${place}/${type}`)
       return data
