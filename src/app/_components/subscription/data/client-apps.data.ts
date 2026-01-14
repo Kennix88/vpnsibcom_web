@@ -38,6 +38,11 @@ export const CLIENT_APPS: ClientAppInterface[] = [
             title: 'Testflight 🇷🇺',
             link: 'https://testflight.apple.com/join/1bKEcMub',
           },
+          {
+            iconType: IconTypeEnum.OTHER,
+            title: 'All installers',
+            link: 'https://www.happ.su/main/',
+          },
         ],
       },
       {
@@ -64,6 +69,11 @@ export const CLIENT_APPS: ClientAppInterface[] = [
             title: 'Testflight 🇷🇺',
             link: 'https://testflight.apple.com/join/1bKEcMub',
           },
+          {
+            iconType: IconTypeEnum.OTHER,
+            title: 'All installers',
+            link: 'https://www.happ.su/main/',
+          },
         ],
       },
       {
@@ -85,6 +95,11 @@ export const CLIENT_APPS: ClientAppInterface[] = [
             title: 'APK Beta file',
             link: 'https://github.com/Happ-proxy/happ-android/releases/latest/download/Happ_beta.apk',
           },
+          {
+            iconType: IconTypeEnum.OTHER,
+            title: 'All installers',
+            link: 'https://www.happ.su/main/',
+          },
         ],
       },
       {
@@ -101,6 +116,11 @@ export const CLIENT_APPS: ClientAppInterface[] = [
             title: 'APK file',
             link: 'https://github.com/Happ-proxy/happ-android/releases/latest/download/Happ.apk',
           },
+          {
+            iconType: IconTypeEnum.OTHER,
+            title: 'All installers',
+            link: 'https://www.happ.su/main/',
+          },
         ],
       },
       {
@@ -110,7 +130,12 @@ export const CLIENT_APPS: ClientAppInterface[] = [
           {
             iconType: IconTypeEnum.OTHER,
             title: 'Installer x86/x64',
-            link: 'https://github.com/Happ-proxy/happ-desktop/releases/latest/download/setup-Happ.x86.exe',
+            link: 'https://github.com/Happ-proxy/happ-desktop/releases/latest/download/setup-Happ.x64.exe',
+          },
+          {
+            iconType: IconTypeEnum.OTHER,
+            title: 'All installers',
+            link: 'https://www.happ.su/main/',
           },
         ],
       },
@@ -128,6 +153,11 @@ export const CLIENT_APPS: ClientAppInterface[] = [
             title: 'AppStore 🇷🇺',
             link: 'https://apps.apple.com/ru/app/happ-proxy-utility-plus/id6746188973',
           },
+          {
+            iconType: IconTypeEnum.OTHER,
+            title: 'All installers',
+            link: 'https://www.happ.su/main/',
+          },
         ],
       },
       {
@@ -139,6 +169,11 @@ export const CLIENT_APPS: ClientAppInterface[] = [
             title: 'File',
             link: 'https://github.com/Happ-proxy/happ-desktop/releases/',
           },
+          {
+            iconType: IconTypeEnum.OTHER,
+            title: 'All installers',
+            link: 'https://www.happ.su/main/',
+          },
         ],
       },
       {
@@ -149,6 +184,11 @@ export const CLIENT_APPS: ClientAppInterface[] = [
             iconType: IconTypeEnum.APPLE_STORE,
             title: 'AppStore',
             link: 'https://apps.apple.com/us/app/happ-proxy-utility-for-tv/id6748297274',
+          },
+          {
+            iconType: IconTypeEnum.OTHER,
+            title: 'All installers',
+            link: 'https://www.happ.su/main/',
           },
         ],
       },
