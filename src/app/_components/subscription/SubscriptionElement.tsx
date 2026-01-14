@@ -488,6 +488,43 @@ export default function SubscriptionElement({
               title={t('actions')}
               variant="default">
               <div className="flex flex-wrap items-center gap-2">
+                <div className="flex gap-2 items-center ">
+                  <button
+                    onClick={() => setIsOpenModalQR(subscription.id)}
+                    className="p-2 rounded-md bg-[var(--secondary-container)] text-[var(--on-secondary-container)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex gap-2 items-center text-xs">
+                    <TbQrcode size={18} /> QR
+                  </button>
+
+                  <Modal
+                    isOpen={isOpenModalQR === subscription.id}
+                    onClose={() => setIsOpenModalQR(null)}
+                    title={t('modals.qr.title')}
+                    variant="default">
+                    <div className="flex flex-col items-center gap-4 p-4">
+                      <div ref={qrRef} className="qr-code-container"></div>
+                      <div className="text-sm text-center">
+                        {t('modals.qr.description')} (Happ, Straisand,
+                        ShadowRocket, v2rayNG, FoXray...)
+                      </div>
+                    </div>
+                  </Modal>
+
+                  <button
+                    onClick={() => handleCopyUrl(subscription.subscriptionUrl)}
+                    className="p-2 rounded-md bg-[var(--secondary-container)] text-[var(--on-secondary-container)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer  flex gap-2 items-center text-xs">
+                    <FaCopy size={16} /> Copy
+                  </button>
+
+                  <Link
+                    href={subscription.subscriptionUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-md bg-[var(--secondary-container)] text-[var(--on-secondary-container)] transition-all duration-200 hover:brightness-110 active:scale-[0.97]  flex gap-2 items-center text-xs">
+                    <FiExternalLink size={18} /> Open
+                  </Link>
+                </div>
+
+                <hr className="w-full border-none h-[1px] bg-[var(--surface-container-highest)] my-2" />
                 <RenewButton subscription={subscription} />
                 <AddTrafficButton subscription={subscription} />
                 <ChangeServersButton subscription={subscription} />
