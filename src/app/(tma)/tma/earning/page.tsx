@@ -3,7 +3,6 @@ import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
 import SocialButtons from '@app/app/_components/SocialButtons'
 import TopBar from '@app/app/_components/TopBar'
 import Version from '@app/app/_components/Version'
-import { AdsPlaceEnum } from '@app/enums/ads-place.enum'
 import { useTranslations } from 'next-intl'
 import dynamic from 'next/dynamic'
 const TaskAdsReward = dynamic(
@@ -15,12 +14,7 @@ const TaskAdsReward = dynamic(
     ssr: false,
   },
 )
-const AdsonarBanner = dynamic(
-  () => import('@app/app/_components/ads/AdsonarBanner'),
-  {
-    ssr: false,
-  },
-)
+
 const AdsgramRewardTask = dynamic(
   () =>
     import('@app/app/_components/ads/AdsgramRewardTask').then(
@@ -41,7 +35,6 @@ export default function Page() {
         {/* <div className="text-lg font-bold font-mono">Soon...</div> */}
       </div>
       <div className="flex flex-col gap-4 mt-4 pb-[80px]">
-        <AdsonarBanner place={AdsPlaceEnum.BANNER_2} />
         <TaskAdsReward />
         <AdsgramRewardTask />
       </div>
