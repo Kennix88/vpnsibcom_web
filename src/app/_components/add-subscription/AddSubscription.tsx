@@ -701,6 +701,7 @@ export default function AddSubscription() {
         trafficLimitGb={trafficLimitGb}
         trafficBalance={user.balance.traffic}
         onPayment={(method) => handlePurchase(method)}
+        user={user}
       />
     </div>
   )
