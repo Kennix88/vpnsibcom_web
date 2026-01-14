@@ -157,19 +157,19 @@ export default function AppElement({
                   target="_blank"
                   title={t('instruction.stage2')}
                   className="rounded-md bg-[var(--surface-container)] h-8  cursor-pointer flex items-center gap-2 justify-center px-4">
-                  {t('instruction.add')} <FiExternalLink size={18} />
+                  <FiExternalLink size={18} /> {t('instruction.add')}
                 </Link>
                 <button
                   title={t('instruction.copyUrl')}
                   onClick={() => copyToClipboard(subscriptionUrl)}
-                  className="rounded-md bg-[var(--surface-container)] h-8 cursor-pointer flex items-center gap-2 justify-center px-2">
-                  <FaCopy size={16} />
+                  className="rounded-md bg-[var(--surface-container)] h-8 cursor-pointer flex items-center gap-2 justify-center px-2 text-sm">
+                  <FaCopy size={16} /> Copy
                 </button>
                 <button
                   title={t('instruction.openQR')}
-                  className="rounded-md bg-[var(--surface-container)] h-8 cursor-pointer flex items-center gap-2 justify-center px-2"
+                  className="rounded-md bg-[var(--surface-container)] h-8 cursor-pointer flex items-center gap-2 justify-center px-2 text-sm"
                   onClick={() => setIsOpenModalQRAdd(true)}>
-                  <TbQrcode size={18} />
+                  <TbQrcode size={18} /> QR
                 </button>
                 <Modal
                   isOpen={isOpenModalQRAdd}
