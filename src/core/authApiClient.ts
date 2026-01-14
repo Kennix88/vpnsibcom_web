@@ -6,6 +6,7 @@ import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
 import { TrafficResetEnum } from '@app/enums/traffic-reset.enum'
 import { useUserStore } from '@app/store/user.store'
+import { BonusesInterface } from '@app/types/bonuses.interface'
 import { CurrencyInterface } from '@app/types/currency.interface'
 import { PaymentMethodsDataInterface } from '@app/types/payment-methods-data.interface'
 import { RatesInterface } from '@app/types/rates.interface'
@@ -257,6 +258,17 @@ class ApiClient {
         }>
       >('/payments/methods', { params: { isTma } })
       return data.data
+    })
+  }
+
+  async getPaymentBonuses() {
+    return this.safeRequest<BonusesInterface>(async () => {
+      const { data } = await this.instance.get<
+        ApiResponse<{
+          bonuses: BonusesInterface
+        }>
+      >('/payments/bonuses')
+      return data.data.bonuses
     })
   }
 
