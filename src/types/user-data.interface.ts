@@ -28,6 +28,7 @@ export interface UserDataInterface {
   inviteMessageId: string
   nextAdsRewardAt?: Date
   nextAdsgramTaskAt?: Date
+  minPayStars: number
 }
 
 export interface UserBalanceInterface {
