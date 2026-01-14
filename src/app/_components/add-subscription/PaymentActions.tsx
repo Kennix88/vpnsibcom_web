@@ -4,6 +4,7 @@ import { CurrencyEnum } from '@app/enums/currency.enum'
 import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
 import { useCurrencyStore } from '@app/store/currency.store'
 import { PlansInterface } from '@app/types/plans.interface'
+import { UserDataInterface } from '@app/types/user-data.interface'
 import { roundUp } from '@app/utils/calculate-subscription-cost.util'
 import { fxUtil } from '@app/utils/fx.util'
 import { useTranslations } from 'next-intl'
@@ -24,6 +25,7 @@ export const PaymentActions = ({
   trafficBalance,
   trafficLimitGb,
   planSelected,
+  user,
 }: {
   planSelected: PlansInterface
   isAllBaseServers: boolean
@@ -35,6 +37,7 @@ export const PaymentActions = ({
   isLoading: boolean
   trafficLimitGb: number
   trafficBalance: number
+  user: UserDataInterface
   onPayment: (
     method: PaymentMethodEnum | 'BALANCE' | 'TRAFFIC',
   ) => Promise<void>
@@ -89,9 +92,9 @@ export const PaymentActions = ({
               onClick={() => {
                 onPayment(PaymentMethodEnum.STARS)
               }}
-              disabled={isLoading || price <= 0}
+              disabled={isLoading || price <= 0 || price < user.minPayStars}
               className={`py-2 px-4 rounded-md bg-[var(--star-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
-                isLoading || price <= 0
+                isLoading || price <= 0 || price < user.minPayStars
                   ? 'opacity-50 cursor-not-allowed'
                   : ' cursor-pointer'
               } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
@@ -110,9 +113,9 @@ export const PaymentActions = ({
                 onClick={() => {
                   onPayment(PaymentMethodEnum.TON_TON)
                 }}
-                disabled={isLoading || price <= 0}
+                disabled={isLoading || price <= 0 || price < user.minPayStars}
                 className={`py-2 px-4 rounded-md bg-[var(--ton-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
-                  isLoading || price <= 0
+                  isLoading || price <= 0 || price < user.minPayStars
                     ? 'opacity-50 cursor-not-allowed'
                     : ' cursor-pointer'
                 } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
