@@ -6,7 +6,7 @@ const withNextIntl = createNextIntlPlugin('./src/core/i18n/i18n.ts')
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  poweredByHeader: false,
+  // poweredByHeader: false,
   compress: true,
   output: 'standalone',
   outputFileTracingRoot: __dirname,
@@ -37,29 +37,29 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: false,
   },
 
-  async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: [
-          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-          { key: 'Permissions-Policy', value: 'geolocation=(), microphone=()' },
-          { key: 'X-XSS-Protection', value: '1; mode=block' },
-          {
-            key: 'Strict-Transport-Security',
-            value: 'max-age=63072000; includeSubDomains; preload',
-          },
-          {
-            key: 'Content-Security-Policy',
-            value:
-              "default-src 'self'; img-src 'self' https: data:; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; frame-ancestors 'none';",
-          },
-        ],
-      },
-    ]
-  },
+  // async headers() {
+  //   return [
+  //     {
+  //       source: '/(.*)',
+  //       headers: [
+  //         { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+  //         { key: 'X-Content-Type-Options', value: 'nosniff' },
+  //         { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+  //         { key: 'Permissions-Policy', value: 'geolocation=(), microphone=()' },
+  //         { key: 'X-XSS-Protection', value: '1; mode=block' },
+  //         {
+  //           key: 'Strict-Transport-Security',
+  //           value: 'max-age=63072000; includeSubDomains; preload',
+  //         },
+  //         {
+  //           key: 'Content-Security-Policy',
+  //           value:
+  //             "default-src 'self'; img-src 'self' https: data:; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; frame-ancestors 'none';",
+  //         },
+  //       ],
+  //     },
+  //   ]
+  // },
 
   webpack: (config, { isServer }) => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
