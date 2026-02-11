@@ -102,6 +102,8 @@ export default function AnalyticsInit() {
           // fallback: convert to array and push
           w.graspil = w.graspil && Array.isArray(w.graspil) ? w.graspil : []
           w.graspil.push(payload)
+          // w.Telegram.push(payload)
+          // w.Taddy.init('14cbeb980853dd416003462ca4db7c12')
         }
       }
     })
