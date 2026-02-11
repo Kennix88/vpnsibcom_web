@@ -15,15 +15,15 @@ const TaskAdsReward = dynamic(
   },
 )
 
-const AdsgramRewardTask = dynamic(
-  () =>
-    import('@app/app/_components/ads/AdsgramRewardTask').then(
-      (mod) => mod.AdsgramRewardTask,
-    ),
-  {
-    ssr: false,
-  },
-)
+// const AdsgramRewardTask = dynamic(
+//   () =>
+//     import('@app/app/_components/ads/AdsgramRewardTask').then(
+//       (mod) => mod.AdsgramRewardTask,
+//     ),
+//   {
+//     ssr: false,
+//   },
+// )
 
 export default function Page() {
   const t = useTranslations('earning')
@@ -36,7 +36,7 @@ export default function Page() {
       </div>
       <div className="flex flex-col gap-4 mt-4 pb-[80px]">
         <TaskAdsReward />
-        <AdsgramRewardTask />
+        {/* <AdsgramRewardTask /> */}
       </div>
       <div className="flex flex-col gap-4">
         <SocialButtons />
