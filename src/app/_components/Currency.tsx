@@ -1,4 +1,5 @@
 'use client'
+import ad from '@app/app/_assets/icons/ad.svg'
 import star from '@app/app/_assets/icons/star.svg'
 import tgStar from '@app/app/_assets/icons/tg-star-original.svg'
 import ticket from '@app/app/_assets/icons/ticket.svg'
@@ -11,7 +12,7 @@ export default function Currency({
   type = 'star',
 }: {
   w?: number
-  type?: 'star' | 'tg-star' | 'ticket' | 'traffic' | 'ton'
+  type?: 'star' | 'tg-star' | 'ticket' | 'traffic' | 'ton' | 'ad'
 }) {
   return (
     <Image
@@ -26,7 +27,9 @@ export default function Currency({
                 ? traffic
                 : type === 'ton'
                   ? ton
-                  : star
+                  : type === 'ad'
+                    ? ad
+                    : star
       }
       alt={'currency'}
       width={w}
