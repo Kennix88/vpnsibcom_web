@@ -29,13 +29,13 @@ export interface UserDataInterface {
   nextAdsRewardAt?: Date
   nextAdsgramTaskAt?: Date
   minPayStars: number
+  lastFullscreenViewedAt?: Date
 }
 
 export interface UserBalanceInterface {
   payment: number
   hold: number
-  totalEarned: number
+  ad: number
   tickets: number
   traffic: number
-  wager: number
 }
