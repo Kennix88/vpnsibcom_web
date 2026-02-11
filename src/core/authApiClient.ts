@@ -384,7 +384,7 @@ class ApiClient {
   async addTrafficSubscription(
     subscriptionId: string,
     traffic: number,
-    method: PaymentMethodEnum | 'BALANCE' | 'TRAFFIC',
+    method: PaymentMethodEnum | 'BALANCE' | 'TRAFFIC' | 'AD',
   ) {
     return this.safeRequest<{
       subscriptions: SubscriptionResponseInterface
@@ -429,7 +429,7 @@ class ApiClient {
 
   async renewSubscription(
     subscriptionId: string,
-    method: PaymentMethodEnum | 'BALANCE',
+    method: PaymentMethodEnum | 'BALANCE' | 'AD',
     isSavePeriod: boolean,
     period: SubscriptionPeriodEnum,
     periodMultiplier: number,
