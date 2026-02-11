@@ -15,6 +15,7 @@ import {
   calculateSubscriptionCost,
   calculateSubscriptionCostNoDiscount,
   roundUp,
+  starsToAD,
 } from '@app/utils/calculate-subscription-cost.util'
 import { fxUtil } from '@app/utils/fx.util'
 import { invoice } from '@tma.js/sdk-react'
@@ -277,7 +278,7 @@ export default function RenewButton({
 
   const renewSubscription = async (
     subscription: SubscriptionDataInterface,
-    method: PaymentMethodEnum | 'BALANCE',
+    method: PaymentMethodEnum | 'BALANCE' | 'AD',
   ) => {
     try {
       if (method === PaymentMethodEnum.TON_TON && !wallet?.account?.address) {
@@ -672,6 +673,31 @@ export default function RenewButton({
                         )}
                       </button>
                     )}
+                    <button
+                      onClick={() => {
+                        renewSubscription(subscription, 'AD')
+                      }}
+                      disabled={
+                        isLoading ||
+                        starsToAD(price, subscriptions.adPriceStars) >
+                          user.balance.ad
+                      }
+                      className={`py-2 px-4 rounded-md bg-[var(--ad-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+                        isLoading ||
+                        starsToAD(price, subscriptions.adPriceStars) >
+                          user.balance.ad
+                          ? 'opacity-50 cursor-not-allowed'
+                          : ' cursor-pointer'
+                      } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
+                      {price <= 0 ? (
+                        t('addFree')
+                      ) : (
+                        <>
+                          <Currency type={'ad'} w={18} />
+                          {starsToAD(price, subscriptions.adPriceStars)}
+                        </>
+                      )}
+                    </button>
                   </div>
                 </div>
               </div>
