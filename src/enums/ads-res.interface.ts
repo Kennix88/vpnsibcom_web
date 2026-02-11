@@ -21,4 +21,5 @@ export interface AdsTaskRewardsInterface {
   traffic: number
   stars: number
   tickets: number
+  ad: number
 }
