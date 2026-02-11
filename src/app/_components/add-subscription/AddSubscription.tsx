@@ -419,7 +419,7 @@ export default function AddSubscription() {
   }, [subscriptions, user, t])
 
   const handlePurchase = async (
-    method: PaymentMethodEnum | 'BALANCE' | 'TRAFFIC',
+    method: PaymentMethodEnum | 'BALANCE' | 'TRAFFIC' | 'AD',
   ) => {
     if (isLoading || !planSelected || !periodButton) return
     if (method === PaymentMethodEnum.TON_TON && !wallet?.account?.address) {
@@ -699,6 +699,7 @@ export default function AddSubscription() {
         priceNoDiscount={priceNoDiscount}
         isLoading={isLoading}
         trafficLimitGb={trafficLimitGb}
+        adPriceStars={subscriptions.adPriceStars}
         trafficBalance={user.balance.traffic}
         onPayment={(method) => handlePurchase(method)}
         user={user}
