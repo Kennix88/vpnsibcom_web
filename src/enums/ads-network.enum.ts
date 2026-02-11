@@ -5,4 +5,6 @@ export enum AdsNetworkEnum {
   ADSONAR = 'ADSONAR',
   GIGA = 'GIGA',
   MONETAG = 'MONETAG',
+  TADDY = 'TADDY',
+  RICHADS = 'RICHADS',
 }
