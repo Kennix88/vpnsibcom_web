@@ -1,5 +1,6 @@
 'use client'
 import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
+import { useFullscreenAd } from '@app/app/_components/ads/useFullscreenAd'
 import Avatar from '@app/app/_components/Avatar'
 import Balance from '@app/app/_components/Balance'
 import LanguageSwitcher from '@app/app/_components/LanguageSwitcher'
@@ -31,6 +32,8 @@ export default function Page() {
       })
     : null
 
+  useFullscreenAd()
+
   useEffect(() => {
     const updateUser = async () => {
       try {
@@ -57,9 +60,9 @@ export default function Page() {
             </div>
           </div>
         </div>
-        <div className={'flex flex-row gap-2 items-center justify-center'}>
+        <div className={'flex flex-wrap gap-2 items-center justify-center'}>
           <Balance type={'payment'} />
-          <Balance type={'ticket'} />
+          <Balance type={'ad'} />
           <Balance type={'traffic'} />
         </div>
         <div
