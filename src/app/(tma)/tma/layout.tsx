@@ -27,7 +27,17 @@ export default async function TmaLayout({
       <head>
         <Script
           id="adsonar"
-          src="https://static.sonartech.io/lib/1.0.0/sonar.js?appId=app_133d2148"
+          strategy="beforeInteractive"
+          src={
+            'https://static.sonartech.io/lib/1.0.0/sonar.js?appId=app_133d2148' +
+            (process.env.NODE_ENV === 'development' ? '&isDebug=true' : '')
+          }
+        />
+
+        <Script
+          id="taddy"
+          strategy="beforeInteractive"
+          src={'https://sdk.taddy.pro/web/taddy.min.js?1317'}
         />
       </head>
       <body className="bg-[var(--background)]">
