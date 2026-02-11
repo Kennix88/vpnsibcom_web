@@ -6,6 +6,8 @@ import { PlansInterface } from '@app/types/plans.interface'
  * Subscription cost calculation settings interface
  */
 interface SubscriptionCostSettings {
+  tgStarsToUSD: number
+  adPriceStars: number
   devicesPriceStars: number
   serversPriceStars: number
   premiumServersPriceStars: number
@@ -44,6 +46,13 @@ interface SubscriptionCostParams {
   userDiscount: number
   plan: PlansInterface
   settings: SubscriptionCostSettings
+}
+
+export function starsToAD(stars: number, adPriceStars: number) {
+  if (stars <= 0) {
+    throw new Error('The stars must be greater than 0')
+  }
+  return roundingUpPrice(stars / adPriceStars)
 }
 
 export function calculateTrafficPrice(
