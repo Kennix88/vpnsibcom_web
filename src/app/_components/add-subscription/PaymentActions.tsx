@@ -5,7 +5,7 @@ import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
 import { useCurrencyStore } from '@app/store/currency.store'
 import { PlansInterface } from '@app/types/plans.interface'
 import { UserDataInterface } from '@app/types/user-data.interface'
-import { roundUp } from '@app/utils/calculate-subscription-cost.util'
+import { roundUp, starsToAD } from '@app/utils/calculate-subscription-cost.util'
 import { fxUtil } from '@app/utils/fx.util'
 import { useTranslations } from 'next-intl'
 import { FaCircleInfo } from 'react-icons/fa6'
@@ -19,7 +19,7 @@ export const PaymentActions = ({
   serversSelected,
   balance,
   price,
-
+  adPriceStars,
   isLoading,
   onPayment,
   trafficBalance,
@@ -38,8 +38,9 @@ export const PaymentActions = ({
   trafficLimitGb: number
   trafficBalance: number
   user: UserDataInterface
+  adPriceStars: number
   onPayment: (
-    method: PaymentMethodEnum | 'BALANCE' | 'TRAFFIC',
+    method: PaymentMethodEnum | 'BALANCE' | 'TRAFFIC' | 'AD',
   ) => Promise<void>
 }) => {
   const { rates } = useCurrencyStore()
@@ -162,6 +163,27 @@ export const PaymentActions = ({
                 {price <= 0 ? 0 : trafficLimitGb * 1024}
               </button>
             )}
+            <button
+              onClick={() => {
+                onPayment('AD')
+              }}
+              disabled={
+                isLoading || starsToAD(price, adPriceStars) > user.balance.ad
+              }
+              className={`py-2 px-4 rounded-md bg-[var(--ad-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+                isLoading || starsToAD(price, adPriceStars) > user.balance.ad
+                  ? 'opacity-50 cursor-not-allowed'
+                  : ' cursor-pointer'
+              } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
+              {price <= 0 ? (
+                t('addFree')
+              ) : (
+                <>
+                  <Currency type={'ad'} w={18} />
+                  {starsToAD(price, adPriceStars)}
+                </>
+              )}
+            </button>
           </div>
         </>
       )}
