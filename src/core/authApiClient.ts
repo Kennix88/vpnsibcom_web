@@ -18,7 +18,6 @@ import {
   SubscriptionResponseInterface,
 } from '@app/types/subscription-data.interface'
 import { UserDataInterface } from '@app/types/user-data.interface'
-import { retrieveRawInitData } from '@tma.js/sdk-react'
 
 import axios, {
   AxiosError,
@@ -107,6 +106,7 @@ class ApiClient {
 
     if (typeof window !== 'undefined') {
       try {
+        const { retrieveRawInitData } = await import('@tma.js/sdk-react')
         const initData = retrieveRawInitData()
         if (initData) {
           const { accessToken, user } = await this.telegramLogin(initData)
