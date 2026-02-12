@@ -1,7 +1,6 @@
 // components/GraspilInit.tsx
 'use client'
 
-import { retrieveLaunchParams, retrieveRawInitData } from '@tma.js/sdk-react'
 import Script from 'next/script'
 import { useEffect } from 'react'
 
@@ -16,12 +15,14 @@ import { useEffect } from 'react'
  * Insert this component somewhere in client layout (after your initTelegramSDK call)
  */
 export default function AnalyticsInit() {
-  const initDataRaw = retrieveRawInitData()
-  const launchParams = retrieveLaunchParams()
-
   useEffect(() => {
     // wait microtask so next/script has chance to run its inline script
-    Promise.resolve().then(() => {
+    Promise.resolve().then(async () => {
+      const { retrieveLaunchParams, retrieveRawInitData } =
+        await import('@tma.js/sdk-react')
+      const initDataRaw = retrieveRawInitData()
+      const launchParams = retrieveLaunchParams()
+
       // 1) try global Telegram.WebApp (may be removed by @telegram-apps)
       const tgWebApp = (globalThis as any).Telegram?.WebApp
 
@@ -107,7 +108,7 @@ export default function AnalyticsInit() {
         }
       }
     })
-  }, [initDataRaw, launchParams])
+  }, [])
 
   // Insert Graspil loader script. It will create window.graspil = [] and load remote script.
   // Using dangerouslySetInnerHTML inline to match required snippet.
