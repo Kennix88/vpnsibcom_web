@@ -11,11 +11,10 @@ import { AdsTypeEnum } from '@app/enums/ads-type.enum'
 import { useUserStore } from '@app/store/user.store'
 
 export function useFullscreenAd() {
+  const { user } = useUserStore()
   const executedRef = useRef(false)
   const mountedRootRef = useRef<Root | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
-
-  const { user } = useUserStore()
 
   useEffect(() => {
     if (!user || executedRef.current) return
@@ -23,7 +22,7 @@ export function useFullscreenAd() {
 
     const run = async () => {
       try {
-        // rate limit: 5 minutes from last viewed
+        // rate limit: 3 минуты с последнего показа
         if (
           user.lastFullscreenViewedAt &&
           !isAfter(
@@ -38,88 +37,69 @@ export function useFullscreenAd() {
           AdsPlaceEnum.FULLSCREEN,
           AdsTypeEnum.VIEW,
         )
-
         if (response.isNoAds || !response.ad) return
 
         const { ad } = response
 
-        // create container and mount appropriate component imperatively
-        // (useAdsgram is a hook and must be used inside a component)
-        /* eslint-disable @typescript-eslint/ban-ts-comment */
-        // @ts-ignore
-        const mountAdComponent = (node: JSX.Element) => {
-          // create container
-          const container = document.createElement('div')
-          container.setAttribute('data-ads-portal', 'true')
-          document.body.appendChild(container)
-          containerRef.current = container
-          const root = createRoot(container)
-          mountedRootRef.current = root
-          root.render(node)
+        // создаём динамический контейнер
+        if (!containerRef.current) {
+          const div = document.createElement('div')
+          div.id = 'ads-fullscreen-container'
+          document.body.appendChild(div)
+          containerRef.current = div
         }
 
-        const unmount = () => {
-          try {
-            if (mountedRootRef.current) {
-              mountedRootRef.current.unmount()
-              mountedRootRef.current = null
-            }
-            if (containerRef.current) {
-              containerRef.current.remove()
-              containerRef.current = null
-            }
-          } catch (err) {
-            console.warn('Unmount ad portal failed', err)
-          }
-        }
+        if (mountedRootRef.current) return // уже смонтирован
+        const root = createRoot(containerRef.current)
+        mountedRootRef.current = root
 
         const handleClose = () => {
-          unmount()
+          if (mountedRootRef.current) {
+            mountedRootRef.current.unmount()
+            mountedRootRef.current = null
+          }
+          if (containerRef.current) {
+            containerRef.current.remove()
+            containerRef.current = null
+          }
         }
 
         if (ad.network === AdsNetworkEnum.ADSGRAM) {
           const { default: AdsgramFullscreen } =
             await import('./AdsgramFullscreen')
-          mountAdComponent(
+          root.render(
             <AdsgramFullscreen
               blockId={ad.blockId as `${number}` | `int-${number}`}
               onClose={handleClose}
             />,
           )
         } else if (ad.network === AdsNetworkEnum.ADSONAR) {
-          // Sonar or other imperative SDKs
           const { default: AdsonarFullscreen } =
             await import('./AdsonarFullscreen')
-          mountAdComponent(
+          root.render(
             <AdsonarFullscreen
               blockId={String(ad.blockId)}
               onClose={handleClose}
             />,
           )
         }
-      } catch (e) {
-        console.error('[useFullscreenAd] failed:', e)
+      } catch (err) {
+        console.error('[useFullscreenAd] failed:', err)
       }
     }
 
-    // ensure run AFTER first paint
-    requestAnimationFrame(() => {
-      setTimeout(run, 0)
-    })
+    // run после первой отрисовки
+    requestAnimationFrame(() => setTimeout(run, 0))
 
-    // cleanup if page unmounts before ad finishes
+    // cleanup при размонтировании страницы
     return () => {
-      try {
-        if (mountedRootRef.current) {
-          mountedRootRef.current.unmount()
-          mountedRootRef.current = null
-        }
-        if (containerRef.current) {
-          containerRef.current.remove()
-          containerRef.current = null
-        }
-      } catch (err) {
-        console.warn('Unmount ad portal failed', err)
+      if (mountedRootRef.current) {
+        mountedRootRef.current.unmount()
+        mountedRootRef.current = null
+      }
+      if (containerRef.current) {
+        containerRef.current.remove()
+        containerRef.current = null
       }
     }
   }, [user])
