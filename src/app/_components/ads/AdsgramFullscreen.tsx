@@ -1,7 +1,7 @@
 'use client'
 
 import { useAdsgram } from '@adsgram/react'
-import { useEffect } from 'react'
+import { useCallback } from 'react'
 
 type Props = {
   blockId: `${number}` | `int-${number}`
@@ -9,28 +9,17 @@ type Props = {
 }
 
 export default function AdsgramFullscreen({ blockId, onClose }: Props) {
-  // useAdsgram must be called inside a component
+  const handleReward = useCallback(() => {
+    onClose?.()
+  }, [onClose])
+
   const { show } = useAdsgram({
     blockId,
-    debug: process.env.NODE_ENV === 'development',
+    debug: false,
+    onReward: handleReward,
   })
 
-  useEffect(() => {
-    let mounted = true
-    // вызов после mount
-    if (mounted) {
-      try {
-        show()
-      } catch (err) {
-        console.error('Adsgram show failed:', err)
-        onClose?.()
-      }
-    }
-    return () => {
-      mounted = false
-      // SDK-specific cleanup можно добавить здесь, если требуется
-    }
-  }, [show, onClose])
+  show()
 
   return null
 }
