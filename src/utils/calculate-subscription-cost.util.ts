@@ -49,7 +49,7 @@ interface SubscriptionCostParams {
 }
 
 export function starsToAD(stars: number, adPriceStars: number) {
-  if (stars <= 0) {
+  if (stars < 0) {
     throw new Error('The stars must be greater than 0')
   }
   return roundingUpPrice(stars / adPriceStars)
