@@ -1,3 +1,4 @@
+'use client'
 import { motion, useAnimation } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
