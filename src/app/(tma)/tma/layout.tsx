@@ -34,11 +34,11 @@ export default async function TmaLayout({
           }
         />
 
-        <Script
+        {/* <Script
           id="taddy"
           strategy="beforeInteractive"
           src={'https://sdk.taddy.pro/web/taddy.min.js?1317'}
-        />
+        /> */}
       </head>
       <body className="bg-[var(--background)]">
         <I18nProvider>
