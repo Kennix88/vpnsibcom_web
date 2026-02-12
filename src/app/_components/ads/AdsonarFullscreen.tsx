@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 type Props = {
   blockId: string
@@ -8,7 +8,14 @@ type Props = {
 }
 
 export default function AdsonarFullscreen({ blockId, onClose }: Props) {
+  const calledRef = useRef(false)
+  const onCloseRef = useRef(onClose)
+  onCloseRef.current = onClose
+
   useEffect(() => {
+    if (calledRef.current) return
+    calledRef.current = true
+
     let cancelled = false
 
     const showSonarAd = async () => {
@@ -16,31 +23,33 @@ export default function AdsonarFullscreen({ blockId, onClose }: Props) {
         /* eslint-disable @typescript-eslint/ban-ts-comment */
         // @ts-ignore
         const sonar = window.Sonar
-        if (!sonar || typeof sonar.show !== 'function') {
+
+        if (!sonar?.show) {
           console.warn('Sonar SDK not available')
-          onClose?.()
           return
         }
 
-        // Sonar.show returns a Promise; handle lifecycle and reward callback
         await sonar.show({
           adUnit: blockId,
-          loader: true,
+          loader: false,
         })
       } catch (err) {
         console.error('showSonarAd error', err)
       } finally {
-        if (!cancelled) onClose?.()
+        if (!cancelled) {
+          onCloseRef.current?.()
+        }
       }
     }
 
-    showSonarAd()
+    // defer to avoid race with hydration
+    const id = setTimeout(showSonarAd, 0)
 
     return () => {
       cancelled = true
-      // No standard Sonar cleanup known; if available, call it here.
+      clearTimeout(id)
     }
-  }, [blockId, onClose])
+  }, [blockId])
 
   return null
 }
