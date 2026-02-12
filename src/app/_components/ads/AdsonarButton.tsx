@@ -30,10 +30,8 @@ export default function AdsonarButton({
     } catch (error) {
       console.error('Failed to load ad', error)
       //
-    } finally {
-      fetchAd()
     }
-  }, [verifyKey, setUser, t, fetchAd])
+  }, [verifyKey, setUser, t])
 
   const showRewardedAd = () => {
     /* eslint-disable @typescript-eslint/ban-ts-comment */
@@ -41,7 +39,7 @@ export default function AdsonarButton({
     window.Sonar.show({
       adUnit: blockId, // Замените {bannerAdUnitName} на актуальное
 
-      loader: true, // опционально, можно включать или отключать показ лоадера перед показом рекламы. По-умолчанию: true
+      loader: false, // опционально, можно включать или отключать показ лоадера перед показом рекламы. По-умолчанию: true
 
       onStart: () => {
         // Добавьте логику для момента начала загрузки рекламы
@@ -52,7 +50,7 @@ export default function AdsonarButton({
       },
 
       onError: () => {
-        // Обработайте ошибки, которые могут возникнуть во время жизненного цикла рекламы
+        fetchAd()
       },
 
       onClose: () => {
