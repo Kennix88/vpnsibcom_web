@@ -1,5 +1,5 @@
 'use client'
-import ad from '@app/app/_assets/icons/ad.svg'
+import ad from '@app/app/_assets/icons/ad-icon.svg'
 import star from '@app/app/_assets/icons/star.svg'
 import tgStar from '@app/app/_assets/icons/tg-star-original.svg'
 import ticket from '@app/app/_assets/icons/ticket.svg'
