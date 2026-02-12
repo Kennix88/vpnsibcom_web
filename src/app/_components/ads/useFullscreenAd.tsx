@@ -10,11 +10,6 @@ import { AdsPlaceEnum } from '@app/enums/ads-place.enum'
 import { AdsTypeEnum } from '@app/enums/ads-type.enum'
 import { useUserStore } from '@app/store/user.store'
 
-// Импорт "минимальных" компонентов, которые используют useAdsgram / window.Sonar.
-// Эти компоненты описаны ниже.
-import AdsgramFullscreen from './AdsgramFullscreen'
-import AdsonarFullscreen from './AdsonarFullscreen'
-
 export function useFullscreenAd() {
   const executedRef = useRef(false)
   const mountedRootRef = useRef<Root | null>(null)
@@ -83,6 +78,8 @@ export function useFullscreenAd() {
         }
 
         if (ad.network === AdsNetworkEnum.ADSGRAM) {
+          const { default: AdsgramFullscreen } =
+            await import('./AdsgramFullscreen')
           mountAdComponent(
             <AdsgramFullscreen
               blockId={ad.blockId as `${number}` | `int-${number}`}
@@ -91,6 +88,8 @@ export function useFullscreenAd() {
           )
         } else if (ad.network === AdsNetworkEnum.ADSONAR) {
           // Sonar or other imperative SDKs
+          const { default: AdsonarFullscreen } =
+            await import('./AdsonarFullscreen')
           mountAdComponent(
             <AdsonarFullscreen
               blockId={String(ad.blockId)}
