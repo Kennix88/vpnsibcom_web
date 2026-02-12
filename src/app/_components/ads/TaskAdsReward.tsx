@@ -10,9 +10,9 @@ import dynamic from 'next/dynamic'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { FaPlay } from 'react-icons/fa6'
 import Currency from '../Currency'
+import AdsgramButton from './AdsgramButton'
 import { CountdownTimer } from './CountdownTimer'
 
-const AdsgramButton = dynamic(() => import('./AdsgramButton'), { ssr: false })
 const AdsonarButton = dynamic(() => import('./AdsonarButton'), { ssr: false })
 
 export function TaskAdsReward() {
@@ -86,6 +86,7 @@ export function TaskAdsReward() {
         <>
           {ad.network === AdsNetworkEnum.ADSGRAM && (
             <AdsgramButton
+              key={ad.verifyKey}
               blockId={ad.blockId as `${number}` | `int-${number}`}
               verifyKey={ad.verifyKey}
               fetchAd={fetchAd}
@@ -93,6 +94,7 @@ export function TaskAdsReward() {
           )}
           {ad.network === AdsNetworkEnum.ADSONAR && (
             <AdsonarButton
+              key={ad.verifyKey}
               blockId={ad.blockId}
               verifyKey={ad.verifyKey}
               fetchAd={fetchAd}
