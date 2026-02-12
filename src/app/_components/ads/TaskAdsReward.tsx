@@ -6,12 +6,14 @@ import { AdsDataInterface } from '@app/enums/ads-res.interface'
 import { AdsTypeEnum } from '@app/enums/ads-type.enum'
 import { useUserStore } from '@app/store/user.store'
 import { useTranslations } from 'next-intl'
+import dynamic from 'next/dynamic'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { FaPlay } from 'react-icons/fa6'
 import Currency from '../Currency'
-import AdsgramButton from './AdsgramButton'
-import AdsonarButton from './AdsonarButton'
 import { CountdownTimer } from './CountdownTimer'
+
+const AdsgramButton = dynamic(() => import('./AdsgramButton'), { ssr: false })
+const AdsonarButton = dynamic(() => import('./AdsonarButton'), { ssr: false })
 
 export function TaskAdsReward() {
   const [ad, setAd] = useState<AdsDataInterface | null>(null)
