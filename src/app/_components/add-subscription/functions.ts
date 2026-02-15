@@ -6,6 +6,12 @@ import { SubscriptionResponseInterface } from '@app/types/subscription-data.inte
 import { UserDataInterface } from '@app/types/user-data.interface'
 import { COLORS } from './constants'
 
+export const getTrafficCountButtonColor = (amount: number) => {
+  if (amount <= 10) return COLORS.GREEN
+  if (amount <= 50) return COLORS.GOLD
+  return COLORS.RED
+}
+
 export const getDevicesCountButtonColor = (amount: number) => {
   if (amount <= 5) return COLORS.GREEN
   if (amount <= 10) return COLORS.GOLD
@@ -30,22 +36,27 @@ export const getServersText = (
   allPremium: boolean,
   baseCount: number,
   premiumCount: number,
+  t: any,
 ) => {
   if (!plan) return ''
 
   switch (plan.serversSelectType) {
     case PlansServersSelectTypeEnum.CUSTOM:
-      return 'Выбирай нужные сервера'
+      return t('subscription.privileges.selectServers')
     case PlansServersSelectTypeEnum.ONE_BASE:
-      return 'Один базовый сервер на выбор'
+      return t('subscription.privileges.oneBaseServer')
     case PlansServersSelectTypeEnum.ONE_BASE_OR_PREMIUM:
-      return 'Один базовый или премиум сервер на выбор'
+      return t('subscription.privileges.oneBaseOrPremiumServer')
     default:
-      if (allBase && allPremium) return 'Доступ ко всем серверам'
-      if (allBase) return 'Доступ ко всем базовым серверам'
+      if (allBase && allPremium)
+        return t('subscription.privileges.accessAllServers')
+      if (allBase) return t('subscription.privileges.accessAllBaseServers')
       return premiumCount === 0
-        ? `Доступ к ${baseCount} базовым серверам`
-        : `Доступ к ${baseCount} базовым и ${premiumCount} премиум серверам`
+        ? t('subscription.privileges.accessBaseServers', { baseCount })
+        : t('subscription.privileges.accessBaseAndPremiumServers', {
+            baseCount,
+            premiumCount,
+          })
   }
 }
 

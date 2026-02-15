@@ -1,10 +1,13 @@
 'use client'
 import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
+import { useFullscreenAd } from '@app/app/_components/ads/useFullscreenAd'
 import Avatar from '@app/app/_components/Avatar'
 import Balance from '@app/app/_components/Balance'
 import LanguageSwitcher from '@app/app/_components/LanguageSwitcher'
+import SocialButtons from '@app/app/_components/SocialButtons'
 import { TonWalletConnect } from '@app/app/_components/ton/TonWalletConnect'
 import { TonWalletManager } from '@app/app/_components/ton/TonWalletManager'
+import Version from '@app/app/_components/Version'
 import { authApiClient } from '@app/core/authApiClient'
 import { useSlicedAddress } from '@app/hooks/useSlicedAddress'
 import { useUserStore } from '@app/store/user.store'
@@ -28,6 +31,8 @@ export default function Page() {
         bounceable: false,
       })
     : null
+
+  useFullscreenAd()
 
   useEffect(() => {
     const updateUser = async () => {
@@ -55,9 +60,9 @@ export default function Page() {
             </div>
           </div>
         </div>
-        <div className={'flex flex-row gap-2 items-center justify-center'}>
+        <div className={'flex flex-wrap gap-2 items-center justify-center'}>
           <Balance type={'payment'} />
-          <Balance type={'ticket'} />
+          <Balance type={'ad'} />
           <Balance type={'traffic'} />
         </div>
         <div
@@ -169,6 +174,10 @@ export default function Page() {
           <LanguageSwitcher />
           {/* <CurrencySwitcher /> */}
         </div>
+      </div>
+      <div className="flex flex-col mt-8 gap-4">
+        <SocialButtons />
+        <Version />
       </div>
     </TmaPage>
   )

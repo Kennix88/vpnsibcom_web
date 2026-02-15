@@ -1,0 +1,116 @@
+{
+  "title": "Abonelik",
+  "connection": "Bağlantı",
+  "configs": "Yapılandırmalar",
+  "addSubscription": "Abonelik Ekle",
+  "addSubscriptionTitle": "Abonelik Ekleme",
+  "yourSubscriptions": "Abonelikleriniz",
+  "noSubscriptions": "Aktif aboneliğiniz yok",
+  "loading": "Abonelik verileri yükleniyor...",
+  "notFound": "Abonelik bulunamadı",
+  "renewSubscription": "Aboneliği Yenile",
+  "autoRenewalEnabled": "Otomatik yenileme etkin",
+  "autoRenewalDisabled": "Otomatik yenileme devre dışı",
+  "subscriptionDeleted": "Abonelik başarıyla silindi",
+  "subscriptionDataUpdated": "Abonelik verileri başarıyla güncellendi",
+  "subscriptionRenewed": "Abonelik başarıyla yenilendi",
+  "changeServer": "Sunucuyu Değiştir",
+  "changeServerTitle": "Sunucu Değişikliği",
+  "changeServerWarning": "DİKKAT: Sunucu değişikliği 2 dakika içinde gerçekleşir. Sunucu değişikliğinden sonra, uygulamadaki verileri güncellemeniz gerekmektedir!",
+  "active": "Aktif",
+  "notActive": "Aktif Değil",
+  "online": "Çevrimiçi",
+  "offline": "Çevrimdışı",
+  "traffic": "Trafik",
+  "trafficReset": {
+    "daily": "Günlük",
+    "weekly": "Haftalık",
+    "monthly": "Aylık",
+    "yearly": "Yıllık",
+    "unlimit": "Sınırsız"
+  },
+  "inTotal": "Toplamda",
+  "servers": "Sunucular",
+  "fullServers": "Tümüne erişim",
+  "allBase": "Tüm temel",
+  "base": "Temel",
+  "premium": "Premium",
+  "devices": "Cihazlar",
+  "period": "Ödeme Periyodu",
+  "expires": "Sona Eriyor",
+  "autoRenewal": "Otomatik Yenileme",
+  "actions": "Eylemler",
+  "save": "Kaydet",
+  "required": "Önerilir!",
+  "paid": "Ücretli!",
+  "instruction": {
+    "stage1": "Uygulamayı İndir",
+    "stage2": "Uygulamaya abonelik ekle",
+    "copyUrl": "Abonelik URL'sini Kopyala",
+    "openQR": "Abonelik QR Kodu",
+    "scanApp": "Uygulamada Tara",
+    "scanPhone": "Telefonda Tara",
+    "add": "Uygulamaya Ekle"
+  },
+  "platform": "Platform",
+  "success": {
+    "serversUpdated": "Sunucular başarıyla güncellendi"
+  },
+  "errors": {
+    "loadFailed": "Abonelikler yüklenemedi",
+    "disableAutoRenewalFailed": "Otomatik yenileme devre dışı bırakılamadı!",
+    "enableAutoRenewalFailed": "Otomatik yenileme etkinleştirilemedi!",
+    "deleteSubscriptionFailed": "Abonelik silinemedi!",
+    "resetSubscriptionFailed": "Abonelik verileri sıfırlanamadı!",
+    "renewSubscriptionFailed": "Abonelik yenilenemedi!",
+    "fetchingServers": "Sunucular yüklenemedi",
+    "updatingServers": "Sunucular güncellenemedi",
+    "serverLimitReached": "Sunucu limitine ulaşıldı",
+    "serverLimitReachedPremium": "Premium sunucu limitine ulaşıldı",
+    "serverLimitReachedBase": "Temel sunucu limitine ulaşıldı"
+  },
+  "periods": {
+    "trial": "Deneme Süresi",
+    "hour": "1 saat",
+    "day": "1 gün",
+    "week": "1 hafta",
+    "month": "1 ay",
+    "threeMonth": "3 ay",
+    "sixMonth": "6 ay",
+    "year": "1 yıl",
+    "twoYear": "2 yıl",
+    "threeYear": "3 yıl",
+    "indefinitely": "Süresiz"
+  },
+  "modals": {
+    "delete": {
+      "title": "Abonelik Silme",
+      "button": "Sil",
+      "action": "Sil",
+      "message": "Aboneliği kalıcı olarak silmek istediğinizden emin misiniz? Geri alınamaz! Tazminat sağlanmayacaktır!"
+    },
+    "qr": {
+      "title": "Abonelik QR Kodu",
+      "description": "Müşteri uygulamasında tarayın"
+    },
+    "refresh": {
+      "title": "Abonelik Verilerini Sıfırla",
+      "button": "Verileri Sıfırla",
+      "action": "Sıfırla",
+      "message": "Abonelik verilerini sıfırlamak istediğinizden emin misiniz? Bundan sonra anahtarlar ve abonelik adresi yenileriyle değişecektir! Aboneliği uygulamaya yeniden eklemeniz gerekecektir! Genellikle aboneliğiniz ağa sızarsa veya birisi ona erişirse sıfırlama yapılır!"
+    },
+    "autoRenewal": {
+      "enableTitle": "Otomatik Yenilemeyi Etkinleştir",
+      "disableTitle": "Otomatik Yenilemeyi Devre Dışı Bırak",
+      "enableAction": "Etkinleştir",
+      "disableAction": "Devre Dışı Bırak",
+      "enableMessage": "Aboneliğin otomatik olarak yenilenmesini etkinleştirmek istiyor musunuz? Abonelik süresi dolduğunda fonlar otomatik olarak tahsil edilecektir.",
+      "disableMessage": "Aboneliğin otomatik olarak yenilenmesini devre dışı bırakmak istiyor musunuz? Abonelik süresi dolduktan sonra abonelik devre dışı bırakılacaktır."
+    },
+    "renew": {
+      "title": "Abonelik Yenileme",
+      "action": "Yenile",
+      "message": "Aboneliği yenilemek istiyor musunuz? Bakiyenizden {price} yıldız düşülecektir."
+    }
+  }
+}

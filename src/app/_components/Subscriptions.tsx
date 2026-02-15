@@ -10,7 +10,6 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { FiPlus } from 'react-icons/fi'
-import { toast } from 'react-toastify'
 
 import SubscriptionElement from './subscription/SubscriptionElement'
 
@@ -37,11 +36,11 @@ export function Subscriptions() {
       console.log('Subscriptions loaded successfully')
     } catch (error) {
       console.error('Failed to load subscriptions', error)
-      toast.error(t('errors.loadFailed'))
+      // toast.error(t('errors.loadFailed'))
     } finally {
       setLoading(false)
     }
-  }, [setSubscriptions, t])
+  }, [setSubscriptions])
 
   useEffect(() => {
     fetchSubscriptions()

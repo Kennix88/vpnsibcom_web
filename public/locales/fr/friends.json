@@ -1,0 +1,35 @@
+{
+  "title": "Amis",
+  "get": "Obtenez des récompenses",
+  "for": "pour inviter des amis",
+  "level": "niveau",
+  "total": "Total",
+  "list": {
+    "title": "Vos amis",
+    "top": "Top",
+    "empty": "Personne ici pour l'instant 🥲"
+  },
+  "bonuses": {
+    "title": "Bonus",
+    "inviteTitle": "Pour l'invitation d'un ami",
+    "paymentTitle": "Pour les actions d'un ami",
+    "inviteInfo": "Après le premier paiement d'un ami ou l'activation d'une période d'essai!",
+    "paymentInfo": "Recevez un pourcentage de nos revenus pour les amis et ceux que vos amis ont invités pour toujours!",
+    "lvl1Info": "Ceux que vous avez invités",
+    "lvl2Info": "Ceux que les amis ont invités",
+    "lvl3Info": "Ceux que les amis des amis ont invités 😁"
+  },
+  "invite": {
+    "title": "Inviter un ami",
+    "message": "Envoyer un message",
+    "copy": "Copier le lien",
+    "story": "Envoyer en story"
+  },
+  "statistics": {
+    "title": "Statistiques",
+    "earnTitle": "Vos gains",
+    "inviteTitle": "Invité",
+    "earnInfo": "Vous avez gagné tout le temps",
+    "inviteInfo": "Invité | Activé | Dont Standard | Dont Premium"
+  }
+}

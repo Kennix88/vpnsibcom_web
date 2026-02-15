@@ -1,125 +1,195 @@
 'use client'
 
-import { config } from '@app/config/client'
+import { CurrencyEnum } from '@app/enums/currency.enum'
+import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
+import { useCurrencyStore } from '@app/store/currency.store'
+import { PlansInterface } from '@app/types/plans.interface'
 import { UserDataInterface } from '@app/types/user-data.interface'
-import clsx from 'clsx'
-import Link from 'next/link'
+import { roundUp, starsToAD } from '@app/utils/calculate-subscription-cost.util'
+import { fxUtil } from '@app/utils/fx.util'
+import { useTranslations } from 'next-intl'
 import { FaCircleInfo } from 'react-icons/fa6'
-import TgStar from '../Currency'
+import Currency from '../Currency'
+import Split from '../payments/Split'
 
 // Компонент: Кнопки оплаты
 export const PaymentActions = ({
-  user,
   isAllBaseServers,
   isAllPremiumServers,
   serversSelected,
   balance,
-  nextFinalPrice,
+  price,
+  adPriceStars,
   isLoading,
-  onBalancePayment,
-  onInvoicePayment,
-  tBill,
+  onPayment,
+  trafficBalance,
+  trafficLimitGb,
+  planSelected,
+  user,
 }: {
-  user: UserDataInterface
+  planSelected: PlansInterface
   isAllBaseServers: boolean
   isAllPremiumServers: boolean
   serversSelected: string[]
   balance: number
-  nextFinalPrice: number
+  price: number
+  priceNoDiscount: number
   isLoading: boolean
-  onBalancePayment: () => Promise<void>
-  onInvoicePayment: () => Promise<void>
-  tBill: (key: string) => string
+  trafficLimitGb: number
+  trafficBalance: number
+  user: UserDataInterface
+  adPriceStars: number
+  onPayment: (
+    method: PaymentMethodEnum | 'BALANCE' | 'TRAFFIC' | 'AD',
+  ) => Promise<void>
 }) => {
+  const { rates } = useCurrencyStore()
+  const t = useTranslations('billing.subscription')
   const hasSelectedServers =
     isAllBaseServers || isAllPremiumServers || serversSelected.length > 0
 
   return (
-    <div className="flex flex-col gap-2 items-center w-full">
+    <div className="flex flex-col gap-2 w-full">
       {!hasSelectedServers ? (
         <div className="bg-[var(--warning-container)] text-[var(--on-warning-container)] rounded-md flex flex-col gap-2 py-2 px-4 w-full max-w-[400px]">
           <div className="flex flex-row gap-2 items-center text-xs">
             <FaCircleInfo />
-            Выберите хотя бы один сервер!
+            {t('selectServer')}
           </div>
         </div>
-      ) : balance >= nextFinalPrice ? (
-        <button
-          onClick={onBalancePayment}
-          disabled={isLoading}
-          className={clsx(
-            'flex flex-row gap-2 items-center justify-center bg-[var(--primary)] text-[var(--on-primary)] font-medium text-sm px-4 py-2 rounded-md w-full transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer max-w-[400px]',
-            isLoading && 'opacity-50 pointer-events-none',
-          )}>
-          {isLoading && (
-            <div
-              className="loader"
-              style={{ width: '15px', height: '15px', borderWidth: '2px' }}
-            />
-          )}
-          {user.roleDiscount > 0 ? (
-            <>
-              Оплатить с баланса <TgStar type="star" w={15} />{' '}
-              {nextFinalPrice.toFixed(2)}
-            </>
-          ) : (
-            <>Добавить БЕСПЛАТНО</>
-          )}
-        </button>
       ) : (
-        <div className="bg-[var(--surface-container)] text-[var(--on-surface)] rounded-md flex flex-col gap-2 py-2 px-4 w-full max-w-[400px]">
-          <div className="flex flex-row gap-2 items-center text-xs">
-            <FaCircleInfo />
-            На вашем балансе недостаточно средств
-          </div>
-          <Link
-            className="flex flex-row gap-2 items-center justify-center px-4 py-2 bg-[var(--surface-container-high)] rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer text-sm"
-            href={`/tma/payment?amount=${Math.ceil(nextFinalPrice - balance)}`}>
-            Пополнить баланс на <TgStar type="star" w={14} />{' '}
-            {Math.ceil(nextFinalPrice - balance)}
-          </Link>
-        </div>
-      )}
-
-      {hasSelectedServers && user.roleDiscount > 0 && (
         <>
-          <div className="w-full flex gap-2 items-center px-4">
-            <div className="h-[1px] grow bg-[var(--primary)]"></div>
-            <div className="text-[var(--primary)]">или</div>
-            <div className="h-[1px] grow bg-[var(--primary)]"></div>
+          <div className="px-4 opacity-50 flex flex-wrap items-center gap-2 font-mono">
+            {t('pay')}
           </div>
-
-          <button
-            onClick={onInvoicePayment}
-            disabled={isLoading}
-            className={clsx(
-              'flex flex-row gap-2 items-center justify-center bg-[var(--surface-container-lowest)] font-medium text-sm px-4 py-2 rounded-md w-full transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer max-w-[400px]',
-              isLoading && 'opacity-50 pointer-events-none',
-            )}>
-            {isLoading && (
-              <div
-                className="loader"
-                style={{ width: '15px', height: '15px', borderWidth: '2px' }}
-              />
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={() => {
+                onPayment('BALANCE')
+              }}
+              disabled={isLoading || price > balance}
+              className={`py-2 px-4 rounded-md bg-[var(--star-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+                price > balance
+                  ? 'opacity-50 cursor-not-allowed'
+                  : ' cursor-pointer'
+              } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
+              {price <= 0 ? (
+                t('addFree')
+              ) : (
+                <>
+                  <Currency type={'star'} w={18} />
+                  <div>
+                    {price}
+                    {/* {price !== priceNoDiscount && (
+                      <span className="opacity-70 text-[12px] line-through">
+                        ({priceNoDiscount})
+                      </span>
+                    )} */}
+                  </div>
+                </>
+              )}
+            </button>
+            <button
+              onClick={() => {
+                onPayment(PaymentMethodEnum.STARS)
+              }}
+              disabled={isLoading || price <= 0 || price < user.minPayStars}
+              className={`py-2 px-4 rounded-md bg-[var(--star-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+                isLoading || price <= 0 || price < user.minPayStars
+                  ? 'opacity-50 cursor-not-allowed'
+                  : ' cursor-pointer'
+              } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
+              <Currency type={'tg-star'} w={18} />
+              <div>
+                {price}
+                {/* {price !== priceNoDiscount && (
+                  <span className="opacity-70 text-[12px] line-through">
+                    ({priceNoDiscount})
+                  </span>
+                )} */}
+              </div>
+            </button>
+            {rates && (
+              <button
+                onClick={() => {
+                  onPayment(PaymentMethodEnum.TON_TON)
+                }}
+                disabled={isLoading || price <= 0 || price < user.minPayStars}
+                className={`py-2 px-4 rounded-md bg-[var(--ton-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+                  isLoading || price <= 0 || price < user.minPayStars
+                    ? 'opacity-50 cursor-not-allowed'
+                    : ' cursor-pointer'
+                } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
+                <Currency type={'ton'} w={18} />
+                <div>
+                  {roundUp(
+                    fxUtil(price, CurrencyEnum.XTR, CurrencyEnum.TON, rates),
+                  )}
+                  {/* {price !== priceNoDiscount && (
+                    <span className="opacity-70 text-[12px] line-through">
+                      (
+                      {roundUp(
+                        fxUtil(
+                          priceNoDiscount,
+                          CurrencyEnum.XTR,
+                          CurrencyEnum.TON,
+                          rates,
+                        ),
+                      )}
+                      )
+                    </span>
+                  )} */}
+                </div>
+              </button>
             )}
-            Оплатить напрямую <TgStar type="tg-star" w={15} />{' '}
-            {Math.ceil(nextFinalPrice)}
-          </button>
-
-          <div className="bg-[var(--surface-container)] text-[var(--on-surface)] rounded-md flex flex-col gap-2 py-2 px-4 w-full max-w-[400px]">
-            <div className="flex flex-row gap-2 items-center text-xs">
-              <FaCircleInfo className="text-3xl" />
-              {tBill('split')}
-            </div>
-            <Link
-              href={config.SPLIT_TG_REF_URL}
-              className="flex flex-row gap-2 items-center justify-center px-4 py-2 bg-[var(--surface-container-high)] rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer text-sm"
-              target="_blank">
-              {tBill('splitBay')} <TgStar type="tg-star" w={15} />
-            </Link>
+            {planSelected.key == 'TRAFFIC' && (
+              <button
+                onClick={() => {
+                  onPayment('TRAFFIC')
+                }}
+                disabled={
+                  isLoading ||
+                  trafficLimitGb * 1024 > trafficBalance ||
+                  price <= 0
+                }
+                className={`py-2 px-4 rounded-md bg-[var(--traffic-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+                  isLoading ||
+                  trafficLimitGb * 1024 > trafficBalance ||
+                  price <= 0
+                    ? 'opacity-50 cursor-not-allowed'
+                    : ' cursor-pointer'
+                } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
+                <Currency type={'traffic'} w={18} />
+                {price <= 0 ? 0 : trafficLimitGb * 1024}
+              </button>
+            )}
+            <button
+              onClick={() => {
+                onPayment('AD')
+              }}
+              disabled={
+                isLoading || starsToAD(price, adPriceStars) > user.balance.ad
+              }
+              className={`py-2 px-4 rounded-md bg-[var(--ad-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+                isLoading || starsToAD(price, adPriceStars) > user.balance.ad
+                  ? 'opacity-50 cursor-not-allowed'
+                  : ' cursor-pointer'
+              } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
+              {price <= 0 ? (
+                t('addFree')
+              ) : (
+                <>
+                  <Currency type={'ad'} w={18} />
+                  {starsToAD(price, adPriceStars)}
+                </>
+              )}
+            </button>
           </div>
         </>
       )}
+
+      <br />
+      <Split />
     </div>
   )
 }

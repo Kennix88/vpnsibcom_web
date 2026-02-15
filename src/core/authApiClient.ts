@@ -1,6 +1,12 @@
+import { AdsPlaceEnum } from '@app/enums/ads-place.enum'
+import { AdsResInterface } from '@app/enums/ads-res.interface'
+import { AdsTypeEnum } from '@app/enums/ads-type.enum'
 import { CurrencyEnum } from '@app/enums/currency.enum'
 import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
+import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
+import { TrafficResetEnum } from '@app/enums/traffic-reset.enum'
 import { useUserStore } from '@app/store/user.store'
+import { BonusesInterface } from '@app/types/bonuses.interface'
 import { CurrencyInterface } from '@app/types/currency.interface'
 import { PaymentMethodsDataInterface } from '@app/types/payment-methods-data.interface'
 import { RatesInterface } from '@app/types/rates.interface'
@@ -12,13 +18,11 @@ import {
   SubscriptionResponseInterface,
 } from '@app/types/subscription-data.interface'
 import { UserDataInterface } from '@app/types/user-data.interface'
-import { retrieveRawInitData } from '@telegram-apps/sdk-react'
 
 import axios, {
   AxiosError,
   AxiosHeaders,
   AxiosInstance,
-  AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios'
 
@@ -28,19 +32,10 @@ interface ApiResponse<T> {
   message?: string
 }
 
-type FailedRequest = {
-  resolve: (value: AxiosResponse) => void
-  reject: (reason?: any) => void
-}
-
 interface ApiClientConfig {
   baseURL: string
   withCredentials: boolean
   timeout: number
-}
-
-interface RefreshTokenResponse {
-  accessToken: string
 }
 
 interface SilentAuthOptions {
@@ -49,8 +44,6 @@ interface SilentAuthOptions {
 
 class ApiClient {
   private instance: AxiosInstance
-  private isRefreshing = false
-  private failedQueue: FailedRequest[] = []
   private readonly config: ApiClientConfig
 
   constructor(config: ApiClientConfig) {
@@ -69,7 +62,6 @@ class ApiClient {
       },
     })
 
-    // Исправление типов для интерцепторов
     instance.interceptors.request.use((config) => this.handleRequest(config))
     instance.interceptors.response.use(
       (response) => response,
@@ -79,101 +71,49 @@ class ApiClient {
     return instance
   }
 
-  // Исправленный тип для параметра config
   private handleRequest(
     config: InternalAxiosRequestConfig,
   ): InternalAxiosRequestConfig {
     const token = useUserStore.getState().accessToken
     if (token) {
-      // Создаем экземпляр AxiosHeaders если нужно
       if (!(config.headers instanceof AxiosHeaders)) {
         config.headers = new AxiosHeaders(config.headers)
       }
-
-      // Устанавливаем заголовок с использованием AxiosHeaders
       config.headers.set('Authorization', `Bearer ${token}`)
     }
     return config
   }
 
   private async handleResponseError(error: AxiosError) {
-    // Исправленный тип для originalRequest
     const originalRequest = error.config as InternalAxiosRequestConfig & {
       _retry?: boolean
     }
 
-    if (
-      error.response?.status !== 401 ||
-      originalRequest._retry ||
-      originalRequest.url?.includes('/auth/refresh') ||
-      originalRequest.url?.includes('/auth/telegram')
-    ) {
+    if (error.response?.status !== 401 || originalRequest._retry) {
       return Promise.reject(error)
     }
 
     originalRequest._retry = true
 
-    if (this.isRefreshing) {
-      return new Promise((resolve, reject) => {
-        this.failedQueue.push({ resolve, reject })
-      })
-    }
-
-    this.isRefreshing = true
-
-    try {
-      const newToken = await this.refreshToken()
-      const store = useUserStore.getState()
-      store.setAccessToken(newToken)
-
-      // Исправление: правильная установка заголовка
-      if (originalRequest.headers) {
-        if (!(originalRequest.headers instanceof AxiosHeaders)) {
-          originalRequest.headers = new AxiosHeaders(originalRequest.headers)
-        }
-        originalRequest.headers.set('Authorization', `Bearer ${newToken}`)
-      } else {
-        originalRequest.headers = new AxiosHeaders({
-          Authorization: `Bearer ${newToken}`,
-        })
-      }
-
-      return this.instance(originalRequest)
-    } catch (refreshError) {
-      return this.handleRefreshError(refreshError as Error, {
-        redirectTo: originalRequest.url?.includes('/app')
-          ? '/app/login'
-          : '/tma',
-      })
-    } finally {
-      this.isRefreshing = false
-      this.processQueue(null)
-    }
+    return this.handleAuthError(error, {
+      redirectTo: originalRequest.url?.includes('/app') ? '/app/login' : '/tma',
+    })
   }
 
-  private async refreshToken(): Promise<string> {
-    const response = await axios.post<ApiResponse<RefreshTokenResponse>>(
-      `${this.config.baseURL}/auth/refresh`,
-      {},
-      { withCredentials: true },
-    )
-    return response.data.data.accessToken
-  }
-
-  private async handleRefreshError(
-    error: Error,
-    options: SilentAuthOptions = {},
-  ) {
+  private async handleAuthError(error: Error, options: SilentAuthOptions = {}) {
     const store = useUserStore.getState()
     store.reset()
 
     if (typeof window !== 'undefined') {
       try {
+        const { retrieveRawInitData } = await import('@tma.js/sdk-react')
         const initData = retrieveRawInitData()
         if (initData) {
           const { accessToken, user } = await this.telegramLogin(initData)
           store.setAccessToken(accessToken)
           store.setUser(user)
+          // After silent auth, we can retry the original request
+          // This requires more complex logic to replay the request, for now, we just re-throw
           throw error
         }
       } catch (silentAuthError) {
@@ -188,13 +128,6 @@ class ApiClient {
     throw error
   }
 
-  private processQueue(error: any) {
-    this.failedQueue.forEach(({ reject }) => {
-      reject(error)
-    })
-    this.failedQueue = []
-  }
-
   private async handleApiError(error: unknown): Promise<never> {
     if (axios.isAxiosError(error)) {
       const status = error.response?.status
@@ -203,6 +136,7 @@ class ApiClient {
       console.error(`API Error (${status}): ${message}`, error)
 
       if (status === 401) {
+        // This is now handled by handleResponseError, but as a fallback
         useUserStore.getState().reset()
       }
 
@@ -217,9 +151,6 @@ class ApiClient {
     throw new Error('Неизвестная ошибка при обращении к серверу')
   }
 
-  /**
-   * Обертка для безопасного выполнения запросов
-   */
   private async safeRequest<T>(fn: () => Promise<T>): Promise<T> {
     try {
       return await fn()
@@ -242,17 +173,6 @@ class ApiClient {
         store.setUser(user)
 
         return { accessToken, user }
-      },
-    )
-  }
-
-  async refresh() {
-    return this.safeRequest<{ accessToken: string; user: UserDataInterface }>(
-      async () => {
-        const { data } = await this.instance.post<
-          ApiResponse<{ accessToken: string; user: UserDataInterface }>
-        >('/auth/refresh', {})
-        return data.data
       },
     )
   }
@@ -341,17 +261,32 @@ class ApiClient {
     })
   }
 
+  async getPaymentBonuses() {
+    return this.safeRequest<BonusesInterface>(async () => {
+      const { data } = await this.instance.get<
+        ApiResponse<{
+          bonuses: BonusesInterface
+        }>
+      >('/payments/bonuses')
+      return data.data.bonuses
+    })
+  }
+
   async createInvoice(params: { method: PaymentMethodEnum; amount: number }) {
     return this.safeRequest<{
       user: UserDataInterface
       linkPay: string
-      isTmaIvoice: boolean
+      isTonPayment: boolean
+      amountTon: number
+      token: string
     }>(async () => {
       const { data } = await this.instance.post<
         ApiResponse<{
           user: UserDataInterface
           linkPay: string
-          isTmaIvoice: boolean
+          isTonPayment: boolean
+          amountTon: number
+          token: string
         }>
       >('/payments/invoice', params)
       return data.data
@@ -393,13 +328,86 @@ class ApiClient {
     return this.safeRequest<{
       subscriptions: SubscriptionResponseInterface
       user: UserDataInterface
+      invoice?: {
+        linkPay: string
+        isTonPayment: boolean
+        amountTon: number
+        token: string
+      }
+    }>(async () => {
+      const { data } = await this.instance.post<
+        ApiResponse<{
+          subscriptions: SubscriptionResponseInterface
+          user: UserDataInterface
+          invoice?: {
+            linkPay: string
+            isTonPayment: boolean
+            amountTon: number
+            token: string
+          }
+        }>
+      >('/subscriptions/purchase', params)
+      return data.data
+    })
+  }
+
+  async editSubscriptionName(subscriptionId: string, name: string) {
+    return this.safeRequest<{
+      subscriptions: SubscriptionResponseInterface
+      user: UserDataInterface
     }>(async () => {
       const { data } = await this.instance.post<
         ApiResponse<{
           subscriptions: SubscriptionResponseInterface
           user: UserDataInterface
         }>
-      >('/subscriptions/purchase', params)
+      >('/subscriptions/edit-name/' + subscriptionId, { name })
+      return data.data
+    })
+  }
+
+  async updateServerSubscription(subscriptionId: string, servers: string[]) {
+    return this.safeRequest<{
+      subscriptions: SubscriptionResponseInterface
+      user: UserDataInterface
+    }>(async () => {
+      const { data } = await this.instance.post<
+        ApiResponse<{
+          subscriptions: SubscriptionResponseInterface
+          user: UserDataInterface
+        }>
+      >('/subscriptions/update-server/' + subscriptionId, { servers })
+      return data.data
+    })
+  }
+
+  async addTrafficSubscription(
+    subscriptionId: string,
+    traffic: number,
+    method: PaymentMethodEnum | 'BALANCE' | 'TRAFFIC' | 'AD',
+  ) {
+    return this.safeRequest<{
+      subscriptions: SubscriptionResponseInterface
+      user: UserDataInterface
+      invoice?: {
+        linkPay: string
+        isTonPayment: boolean
+        amountTon: number
+        token: string
+      }
+    }>(async () => {
+      const { data } = await this.instance.post<
+        ApiResponse<{
+          subscriptions: SubscriptionResponseInterface
+          user: UserDataInterface
+          invoice?: {
+            linkPay: string
+            isTonPayment: boolean
+            amountTon: number
+            token: string
+          }
+        }>
+      >('/subscriptions/add-traffic/' + subscriptionId, { traffic, method })
       return data.data
     })
   }
@@ -419,17 +427,42 @@ class ApiClient {
     })
   }
 
-  async renewSubscription(subscriptionId: string) {
+  async renewSubscription(
+    subscriptionId: string,
+    method: PaymentMethodEnum | 'BALANCE' | 'AD',
+    isSavePeriod: boolean,
+    period: SubscriptionPeriodEnum,
+    periodMultiplier: number,
+    trafficReset: TrafficResetEnum,
+  ) {
     return this.safeRequest<{
       subscriptions: SubscriptionResponseInterface
       user: UserDataInterface
+      invoice?: {
+        linkPay: string
+        isTonPayment: boolean
+        amountTon: number
+        token: string
+      }
     }>(async () => {
       const { data } = await this.instance.post<
         ApiResponse<{
           subscriptions: SubscriptionResponseInterface
           user: UserDataInterface
+          invoice?: {
+            linkPay: string
+            isTonPayment: boolean
+            amountTon: number
+            token: string
+          }
         }>
-      >('/subscriptions/renew', { subscriptionId })
+      >('/subscriptions/renew/' + subscriptionId, {
+        method,
+        isSavePeriod,
+        period,
+        periodMultiplier,
+        trafficReset,
+      })
       return data.data
     })
   }
@@ -477,6 +510,27 @@ class ApiClient {
     )
   }
 
+  async getAds(place: AdsPlaceEnum, type: AdsTypeEnum) {
+    return this.safeRequest<AdsResInterface>(async () => {
+      const { data } = await this.instance.get(`/ads/${place}/${type}`)
+      return data
+    })
+  }
+
+  async confirmAds(verifyKey: string, verificationCode?: string) {
+    return this.safeRequest<{
+      success: boolean
+      user: UserDataInterface
+    }>(async () => {
+      const { data } = await this.instance.post(`/ads/confirm`, {
+        verifyKey,
+        verificationCode,
+      })
+
+      return data
+    })
+  }
+
   async getServers() {
     return this.safeRequest<ServersResponseDataInterface>(async () => {
       const { data } =
@@ -487,13 +541,10 @@ class ApiClient {
     })
   }
 
-  /**
-   * Updates the servers for a subscription
-   * @param subscriptionId - ID of the subscription to update
-   * @param serverCodes - Array of server codes to assign to the subscription
-   * @returns Promise with updated subscriptions and user data
-   */
-  async updateSubscriptionServers(subscriptionId: string, serverCodes: string[]) {
+  async updateSubscriptionServers(
+    subscriptionId: string,
+    serverCodes: string[],
+  ) {
     return this.safeRequest<{
       subscriptions: SubscriptionResponseInterface
       user: UserDataInterface
@@ -509,7 +560,6 @@ class ApiClient {
   }
 }
 
-// Создаем экземпляр API клиента
 export const authApiClient = new ApiClient({
   baseURL: process.env.NEXT_PUBLIC_API_URL!,
   withCredentials: true,

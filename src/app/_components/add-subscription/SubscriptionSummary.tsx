@@ -1,35 +1,38 @@
 'use client'
 
-import { PlansServersSelectTypeEnum } from '@app/enums/plans-servers-select-type.enum'
+import { PlansEnum } from '@app/enums/plans.enum'
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
+import { TrafficResetEnum } from '@app/enums/traffic-reset.enum'
 import { PlansInterface } from '@app/types/plans.interface'
+import { ServerDataInterface } from '@app/types/servers-data.interface'
+
 import { SubscriptionResponseInterface } from '@app/types/subscription-data.interface'
 import { UserDataInterface } from '@app/types/user-data.interface'
 import { motion } from 'framer-motion'
+import { useTranslations } from 'next-intl'
+import Image from 'next/image'
 import { useMemo } from 'react'
-import { FaCircleInfo } from 'react-icons/fa6'
 import TgStar from '../Currency'
-import TooltipWrapper from '../TooltipWrapper'
 import { PeriodButtonInterface } from './AddSubscription'
 
 // Компонент: Итоговая информация
 export const SubscriptionSummary = ({
   planSelected,
-  devicesCount,
+  devicesCount, // eslint-disable-line @typescript-eslint/no-unused-vars
   isUnlimitTraffic,
   trafficLimitGb,
   isAllBaseServers,
   isAllPremiumServers,
-  baseServersCount,
-  premiumServersCount,
   periodButton,
   periodMultiplier,
   user,
-  isFixedPrice,
   isAutoRenewal,
   price,
-  nextFinalPrice,
-  subscriptions,
+  priceNoDiscount,
+  subscriptions, // eslint-disable-line @typescript-eslint/no-unused-vars
+  name,
+  trafficReset,
+  serverSelected,
 }: {
   planSelected: PlansInterface
   devicesCount: number
@@ -37,61 +40,78 @@ export const SubscriptionSummary = ({
   trafficLimitGb: number
   isAllBaseServers: boolean
   isAllPremiumServers: boolean
-  baseServersCount: number
-  premiumServersCount: number
+  subscriptions: SubscriptionResponseInterface
   periodButton: PeriodButtonInterface
   periodMultiplier: number
   user: UserDataInterface
-  isFixedPrice: boolean
   isAutoRenewal: boolean
   price: number
-  nextFinalPrice: number
-  subscriptions: SubscriptionResponseInterface
+  priceNoDiscount: number
+  name: string
+  trafficReset: TrafficResetEnum
+  serverSelected: ServerDataInterface | null
 }) => {
+  const t = useTranslations('billing.subscription.summary')
   const getFinalPercent = (ratio: number) => 100 - ratio * 100
 
   const summaryItems = useMemo(
     () => [
       {
-        name: 'Устройства',
-        value: <div>{devicesCount} шт.</div>,
-        isVisible:
-          planSelected.serversSelectType === PlansServersSelectTypeEnum.CUSTOM,
+        name: t('name'),
+        value: <div>{name}</div>,
+        isVisible: true,
       },
       {
-        name: 'Трафик',
+        name: t('traffic'),
         value: (
-          <div>{isUnlimitTraffic ? 'Безлимит' : `${trafficLimitGb} ГБ.`}</div>
+          <div>
+            {isUnlimitTraffic
+              ? t('unlimit')
+              : planSelected.key === PlansEnum.TRAFFIC
+                ? `${trafficLimitGb} GB`
+                : `${trafficReset == TrafficResetEnum.DAY ? `${trafficLimitGb} GB ${t('daily')}` : trafficReset == TrafficResetEnum.WEEK ? `${trafficLimitGb * 7} GB ${t('weekly')}` : trafficReset == TrafficResetEnum.MONTH ? `${trafficLimitGb * 30} GB ${t('monthly')}` : `${trafficLimitGb * 365} GB ${t('yearly')}`}`}
+          </div>
         ),
-        isVisible:
-          planSelected.serversSelectType === PlansServersSelectTypeEnum.CUSTOM,
+        isVisible: true,
       },
       {
-        name: 'Сервера',
+        name: t('servers'),
         value: (
           <div className="flex gap-2 items-center">
             {isAllBaseServers && isAllPremiumServers ? (
-              'Все базовые + премиум'
+              t('fullServers')
             ) : isAllBaseServers ? (
-              'Все базовые'
+              t('allBase')
+            ) : serverSelected ? (
+              <div className="flex flex-col gap-0.5 grow items-center justify-center text-white rounded-md text-[11px] font-mono ]">
+                <div className="flex gap-2 grow flex-wrap">
+                  {serverSelected.isPremium && (
+                    <div className="flex items-center justify-center h-5 w-5 bg-[var(--gold-container)] rounded-md">
+                      ⭐
+                    </div>
+                  )}
+                  <Image
+                    src={`/flags/${serverSelected.flagKey}.svg`}
+                    alt="flag"
+                    width={20}
+                    height={20}
+                  />
+                  {serverSelected.code.toUpperCase()} [{serverSelected.network}
+                  GBit]
+                </div>
+                <div className="flex gap-2 grow flex-wrap">
+                  {serverSelected.name}
+                </div>
+              </div>
             ) : (
-              <>
-                <TooltipWrapper
-                  prompt={'Базовые/Премиум сервера'}
-                  color="info"
-                  placement="top">
-                  <FaCircleInfo />
-                </TooltipWrapper>
-                {baseServersCount}/{premiumServersCount} шт.
-              </>
+              <> {t('notServers')}</>
             )}
           </div>
         ),
-        isVisible:
-          planSelected.serversSelectType === PlansServersSelectTypeEnum.CUSTOM,
+        isVisible: true,
       },
       {
-        name: 'Период',
+        name: t('period'),
         value: (
           <div className="flex gap-1 items-center">
             <div>{periodButton.label}</div>
@@ -102,79 +122,46 @@ export const SubscriptionSummary = ({
             )}
           </div>
         ),
-        isVisible: true,
+        isVisible: planSelected.key !== PlansEnum.TRAFFIC,
       },
       {
-        name: 'Скидка за период',
+        name: t('periodDiscount'),
         value: <div>{getFinalPercent(periodButton.discount)}%</div>,
         isVisible:
+          planSelected.key !== PlansEnum.TRAFFIC &&
           periodButton.key !== SubscriptionPeriodEnum.INDEFINITELY &&
           getFinalPercent(periodButton.discount) > 0,
       },
       {
-        name: 'Скидка за роль',
+        name: t('roleDiscount'),
         value: <div>{getFinalPercent(user.roleDiscount)}%</div>,
         isVisible: getFinalPercent(user.roleDiscount) > 0,
       },
       {
-        name: 'Авто продление',
+        name: t('autoRenewal'),
         value: (
           <div className="flex flex-row gap-2 items-center">
-            {isAutoRenewal ? 'Да' : 'Нет'}
+            {isAutoRenewal ? t('yes') : t('no')}
           </div>
         ),
         isVisible:
-          planSelected.serversSelectType ===
-            PlansServersSelectTypeEnum.CUSTOM &&
+          planSelected.key !== PlansEnum.TRAFFIC &&
           periodButton.key !== SubscriptionPeriodEnum.INDEFINITELY &&
           isAutoRenewal,
       },
       {
-        name: 'К оплате за период',
+        name: t('toPaid'),
         value: (
-          <div className="flex flex-row gap-2 items-center">
+          <div className="flex gap-2 items-center">
             <TgStar type="star" w={14} />
-            {price}
-          </div>
-        ),
-        isVisible:
-          planSelected.serversSelectType ===
-            PlansServersSelectTypeEnum.CUSTOM &&
-          isFixedPrice &&
-          periodButton.key !== SubscriptionPeriodEnum.INDEFINITELY,
-      },
-      {
-        name: 'Фиксация цены',
-        value: (
-          <div className="flex flex-row gap-2 items-center">
-            {isFixedPrice ? 'Да' : 'Нет'}
-          </div>
-        ),
-        isVisible:
-          planSelected.serversSelectType ===
-            PlansServersSelectTypeEnum.CUSTOM &&
-          periodButton.key !== SubscriptionPeriodEnum.INDEFINITELY &&
-          isFixedPrice,
-      },
-      {
-        name: 'К оплате разово',
-        value: (
-          <div className="flex flex-row gap-2 items-center">
-            <TgStar type="star" w={14} />! ! {subscriptions.trafficGbPriceStars}
-          </div>
-        ),
-        isVisible:
-          planSelected.serversSelectType ===
-            PlansServersSelectTypeEnum.CUSTOM &&
-          periodButton.key !== SubscriptionPeriodEnum.INDEFINITELY &&
-          isFixedPrice,
-      },
-      {
-        name: 'Всего к оплате',
-        value: (
-          <div className="flex flex-row gap-2 items-center">
-            <TgStar type="star" w={14} />
-            {nextFinalPrice.toFixed(2)}
+            <div>
+              {price}
+              {price !== priceNoDiscount && (
+                <span className="opacity-70 text-[12px] line-through">
+                  ({priceNoDiscount})
+                </span>
+              )}
+            </div>
           </div>
         ),
         isVisible: true,
@@ -182,27 +169,28 @@ export const SubscriptionSummary = ({
     ],
     [
       planSelected,
-      devicesCount,
       isUnlimitTraffic,
       trafficLimitGb,
+      trafficReset,
+      priceNoDiscount,
+      t,
       isAllBaseServers,
       isAllPremiumServers,
-      baseServersCount,
-      premiumServersCount,
+      serverSelected,
       periodButton,
       periodMultiplier,
       user,
       isAutoRenewal,
       price,
-      nextFinalPrice,
-      subscriptions,
+      // subscriptions не используется в useMemo, удаляем
+      name,
     ],
   )
 
   return (
     <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
       <div className="px-4 opacity-50 flex flex-row gap-2 items-center w-full">
-        Итого
+        {t('title')}
       </div>
 
       <motion.div

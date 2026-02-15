@@ -26,13 +26,16 @@ export interface UserDataInterface {
   balance: UserBalanceInterface
   inviteUrl: string
   inviteMessageId: string
+  nextAdsRewardAt?: Date
+  nextAdsgramTaskAt?: Date
+  minPayStars: number
+  lastFullscreenViewedAt?: Date
 }
 
 export interface UserBalanceInterface {
   payment: number
   hold: number
-  totalEarned: number
+  ad: number
   tickets: number
   traffic: number
-  wager: number
 }

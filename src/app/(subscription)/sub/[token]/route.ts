@@ -55,7 +55,7 @@ export async function GET(
         // ...resData.marzbanSubRes.headers,
         'content-type': 'text/plain; charset=utf-8',
         'content-disposition': 'attachment; filename="213"',
-        'subscription-userinfo': `upload=0; download=${resData.subscription.usedTraffic || 0}; total=${resData.subscription.dataLimit || 0}; expire=${resData.subscription.expiredAt ? Math.floor(new Date(resData.subscription.expiredAt).getTime() / 1000) : 0}`,
+        'subscription-userinfo': `upload=0; download=${resData.subscription.usedTraffic || 0}; total=${resData.subscription.dataLimit || 0}${resData.subscription.expiredAt ? `; expire=${Math.floor(new Date(resData.subscription.expiredAt).getTime() / 1000)}` : ''}`,
         'support-url': process.env.NEXT_PUBLIC_BOT_URL || '',
         'profile-web-page-url': resData.subscription.subscriptionUrl,
         'profile-update-interval': '1',

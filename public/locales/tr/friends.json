@@ -1,0 +1,35 @@
+{
+  "title": "Arkadaşlar",
+  "get": "Ödüller kazanın",
+  "for": "arkadaşlarınızı davet ettiğiniz için",
+  "level": "seviye",
+  "total": "Toplam",
+  "list": {
+    "title": "Arkadaşlarınız",
+    "top": "En İyi",
+    "empty": "Henüz kimse yok 🥲"
+  },
+  "bonuses": {
+    "title": "Bonuslar",
+    "inviteTitle": "Arkadaş daveti için",
+    "paymentTitle": "Arkadaş eylemleri için",
+    "inviteInfo": "Arkadaşınızın ilk ödemesinden veya deneme süresini etkinleştirmesinden sonra!",
+    "paymentInfo": "Arkadaşlarınızdan ve arkadaşlarınızın davet ettiği kişilerden elde ettiğimiz gelirin bir yüzdesini sonsuza kadar alın!",
+    "lvl1Info": "Sizin davet ettikleriniz",
+    "lvl2Info": "Arkadaşlarınızın davet ettikleri",
+    "lvl3Info": "Arkadaşlarınızın arkadaşlarının davet ettikleri 😁"
+  },
+  "invite": {
+    "title": "Arkadaş davet et",
+    "message": "Mesaj gönder",
+    "copy": "Bağlantıyı kopyala",
+    "story": "Hikayede paylaş"
+  },
+  "statistics": {
+    "title": "İstatistikler",
+    "earnTitle": "Kazancınız",
+    "inviteTitle": "Davet edilenler",
+    "earnInfo": "Tüm zamanlarda kazandığınız",
+    "inviteInfo": "Davet edilenler | Etkinleştirilenler | Bunlardan Standart | Bunlardan Premium"
+  }
+}

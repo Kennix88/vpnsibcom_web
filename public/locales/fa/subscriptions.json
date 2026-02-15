@@ -1,0 +1,116 @@
+{
+  "title": "اشتراک",
+  "connection": "اتصال",
+  "configs": "پیکربندی ها",
+  "addSubscription": "افزودن اشتراک",
+  "addSubscriptionTitle": "افزودن اشتراک",
+  "yourSubscriptions": "اشتراک های شما",
+  "noSubscriptions": "شما اشتراک فعالی ندارید",
+  "loading": "در حال بارگذاری اطلاعات اشتراک...",
+  "notFound": "اشتراک یافت نشد",
+  "renewSubscription": "تمدید اشتراک",
+  "autoRenewalEnabled": "تمدید خودکار فعال است",
+  "autoRenewalDisabled": "تمدید خودکار غیرفعال است",
+  "subscriptionDeleted": "اشتراک با موفقیت حذف شد",
+  "subscriptionDataUpdated": "اطلاعات اشتراک با موفقیت به روز شد",
+  "subscriptionRenewed": "اشتراک با موفقیت تمدید شد",
+  "changeServer": "تغییر سرور",
+  "changeServerTitle": "تغییر سرور",
+  "changeServerWarning": "توجه: تغییر سرور در عرض 2 دقیقه انجام می شود. پس از تغییر سرور، باید داده ها را در برنامه به روز کنید!",
+  "active": "فعال",
+  "notActive": "غیرفعال",
+  "online": "آنلاین",
+  "offline": "آفلاین",
+  "traffic": "ترافیک",
+  "trafficReset": {
+    "daily": "روزانه",
+    "weekly": "هفتگی",
+    "monthly": "ماهانه",
+    "yearly": "سالانه",
+    "unlimit": "نامحدود"
+  },
+  "inTotal": "در کل",
+  "servers": "سرورها",
+  "fullServers": "دسترسی به همه",
+  "allBase": "همه پایه",
+  "base": "پایه",
+  "premium": "ویژه",
+  "devices": "دستگاه ها",
+  "period": "دوره پرداخت",
+  "expires": "منقضی می شود",
+  "autoRenewal": "تمدید خودکار",
+  "actions": "عملیات",
+  "save": "ذخیره",
+  "required": "توصیه می شود!",
+  "paid": "پرداخت شده!",
+  "instruction": {
+    "stage1": "دانلود برنامه",
+    "stage2": "افزودن اشتراک به برنامه",
+    "copyUrl": "کپی URL اشتراک",
+    "openQR": "کد QR اشتراک",
+    "scanApp": "اسکن در برنامه",
+    "scanPhone": "اسکن در تلفن",
+    "add": "افزودن به برنامه"
+  },
+  "platform": "پلتفرم",
+  "success": {
+    "serversUpdated": "سرورها با موفقیت به روز شدند"
+  },
+  "errors": {
+    "loadFailed": "بارگذاری اشتراک ها ناموفق بود",
+    "disableAutoRenewalFailed": "خطا در غیرفعال کردن تمدید خودکار!",
+    "enableAutoRenewalFailed": "خطا در فعال کردن تمدید خودکار!",
+    "deleteSubscriptionFailed": "خطا در حذف اشتراک!",
+    "resetSubscriptionFailed": "خطا در بازنشانی اطلاعات اشتراک!",
+    "renewSubscriptionFailed": "تمدید اشتراک ناموفق بود!",
+    "fetchingServers": "بارگذاری سرورها ناموفق بود",
+    "updatingServers": "به روزرسانی سرورها ناموفق بود",
+    "serverLimitReached": "به حد مجاز سرورها رسیده اید",
+    "serverLimitReachedPremium": "به حد مجاز سرورهای ویژه رسیده اید",
+    "serverLimitReachedBase": "به حد مجاز سرورهای پایه رسیده اید"
+  },
+  "periods": {
+    "trial": "دوره آزمایشی",
+    "hour": "1 ساعت",
+    "day": "1 روز",
+    "week": "1 هفته",
+    "month": "1 ماه",
+    "threeMonth": "3 ماه",
+    "sixMonth": "6 ماه",
+    "year": "1 سال",
+    "twoYear": "2 سال",
+    "threeYear": "3 سال",
+    "indefinitely": "نامحدود"
+  },
+  "modals": {
+    "delete": {
+      "title": "حذف اشتراک",
+      "button": "حذف",
+      "action": "حذف",
+      "message": "آیا مطمئن هستید که می خواهید اشتراک را برای همیشه حذف کنید؟ امکان بازیابی آن وجود نخواهد داشت! هیچ غرامتی پرداخت نخواهد شد!"
+    },
+    "qr": {
+      "title": "کد QR اشتراک",
+      "description": "اسکن در برنامه مشتری"
+    },
+    "refresh": {
+      "title": "بازنشانی اطلاعات اشتراک",
+      "button": "بازنشانی اطلاعات",
+      "action": "بازنشانی",
+      "message": "آیا مطمئن هستید که می خواهید اطلاعات اشتراک را بازنشانی کنید؟ پس از آن کلیدها و آدرس اشتراک به موارد جدید تغییر خواهند کرد! باید اشتراک را دوباره به برنامه اضافه کنید! معمولاً بازنشانی زمانی انجام می شود که اشتراک شما به شبکه درز کرده یا کسی به آن دسترسی پیدا کرده باشد!"
+    },
+    "autoRenewal": {
+      "enableTitle": "فعال کردن تمدید خودکار",
+      "disableTitle": "غیرفعال کردن تمدید خودکار",
+      "enableAction": "فعال کردن",
+      "disableAction": "غیرفعال کردن",
+      "enableMessage": "آیا می خواهید تمدید خودکار اشتراک را فعال کنید؟ وجوه به طور خودکار در زمان انقضای اشتراک کسر می شود.",
+      "disableMessage": "آیا می خواهید تمدید خودکار اشتراک را غیرفعال کنید؟ پس از انقضای اشتراک، غیرفعال خواهد شد."
+    },
+    "renew": {
+      "title": "تمدید اشتراک",
+      "action": "تمدید",
+      "message": "آیا می خواهید اشتراک را تمدید کنید؟ {price} ستاره از موجودی شما کسر می شود."
+    }
+  }
+}

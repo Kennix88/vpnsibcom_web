@@ -86,3 +86,11 @@
   background-color: var(--error-container);
   color: var(--on-error-container);
 }
+
+.adsgram-task {
+  --adsgram-task-font-size: 14px;
+  --adsgram-task-icon-size: 40px;
+  --adsgram-task-icon-title-gap: 8px;
+  --adsgram-task-icon-border-radius: 4px;
+  --adsgram-task-button-width: 60px;
+}

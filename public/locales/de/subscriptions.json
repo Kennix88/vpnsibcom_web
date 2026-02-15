@@ -1,0 +1,114 @@
+{
+  "title": "Abonnement",
+  "connection": "Verbindung",
+  "configs": "Konfigurationen",
+  "addSubscription": "Abonnement hinzufügen",
+  "addSubscriptionTitle": "Abonnement hinzufügen",
+  "yourSubscriptions": "Ihre Abonnements",
+  "noSubscriptions": "Sie haben keine aktiven Abonnements",
+  "loading": "Abonnementdaten werden geladen...",
+  "notFound": "Abonnement nicht gefunden",
+  "renewSubscription": "Abonnement verlängern",
+  "autoRenewalEnabled": "Automatische Verlängerung aktiviert",
+  "autoRenewalDisabled": "Automatische Verlängerung deaktiviert",
+  "subscriptionDeleted": "Abonnement wurde erfolgreich gelöscht",
+  "subscriptionDataUpdated": "Abonnementdaten wurden erfolgreich aktualisiert",
+  "subscriptionRenewed": "Abonnement erfolgreich verlängert",
+  "changeServer": "Server wechseln",
+  "changeServerTitle": "Serverwechsel",
+  "changeServerWarning": "ACHTUNG: Der Serverwechsel dauert 2 Minuten. Nach dem Serverwechsel müssen Sie die Daten in der Anwendung aktualisieren!",
+  "active": "Aktiv",
+  "notActive": "Nicht aktiv",
+  "online": "Online",
+  "offline": "Offline",
+  "traffic": "Traffic",
+  "trafficReset": {
+    "daily": "Täglich",
+    "weekly": "Wöchentlich",
+    "monthly": "Monatlich",
+    "yearly": "Jährlich",
+    "unlimit": "Unbegrenzt"
+  },
+  "inTotal": "Insgesamt",
+  "servers": "Server",
+  "fullServers": "Zugang zu allen",
+  "allBase": "Alle Basis",
+  "base": "Basis",
+  "premium": "Premium",
+  "devices": "Geräte",
+  "period": "Zahlungsperiode",
+  "expires": "Läuft ab",
+  "autoRenewal": "Automatische Verlängerung",
+  "actions": "Aktionen",
+  "save": "Speichern",
+  "required": "Empfohlen!",
+  "paid": "Bezahlt!",
+  "instruction": {
+    "stage1": "Anwendung herunterladen",
+    "stage2": "Abonnement zur Anwendung hinzufügen",
+    "copyUrl": "Abonnement-URL kopieren",
+    "openQR": "QR-Code des Abonnements",
+    "scanApp": "In der Anwendung scannen",
+    "scanPhone": "Auf dem Telefon scannen",
+    "add": "Zur Anwendung hinzufügen"
+  },
+  "platform": "Plattform",
+  "success": { "serversUpdated": "Server erfolgreich aktualisiert" },
+  "errors": {
+    "loadFailed": "Abonnements konnten nicht geladen werden",
+    "disableAutoRenewalFailed": "Fehler beim Deaktivieren der automatischen Verlängerung!",
+    "enableAutoRenewalFailed": "Fehler beim Aktivieren der automatischen Verlängerung!",
+    "deleteSubscriptionFailed": "Fehler beim Löschen des Abonnements!",
+    "resetSubscriptionFailed": "Fehler beim Zurücksetzen der Abonnementdaten!",
+    "renewSubscriptionFailed": "Abonnement konnte nicht verlängert werden!",
+    "fetchingServers": "Server konnten nicht geladen werden",
+    "updatingServers": "Server konnten nicht aktualisiert werden",
+    "serverLimitReached": "Sie haben das Serverlimit erreicht",
+    "serverLimitReachedPremium": "Sie haben das Premium-Serverlimit erreicht",
+    "serverLimitReachedBase": "Sie haben das Basis-Serverlimit erreicht"
+  },
+  "periods": {
+    "trial": "Testphase",
+    "hour": "1 Stunde",
+    "day": "1 Tag",
+    "week": "1 Woche",
+    "month": "1 Monat",
+    "threeMonth": "3 Monate",
+    "sixMonth": "6 Monate",
+    "year": "1 Jahr",
+    "twoYear": "2 Jahre",
+    "threeYear": "3 Jahre",
+    "indefinitely": "Unbefristet"
+  },
+  "modals": {
+    "delete": {
+      "title": "Abonnement löschen",
+      "button": "Löschen",
+      "action": "Löschen",
+      "message": "Möchten Sie das Abonnement wirklich unwiderruflich löschen? Es kann nicht wiederhergestellt werden! Eine Entschädigung ist nicht vorgesehen!"
+    },
+    "qr": {
+      "title": "QR-Code des Abonnements",
+      "description": "In der Client-Anwendung scannen"
+    },
+    "refresh": {
+      "title": "Abonnementdaten zurücksetzen",
+      "button": "Daten zurücksetzen",
+      "action": "Zurücksetzen",
+      "message": "Möchten Sie die Abonnementdaten wirklich zurücksetzen? Danach ändern sich die Schlüssel und die Abonnementadresse zu neuen! Sie müssen das Abonnement erneut zur Anwendung hinzufügen! Normalerweise wird ein Reset durchgeführt, wenn Ihr Abonnement ins Netz gelangt ist oder jemand darauf Zugriff erhalten hat!"
+    },
+    "autoRenewal": {
+      "enableTitle": "Automatische Verlängerung aktivieren",
+      "disableTitle": "Automatische Verlängerung deaktivieren",
+      "enableAction": "Aktivieren",
+      "disableAction": "Deaktivieren",
+      "enableMessage": "Möchten Sie die automatische Verlängerung des Abonnements aktivieren? Die Gelder werden automatisch bei Ablauf des Abonnements abgebucht.",
+      "disableMessage": "Möchten Sie die automatische Verlängerung des Abonnements deaktivieren? Nach Ablauf wird das Abonnement deaktiviert."
+    },
+    "renew": {
+      "title": "Abonnement verlängern",
+      "action": "Verlängern",
+      "message": "Möchten Sie das Abonnement verlängern? {price} Sterne werden von Ihrem Guthaben abgebucht."
+    }
+  }
+}

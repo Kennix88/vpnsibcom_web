@@ -1,0 +1,28 @@
+{
+  "modal": {
+    "cancel": "Бас тарту",
+    "accept": "Қабылдау",
+    "close": "Жабу"
+  },
+  "scrolling": "Төмен қарай айналдыру",
+  "clipboard": {
+    "copied": "Алмасу буферіне көшірілді!",
+    "failed": "Көшіру мүмкін болмады!"
+  },
+  "freePlan": {
+    "trialAvailable": "Сізге {days} күнге сынақ мерзімі қолжетімді.",
+    "activate": "Белсендіру",
+    "activationFailed": "Тегін жоспарды белсендіру мүмкін болмады"
+  },
+  "units": {
+    "bytes": "Б",
+    "kilobytes": "КБ",
+    "megabytes": "МБ",
+    "gigabytes": "ГБ",
+    "terabytes": "ТБ",
+    "petabytes": "ПБ",
+    "exabytes": "ЭБ",
+    "zettabytes": "ЗБ",
+    "yottabytes": "ЙБ"
+  }
+}

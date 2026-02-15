@@ -1,47 +1,33 @@
 'use client'
 
-import { SubscriptionResponseInterface } from '@app/types/subscription-data.interface'
-import { UserDataInterface } from '@app/types/user-data.interface'
 import { motion } from 'framer-motion'
+import { useTranslations } from 'next-intl'
 import TgStar from '../Currency'
 import { TRAFFIC_GBS } from './constants'
-import { calculateTrafficPrice, getDevicesCountButtonColor } from './functions'
+import { getTrafficCountButtonColor } from './functions'
 
 // Компонент: Выбор трафика
 export const TrafficSelection = ({
   trafficLimitGb,
   setTrafficLimitGb,
-  isUnlimitTraffic,
   setIsUnlimitTraffic,
-  user,
-  subscriptions,
+  price,
 }: {
   trafficLimitGb: number
   setTrafficLimitGb: (val: number) => void
-  isUnlimitTraffic: boolean
   setIsUnlimitTraffic: (val: boolean) => void
-  user: UserDataInterface
-  subscriptions: SubscriptionResponseInterface
+  price: number
 }) => {
-  const trafficPrice = calculateTrafficPrice(
-    user,
-    subscriptions,
-    isUnlimitTraffic,
-    trafficLimitGb,
-  )
-
+  const t = useTranslations('billing.subscription')
   return (
     <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
       <div className="flex gap-2 items-end justify-between w-full px-4 ">
         <div className="opacity-50 flex flex-row gap-2 items-center">
-          Ежедневный трафик ГБ
+          {t('traffic')} GB
         </div>
         <div className="flex gap-2 items-center ">
           <TgStar type="star" w={14} />
-          {(user.isTgProgramPartner
-            ? trafficPrice * subscriptions.telegramPartnerProgramRatio
-            : trafficPrice
-          ).toFixed(2)}
+          {price}
         </div>
       </div>
 
@@ -78,7 +64,7 @@ export const TrafficSelection = ({
 
         {TRAFFIC_GBS.map((val) => {
           const isActive = trafficLimitGb === val
-          const rgb = getDevicesCountButtonColor(val)
+          const rgb = getTrafficCountButtonColor(val)
           const bgOpacity = isActive ? 0.3 : 0.15
           return (
             <motion.button
@@ -100,7 +86,7 @@ export const TrafficSelection = ({
           )
         })}
 
-        <motion.button
+        {/* <motion.button
           whileTap={{ scale: 0.95 }}
           onClick={() => {
             setTrafficLimitGb(0)
@@ -114,7 +100,7 @@ export const TrafficSelection = ({
               : '1px solid transparent',
           }}>
           Безлимит
-        </motion.button>
+        </motion.button> */}
       </motion.div>
     </div>
   )

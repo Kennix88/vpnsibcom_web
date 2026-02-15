@@ -1,0 +1,8 @@
+{
+  "trialAvailable": "無期限のトライアルサブスクリプションで{gb}GBのボーナストラフィックが利用可能です。",
+  "activate": "アクティブ化",
+  "activationFailed": "無料プランをアクティブ化できませんでした",
+  "modalTitle": "試用期間のアクティブ化",
+  "modalAction": "アクティブ化",
+  "modalConfirmation": "試用期間をアクティブ化してもよろしいですか？"
+}

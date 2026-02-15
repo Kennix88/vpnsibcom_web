@@ -97,22 +97,27 @@ export default function FriendsList() {
                   <div className="font-bold text-md font-mono">
                     {limitLengthString(ref.fullName)}
                   </div>
-                  <div className="font-bold text-xs text-[var(--on-background)]/80 font-mono flex flex-row gap-2 justify-between items-center w-full">
-                    <div>@{ref.username ? ref.username : 'Anonymous'}</div>
+                  <div className="font-bold text-xs text-[var(--on-background)]/80 font-mono flex flex-wrap gap-2 justify-between items-center w-full">
+                    <div className="text-[12px]">
+                      @
+                      {ref.username
+                        ? limitLengthString(ref.username, 15)
+                        : limitLengthString('Anonymous', 15)}
+                    </div>
                     <div
                       className={
-                        'flex flex-row justify-between gap-4 items-center'
+                        'flex flex-wrap justify-between gap-2 items-center'
                       }>
                       <div
                         className={
-                          'flex flex-row gap-1 items-center px-2 py-1 rounded-md bg-[var(--star-container-rgba)]'
+                          'flex  gap-1 items-center px-2 py-1 rounded-md bg-[var(--star-container-rgba)]'
                         }>
                         <TgStar w={15} type={'star'} />
                         {addSuffixToNumberUtil(ref.totalPaymentsRewarded)}
                       </div>
                       <div
                         className={
-                          'flex flex-row gap-1 items-center px-2 py-1 rounded-md bg-[var(--traffic-container-rgba)]'
+                          'flex  gap-1 items-center px-2 py-1 rounded-md bg-[var(--traffic-container-rgba)]'
                         }>
                         <TgStar w={15} type={'traffic'} />
                         {addSuffixToNumberUtil(ref.totalTrafficRewarded)}

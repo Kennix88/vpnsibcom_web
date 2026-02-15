@@ -9,6 +9,7 @@ import React from 'react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import '../../_assets/globals.css'
+import { InitData } from '../_components/InitData'
 
 export const metadata: Metadata = {
   title: 'TMA - VPNsib',
@@ -24,12 +25,20 @@ export default async function TmaLayout({
   return (
     <html lang={locale} className={'dark'}>
       <head>
-        <Script id="graspil">
-          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({key:i});
-            var f=d.getElementsByTagName(s)[0],j=d.createElement(s);
-            j.async=true;j.src="https://w.graspil.com";f.parentNode.insertBefore(j,f);
-          })(window,document,"script","graspil","2a2cda3309436dbb3a6bc4d817020929");`}
-        </Script>
+        <Script
+          id="adsonar"
+          strategy="beforeInteractive"
+          src={
+            'https://static.sonartech.io/lib/1.0.0/sonar.js?appId=app_133d2148' +
+            (process.env.NODE_ENV === 'development' ? '&isDebug=true' : '')
+          }
+        />
+
+        {/* <Script
+          id="taddy"
+          strategy="beforeInteractive"
+          src={'https://sdk.taddy.pro/web/taddy.min.js?1317'}
+        /> */}
       </head>
       <body className="bg-[var(--background)]">
         <I18nProvider>
@@ -46,7 +55,9 @@ export default async function TmaLayout({
               pauseOnHover
               theme="dark"
             />
-            <CheckPlatform>{children}</CheckPlatform>
+            <CheckPlatform>
+              <InitData>{children}</InitData>
+            </CheckPlatform>
           </TelegramProvider>
         </I18nProvider>
       </body>

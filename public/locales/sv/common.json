@@ -1,0 +1,28 @@
+{
+  "modal": {
+    "cancel": "Avbryt",
+    "accept": "Acceptera",
+    "close": "Stäng"
+  },
+  "scrolling": "Scrolla ner",
+  "clipboard": {
+    "copied": "Kopierat till urklipp!",
+    "failed": "Kunde inte kopiera!"
+  },
+  "freePlan": {
+    "trialAvailable": "Du har tillgång till en provperiod på {days} dagar.",
+    "activate": "Aktivera",
+    "activationFailed": "Kunde inte aktivera gratisplanen"
+  },
+  "units": {
+    "bytes": "B",
+    "kilobytes": "KB",
+    "megabytes": "MB",
+    "gigabytes": "GB",
+    "terabytes": "TB",
+    "petabytes": "PB",
+    "exabytes": "EB",
+    "zettabytes": "ZB",
+    "yottabytes": "YB"
+  }
+}

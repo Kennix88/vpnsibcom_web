@@ -7,7 +7,7 @@ interface CurrencyStore {
   currencies: CurrencyInterface[]
   rates: RatesInterface | null
   setCurrencies: (currencies: CurrencyInterface[]) => void
-  setRates: (rates: RatesInterface) => void
+  setRates: (rates: RatesInterface | null) => void
 }
 
 export const useCurrencyStore = create<CurrencyStore>()(
@@ -16,7 +16,7 @@ export const useCurrencyStore = create<CurrencyStore>()(
       currencies: [],
       rates: null,
       setCurrencies: (currencies) => set({ currencies }),
-      setRates: (rates: RatesInterface) => set({ rates }),
+      setRates: (rates: RatesInterface | null) => set({ rates }),
     }),
     {
       name: 'currency-storage',

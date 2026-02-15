@@ -1,0 +1,116 @@
+{
+  "title": "Abonnement",
+  "connection": "Connexion",
+  "configs": "Configurations",
+  "addSubscription": "Ajouter un abonnement",
+  "addSubscriptionTitle": "Ajout d'abonnement",
+  "yourSubscriptions": "Vos abonnements",
+  "noSubscriptions": "Vous n'avez pas d'abonnements actifs",
+  "loading": "Chargement des données d'abonnement...",
+  "notFound": "Abonnement introuvable",
+  "renewSubscription": "Renouveler l'abonnement",
+  "autoRenewalEnabled": "Renouvellement automatique activé",
+  "autoRenewalDisabled": "Renouvellement automatique désactivé",
+  "subscriptionDeleted": "L'abonnement a été supprimé avec succès",
+  "subscriptionDataUpdated": "Les données d'abonnement ont été mises à jour avec succès",
+  "subscriptionRenewed": "Abonnement renouvelé avec succès",
+  "changeServer": "Changer de serveur",
+  "changeServerTitle": "Changement de serveur",
+  "changeServerWarning": "ATTENTION: Le changement de serveur prend 2 minutes. Après le changement de serveur, vous devez mettre à jour les données dans l'application!",
+  "active": "Actif",
+  "notActive": "Inactif",
+  "online": "En ligne",
+  "offline": "Hors ligne",
+  "traffic": "Trafic",
+  "trafficReset": {
+    "daily": "Quotidien",
+    "weekly": "Hebdomadaire",
+    "monthly": "Mensuel",
+    "yearly": "Annuel",
+    "unlimit": "Illimité"
+  },
+  "inTotal": "Total",
+  "servers": "Serveurs",
+  "fullServers": "Accès à tous",
+  "allBase": "Tous les serveurs de base",
+  "base": "De base",
+  "premium": "Premium",
+  "devices": "Appareils",
+  "period": "Fréquence de paiement",
+  "expires": "Expire",
+  "autoRenewal": "Renouvellement automatique",
+  "actions": "Actions",
+  "save": "Enregistrer",
+  "required": "Recommandé!",
+  "paid": "Payant!",
+  "instruction": {
+    "stage1": "Télécharger l'application",
+    "stage2": "Ajouter un abonnement à l'application",
+    "copyUrl": "Copier l'URL de l'abonnement",
+    "openQR": "Code QR de l'abonnement",
+    "scanApp": "Scanner dans l'application",
+    "scanPhone": "Scanner sur le téléphone",
+    "add": "Ajouter à l'application"
+  },
+  "platform": "Plateforme",
+  "success": {
+    "serversUpdated": "Serveurs mis à jour avec succès"
+  },
+  "errors": {
+    "loadFailed": "Échec du chargement des abonnements",
+    "disableAutoRenewalFailed": "Erreur de désactivation du renouvellement automatique!",
+    "enableAutoRenewalFailed": "Erreur d'activation du renouvellement automatique!",
+    "deleteSubscriptionFailed": "Erreur de suppression de l'abonnement!",
+    "resetSubscriptionFailed": "Erreur de réinitialisation des données d'abonnement!",
+    "renewSubscriptionFailed": "Échec du renouvellement de l'abonnement!",
+    "fetchingServers": "Échec du chargement des serveurs",
+    "updatingServers": "Échec de la mise à jour des serveurs",
+    "serverLimitReached": "Vous avez atteint la limite de serveurs",
+    "serverLimitReachedPremium": "Vous avez atteint la limite de serveurs premium",
+    "serverLimitReachedBase": "Vous avez atteint la limite de serveurs de base"
+  },
+  "periods": {
+    "trial": "Période d'essai",
+    "hour": "1 heure",
+    "day": "1 jour",
+    "week": "1 semaine",
+    "month": "1 mois",
+    "threeMonth": "3 mois",
+    "sixMonth": "6 mois",
+    "year": "1 an",
+    "twoYear": "2 ans",
+    "threeYear": "3 ans",
+    "indefinitely": "Indéfiniment"
+  },
+  "modals": {
+    "delete": {
+      "title": "Suppression de l'abonnement",
+      "button": "Supprimer",
+      "action": "Supprimer",
+      "message": "Voulez-vous vraiment supprimer définitivement l'abonnement? Il ne pourra pas être restauré! Aucune compensation n'est prévue!"
+    },
+    "qr": {
+      "title": "Code QR de l'abonnement",
+      "description": "Scanner dans l'application client"
+    },
+    "refresh": {
+      "title": "Réinitialisation des données d'abonnement",
+      "button": "Réinitialiser les données",
+      "action": "Réinitialiser",
+      "message": "Voulez-vous vraiment réinitialiser les données d'abonnement? Après cela, les clés et l'adresse de l'abonnement changeront! Vous devrez ajouter l'abonnement à nouveau dans l'application! La réinitialisation est généralement effectuée si votre abonnement a été divulgué ou si quelqu'un y a eu accès!"
+    },
+    "autoRenewal": {
+      "enableTitle": "Activation du renouvellement automatique",
+      "disableTitle": "Désactivation du renouvellement automatique",
+      "enableAction": "Activer",
+      "disableAction": "Désactiver",
+      "enableMessage": "Voulez-vous activer le renouvellement automatique de l'abonnement? Les fonds seront débités automatiquement à l'expiration de l'abonnement.",
+      "disableMessage": "Voulez-vous désactiver le renouvellement automatique de l'abonnement? Après l'expiration, l'abonnement sera désactivé."
+    },
+    "renew": {
+      "title": "Renouvellement de l'abonnement",
+      "action": "Renouveler",
+      "message": "Voulez-vous renouveler l'abonnement? {price} étoiles seront débitées de votre solde."
+    }
+  }
+}

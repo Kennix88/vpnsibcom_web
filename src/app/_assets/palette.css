@@ -27,6 +27,20 @@
   --on-traffic-container: #00292f;
   --traffic-container-rgba: rgba(0, 187, 212, 0.3);
 
+  /* AD (00BBD4) */
+  --ad: #ff6a00;
+  --on-ad: #ffffff;
+  --ad-container: #ffd7bf;
+  --on-ad-container: #3a1600;
+  --ad-container-rgba: rgba(255, 106, 0, 0.3);
+
+  /* USDT */
+  --usdt: #50af95;
+  --on-usdt: #ffffff;
+  --usdt-container: #7fd6bf;
+  --on-usdt-container: #1f4f44;
+  --usdt-container-rgba: rgba(80, 175, 149, 0.3);
+
   /* Wager (D63A3A) */
   --wager: #d63a3a;
   --on-wager: #ffffff;

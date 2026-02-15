@@ -1,0 +1,35 @@
+{
+  "title": "Do'stlar",
+  "get": "Mukofot oling",
+  "for": "do'stlarni taklif qilish uchun",
+  "level": "daraja",
+  "total": "Jami",
+  "list": {
+    "title": "Sizning do'stlaringiz",
+    "top": "Yuqori",
+    "empty": "Hozircha hech kim yo'q 🥲"
+  },
+  "bonuses": {
+    "title": "Bonuslar",
+    "inviteTitle": "Do'stni taklif qilish uchun",
+    "paymentTitle": "Do'stning harakatlari uchun",
+    "inviteInfo": "Do'st birinchi to'lovni amalga oshirgandan yoki sinov muddatini faollashtirgandan so'ng!",
+    "paymentInfo": "Do'stlar va ularning do'stlari tomonidan taklif qilinganlardan bizning daromadimizdan foiz oling!",
+    "lvl1Info": "Siz taklif qilganlar",
+    "lvl2Info": "Do'stlar taklif qilganlar",
+    "lvl3Info": "Do'stlarning do'stlari taklif qilganlar 😁"
+  },
+  "invite": {
+    "title": "Do'stni taklif qilish",
+    "message": "Xabar yuborish",
+    "copy": "Havolani nusxalash",
+    "story": "Hikoyalarga yuborish"
+  },
+  "statistics": {
+    "title": "Statistika",
+    "earnTitle": "Sizning daromadingiz",
+    "inviteTitle": "Taklif qilingan",
+    "earnInfo": "Siz barcha vaqt davomida ishlab topdingiz",
+    "inviteInfo": "Taklif qilingan | Faollashtirilgan | Ulardan Standart | Ulardan Premium"
+  }
+}

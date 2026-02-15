@@ -1,0 +1,35 @@
+{
+  "title": "Znajomi",
+  "get": "Otrzymuj nagrody",
+  "for": "za zapraszanie znajomych",
+  "level": "poziom",
+  "total": "Razem",
+  "list": {
+    "title": "Twoi znajomi",
+    "top": "Top",
+    "empty": "Jeszcze nikogo tu nie ma 🥲"
+  },
+  "bonuses": {
+    "title": "Bonusy",
+    "inviteTitle": "Za zaproszenie znajomego",
+    "paymentTitle": "Za działania znajomego",
+    "inviteInfo": "Po pierwszej płatności znajomego lub aktywacji okresu próbnego!",
+    "paymentInfo": "Otrzymuj procent od naszych dochodów za znajomych i tych, których zaprosili Twoi znajomi na zawsze!",
+    "lvl1Info": "Ci, których zaprosiłeś Ty",
+    "lvl2Info": "Ci, których zaprosili znajomi",
+    "lvl3Info": "Ci, których zaprosili znajomi znajomych 😁"
+  },
+  "invite": {
+    "title": "Zaproś znajomego",
+    "message": "Wyślij wiadomość",
+    "copy": "Kopiuj link",
+    "story": "Wyślij do relacji"
+  },
+  "statistics": {
+    "title": "Statystyki",
+    "earnTitle": "Twoje zarobki",
+    "inviteTitle": "Zaproszono",
+    "earnInfo": "Zarobiłeś przez cały czas",
+    "inviteInfo": "Zaproszono | Aktywowano | Z tego Standard | Z tego Premium"
+  }
+}

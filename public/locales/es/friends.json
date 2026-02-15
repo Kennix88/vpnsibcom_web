@@ -1,0 +1,35 @@
+{
+  "title": "Amigos",
+  "get": "Obtén recompensas",
+  "for": "por invitar amigos",
+  "level": "nivel",
+  "total": "Total",
+  "list": {
+    "title": "Tus amigos",
+    "top": "Top",
+    "empty": "Nadie aquí todavía 🥲"
+  },
+  "bonuses": {
+    "title": "Bonificaciones",
+    "inviteTitle": "Por invitar a un amigo",
+    "paymentTitle": "Por las acciones de un amigo",
+    "inviteInfo": "¡Después del primer pago de un amigo o la activación del período de prueba!",
+    "paymentInfo": "¡Obtén un porcentaje de nuestros ingresos por amigos y aquellos a quienes tus amigos invitaron para siempre!",
+    "lvl1Info": "Aquellos a quienes invitaste",
+    "lvl2Info": "Aquellos a quienes invitaron tus amigos",
+    "lvl3Info": "Aquellos a quienes invitaron los amigos de tus amigos 😁"
+  },
+  "invite": {
+    "title": "Invitar amigo",
+    "message": "Enviar mensaje",
+    "copy": "Copiar enlace",
+    "story": "Enviar a historias"
+  },
+  "statistics": {
+    "title": "Estadísticas",
+    "earnTitle": "Tus ganancias",
+    "inviteTitle": "Invitados",
+    "earnInfo": "Has ganado en total",
+    "inviteInfo": "Invitados | Activados | De ellos Estándar | De ellos Premium"
+  }
+}

@@ -33,7 +33,7 @@ export default function FriendsStatistics() {
           <div className="flex flex-col divide-y divide-[var(--on-surface)]/50">
             <div
               className={
-                'bg-[var(--surface-container-high)] rounded-t-md grid grid-cols-2 justify-between py-2 px-4'
+                'bg-[var(--surface-container-high)] rounded-t-md grid grid-cols-3 justify-between py-2 px-4'
               }>
               <div
                 className={
@@ -41,10 +41,10 @@ export default function FriendsStatistics() {
                 }>
                 {t('total')}
               </div>
-              <div className={'grid grid-cols-2 items-center'}>
+              <div className={'grid grid-cols-2 grow items-center col-span-2'}>
                 <div
                   className={
-                    'flex justify-center flex-row gap-1 items-center px-2 py-1 rounded-l-md bg-[var(--star-container-rgba)]'
+                    'flex justify-center flex-row gap-1 items-center px-2 py-1 rounded-l-md bg-[var(--star-container-rgba)] '
                   }>
                   <TgStar w={18} type={'star'} />
                   {referralsData &&
@@ -69,11 +69,11 @@ export default function FriendsStatistics() {
                 </div>
               </div>
             </div>
-            <div className={'grid grid-cols-2 justify-between py-2 px-4'}>
+            <div className={'grid grid-cols-3 justify-between py-2 px-4'}>
               <div className={'opacity-50 flex flex-row gap-2 items-center'}>
                 1 {t('level')}
               </div>
-              <div className={'grid grid-cols-2 items-center'}>
+              <div className={'grid grid-cols-2 items-center col-span-2'}>
                 <div
                   className={
                     'flex justify-center flex-row gap-1 items-center px-2 py-1 rounded-l-md bg-[var(--star-container-rgba)]'
@@ -96,11 +96,11 @@ export default function FriendsStatistics() {
                 </div>
               </div>
             </div>
-            <div className={'grid grid-cols-2 justify-between py-2 px-4'}>
+            <div className={'grid grid-cols-3 justify-between py-2 px-4'}>
               <div className={'opacity-50 flex flex-row gap-2 items-center'}>
                 2 {t('level')}
               </div>
-              <div className={'grid grid-cols-2 items-center'}>
+              <div className={'grid grid-cols-2 items-center col-span-2'}>
                 <div
                   className={
                     'flex justify-center flex-row gap-1 items-center px-2 py-1 rounded-l-md bg-[var(--star-container-rgba)]'
@@ -123,11 +123,11 @@ export default function FriendsStatistics() {
                 </div>
               </div>
             </div>
-            <div className={'grid grid-cols-2 justify-between py-2 px-4'}>
+            <div className={'grid grid-cols-3 justify-between py-2 px-4'}>
               <div className={'opacity-50 flex flex-row gap-2 items-center'}>
                 3 {t('level')}
               </div>
-              <div className={'grid grid-cols-2 items-center'}>
+              <div className={'grid grid-cols-2 items-center col-span-2'}>
                 <div
                   className={
                     'flex justify-center flex-row gap-1 items-center px-2 py-1 rounded-l-md bg-[var(--star-container-rgba)]'

@@ -1,0 +1,5 @@
+{
+  "loading": "Kontrollerar anslutningssäkerhet...",
+  "danger": "Din anslutning är INTE säker!\nAnslut VPN!",
+  "success": "Din anslutning är säker!"
+}

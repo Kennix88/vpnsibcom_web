@@ -1,5 +1,9 @@
 {
+  "title": "Subscription",
+  "connection": "Connection",
+  "configs": "Configs",
   "addSubscription": "Add subscription",
+  "addSubscriptionTitle": "Adding a subscription",
   "yourSubscriptions": "Your subscriptions",
   "noSubscriptions": "You don't have any subscriptions yet",
   "loading": "Loading subscription data...",
@@ -10,9 +14,45 @@
   "subscriptionDeleted": "Subscription has been successfully deleted",
   "subscriptionDataUpdated": "Subscription data has been successfully updated",
   "subscriptionRenewed": "Subscription has been successfully renewed",
-  "changeServers": "Change servers",
-  "changeServersTitle": "Change servers",
+  "changeServer": "Change server",
+  "changeServerTitle": "Change server",
+  "changeServerWarning": "WARNING: Changing the server takes 2 minutes. After changing the server, you need to update the data in the application!",
+  "active": "Active",
+  "notActive": "Not active",
+  "online": "Online",
+  "offline": "Offline",
+  "traffic": "Traffic",
+  "trafficReset": {
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "yearly": "Annually",
+    "unlimit": "Unlimited"
+  },
+  "inTotal": "All",
+  "servers": "Servers",
+  "fullServers": "Access to all",
+  "allBase": "All base",
+  "base": "Base",
+  "premium": "Premium",
+  "devices": "Devices",
+  "period": "Payment period",
+  "expires": "Expires",
+  "autoRenewal": "Auto-renewal",
+  "actions": "Actions",
   "save": "Save",
+  "required": "Recommended!",
+  "paid": "Paid!",
+  "instruction": {
+    "stage1": "Download the application",
+    "stage2": "Add subscription to the application",
+    "copyUrl": "Copy subscription URL",
+    "openQR": "QR-code of the subscription",
+    "scanApp": "Scan in the application",
+    "scanPhone": "Scan in the phone",
+    "add": "Add to the application"
+  },
+  "platform": "Platform",
   "success": {
     "serversUpdated": "Servers have been successfully updated"
   },
@@ -33,21 +73,29 @@
     "trial": "Trial period",
     "hour": "1 hour",
     "day": "1 day",
+    "week": "1 week",
     "month": "1 month",
     "threeMonth": "3 months",
     "sixMonth": "6 months",
     "year": "1 year",
     "twoYear": "2 years",
-    "threeYear": "3 years"
+    "threeYear": "3 years",
+    "indefinitely": "Безсрочно"
   },
   "modals": {
     "delete": {
       "title": "Deleting a subscription",
+      "button": "Delete",
       "action": "Delete",
       "message": "Are you sure you want to permanently delete your subscription? It will be impossible to restore it! No compensation is provided!"
     },
+    "qr": {
+      "title": "QR code of the subscription",
+      "description": "Scan it in the client application"
+    },
     "refresh": {
       "title": "Subscription data reset",
+      "button": "Reset the data",
       "action": "Reset",
       "message": "Are you sure you want to reset the subscription data? After this, the keys and subscription address will be changed to new ones! You will need to add the subscription to the application again! Usually, a reset is done if your subscription has leaked to the network or someone has gained access to it!"
     },

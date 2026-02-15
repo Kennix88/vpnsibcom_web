@@ -20,7 +20,7 @@ export default function FormatPeriod({
     case SubscriptionPeriodEnum.DAY:
       return <>{t('day')}</>
     case SubscriptionPeriodEnum.WEEK:
-      return <>1 неделя</>
+      return <>{t('week')}</>
     case SubscriptionPeriodEnum.MONTH:
       return <>{t('month')}</>
     case SubscriptionPeriodEnum.THREE_MONTH:
@@ -36,7 +36,7 @@ export default function FormatPeriod({
     case SubscriptionPeriodEnum.INDEFINITELY ||
       SubscriptionPeriodEnum.TRAFFIC ||
       SubscriptionPeriodEnum.TRIAL:
-      return <>Безсрочно</>
+      return <>{t('indefinitely')}</>
     default:
       return <>{period}</>
   }

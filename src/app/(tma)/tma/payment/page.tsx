@@ -1,6 +1,9 @@
 'use client'
 import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
 import Payments from '@app/app/_components/payments/Payments'
+import SocialButtons from '@app/app/_components/SocialButtons'
+import TopBar from '@app/app/_components/TopBar'
+import Version from '@app/app/_components/Version'
 import { authApiClient } from '@app/core/authApiClient'
 import { usePaymentMethodsStore } from '@app/store/payment-methods.store'
 import { useUserStore } from '@app/store/user.store'
@@ -29,14 +32,19 @@ export default function Page() {
 
   return (
     <TmaPage back={true}>
-      <div className="flex flex-row gap-4 flex-wrap justify-center">
+      <TopBar />
+      <div className="flex flex-row gap-4 my-4 flex-wrap justify-center">
         <div className="flex flex-col gap-2 uppercase font-mono w-full">
           <div className="text-2xl font-bold ">{t('title')}</div>
           {/*<div className="text-md font-bold font-mono">*/}
           {/*  {t('get')} <span className="opacity-80 font-normal">{t('for')}</span>*/}
           {/*</div>*/}
         </div>
-        <Payments isTma={true} />
+        <Payments />
+      </div>
+      <div className="flex flex-col gap-4">
+        <SocialButtons />
+        <Version />
       </div>
     </TmaPage>
   )

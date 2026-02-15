@@ -1,0 +1,28 @@
+{
+  "modal": {
+    "cancel": "لغو",
+    "accept": "پذیرفتن",
+    "close": "بستن"
+  },
+  "scrolling": "به پایین اسکرول کنید",
+  "clipboard": {
+    "copied": "در کلیپ بورد کپی شد!",
+    "failed": "کپی نشد!"
+  },
+  "freePlan": {
+    "trialAvailable": "شما یک دوره آزمایشی {days} روزه در دسترس دارید.",
+    "activate": "فعال کردن",
+    "activationFailed": "فعال سازی طرح رایگان ناموفق بود"
+  },
+  "units": {
+    "bytes": "بایت",
+    "kilobytes": "کیلوبایت",
+    "megabytes": "مگابایت",
+    "gigabytes": "گیگابایت",
+    "terabytes": "ترابایت",
+    "petabytes": "پتابایت",
+    "exabytes": "اگزابایت",
+    "zettabytes": "زتابایت",
+    "yottabytes": "یوتابایت"
+  }
+}

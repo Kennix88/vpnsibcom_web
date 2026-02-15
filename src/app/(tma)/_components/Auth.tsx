@@ -2,66 +2,39 @@
 import Loader from '@app/app/_components/Loader'
 import { config } from '@app/config/client'
 import { authApiClient } from '@app/core/authApiClient'
-import { setServerLocale } from '@app/core/i18n/locale.server'
-import { useCurrencyStore } from '@app/store/currency.store'
 import { useUserStore } from '@app/store/user.store'
-import { retrieveRawInitData } from '@telegram-apps/sdk-react'
 
 import { TonConnectUIProvider } from '@tonconnect/ui-react'
 import { PropsWithChildren, useEffect } from 'react'
 
 export function Auth({ children }: PropsWithChildren) {
-  const initDataRaw = retrieveRawInitData()
-  const { reset, user, accessToken } = useUserStore()
+  const { user, accessToken, setUser, setAccessToken } = useUserStore()
 
-  const { setCurrencies, setRates } = useCurrencyStore()
-
+  // main effect: detect initData change and re-auth
   useEffect(() => {
-    const initialize = async () => {
-      await reset()
-    }
-    initialize()
-  }, [reset])
-
-  useEffect(() => {
-    const initAuth = async () => {
+    const handleInit = async () => {
+      const { retrieveRawInitData } = await import('@tma.js/sdk-react')
+      const initDataRaw = retrieveRawInitData()
+      // await clearClientPersistence()
       if (!initDataRaw) {
         console.warn('No Telegram initData found')
         return
       }
 
       try {
-        await authApiClient.telegramLogin(initDataRaw)
+        const { accessToken: newToken, user: newUser } =
+          await authApiClient.telegramLogin(initDataRaw)
+        // ensure local store updated
+        setAccessToken(newToken)
+        setUser(newUser)
       } catch (err) {
-        console.error('Authorization failed', err)
-        await reset()
+        console.error('Error during initData handling', err)
       }
     }
 
-    initAuth()
-  }, [initDataRaw, reset])
-
-  useEffect(() => {
-    const getRates = async () => {
-      try {
-        if (user && accessToken) {
-          const data = await authApiClient.getCurrency()
-          setCurrencies(data.currencies)
-          setRates(data.rates)
-        }
-      } catch (error) {
-        console.error('Failed to fetch currency rates', error)
-      }
-    }
-
-    getRates()
-  }, [user, accessToken, setCurrencies, setRates])
-
-  useEffect(() => {
-    if (user) {
-      setServerLocale(user.languageCode)
-    }
-  }, [user])
+    handleInit()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   if (!user || !accessToken) {
     return <Loader />

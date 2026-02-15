@@ -1,0 +1,28 @@
+{
+  "modal": {
+    "cancel": "Abbrechen",
+    "accept": "Akzeptieren",
+    "close": "Schließen"
+  },
+  "scrolling": "Nach unten scrollen",
+  "clipboard": {
+    "copied": "In die Zwischenablage kopiert!",
+    "failed": "Kopieren fehlgeschlagen!"
+  },
+  "freePlan": {
+    "trialAvailable": "Ihnen steht eine Testphase von {days} Tagen zur Verfügung.",
+    "activate": "Aktivieren",
+    "activationFailed": "Kostenloser Plan konnte nicht aktiviert werden"
+  },
+  "units": {
+    "bytes": "B",
+    "kilobytes": "KB",
+    "megabytes": "MB",
+    "gigabytes": "GB",
+    "terabytes": "TB",
+    "petabytes": "PB",
+    "exabytes": "EB",
+    "zettabytes": "ZB",
+    "yottabytes": "YB"
+  }
+}

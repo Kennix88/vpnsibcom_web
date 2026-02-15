@@ -1,0 +1,11 @@
+{
+  "main": "Hauptseite",
+  "profile": "Profil",
+  "subscriptions": "Abonnements",
+  "wallet": "Geldbörse",
+  "friends": "Freunde",
+  "free": "Kostenlos",
+  "settings": "Einstellungen",
+  "admin": "Admin",
+  "logout": "Abmelden"
+}

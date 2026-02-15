@@ -1,0 +1,28 @@
+{
+  "modal": {
+    "cancel": "Annuleren",
+    "accept": "Accepteren",
+    "close": "Sluiten"
+  },
+  "scrolling": "Scroll naar beneden",
+  "clipboard": {
+    "copied": "Gekopieerd naar klembord!",
+    "failed": "Kopiëren mislukt!"
+  },
+  "freePlan": {
+    "trialAvailable": "U heeft een proefperiode van {days} dagen beschikbaar.",
+    "activate": "Activeren",
+    "activationFailed": "Gratis abonnement kon niet worden geactiveerd"
+  },
+  "units": {
+    "bytes": "B",
+    "kilobytes": "KB",
+    "megabytes": "MB",
+    "gigabytes": "GB",
+    "terabytes": "TB",
+    "petabytes": "PB",
+    "exabytes": "EB",
+    "zettabytes": "ZB",
+    "yottabytes": "YB"
+  }
+}

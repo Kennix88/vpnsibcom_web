@@ -1,0 +1,28 @@
+{
+  "modal": {
+    "cancel": "إلغاء",
+    "accept": "قبول",
+    "close": "إغلاق"
+  },
+  "scrolling": "مرر للأسفل",
+  "clipboard": {
+    "copied": "تم النسخ إلى الحافظة!",
+    "failed": "فشل النسخ!"
+  },
+  "freePlan": {
+    "trialAvailable": "يتوفر لك فترة تجريبية لمدة {days} أيام.",
+    "activate": "تفعيل",
+    "activationFailed": "فشل تفعيل الخطة المجانية"
+  },
+  "units": {
+    "bytes": "بايت",
+    "kilobytes": "كيلوبايت",
+    "megabytes": "ميجابايت",
+    "gigabytes": "جيجابايت",
+    "terabytes": "تيرابايت",
+    "petabytes": "بيتابايت",
+    "exabytes": "إكسابايت",
+    "zettabytes": "زيتابايت",
+    "yottabytes": "يوتابايت"
+  }
+}

@@ -1,4 +1,6 @@
+'use client'
 import { motion, useAnimation } from 'framer-motion'
+import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 import { IoChevronDown } from 'react-icons/io5'
 
@@ -10,6 +12,7 @@ function ScrollHint({
   const controls = useAnimation()
   const [isScrollable, setIsScrollable] = useState(false)
   const [visible, setVisible] = useState(false)
+  const t = useTranslations('common')
 
   useEffect(() => {
     const el = targetRef.current
@@ -96,7 +99,7 @@ function ScrollHint({
         }}
         transition={{ repeat: Infinity, duration: 1.5, repeatType: 'loop' }}
         className="text-xs">
-        Прокрутите
+        {t('scrolling')}
       </motion.span>
       <motion.div
         animate={{

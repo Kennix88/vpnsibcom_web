@@ -1,0 +1,5 @@
+{
+  "loading": "Memuat: Memeriksa keamanan koneksi...",
+  "danger": "Bahaya: Koneksi Anda TIDAK aman!\nHubungkan VPN!",
+  "success": "Berhasil: Koneksi Anda aman!"
+}

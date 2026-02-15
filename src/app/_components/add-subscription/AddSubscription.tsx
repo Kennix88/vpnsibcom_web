@@ -2,7 +2,9 @@
 
 import { authApiClient } from '@app/core/authApiClient'
 import { publicApiClient } from '@app/core/publicApiClient'
+import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
 import { PlansServersSelectTypeEnum } from '@app/enums/plans-servers-select-type.enum'
+import { PlansEnum } from '@app/enums/plans.enum'
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
 import { TrafficResetEnum } from '@app/enums/traffic-reset.enum'
 import { usePlansStore } from '@app/store/plans.store'
@@ -10,18 +12,23 @@ import { useServersStore } from '@app/store/servers.store'
 import { useSubscriptionsStore } from '@app/store/subscriptions.store'
 import { useUserStore } from '@app/store/user.store'
 import { PlansInterface } from '@app/types/plans.interface'
+import { ServerDataInterface } from '@app/types/servers-data.interface'
+import { CreateSubscriptionDataInterface } from '@app/types/subscription-data.interface'
 import {
-  CreateSubscriptionDataInterface,
-  SubscriptionResponseInterface,
-} from '@app/types/subscription-data.interface'
-import { UserDataInterface } from '@app/types/user-data.interface'
-import { calculateSubscriptionCost } from '@app/utils/calculate-subscription-cost.util'
-import { invoice } from '@telegram-apps/sdk-react'
+  calculateDaysByPeriod,
+  calculateSubscriptionCost,
+  calculateSubscriptionCostNoDiscount,
+} from '@app/utils/calculate-subscription-cost.util'
+import { invoice } from '@tma.js/sdk-react'
+import { beginCell, toNano } from '@ton/core'
+import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react'
+import { addDays, eachDayOfInterval } from 'date-fns'
+import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { BiServer, BiSolidMask } from 'react-icons/bi'
-import { FaShieldHeart } from 'react-icons/fa6'
+import { FaCircleInfo, FaShieldHeart } from 'react-icons/fa6'
 import { IoLogoGithub, IoShieldHalf } from 'react-icons/io5'
 import {
   MdAdsClick,
@@ -31,6 +38,8 @@ import {
 } from 'react-icons/md'
 import { TbCloudNetwork } from 'react-icons/tb'
 import { toast } from 'react-toastify'
+import { TrafficPeriodButtonInterface } from '../subscription/RenewButton'
+import TooltipWrapper from '../TooltipWrapper'
 import { DevicesSelection } from './DevicesSelection'
 import { getServersText } from './functions'
 import { PaymentActions } from './PaymentActions'
@@ -49,15 +58,15 @@ export interface PeriodButtonInterface {
 }
 
 export default function AddSubscription() {
-  const tBill = useTranslations('billing.payment')
-  const location = usePathname()
-  const url = location.includes('/tma') ? '/tma' : '/app'
+  const t = useTranslations('billing')
   const router = useRouter()
 
-  const { subscriptions } = useSubscriptionsStore()
+  const { subscriptions, setSubscriptions } = useSubscriptionsStore()
   const { user, setUser } = useUserStore()
   const { serversData, setServersData } = useServersStore()
   const { plansData, setPlansData } = usePlansStore()
+  const wallet = useTonWallet()
+  const [tonConnectUI] = useTonConnectUI()
 
   const [periodButton, setPeriodButton] =
     useState<PeriodButtonInterface | null>(null)
@@ -70,13 +79,42 @@ export default function AddSubscription() {
   const [baseServersCount, setBaseServersCount] = useState(0)
   const [premiumServersCount, setPremiumServersCount] = useState(0)
   const [serversSelected, setServersSelected] = useState<string[]>([])
-  const [isFixedPrice, setIsFixedPrice] = useState(false)
+  const [serverSelected, setServerSelected] =
+    useState<ServerDataInterface | null>(null)
   const [periodMultiplier, setPeriodMultiplier] = useState(1)
   const [isUnlimitTraffic, setIsUnlimitTraffic] = useState(false)
   const [trafficLimitGb, setTrafficLimitGb] = useState(1)
   const [isAutoRenewal, setIsAutoRenewal] = useState(true)
   const [planSelected, setPlanSelected] = useState<PlansInterface | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [trafficReset, setTrafficReset] = useState<TrafficResetEnum>(
+    TrafficResetEnum.DAY,
+  )
+  const [name, setName] = useState<string>(t('subscription.name.default'))
+  const trafficPeriodButtons: TrafficPeriodButtonInterface[] = [
+    {
+      key: TrafficResetEnum.DAY,
+      label: t('subscription.trafficReset.daily'),
+      minDays: 0,
+    },
+    {
+      key: TrafficResetEnum.WEEK,
+      label: t('subscription.trafficReset.weekly'),
+      minDays: 7,
+    },
+    {
+      key: TrafficResetEnum.MONTH,
+      label: t('subscription.trafficReset.monthly'),
+      minDays: 30,
+    },
+    {
+      key: TrafficResetEnum.YEAR,
+      label: t('subscription.trafficReset.yearly'),
+      minDays: 360,
+    },
+  ]
+  const [trafficPeriodButton, setTrafficPeriodButton] =
+    useState<TrafficPeriodButtonInterface | null>(trafficPeriodButtons[0])
 
   const balance = useMemo(() => {
     return user?.balance.payment || 0
@@ -112,13 +150,22 @@ export default function AddSubscription() {
 
   const privileges = useMemo(
     () => [
+      ...(planSelected?.key === PlansEnum.TRAFFIC
+        ? [
+            {
+              key: 'traffic-plan',
+              icon: '🤔',
+              text: t('subscription.privileges.trafficPlan'),
+            },
+          ]
+        : []),
       {
         key: 'devices',
         icon: <MdDevices />,
         text:
           planSelected?.serversSelectType === PlansServersSelectTypeEnum.CUSTOM
-            ? 'Нужное количество устройств'
-            : `До ${devicesCount} одновременных устройств`,
+            ? t('subscription.privileges.customDevices')
+            : t('subscription.privileges.devices', { count: devicesCount }),
       },
       {
         key: 'servers',
@@ -129,6 +176,7 @@ export default function AddSubscription() {
           isAllPremiumServers,
           baseServersCount,
           premiumServersCount,
+          t,
         ),
       },
       {
@@ -136,37 +184,61 @@ export default function AddSubscription() {
         icon: <TbCloudNetwork />,
         text:
           planSelected?.serversSelectType === PlansServersSelectTypeEnum.CUSTOM
-            ? 'Нужное количество трафика'
-            : isUnlimitTraffic
-              ? 'Безлимитный трафик'
-              : `${trafficLimitGb} ГБ трафика ежедневно`,
+            ? t('subscription.privileges.customTraffic')
+            : planSelected?.key === PlansEnum.TRAFFIC
+              ? t('subscription.privileges.customTraffic')
+              : isUnlimitTraffic
+                ? t('subscription.privileges.traffic')
+                : trafficReset == TrafficResetEnum.DAY
+                  ? t('subscription.privileges.dailyTraffic', {
+                      count: trafficLimitGb,
+                    })
+                  : trafficReset == TrafficResetEnum.WEEK
+                    ? t('subscription.privileges.weeklyTraffic', {
+                        count: trafficLimitGb * 7,
+                      })
+                    : trafficReset == TrafficResetEnum.MONTH
+                      ? t('subscription.privileges.monthlyTraffic', {
+                          count: trafficLimitGb * 30,
+                        })
+                      : t('subscription.privileges.yearlyTraffic', {
+                          count: trafficLimitGb * 365,
+                        }),
       },
       {
         key: 'security',
         icon: <FaShieldHeart />,
-        text: 'Защищенное соединение',
+        text: t('subscription.privileges.security'),
       },
       {
         key: 'speed',
         icon: <MdTraffic />,
-        text: 'Без ограничений на скорость',
+        text: t('subscription.privileges.speed'),
       },
       {
         key: 'masking',
         icon: <BiSolidMask />,
-        text: 'Маскировка вашего трафика',
+        text: t('subscription.privileges.masking'),
       },
-      { key: 'no-ads', icon: <MdAdsClick />, text: 'Отсутвие рекламы' },
+      {
+        key: 'no-ads',
+        icon: <MdAdsClick />,
+        text: t('subscription.privileges.noAds'),
+      },
       {
         key: 'devices-support',
         icon: <MdOutlineDevicesOther />,
-        text: 'Широкая поддержка устройств',
+        text: t('subscription.privileges.devicesSupport'),
       },
-      { key: 'xray', icon: <IoShieldHalf />, text: 'Надежное ядро XRAY' },
+      {
+        key: 'xray',
+        icon: <IoShieldHalf />,
+        text: t('subscription.privileges.xray'),
+      },
       {
         key: 'opensource',
         icon: <IoLogoGithub />,
-        text: 'Открытый исходный код',
+        text: t('subscription.privileges.opensource'),
       },
     ],
     [
@@ -178,30 +250,52 @@ export default function AddSubscription() {
       premiumServersCount,
       isUnlimitTraffic,
       trafficLimitGb,
+      trafficReset,
+      t,
     ],
   )
 
-  const price = useMemo(() => {
+  const { price, priceNoDiscount } = useMemo(() => {
     if (!user || !subscriptions || !planSelected || !periodButton) {
-      return 0
+      return {
+        price: 0,
+        priceNoDiscount: 0,
+      }
     }
 
-    return calculateSubscriptionCost({
-      period: periodButton.key,
-      periodMultiplier,
-      isPremium: user.isPremium,
-      isTgProgramPartner: user.isTgProgramPartner,
-      devicesCount,
-      serversCount: baseServersCount,
-      premiumServersCount,
-      trafficLimitGb,
-      isAllBaseServers,
-      isAllPremiumServers,
-      isUnlimitTraffic,
-      userDiscount: user.roleDiscount,
-      plan: planSelected,
-      settings: subscriptions,
-    })
+    return {
+      price: calculateSubscriptionCost({
+        period: periodButton.key,
+        periodMultiplier,
+        isPremium: user.isPremium,
+        isTgProgramPartner: user.isTgProgramPartner,
+        devicesCount,
+        serversCount: baseServersCount,
+        premiumServersCount,
+        trafficLimitGb,
+        isAllBaseServers,
+        isAllPremiumServers,
+        isUnlimitTraffic,
+        userDiscount: user.roleDiscount,
+        plan: planSelected,
+        settings: subscriptions,
+      }),
+      priceNoDiscount: calculateSubscriptionCostNoDiscount({
+        period: periodButton.key,
+        periodMultiplier,
+        isPremium: user.isPremium,
+        isTgProgramPartner: user.isTgProgramPartner,
+        devicesCount,
+        serversCount: baseServersCount,
+        premiumServersCount,
+        trafficLimitGb,
+        isAllBaseServers,
+        isAllPremiumServers,
+        isUnlimitTraffic,
+        plan: planSelected,
+        settings: subscriptions,
+      }),
+    }
   }, [
     user,
     subscriptions,
@@ -270,67 +364,80 @@ export default function AddSubscription() {
     const buttons: PeriodButtonInterface[] = [
       {
         key: SubscriptionPeriodEnum.HOUR,
-        label: '1 час',
+        label: t('subscription.period.hour'),
         discount: subscriptions.hourRatioPayment,
       },
       {
         key: SubscriptionPeriodEnum.DAY,
-        label: '1 день',
+        label: t('subscription.period.day'),
         discount: subscriptions.dayRatioPayment,
       },
       {
         key: SubscriptionPeriodEnum.WEEK,
-        label: '1 неделя',
+        label: t('subscription.period.week'),
         discount: subscriptions.weekRatioPayment,
       },
-      { key: SubscriptionPeriodEnum.MONTH, label: '1 месяц', discount: 1 },
+      {
+        key: SubscriptionPeriodEnum.MONTH,
+        label: t('subscription.period.month'),
+        discount: 1,
+      },
       {
         key: SubscriptionPeriodEnum.THREE_MONTH,
-        label: '3 месяца',
+        label: t('subscription.period.threeMonth'),
         discount: subscriptions.threeMouthesRatioPayment,
       },
       {
         key: SubscriptionPeriodEnum.SIX_MONTH,
-        label: '6 месяцев',
+        label: t('subscription.period.sixMonth'),
         discount: subscriptions.sixMouthesRatioPayment,
       },
       {
         key: SubscriptionPeriodEnum.YEAR,
-        label: '1 год',
+        label: t('subscription.period.year'),
         discount: subscriptions.oneYearRatioPayment,
       },
       {
         key: SubscriptionPeriodEnum.TWO_YEAR,
-        label: '2 года',
+        label: t('subscription.period.twoYear'),
         discount: subscriptions.twoYearRatioPayment,
       },
       {
         key: SubscriptionPeriodEnum.THREE_YEAR,
-        label: '3 года',
+        label: t('subscription.period.threeYear'),
         discount: subscriptions.threeYearRatioPayment,
       },
       {
         key: SubscriptionPeriodEnum.INDEFINITELY,
-        label: 'Бессрочно',
+        label: t('subscription.period.indefinitely'),
         discount: subscriptions.indefinitelyRatio,
       },
     ]
 
     setPeriodButtons(buttons)
     setPeriodButton(buttons[3])
-  }, [subscriptions, user])
+  }, [subscriptions, user, t])
 
-  // TODO: Изменить функцию покупки подписки
-  const handlePurchase = async (isInvoice = false) => {
+  const handlePurchase = async (
+    method: PaymentMethodEnum | 'BALANCE' | 'TRAFFIC' | 'AD',
+  ) => {
     if (isLoading || !planSelected || !periodButton) return
+    if (method === PaymentMethodEnum.TON_TON && !wallet?.account?.address) {
+      try {
+        await tonConnectUI.openModal()
+      } catch {
+        toast.error('Error when opening a wallet')
+      }
+      return
+    }
     setIsLoading(true)
 
     try {
       const payload: CreateSubscriptionDataInterface = {
-        name: 'sub',
-        method: 'BALANCE',
+        name,
+        method,
         period: periodButton.key,
-        trafficReset: TrafficResetEnum.DAY,
+        trafficReset,
         periodMultiplier,
         devicesCount,
         isAllBaseServers,
@@ -342,24 +449,49 @@ export default function AddSubscription() {
         planKey: planSelected.key,
       }
 
-      const update: {
-        subscriptions: SubscriptionResponseInterface
-        user: UserDataInterface
-        linkPay?: string
-        isTmaIvoice?: boolean
-      } = await authApiClient.purchaseSubscription(payload)
+      const data = await authApiClient.purchaseSubscription(payload)
 
-      // await setUser(update.user)
-      // await setSubscriptions(update.subscriptions)
+      if (!data.invoice) {
+        await setUser(data.user)
+        await setSubscriptions(data.subscriptions)
+        await router.push('/tma')
+        toast.success('Subscription purchased successfully')
+      } else {
+        if (data.invoice?.isTonPayment) {
+          const amountNano = toNano(data.invoice?.amountTon.toString())
 
-      if (isInvoice && update.linkPay) {
-        await invoice.open(update.linkPay, 'url')
+          // payload с ID платежа в виде комментария
+          const payload = beginCell()
+            .storeUint(0, 32) // opcode text_comment
+            .storeStringTail(data.invoice?.token || '')
+            .endCell()
+
+          // транзакция
+          const tx = {
+            validUntil: Math.floor(Date.now() / 1000) + 300, // 5 минут
+            messages: [
+              {
+                address: data.invoice?.linkPay || '',
+                amount: amountNano.toString(),
+                payload: payload.toBoc().toString('base64'),
+              },
+            ],
+          }
+
+          try {
+            await tonConnectUI.sendTransaction(tx)
+          } catch (err) {
+            console.error('Ошибка при оплате', err)
+          }
+        } else {
+          await invoice.openUrl(data.invoice?.linkPay || '')
+        }
       }
     } catch {
       toast.error('Error updating data')
     } finally {
       setIsLoading(false)
-      router.push(url)
+      router.push('/tma')
     }
   }
 
@@ -380,8 +512,6 @@ export default function AddSubscription() {
         plans={plansData.plans}
         planSelected={planSelected}
         onSelect={selectPlan}
-        user={user}
-        subscriptions={subscriptions}
         price={price}
       />
 
@@ -413,42 +543,132 @@ export default function AddSubscription() {
           premiumServersCount={premiumServersCount}
           user={user}
           subscriptions={subscriptions}
+          setServerSelected={setServerSelected}
         />
       )}
 
-      {planSelected.serversSelectType === PlansServersSelectTypeEnum.CUSTOM && (
+      {planSelected.key === PlansEnum.TRAFFIC && (
         <TrafficSelection
           trafficLimitGb={trafficLimitGb}
           setTrafficLimitGb={setTrafficLimitGb}
-          isUnlimitTraffic={isUnlimitTraffic}
           setIsUnlimitTraffic={setIsUnlimitTraffic}
-          user={user}
-          subscriptions={subscriptions}
+          price={price}
         />
       )}
 
-      <PaymentPeriod
-        periodButtons={periodButtons}
-        periodButton={periodButton}
-        setPeriodButton={setPeriodButton}
-        periodMultiplier={periodMultiplier}
-        setPeriodMultiplier={setPeriodMultiplier}
-        planSelected={planSelected}
-        user={user}
-        subscriptions={subscriptions}
-        price={price}
-      />
-
-      {planSelected.serversSelectType === PlansServersSelectTypeEnum.CUSTOM && (
-        <SubscriptionOptions
-          isAutoRenewal={isAutoRenewal}
-          setIsAutoRenewal={setIsAutoRenewal}
-          isFixedPrice={isFixedPrice}
-          setIsFixedPrice={setIsFixedPrice}
-          // user={user}
-          // subscriptions={subscriptions}
+      {planSelected.key !== PlansEnum.TRAFFIC && (
+        <PaymentPeriod
+          periodButtons={periodButtons}
+          periodButton={periodButton}
+          setPeriodButton={setPeriodButton}
+          periodMultiplier={periodMultiplier}
+          setPeriodMultiplier={setPeriodMultiplier}
+          price={price}
         />
       )}
+
+      {trafficReset !== TrafficResetEnum.NO_RESET &&
+        !isUnlimitTraffic &&
+        planSelected.key !== PlansEnum.TRAFFIC && (
+          <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
+            <div className="flex gap-2 items-end justify-between w-full px-4 ">
+              <div className="opacity-50 flex flex-row gap-2 items-center">
+                {t('subscription.trafficReset.title')}
+              </div>
+              <div>
+                {trafficPeriodButton?.key == TrafficResetEnum.DAY
+                  ? trafficLimitGb
+                  : trafficPeriodButton?.key == TrafficResetEnum.WEEK
+                    ? trafficLimitGb * 7
+                    : trafficPeriodButton?.key == TrafficResetEnum.MONTH
+                      ? trafficLimitGb * 30
+                      : trafficPeriodButton?.key == TrafficResetEnum.YEAR
+                        ? trafficLimitGb * 365
+                        : ''}{' '}
+                GB
+              </div>
+            </div>
+
+            <motion.div
+              layout
+              className="text-sm bg-[var(--surface-container-lowest)] rounded-xl flex flex-row flex-wrap gap-2 items-center p-4 w-full shadow-md">
+              {trafficPeriodButtons.map((btn) => {
+                const isActive = btn.key === trafficPeriodButton?.key
+                const expiresDays = eachDayOfInterval({
+                  start: new Date(),
+                  end: addDays(
+                    new Date(new Date()),
+                    calculateDaysByPeriod(periodButton.key, periodMultiplier) ||
+                      0,
+                  ),
+                }).length
+                const isDisabled = btn.minDays >= expiresDays
+                const bgOpacity = isActive ? 0.3 : 0.15
+                return (
+                  <motion.button
+                    key={btn.key}
+                    disabled={isDisabled}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => {
+                      setTrafficPeriodButton(btn)
+                      setTrafficReset(btn.key)
+                    }}
+                    className={`flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-sm font-mono transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+                      isDisabled
+                        ? 'opacity-50 cursor-not-allowed'
+                        : ' cursor-pointer'
+                    }`}
+                    style={{
+                      backgroundColor: `rgba(216, 197, 255, ${bgOpacity})`,
+                      border: isActive
+                        ? `1px solid rgba(216, 197, 255, 0.7)`
+                        : '1px solid transparent',
+                    }}>
+                    {btn.label}
+                  </motion.button>
+                )
+              })}
+            </motion.div>
+          </div>
+        )}
+
+      {planSelected.key !== PlansEnum.TRAFFIC &&
+        periodButton.key !== SubscriptionPeriodEnum.INDEFINITELY && (
+          <SubscriptionOptions
+            isAutoRenewal={isAutoRenewal}
+            setIsAutoRenewal={setIsAutoRenewal}
+            // user={user}
+            // subscriptions={subscriptions}
+          />
+        )}
+
+      <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
+        <div className="px-4 opacity-50 flex flex-row gap-2 items-center w-full">
+          {t('subscription.name.label')}
+        </div>
+
+        <motion.div
+          layout
+          className="text-sm bg-[var(--surface-container-lowest)] divide-y divide-[var(--primary)] rounded-xl flex flex-col p-4 py-2 w-full shadow-md">
+          <motion.div className="flex gap-2 items-center px-4 py-2 text-sm font-mono">
+            <TooltipWrapper
+              prompt={t('subscription.name.tooltip')}
+              color="info"
+              placement="top">
+              <FaCircleInfo />
+            </TooltipWrapper>
+            <input
+              className="border w-full border-[var(--on-surface)]/50 rounded-md px-2 py-1 bg-transparent focus:border-[var(--primary)] focus:outline-none"
+              maxLength={20}
+              minLength={1}
+              type="text"
+              placeholder={t('subscription.name.placeholder')}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </motion.div>
+        </motion.div>
+      </div>
 
       <SubscriptionSummary
         planSelected={planSelected}
@@ -457,29 +677,32 @@ export default function AddSubscription() {
         trafficLimitGb={trafficLimitGb}
         isAllBaseServers={isAllBaseServers}
         isAllPremiumServers={isAllPremiumServers}
-        baseServersCount={baseServersCount}
-        premiumServersCount={premiumServersCount}
         periodButton={periodButton}
         periodMultiplier={periodMultiplier}
         user={user}
-        isFixedPrice={isFixedPrice}
         isAutoRenewal={isAutoRenewal}
         price={price}
-        nextFinalPrice={price}
+        priceNoDiscount={priceNoDiscount}
         subscriptions={subscriptions}
+        name={name}
+        trafficReset={trafficReset}
+        serverSelected={serverSelected}
       />
 
       <PaymentActions
-        user={user}
+        planSelected={planSelected}
         isAllBaseServers={isAllBaseServers}
         isAllPremiumServers={isAllPremiumServers}
         serversSelected={serversSelected}
         balance={balance}
-        nextFinalPrice={price}
+        price={price}
+        priceNoDiscount={priceNoDiscount}
         isLoading={isLoading}
-        onBalancePayment={() => handlePurchase()}
-        onInvoicePayment={() => handlePurchase(true)}
-        tBill={tBill}
+        trafficLimitGb={trafficLimitGb}
+        adPriceStars={subscriptions.adPriceStars}
+        trafficBalance={user.balance.traffic}
+        onPayment={(method) => handlePurchase(method)}
+        user={user}
       />
     </div>
   )

@@ -19,7 +19,14 @@ export default function SocialButtons() {
         target="_blank"
         className="flex gap-2 items-center bg-[var(--info-container)] text-[var(--on-info-container)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer rounded-md px-2 py-1">
         <RiTelegram2Fill size={18} />
-        Chat
+        Chat&Support
+      </Link>
+      <Link
+        href={config.BOT_URL || ''}
+        target="_blank"
+        className="flex gap-2 items-center bg-[var(--info-container)] text-[var(--on-info-container)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer rounded-md px-2 py-1">
+        <RiTelegram2Fill size={18} />
+        VPN&GAMES bot
       </Link>
     </div>
   )

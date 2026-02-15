@@ -2,7 +2,8 @@
 
 import { detectPlatform } from '@app/utils/platform-detect.util'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect, useRef, useState } from 'react'
+import { useTranslations } from 'next-intl'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { FaCaretDown } from 'react-icons/fa6'
 import AppElement from './AppElement'
 import { CLIENT_APPS } from './data/client-apps.data'
@@ -14,7 +15,8 @@ export default function AppsList({
 }: {
   subscriptionUrl: string
 }) {
-  const platforms: { key: PlatformEnum; name: string }[] = [
+  const t = useTranslations('subscriptions')
+  const platforms = useMemo(() => [
     {
       key: PlatformEnum.ANDROID,
       name: 'Android',
@@ -47,7 +49,7 @@ export default function AppsList({
       key: PlatformEnum.LINUX,
       name: 'Linux',
     },
-  ]
+  ], [])
   const [platform, setPlatform] = useState<{ key: PlatformEnum; name: string }>(
     platforms[0],
   )
@@ -75,7 +77,7 @@ export default function AppsList({
   useEffect(() => {
     const result = detectPlatform()
     setPlatform(platforms.find((el) => el.key == result) || platforms[0])
-  }, [])
+  }, [platforms])
 
   const changePlatform = (plat: { key: PlatformEnum; name: string }) => {
     setPlatform(plat)
@@ -85,7 +87,7 @@ export default function AppsList({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-4 justify-end">
-        <div>Платформа:</div>
+        <div>{t('platform')}:</div>
         <div
           ref={containerRef}
           className="relative inline-block text-sm text-left ">

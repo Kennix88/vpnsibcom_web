@@ -2,7 +2,6 @@
 import { config } from '@app/config/client'
 import { useUserStore } from '@app/store/user.store'
 import { useCopyToClipboard } from '@app/utils/copy-to-clipboard.util'
-import { shareMessage, shareStory } from '@telegram-apps/sdk-react'
 import { FaCopy, FaShareNodes } from 'react-icons/fa6'
 import { RiTelegram2Fill } from 'react-icons/ri'
 import { useTranslations } from 'use-intl'
@@ -11,6 +10,30 @@ export default function FriendsInviteButtons() {
   const copyToClipboard = useCopyToClipboard()
   const { user } = useUserStore()
   const t = useTranslations('friends')
+
+  const handleShareMessage = async () => {
+    try {
+      const { shareMessage } = await import('@tma.js/sdk-react')
+      shareMessage(user?.inviteMessageId || '')
+    } catch (err) {
+      console.error('Failed to share message', err)
+    }
+  }
+
+  const handleShareStory = async () => {
+    try {
+      const { shareStory } = await import('@tma.js/sdk-react')
+      shareStory.ifAvailable(`${config.appUrl}/story.png`, {
+        text: 'Use a VPN and play games in one place! The bonus is already waiting for you! @vpnsibcom_bot',
+        widgetLink: {
+          url: user?.inviteUrl || '',
+          name: 'VPN&GAMES',
+        },
+      })
+    } catch (err) {
+      console.error('Failed to share story', err)
+    }
+  }
 
   if (!user) return null
 
@@ -24,12 +47,9 @@ export default function FriendsInviteButtons() {
           'text-sm bg-[var(--surface-container-lowest)] rounded-md flex flex-col gap-2 py-2 px-4 max-w-[400px] w-full'
         }>
         <div className={'flex flex-row justify-between py-2'}>
-          {/* <div className={'opacity-50 flex flex-row gap-2 items-center'}>
-            {t('invite.title')} 
-          </div> */}
           <div className={'flex flex-wrap gap-2 items-center '}>
             <button
-              onClick={() => shareMessage(user.inviteMessageId)}
+              onClick={handleShareMessage}
               className={
                 'w-full flex gap-2 items-center justify-center bg-[var(--primary)] text-[var(--on-primary)] font-bold text-md px-4 py-2 rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer uppercase tracking-wide'
               }>
@@ -44,15 +64,7 @@ export default function FriendsInviteButtons() {
               <FaCopy />
             </button>
             <button
-              onClick={() =>
-                shareStory.ifAvailable(`${config.appUrl}/story.png`, {
-                  text: 'Use a VPN and play games in one place! The bonus is already waiting for you! @vpnsibcom_bot',
-                  widgetLink: {
-                    url: user.inviteUrl,
-                    name: 'VPN&GAMES',
-                  },
-                })
-              }
+              onClick={handleShareStory}
               className={
                 'w-full flex gap-2 items-center justify-center bg-[var(--primary)] text-[var(--on-primary)] font-bold text-md px-4 py-2 rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer uppercase tracking-wide'
               }>

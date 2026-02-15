@@ -1,0 +1,5 @@
+{
+  "loading": "Controllo sicurezza connessione...",
+  "danger": "La tua connessione NON è protetta!\nConnettiti a VPN!",
+  "success": "La tua connessione è protetta!"
+}

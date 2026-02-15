@@ -1,0 +1,35 @@
+{
+  "title": "Teman",
+  "get": "Dapatkan hadiah",
+  "for": "untuk mengundang teman",
+  "level": "tingkat",
+  "total": "Total",
+  "list": {
+    "title": "Teman Anda",
+    "top": "Teratas",
+    "empty": "Belum ada siapa-siapa di sini 🥲"
+  },
+  "bonuses": {
+    "title": "Bonus",
+    "inviteTitle": "Untuk mengundang teman",
+    "paymentTitle": "Untuk tindakan teman",
+    "inviteInfo": "Setelah pembayaran pertama teman atau aktivasi masa percobaan!",
+    "paymentInfo": "Dapatkan persentase dari pendapatan kami untuk teman dan mereka yang diundang teman Anda selamanya!",
+    "lvl1Info": "Mereka yang Anda undang",
+    "lvl2Info": "Mereka yang diundang teman",
+    "lvl3Info": "Mereka yang diundang teman dari teman 😁"
+  },
+  "invite": {
+    "title": "Undang teman",
+    "message": "Kirim pesan",
+    "copy": "Salin tautan",
+    "story": "Kirim ke cerita"
+  },
+  "statistics": {
+    "title": "Statistik",
+    "earnTitle": "Penghasilan Anda",
+    "inviteTitle": "Diundang",
+    "earnInfo": "Anda telah menghasilkan sepanjang waktu",
+    "inviteInfo": "Diundang | Diaktifkan | Di antaranya Standar | Di antaranya Premium"
+  }
+}

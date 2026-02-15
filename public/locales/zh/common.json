@@ -1,0 +1,28 @@
+{
+  "modal": {
+    "cancel": "取消",
+    "accept": "接受",
+    "close": "关闭"
+  },
+  "scrolling": "向下滚动",
+  "clipboard": {
+    "copied": "已复制到剪贴板！",
+    "failed": "复制失败！"
+  },
+  "freePlan": {
+    "trialAvailable": "您有 {days} 天的试用期。",
+    "activate": "激活",
+    "activationFailed": "无法激活免费计划"
+  },
+  "units": {
+    "bytes": "字节",
+    "kilobytes": "千字节",
+    "megabytes": "兆字节",
+    "gigabytes": "千兆字节",
+    "terabytes": "太字节",
+    "petabytes": "拍字节",
+    "exabytes": "艾字节",
+    "zettabytes": "泽字节",
+    "yottabytes": "尧字节"
+  }
+}

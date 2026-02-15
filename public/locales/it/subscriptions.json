@@ -1,0 +1,116 @@
+{
+  "title": "Abbonamento",
+  "connection": "Connessione",
+  "configs": "Configurazioni",
+  "addSubscription": "Aggiungi abbonamento",
+  "addSubscriptionTitle": "Aggiunta abbonamento",
+  "yourSubscriptions": "I tuoi abbonamenti",
+  "noSubscriptions": "Non hai abbonamenti attivi",
+  "loading": "Caricamento dati abbonamento...",
+  "notFound": "Abbonamento non trovato",
+  "renewSubscription": "Rinnova abbonamento",
+  "autoRenewalEnabled": "Rinnovo automatico abilitato",
+  "autoRenewalDisabled": "Rinnovo automatico disabilitato",
+  "subscriptionDeleted": "Abbonamento eliminato con successo",
+  "subscriptionDataUpdated": "Dati abbonamento aggiornati con successo",
+  "subscriptionRenewed": "Abbonamento rinnovato con successo",
+  "changeServer": "Cambia server",
+  "changeServerTitle": "Cambio server",
+  "changeServerWarning": "ATTENZIONE: Il cambio server avviene entro 2 minuti. Dopo il cambio server, è necessario aggiornare i dati nell'applicazione!",
+  "active": "Attivo",
+  "notActive": "Non attivo",
+  "online": "Online",
+  "offline": "Offline",
+  "traffic": "Traffico",
+  "trafficReset": {
+    "daily": "Giornaliero",
+    "weekly": "Settimanale",
+    "monthly": "Mensile",
+    "yearly": "Annuale",
+    "unlimit": "Illimitato"
+  },
+  "inTotal": "Totale",
+  "servers": "Server",
+  "fullServers": "Accesso a tutti",
+  "allBase": "Tutti base",
+  "base": "Base",
+  "premium": "Premium",
+  "devices": "Dispositivi",
+  "period": "Periodicità di pagamento",
+  "expires": "Scade",
+  "autoRenewal": "Rinnovo automatico",
+  "actions": "Azioni",
+  "save": "Salva",
+  "required": "Consigliato!",
+  "paid": "A pagamento!",
+  "instruction": {
+    "stage1": "Scarica l'applicazione",
+    "stage2": "Aggiungi abbonamento all'applicazione",
+    "copyUrl": "Copia URL abbonamento",
+    "openQR": "QR-code abbonamento",
+    "scanApp": "Scansiona nell'applicazione",
+    "scanPhone": "Scansiona nel telefono",
+    "add": "Aggiungi all'applicazione"
+  },
+  "platform": "Piattaforma",
+  "success": {
+    "serversUpdated": "Server aggiornati con successo"
+  },
+  "errors": {
+    "loadFailed": "Impossibile caricare gli abbonamenti",
+    "disableAutoRenewalFailed": "Errore disabilitazione rinnovo automatico!",
+    "enableAutoRenewalFailed": "Errore abilitazione rinnovo automatico!",
+    "deleteSubscriptionFailed": "Errore eliminazione abbonamento!",
+    "resetSubscriptionFailed": "Errore reset dati abbonamento!",
+    "renewSubscriptionFailed": "Impossibile rinnovare l'abbonamento!",
+    "fetchingServers": "Impossibile caricare i server",
+    "updatingServers": "Impossibile aggiornare i server",
+    "serverLimitReached": "Hai raggiunto il limite di server",
+    "serverLimitReachedPremium": "Hai raggiunto il limite di server premium",
+    "serverLimitReachedBase": "Hai raggiunto il limite di server base"
+  },
+  "periods": {
+    "trial": "Periodo di prova",
+    "hour": "1 ora",
+    "day": "1 giorno",
+    "week": "1 settimana",
+    "month": "1 mese",
+    "threeMonth": "3 mesi",
+    "sixMonth": "6 mesi",
+    "year": "1 anno",
+    "twoYear": "2 anni",
+    "threeYear": "3 anni",
+    "indefinitely": "A tempo indeterminato"
+  },
+  "modals": {
+    "delete": {
+      "title": "Eliminazione abbonamento",
+      "button": "Elimina",
+      "action": "Elimina",
+      "message": "Sei sicuro di voler eliminare definitivamente l'abbonamento? Non sarà possibile recuperarlo! Non è previsto alcun risarcimento!"
+    },
+    "qr": {
+      "title": "QR-code abbonamento",
+      "description": "Scansiona nell'applicazione client"
+    },
+    "refresh": {
+      "title": "Reset dati abbonamento",
+      "button": "Resetta dati",
+      "action": "Resetta",
+      "message": "Sei sicuro di voler resettare i dati dell'abbonamento? Dopo questo, le chiavi e l'indirizzo dell'abbonamento cambieranno in nuovi! Sarà necessario aggiungere nuovamente l'abbonamento all'applicazione! Di solito il reset viene fatto se il tuo abbonamento è trapelato in rete o qualcuno vi ha avuto accesso!"
+    },
+    "autoRenewal": {
+      "enableTitle": "Abilitazione rinnovo automatico",
+      "disableTitle": "Disabilitazione rinnovo automatico",
+      "enableAction": "Abilita",
+      "disableAction": "Disabilita",
+      "enableMessage": "Vuoi abilitare il rinnovo automatico dell'abbonamento? I fondi verranno addebitati automaticamente alla scadenza dell'abbonamento.",
+      "disableMessage": "Vuoi disabilitare il rinnovo automatico dell'abbonamento? Dopo la scadenza, l'abbonamento verrà disattivato."
+    },
+    "renew": {
+      "title": "Rinnovo abbonamento",
+      "action": "Rinnova",
+      "message": "Vuoi rinnovare l'abbonamento? Dal tuo saldo verranno detratti {price} stelle."
+    }
+  }
+}
