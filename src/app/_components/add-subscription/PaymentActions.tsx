@@ -168,21 +168,19 @@ export const PaymentActions = ({
                 onPayment('AD')
               }}
               disabled={
-                isLoading || starsToAD(price, adPriceStars) > user.balance.ad
+                isLoading ||
+                starsToAD(price, adPriceStars) > user.balance.ad ||
+                price <= 0
               }
               className={`py-2 px-4 rounded-md bg-[var(--ad-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
-                isLoading || starsToAD(price, adPriceStars) > user.balance.ad
+                isLoading ||
+                starsToAD(price, adPriceStars) > user.balance.ad ||
+                price <= 0
                   ? 'opacity-50 cursor-not-allowed'
                   : ' cursor-pointer'
               } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-              {price <= 0 ? (
-                t('addFree')
-              ) : (
-                <>
-                  <Currency type={'ad'} w={18} />
-                  {starsToAD(price, adPriceStars)}
-                </>
-              )}
+              <Currency type={'ad'} w={18} />
+              {starsToAD(price, adPriceStars)}
             </button>
           </div>
         </>
