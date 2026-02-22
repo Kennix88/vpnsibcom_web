@@ -45,9 +45,19 @@ export async function GET(
 
     resData.subscription.links.map((el: string) => (links = links + el + `\n`))
 
+    const truncateAnnounce = (text: string, max = 200) => {
+      const chars = [...text]
+
+      if (chars.length <= max) return text
+
+      return chars.slice(0, max - 3).join('') + '...'
+    }
+
+    const rawAnnounce = resData.subscription.announce
+
     const announce =
-      resData.subscription.announce &&
-      `base64:${Buffer.from(resData.subscription.announce).toString('base64')}`
+      rawAnnounce &&
+      `base64:${Buffer.from(truncateAnnounce(rawAnnounce)).toString('base64')}`
 
     return new Response(Buffer.from(links).toString('base64'), {
       status: 200,
