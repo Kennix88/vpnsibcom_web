@@ -389,22 +389,20 @@ export default function AddTrafficButton({
                 }}
                 disabled={
                   isLoading ||
-                  starsToAD(price, subscriptions.adPriceStars) > user.balance.ad
+                  starsToAD(price, subscriptions.adPriceStars) >
+                    user.balance.ad ||
+                  price <= 0
                 }
                 className={`py-2 px-4 rounded-md bg-[var(--ad-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
                   isLoading ||
-                  starsToAD(price, subscriptions.adPriceStars) > user.balance.ad
+                  starsToAD(price, subscriptions.adPriceStars) >
+                    user.balance.ad ||
+                  price <= 0
                     ? 'opacity-50 cursor-not-allowed'
                     : ' cursor-pointer'
                 } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-                {price <= 0 ? (
-                  t('addFree')
-                ) : (
-                  <>
-                    <Currency type={'ad'} w={18} />
-                    {starsToAD(price, subscriptions.adPriceStars)}
-                  </>
-                )}
+                <Currency type={'ad'} w={18} />
+                {starsToAD(price, subscriptions.adPriceStars)}
               </button>
             </div>
           </div>
