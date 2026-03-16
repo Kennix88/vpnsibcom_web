@@ -35,7 +35,5 @@ export interface UserDataInterface {
 export interface UserBalanceInterface {
   payment: number
   hold: number
-  ad: number
-  tickets: number
-  traffic: number
+  usdt: number
 }
