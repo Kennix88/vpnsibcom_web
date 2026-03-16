@@ -15,9 +15,8 @@ export default function TopBar() {
         <Avatar url={user?.photoUrl} className={'cursor-pointer'} />
       </Link>
       <div className={'flex justify-end items-center gap-2 '}>
-        <Balance type={'payment'} fixedNumber={1} />
-        <Balance type={'ad'} fixedNumber={0} />
-        <Balance type={'traffic'} fixedNumber={1} />
+        <Balance type={'payment'} fixedNumber={3} />
+        <Balance type={'usdt'} fixedNumber={3} />
       </div>
       {/* <div
         className={
