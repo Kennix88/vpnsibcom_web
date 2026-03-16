@@ -3,7 +3,6 @@ import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
 import { useFullscreenAd } from '@app/app/_components/ads/useFullscreenAd'
 import FriendsBonuses from '@app/app/_components/friends/FriendsBonuses'
 import FriendsInviteButtons from '@app/app/_components/friends/FriendsInviteButtons'
-import FriendsList from '@app/app/_components/friends/FriendsList'
 import FriendsStatistics from '@app/app/_components/friends/FriendsStatistics'
 import FriendsTitle from '@app/app/_components/friends/FriendsTitle'
 import SocialButtons from '@app/app/_components/SocialButtons'
@@ -41,7 +40,7 @@ export default function Page() {
         <FriendsBonuses />
         <FriendsInviteButtons />
         <FriendsStatistics />
-        <FriendsList />
+        {/*<FriendsList />*/}
       </div>
       <div className="flex flex-col gap-4">
         <SocialButtons />
