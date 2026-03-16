@@ -62,8 +62,7 @@ export default function Page() {
         </div>
         <div className={'flex flex-wrap gap-2 items-center justify-center'}>
           <Balance type={'payment'} />
-          <Balance type={'ad'} />
-          <Balance type={'traffic'} />
+          <Balance type={'usdt'} />
         </div>
         <div
           className={
