@@ -14,7 +14,7 @@ export default function FriendsBonuses() {
       <div className="px-4 opacity-50 flex flex-row gap-2 items-center w-full ">
         {t('bonuses.title')}
       </div>
-      <div className="flex flex-row gap-4 text-sm w-full flex-wrap justify-center">
+      {/*<div className="flex flex-row gap-4 text-sm w-full flex-wrap justify-center">
         <div
           className={
             'bg-[var(--surface-container-lowest)] rounded-md flex flex-col gap-2 p-4 max-w-[400px] w-full'
@@ -62,74 +62,73 @@ export default function FriendsBonuses() {
               </div>
             </div>
           </div>
-        </div>
-        <div
-          className={
-            'bg-[var(--surface-container-lowest)] rounded-md flex flex-col gap-2 p-4 max-w-[400px] w-full'
-          }>
-          <div className={'flex flex-row gap-2 items-center'}>
-            {t('bonuses.paymentTitle')}{' '}
-            <TooltipWrapper
-              prompt={t('bonuses.paymentInfo')}
-              color="info"
-              placement="top">
-              <FaCircleInfo />
-            </TooltipWrapper>
+        </div>*/}
+      <div
+        className={
+          'bg-[var(--surface-container-lowest)] rounded-md flex flex-col gap-2 p-4 max-w-[400px] w-full'
+        }>
+        {/*<div className={'flex flex-row gap-2 items-center'}>
+          {t('bonuses.paymentTitle')}{' '}
+          <TooltipWrapper
+            prompt={t('bonuses.paymentInfo')}
+            color="info"
+            placement="top">
+            <FaCircleInfo />
+          </TooltipWrapper>
+        </div>*/}
+        <div className="flex flex-col divide-y divide-[var(--on-surface)]/50">
+          <div className={'flex flex-row justify-between py-2 px-4'}>
+            <div className={'flex flex-row gap-2 items-center'}>
+              <span className={'opacity-50'}>1 {t('level')}</span>
+              <TooltipWrapper
+                prompt={t('bonuses.lvl1Info')}
+                color="info"
+                placement="top">
+                <FaCircleInfo />
+              </TooltipWrapper>
+            </div>
+            <div
+              className={
+                'flex flex-row gap-1 items-center px-2 py-1 rounded-md min-w-1/3 justify-center bg-[var(--usdt-container-rgba)]'
+              }>
+              {referralsData && Math.round(100 * referralsData.lvl1Percent)}%
+              <TgStar w={18} type={'usdt'} />
+            </div>
           </div>
-          <div className="flex flex-col divide-y divide-[var(--on-surface)]/50">
-            <div className={'flex flex-row justify-between py-2 px-4'}>
-              <div className={'flex flex-row gap-2 items-center'}>
-                <span className={'opacity-50'}>1 {t('level')}</span>
-                <TooltipWrapper
-                  prompt={t('bonuses.lvl1Info')}
-                  color="info"
-                  placement="top">
-                  <FaCircleInfo />
-                </TooltipWrapper>
-              </div>
-              <div
-                className={
-                  'flex flex-row gap-1 items-center px-2 py-1 rounded-md bg-[var(--star-container-rgba)]'
-                }>
-                {referralsData && 100 * referralsData.lvl1Percent}%
-                <TgStar w={18} type={'star'} />
-              </div>
+          <div className={'flex flex-row justify-between py-2 px-4'}>
+            <div className={'flex flex-row gap-2 items-center'}>
+              <span className={'opacity-50'}>2 {t('level')}</span>
+              <TooltipWrapper
+                prompt={t('bonuses.lvl2Info')}
+                color="info"
+                placement="top">
+                <FaCircleInfo />
+              </TooltipWrapper>
             </div>
-            <div className={'flex flex-row justify-between py-2 px-4'}>
-              <div className={'flex flex-row gap-2 items-center'}>
-                <span className={'opacity-50'}>2 {t('level')}</span>
-                <TooltipWrapper
-                  prompt={t('bonuses.lvl2Info')}
-                  color="info"
-                  placement="top">
-                  <FaCircleInfo />
-                </TooltipWrapper>
-              </div>
-              <div
-                className={
-                  'flex flex-row gap-1 items-center px-2 py-1 rounded-md bg-[var(--star-container-rgba)]'
-                }>
-                {referralsData && 100 * referralsData.lvl2Percent}%
-                <TgStar w={18} type={'star'} />
-              </div>
+            <div
+              className={
+                'flex flex-row gap-1 items-center px-2 py-1 rounded-md min-w-1/3 justify-center bg-[var(--usdt-container-rgba)]'
+              }>
+              {referralsData && Math.round(100 * referralsData.lvl2Percent)}%
+              <TgStar w={18} type={'usdt'} />
             </div>
-            <div className={'flex flex-row justify-between py-2 px-4'}>
-              <div className={'flex flex-row gap-2 items-center'}>
-                <span className={'opacity-50'}>3 {t('level')}</span>
-                <TooltipWrapper
-                  prompt={t('bonuses.lvl3Info')}
-                  color="info"
-                  placement="top">
-                  <FaCircleInfo />
-                </TooltipWrapper>
-              </div>
-              <div
-                className={
-                  'flex flex-row gap-1 items-center px-2 py-1 rounded-md bg-[var(--star-container-rgba)]'
-                }>
-                {referralsData && 100 * referralsData.lvl3Percent}%
-                <TgStar w={18} type={'star'} />
-              </div>
+          </div>
+          <div className={'flex flex-row justify-between py-2 px-4'}>
+            <div className={'flex flex-row gap-2 items-center'}>
+              <span className={'opacity-50'}>3 {t('level')}</span>
+              <TooltipWrapper
+                prompt={t('bonuses.lvl3Info')}
+                color="info"
+                placement="top">
+                <FaCircleInfo />
+              </TooltipWrapper>
+            </div>
+            <div
+              className={
+                'flex flex-row gap-1 items-center px-2 py-1 rounded-md min-w-1/3 justify-center bg-[var(--usdt-container-rgba)]'
+              }>
+              {referralsData && Math.round(100 * referralsData.lvl3Percent)}%
+              <TgStar w={18} type={'usdt'} />
             </div>
           </div>
         </div>
