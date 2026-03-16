@@ -1,38 +1,14 @@
 'use client'
 
-import { authApiClient } from '@app/core/authApiClient'
-import { useUserStore } from '@app/store/user.store'
 import { SonarReturnStatus } from '@app/types/sonar'
-import { useTranslations } from 'next-intl'
-import { useCallback } from 'react'
-import { MdDoubleArrow } from 'react-icons/md'
-import { toast } from 'react-toastify'
 
-export default function AdsonarButton({
+export default function AdsonarReward({
   blockId,
-  verifyKey,
-  fetchAd,
+  onReward,
 }: {
   blockId: string
-  verifyKey: string
-  fetchAd: () => Promise<void>
+  onReward: () => void
 }) {
-  const { setUser } = useUserStore()
-  const t = useTranslations('earning')
-
-  const reward = useCallback(async () => {
-    try {
-      const response = await authApiClient.confirmAds(verifyKey)
-      await setUser(response.user)
-      if (response.success) {
-        toast.success(t('earned'))
-      }
-    } catch (error) {
-      console.error('Failed to load ad', error)
-      //
-    }
-  }, [verifyKey, setUser, t])
-
   const showRewardedAd = () => {
     /* eslint-disable @typescript-eslint/ban-ts-comment */
     // @ts-ignore
@@ -49,16 +25,14 @@ export default function AdsonarButton({
         // Добавьте логику для момента, когда реклама становится видимой пользователю
       },
 
-      onError: () => {
-        fetchAd()
-      },
+      onError: () => {},
 
       onClose: () => {
         // Добавьте логику для момента, когда объявление закрылось (например, возобновить контент, показать следующую страницу)
       },
 
       onReward: () => {
-        reward()
+        onReward()
       },
     }).then((result: { status: SonarReturnStatus; message?: string }) => {
       // Здесь вы также можете обработать результат попытки показа рекламы с помощью Promise
@@ -69,11 +43,7 @@ export default function AdsonarButton({
       }
     })
   }
-  return (
-    <button
-      onClick={showRewardedAd}
-      className="font-medium flex items-center justify-center bg-[var(--primary)] text-[var(--on-primary)] px-2 py-1 rounded-md uppercase cursor-pointer w-[52px]">
-      <MdDoubleArrow size={18} />
-    </button>
-  )
+
+  showRewardedAd()
+  return null
 }
