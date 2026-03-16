@@ -3,9 +3,8 @@
 import { CurrencyEnum } from '@app/enums/currency.enum'
 import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
 import { useCurrencyStore } from '@app/store/currency.store'
-import { PlansInterface } from '@app/types/plans.interface'
 import { UserDataInterface } from '@app/types/user-data.interface'
-import { roundUp, starsToAD } from '@app/utils/calculate-subscription-cost.util'
+import { roundUp } from '@app/utils/calculate-subscription-cost.util'
 import { fxUtil } from '@app/utils/fx.util'
 import { useTranslations } from 'next-intl'
 import { FaCircleInfo } from 'react-icons/fa6'
@@ -19,15 +18,12 @@ export const PaymentActions = ({
   serversSelected,
   balance,
   price,
-  adPriceStars,
   isLoading,
   onPayment,
-  trafficBalance,
-  trafficLimitGb,
-  planSelected,
+  usdtBalance,
+  tgStarsToUSD,
   user,
 }: {
-  planSelected: PlansInterface
   isAllBaseServers: boolean
   isAllPremiumServers: boolean
   serversSelected: string[]
@@ -35,13 +31,10 @@ export const PaymentActions = ({
   price: number
   priceNoDiscount: number
   isLoading: boolean
-  trafficLimitGb: number
-  trafficBalance: number
+  usdtBalance: number
   user: UserDataInterface
-  adPriceStars: number
-  onPayment: (
-    method: PaymentMethodEnum | 'BALANCE' | 'TRAFFIC' | 'AD',
-  ) => Promise<void>
+  tgStarsToUSD: number
+  onPayment: (method: PaymentMethodEnum | 'BALANCE' | 'USDT') => Promise<void>
 }) => {
   const { rates } = useCurrencyStore()
   const t = useTranslations('billing.subscription')
@@ -142,45 +135,24 @@ export const PaymentActions = ({
                 </div>
               </button>
             )}
-            {planSelected.key == 'TRAFFIC' && (
-              <button
-                onClick={() => {
-                  onPayment('TRAFFIC')
-                }}
-                disabled={
-                  isLoading ||
-                  trafficLimitGb * 1024 > trafficBalance ||
-                  price <= 0
-                }
-                className={`py-2 px-4 rounded-md bg-[var(--traffic-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
-                  isLoading ||
-                  trafficLimitGb * 1024 > trafficBalance ||
-                  price <= 0
-                    ? 'opacity-50 cursor-not-allowed'
-                    : ' cursor-pointer'
-                } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-                <Currency type={'traffic'} w={18} />
-                {price <= 0 ? 0 : trafficLimitGb * 1024}
-              </button>
-            )}
             <button
               onClick={() => {
-                onPayment('AD')
+                onPayment('USDT')
               }}
               disabled={
                 isLoading ||
-                starsToAD(price, adPriceStars) > user.balance.ad ||
+                roundUp(price * tgStarsToUSD) > usdtBalance ||
                 price <= 0
               }
-              className={`py-2 px-4 rounded-md bg-[var(--ad-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+              className={`py-2 px-4 rounded-md bg-[var(--usdt-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
                 isLoading ||
-                starsToAD(price, adPriceStars) > user.balance.ad ||
+                roundUp(price * tgStarsToUSD) > usdtBalance ||
                 price <= 0
                   ? 'opacity-50 cursor-not-allowed'
                   : ' cursor-pointer'
               } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-              <Currency type={'ad'} w={18} />
-              {starsToAD(price, adPriceStars)}
+              <Currency type={'usdt'} w={18} />
+              {price <= 0 ? 0 : roundUp(price * tgStarsToUSD)}
             </button>
           </div>
         </>
