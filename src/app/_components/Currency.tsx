@@ -5,6 +5,7 @@ import tgStar from '@app/app/_assets/icons/tg-star-original.svg'
 import ticket from '@app/app/_assets/icons/ticket.svg'
 import ton from '@app/app/_assets/icons/ton-coin.svg'
 import traffic from '@app/app/_assets/icons/traffic.svg'
+import usdt from '@app/app/_assets/icons/usdt.svg'
 import Image from 'next/image'
 
 export default function Currency({
@@ -12,7 +13,7 @@ export default function Currency({
   type = 'star',
 }: {
   w?: number
-  type?: 'star' | 'tg-star' | 'ticket' | 'traffic' | 'ton' | 'ad'
+  type?: 'star' | 'tg-star' | 'ticket' | 'traffic' | 'ton' | 'ad' | 'usdt'
 }) {
   return (
     <Image
@@ -29,7 +30,9 @@ export default function Currency({
                   ? ton
                   : type === 'ad'
                     ? ad
-                    : star
+                    : type === 'usdt'
+                      ? usdt
+                      : star
       }
       alt={'currency'}
       width={w}
