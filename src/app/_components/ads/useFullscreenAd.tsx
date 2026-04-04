@@ -1,12 +1,13 @@
 'use client'
 
 import { addMinutes, isAfter } from 'date-fns'
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { createRoot, Root } from 'react-dom/client'
 
 import { authApiClient } from '@app/core/authApiClient'
 import { AdsNetworkEnum } from '@app/enums/ads-network.enum'
 import { AdsPlaceEnum } from '@app/enums/ads-place.enum'
+import { AdsDataInterface } from '@app/enums/ads-res.interface'
 import { AdsTypeEnum } from '@app/enums/ads-type.enum'
 import { useUserStore } from '@app/store/user.store'
 
@@ -14,7 +15,19 @@ export function useFullscreenAd() {
   const { user } = useUserStore()
   const executedRef = useRef(false)
   const mountedRootRef = useRef<Root | null>(null)
+  const adRef = useRef<AdsDataInterface | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
+
+  const reward = useCallback(async () => {
+    try {
+      if (adRef.current == null) return
+      await authApiClient.confirmAds(adRef.current.verifyKey)
+    } catch (error) {
+      console.error('Failed to load ad', error)
+    } finally {
+      adRef.current = null
+    }
+  }, [])
 
   useEffect(() => {
     if (!user || executedRef.current) return
@@ -40,6 +53,7 @@ export function useFullscreenAd() {
         if (response.isNoAds || !response.ad) return
 
         const { ad } = response
+        adRef.current = ad
 
         // создаём динамический контейнер
         if (!containerRef.current) {
@@ -53,7 +67,8 @@ export function useFullscreenAd() {
         const root = createRoot(containerRef.current)
         mountedRootRef.current = root
 
-        const handleClose = () => {
+        const handleClose = async () => {
+          await reward()
           if (mountedRootRef.current) {
             mountedRootRef.current.unmount()
             mountedRootRef.current = null

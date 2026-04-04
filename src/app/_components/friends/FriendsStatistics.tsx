@@ -33,7 +33,7 @@ export default function FriendsStatistics() {
           <div className="flex flex-col divide-y divide-[var(--on-surface)]/50">
             <div
               className={
-                'bg-[var(--surface-container-high)] rounded-t-md grid grid-cols-3 justify-between py-2 px-4'
+                'bg-[var(--surface-container-high)] rounded-t-md flex justify-between py-2 px-4'
               }>
               <div
                 className={
@@ -41,113 +41,57 @@ export default function FriendsStatistics() {
                 }>
                 {t('total')}
               </div>
-              <div className={'grid grid-cols-2 grow items-center col-span-2'}>
-                <div
-                  className={
-                    'flex justify-center flex-row gap-1 items-center px-2 py-1 rounded-l-md bg-[var(--star-container-rgba)] '
-                  }>
-                  <TgStar w={18} type={'star'} />
-                  {referralsData &&
-                    addSuffixToNumberUtil(
-                      referralsData.lvl1TotalPaymentsRewarded +
-                        referralsData.lvl2TotalPaymentsRewarded +
-                        referralsData.lvl3TotalPaymentsRewarded,
-                      2,
-                    )}
-                </div>
-                <div
-                  className={
-                    'flex justify-center flex-row gap-1 items-center px-2 py-1 rounded-r-md bg-[var(--traffic-container-rgba)]'
-                  }>
-                  <TgStar w={18} type={'traffic'} />
-                  {referralsData &&
-                    addSuffixToNumberUtil(
-                      referralsData.lvl1TotalTrafficRewarded +
-                        referralsData.lvl2TotalTrafficRewarded +
-                        referralsData.lvl3TotalTrafficRewarded,
-                    )}
-                </div>
+              <div
+                className={
+                  'flex justify-center flex-row gap-1 items-center px-2 py-1 min-w-1/2 rounded-md bg-[var(--usdt-container-rgba)] '
+                }>
+                <TgStar w={18} type={'usdt'} />
+                {referralsData &&
+                  addSuffixToNumberUtil(
+                    referralsData.lvl1TotalUsdtRewarded +
+                      referralsData.lvl2TotalUsdtRewarded +
+                      referralsData.lvl3TotalUsdtRewarded,
+                    2,
+                  )}
               </div>
             </div>
-            <div className={'grid grid-cols-3 justify-between py-2 px-4'}>
+            <div className={'flex justify-between py-2 px-4'}>
               <div className={'opacity-50 flex flex-row gap-2 items-center'}>
                 1 {t('level')}
               </div>
-              <div className={'grid grid-cols-2 items-center col-span-2'}>
-                <div
-                  className={
-                    'flex justify-center flex-row gap-1 items-center px-2 py-1 rounded-l-md bg-[var(--star-container-rgba)]'
-                  }>
-                  <TgStar w={18} type={'star'} />
-                  {referralsData &&
-                    addSuffixToNumberUtil(
-                      referralsData.lvl1TotalPaymentsRewarded,
-                    )}
-                </div>
-                <div
-                  className={
-                    'flex justify-center flex-row gap-1 items-center px-2 py-1 rounded-r-md bg-[var(--traffic-container-rgba)]'
-                  }>
-                  <TgStar w={18} type={'traffic'} />
-                  {referralsData &&
-                    addSuffixToNumberUtil(
-                      referralsData.lvl3TotalTrafficRewarded,
-                    )}
-                </div>
+              <div
+                className={
+                  'flex justify-center flex-row gap-1 items-center px-2 py-1 min-w-1/2 rounded-md bg-[var(--usdt-container-rgba)]'
+                }>
+                <TgStar w={18} type={'usdt'} />
+                {referralsData &&
+                  addSuffixToNumberUtil(referralsData.lvl1TotalUsdtRewarded)}
               </div>
             </div>
-            <div className={'grid grid-cols-3 justify-between py-2 px-4'}>
+            <div className={'flex justify-between py-2 px-4'}>
               <div className={'opacity-50 flex flex-row gap-2 items-center'}>
                 2 {t('level')}
               </div>
-              <div className={'grid grid-cols-2 items-center col-span-2'}>
-                <div
-                  className={
-                    'flex justify-center flex-row gap-1 items-center px-2 py-1 rounded-l-md bg-[var(--star-container-rgba)]'
-                  }>
-                  <TgStar w={18} type={'star'} />
-                  {referralsData &&
-                    addSuffixToNumberUtil(
-                      referralsData.lvl2TotalPaymentsRewarded,
-                    )}
-                </div>
-                <div
-                  className={
-                    'flex justify-center flex-row gap-1 items-center px-2 py-1 rounded-r-md bg-[var(--traffic-container-rgba)]'
-                  }>
-                  <TgStar w={18} type={'traffic'} />
-                  {referralsData &&
-                    addSuffixToNumberUtil(
-                      referralsData.lvl2TotalTrafficRewarded,
-                    )}
-                </div>
+              <div
+                className={
+                  'flex justify-center flex-row gap-1 items-center px-2 py-1 min-w-1/2 rounded-md bg-[var(--usdt-container-rgba)]'
+                }>
+                <TgStar w={18} type={'usdt'} />
+                {referralsData &&
+                  addSuffixToNumberUtil(referralsData.lvl2TotalUsdtRewarded)}
               </div>
             </div>
-            <div className={'grid grid-cols-3 justify-between py-2 px-4'}>
+            <div className={'flex justify-between py-2 px-4'}>
               <div className={'opacity-50 flex flex-row gap-2 items-center'}>
                 3 {t('level')}
               </div>
-              <div className={'grid grid-cols-2 items-center col-span-2'}>
-                <div
-                  className={
-                    'flex justify-center flex-row gap-1 items-center px-2 py-1 rounded-l-md bg-[var(--star-container-rgba)]'
-                  }>
-                  <TgStar w={18} type={'star'} />
-                  {referralsData &&
-                    addSuffixToNumberUtil(
-                      referralsData.lvl3TotalPaymentsRewarded,
-                    )}
-                </div>
-                <div
-                  className={
-                    'flex justify-center flex-row gap-1 items-center px-2 py-1 rounded-r-md bg-[var(--traffic-container-rgba)]'
-                  }>
-                  <TgStar w={18} type={'traffic'} />
-                  {referralsData &&
-                    addSuffixToNumberUtil(
-                      referralsData.lvl3TotalTrafficRewarded,
-                    )}
-                </div>
+              <div
+                className={
+                  'flex justify-center flex-row gap-1 items-center px-2 py-1 min-w-1/2 rounded-md bg-[var(--usdt-container-rgba)]'
+                }>
+                <TgStar w={18} type={'usdt'} />
+                {referralsData &&
+                  addSuffixToNumberUtil(referralsData.lvl3TotalUsdtRewarded)}
               </div>
             </div>
           </div>
@@ -158,12 +102,12 @@ export default function FriendsStatistics() {
           }>
           <div className={'flex flex-row gap-2 items-center'}>
             {t('statistics.inviteTitle')}{' '}
-            <TooltipWrapper
+            {/*<TooltipWrapper
               prompt={t('statistics.inviteInfo')}
               color="info"
               placement="top">
               <FaCircleInfo />
-            </TooltipWrapper>
+            </TooltipWrapper>*/}
           </div>
           <div className="flex flex-col divide-y divide-[var(--on-surface)]/50">
             <div
@@ -186,21 +130,6 @@ export default function FriendsStatistics() {
                       referralsData.lvl2Count +
                       referralsData.lvl3Count,
                     2,
-                  )} | ${addSuffixToNumberUtil(
-                    referralsData.lvl1IsActivated +
-                      referralsData.lvl2IsActivated +
-                      referralsData.lvl3IsActivated,
-                    2,
-                  )} | ${addSuffixToNumberUtil(
-                    referralsData.lvl1IsActivatedBase +
-                      referralsData.lvl2IsActivatedBase +
-                      referralsData.lvl3IsActivatedBase,
-                    2,
-                  )} | ${addSuffixToNumberUtil(
-                    referralsData.lvl1IsActivatedPremium +
-                      referralsData.lvl2IsActivatedPremium +
-                      referralsData.lvl3IsActivatedPremium,
-                    2,
                   )}`}
               </div>
             </div>
@@ -213,19 +142,7 @@ export default function FriendsStatistics() {
                   'flex px-2 justify-center flex-row gap-1 items-center'
                 }>
                 {referralsData &&
-                  `${addSuffixToNumberUtil(
-                    referralsData.lvl1Count,
-                    2,
-                  )} | ${addSuffixToNumberUtil(
-                    referralsData.lvl1IsActivated,
-                    2,
-                  )} | ${addSuffixToNumberUtil(
-                    referralsData.lvl1IsActivatedBase,
-                    2,
-                  )} | ${addSuffixToNumberUtil(
-                    referralsData.lvl1IsActivatedPremium,
-                    2,
-                  )}`}
+                  `${addSuffixToNumberUtil(referralsData.lvl1Count, 2)}`}
               </div>
             </div>
             <div className={'flex flex-row justify-between py-2 px-4'}>
@@ -237,19 +154,7 @@ export default function FriendsStatistics() {
                   'flex px-2 justify-center flex-row gap-1 items-center'
                 }>
                 {referralsData &&
-                  `${addSuffixToNumberUtil(
-                    referralsData.lvl2Count,
-                    2,
-                  )} | ${addSuffixToNumberUtil(
-                    referralsData.lvl2IsActivated,
-                    2,
-                  )} | ${addSuffixToNumberUtil(
-                    referralsData.lvl2IsActivatedBase,
-                    2,
-                  )} | ${addSuffixToNumberUtil(
-                    referralsData.lvl2IsActivatedPremium,
-                    2,
-                  )}`}
+                  `${addSuffixToNumberUtil(referralsData.lvl2Count, 2)}`}
               </div>
             </div>
             <div className={'flex flex-row justify-between py-2 px-4'}>
@@ -261,19 +166,7 @@ export default function FriendsStatistics() {
                   'flex px-2 justify-center flex-row gap-1 items-center'
                 }>
                 {referralsData &&
-                  `${addSuffixToNumberUtil(
-                    referralsData.lvl3Count,
-                    2,
-                  )} | ${addSuffixToNumberUtil(
-                    referralsData.lvl3IsActivated,
-                    2,
-                  )} | ${addSuffixToNumberUtil(
-                    referralsData.lvl3IsActivatedBase,
-                    2,
-                  )} | ${addSuffixToNumberUtil(
-                    referralsData.lvl3IsActivatedPremium,
-                    2,
-                  )}`}
+                  `${addSuffixToNumberUtil(referralsData.lvl3Count, 2)}`}
               </div>
             </div>
           </div>

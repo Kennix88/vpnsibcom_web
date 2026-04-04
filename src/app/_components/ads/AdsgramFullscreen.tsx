@@ -19,7 +19,9 @@ export default function AdsgramFullscreen({ blockId, onClose }: Props) {
     onReward: handleReward,
   })
 
-  show()
+  show().then(() => {
+    handleReward()
+  })
 
   return null
 }

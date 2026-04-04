@@ -13,6 +13,7 @@ export const config = {
   BOT_URL: process.env.NEXT_PUBLIC_BOT_URL,
   TMA_TOKEN: process.env.NEXT_PUBLIC_TMA_TOKEN as string,
   TMA_IDENTIFIER: process.env.NEXT_PUBLIC_TMA_IDENTIFIER as string,
+  // taddyPubId: '72b92dd008f87edb93bba1d29469b162',
   taddyPubId: '14cbeb980853dd416003462ca4db7c12',
 }
 

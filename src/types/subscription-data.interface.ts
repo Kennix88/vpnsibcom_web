@@ -12,7 +12,6 @@ export interface GetSubscriptionConfigResponseInterface {
 
 export interface SubscriptionResponseInterface {
   tgStarsToUSD: number
-  adPriceStars: number
   telegramPremiumRatio: number
   devicesPriceStars: number
   serversPriceStars: number
@@ -81,7 +80,7 @@ export interface MarzbanResponseInterface {
 
 export interface CreateSubscriptionDataInterface {
   planKey: PlansEnum
-  method: PaymentMethodEnum | 'BALANCE' | 'TRAFFIC' | 'AD'
+  method: PaymentMethodEnum | 'BALANCE' | 'USDT'
   name: string
   period: SubscriptionPeriodEnum
   periodMultiplier: number

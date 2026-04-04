@@ -98,9 +98,7 @@ class PublicApiClient {
     return this.get('/servers/green-check')
   }
 
-  /**
-   * Получение данных подписки по токену
-   */
+  
   async getSubscriptionDataByToken(
     token: string,
     agent?: string,

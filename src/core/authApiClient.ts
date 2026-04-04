@@ -1,5 +1,8 @@
 import { AdsPlaceEnum } from '@app/enums/ads-place.enum'
-import { AdsResInterface } from '@app/enums/ads-res.interface'
+import {
+  AdsResInterface,
+  TaskRewardResInterface,
+} from '@app/enums/ads-res.interface'
 import { AdsTypeEnum } from '@app/enums/ads-type.enum'
 import { CurrencyEnum } from '@app/enums/currency.enum'
 import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
@@ -384,7 +387,7 @@ class ApiClient {
   async addTrafficSubscription(
     subscriptionId: string,
     traffic: number,
-    method: PaymentMethodEnum | 'BALANCE' | 'TRAFFIC' | 'AD',
+    method: PaymentMethodEnum | 'BALANCE' | 'USDT',
   ) {
     return this.safeRequest<{
       subscriptions: SubscriptionResponseInterface
@@ -429,7 +432,7 @@ class ApiClient {
 
   async renewSubscription(
     subscriptionId: string,
-    method: PaymentMethodEnum | 'BALANCE' | 'AD',
+    method: PaymentMethodEnum | 'BALANCE' | 'USDT',
     isSavePeriod: boolean,
     period: SubscriptionPeriodEnum,
     periodMultiplier: number,
@@ -508,6 +511,13 @@ class ApiClient {
         return data.data
       },
     )
+  }
+
+  async getAdTaskReward() {
+    return this.safeRequest<TaskRewardResInterface>(async () => {
+      const { data } = await this.instance.get(`/ads/task-reward`)
+      return data
+    })
   }
 
   async getAds(place: AdsPlaceEnum, type: AdsTypeEnum) {

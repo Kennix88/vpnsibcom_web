@@ -233,11 +233,11 @@ export default function SubscriptionElement({
         </button>
       </div>
 
-      {subscription.announce && (
+      {/* {subscription.announce && (
         <div className="w-full text-xs opacity-80 bg-[var(--warning)] text-[var(--on-warning)] px-4 py-2">
           {subscription.announce}
         </div>
-      )}
+      )} */}
 
       <AnimatePresence initial={false}>
         {isOpen && (

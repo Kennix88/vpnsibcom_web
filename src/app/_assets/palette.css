@@ -59,79 +59,115 @@
   --color-red: 193, 53, 44;
   --color-gold: 159, 114, 34;
 
-  /* === PRIMARY === */
-  --primary: #d8c5ff;
-  --on-primary: #381e72;
-  --primary-container: #4f378a;
-  --on-primary-container: #f2e9ff;
-  --inverse-primary: #6750a4;
+  /* === PRIMARY (фиолетовый, мягкий, современный) === */
+  --primary: #c3a6ff; /* основной акцент */
+  --on-primary: #2b1a5a; /* текст на primary */
+  --primary-container: #3b2a73; /* контейнеры/контрастный фон */
+  --on-primary-container: #f4eefb; /* текст на primary-container */
+  --primary-hover: #b89eff;
+  --primary-active: #9f73f2;
+  --inverse-primary: #6b5aa8;
 
-  /* === SECONDARY === */
-  --secondary: #ccc2dc;
+  /* === ACCENT (сетевой/connection) === */
+  --accent-network: #6ae3ff; /* индикатор соединения, ping, актив */
+  --accent-network-contrast: #002a33; /* текст/иконка на accent */
+  --accent-network-glow: rgba(106, 227, 255, 0.16);
+
+  /* === SECONDARY / TERTIARY (поддержка, аксессуары) === */
+  --secondary: #d6cfe6;
   --on-secondary: #332d41;
   --secondary-container: #4a4458;
-  --on-secondary-container: #e8def8;
+  --on-secondary-container: #efeaf8;
 
-  /* === TERTIARY === */
   --tertiary: #efb8c8;
   --on-tertiary: #4a2532;
   --tertiary-container: #633b48;
   --on-tertiary-container: #ffd8e4;
 
-  /* === NEUTRAL SURFACES === */
-  --background: #1c1b1f;
-  --on-background: #e6e1e6;
-  --surface: #1c1b1f;
-  --on-surface: #e6e1e6;
+  /* === NEUTRALS / SURFACES (глубина, стекло, контейнеры) === */
+  --background: #151417; /* основа страницы */
+  --on-background: #e9e6ea; /* основной текст */
+  --surface: #151417;
+  --on-surface: #e9e6ea;
   --surface-variant: #49454f;
-  --on-surface-variant: #d5d0da;
-  --outline: #938f99;
+  --on-surface-variant: #d7d2db;
 
-  /* === STATUS === */
-  --success: #5edca9;
-  --on-success: #003825;
-  --success-container: #005138;
-  --on-success-container: #7cf9c4;
+  --surface-dim: #0f0d11;
+  --surface-bright: #39363b;
+  --surface-container-lowest: #0b0a0d;
+  --surface-container-low: #18161a;
+  --surface-container: #1f1d23;
+  --surface-container-high: #27242b;
+  --surface-container-highest: #312e35;
 
-  --warning: #ffb872;
-  --on-warning: #4a2800;
-  --warning-container: #6a3c00;
-  --on-warning-container: #ffdcbe;
+  --inverse-surface: #f5f2f7;
+  --inverse-on-surface: #2f2a31;
 
-  --error: #ffb4ab;
-  --on-error: #690005;
-  --error-container: #93000a;
-  --on-error-container: #ffdad6;
-
-  /* Info colors */
-  --info: #84cfff;
-  --on-info: #00344c;
-  --info-container: #004c6c;
-  --on-info-container: #c7e7ff;
-
-  /* Surface elevations */
-  --surface-dim: #141218;
-  --surface-bright: #3b383e;
-  --surface-container-lowest: #0f0d13;
-  --surface-container-low: #1d1b20;
-  --surface-container: #211f26;
-  --surface-container-high: #2b2930;
-  --surface-container-highest: #36343b;
-
-  /* Inverse surface */
-  --inverse-surface: #e6e0e9;
-  --inverse-on-surface: #322f35;
-
-  /* Outline and shadow */
+  /* === OUTLINES / BORDERS / FOCUS === */
+  --outline: #9e97a8;
   --outline-variant: #49454f;
-  --scrim: #000000;
-  --shadow: #000000;
+  --surface-border: rgba(255, 255, 255, 0.04);
+  --surface-strong-border: rgba(255, 255, 255, 0.07);
+  --focus-ring: rgba(195, 166, 255, 0.14);
 
-  /* Состояния элементов */
-  --hover-overlay: rgba(255, 255, 255, 0.08);
-  --pressed-overlay: rgba(255, 255, 255, 0.12);
-  --disabled-container: rgba(255, 255, 255, 0.12);
-  --disabled-content: rgba(255, 255, 255, 0.38);
+  /* === STATUS COLORS === */
+  /* Success — электрический зелёный (подключено) */
+  --success: #37e3a2;
+  --on-success: #002f25;
+  --success-container: #0f5c46;
+  --on-success-container: #dffef2;
+  --success-glow: rgba(55, 227, 162, 0.2);
+  --success-hover: #2fcf90;
+
+  /* Warning — тёплый, не кричащий */
+  --warning: #ffab40;
+  --on-warning: #3a2300;
+  --warning-container: #6b4716;
+  --on-warning-container: #fff6e8;
+  --warning-glow: rgba(255, 171, 64, 0.14);
+  --warning-hover: #ff9e1a;
+
+  /* Error — насыщенный, но мягкий */
+  --error: #ff6b66;
+  --on-error: #3b0000;
+  --error-container: #7a0f12;
+  --on-error-container: #ffd7d6;
+  --error-glow: rgba(255, 107, 102, 0.18);
+  --error-hover: #f25c57;
+
+  /* Info — холодный синий для подсказок / скорость */
+  --info: #59bfff;
+  --on-info: #032838;
+  --info-container: #0d4b66;
+  --on-info-container: #cbeeff;
+  --info-glow: rgba(89, 191, 255, 0.14);
+  --info-hover: #43a8f5;
+
+  /* === GLOW / OVERLAYS / DISABLED === */
+  --hover-overlay: rgba(255, 255, 255, 0.06);
+  --pressed-overlay: rgba(0, 0, 0, 0.18);
+  --disabled-container: rgba(255, 255, 255, 0.06);
+  --disabled-content: rgba(255, 255, 255, 0.36);
+
+  --disabled-border: rgba(255, 255, 255, 0.04);
+
+  /* === CONTRAST / UTILITY === */
+  --primary-contrast: #4a3b7a;
+  --secondary-contrast: #4a4458;
+  --tertiary-contrast: #633b48;
+
+  --surface-ink: rgba(233, 230, 234, 0.92);
+  --scrim: rgba(0, 0, 0, 0.55);
+  --shadow: rgba(0, 0, 0, 0.6);
+
+  /* === SMALL UI HELPERS === */
+  --focus-outline: 2px solid var(--focus-ring);
+  --glass-bg: rgba(26, 24, 29, 0.56);
+  --glass-blur: 10px;
+
+  /* === ANIMATIONS / ELEVATION GLOWS === */
+  --elevation-1-glow: 0 6px 22px rgba(195, 166, 255, 0.06);
+  --elevation-2-glow: 0 10px 34px rgba(106, 227, 255, 0.06);
 
   /* Анимации и переходы */
   --transition-fast: 150ms;

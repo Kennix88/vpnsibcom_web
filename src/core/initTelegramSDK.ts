@@ -3,6 +3,8 @@ export async function initTelegramSDK(options: {
   eruda: boolean
   mockForMacOS: boolean
 }): Promise<void> {
+  const { initTelegramWebAppCompat } =
+    await import('./initTelegramWebAppCompat')
   const {
     backButton,
     initData,
@@ -37,5 +39,5 @@ export async function initTelegramSDK(options: {
     // themeParams.bindCssVars()
   }
 
-  
+  await initTelegramWebAppCompat()
 }

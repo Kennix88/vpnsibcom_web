@@ -7,7 +7,6 @@ import { PlansInterface } from '@app/types/plans.interface'
  */
 interface SubscriptionCostSettings {
   tgStarsToUSD: number
-  adPriceStars: number
   devicesPriceStars: number
   serversPriceStars: number
   premiumServersPriceStars: number
