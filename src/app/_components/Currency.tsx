@@ -5,7 +5,7 @@ import tgStar from '@app/app/_assets/icons/tg-star-original.svg'
 import ticket from '@app/app/_assets/icons/ticket.svg'
 import ton from '@app/app/_assets/icons/ton-coin.svg'
 import traffic from '@app/app/_assets/icons/traffic.svg'
-import usdt from '@app/app/_assets/icons/usdt.svg'
+import usdt from '@app/app/_assets/icons/USDT.svg'
 import Image from 'next/image'
 
 export default function Currency({
