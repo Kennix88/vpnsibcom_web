@@ -28,7 +28,6 @@ export default function Page() {
         <GreenCheck />
         <FreePlanActivated />
         <TaskAdsReward />
-
         <Subscriptions />
         <br />
         <SocialButtons />
