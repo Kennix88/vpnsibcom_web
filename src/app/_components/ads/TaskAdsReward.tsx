@@ -46,7 +46,6 @@ export function TaskAdsReward() {
       }
     } catch (error) {
       console.error('Failed to load ad', error)
-      //
     } finally {
       adRef.current = null
     }
@@ -105,6 +104,8 @@ export function TaskAdsReward() {
           handleClose()
         }
         return
+      } else if (response.isNoAds) {
+        toast.warn('No ads available at the moment')
       }
       cleanup()
     } catch (error) {
