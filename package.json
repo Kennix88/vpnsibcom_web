@@ -16,7 +16,7 @@
     "@adsgram/react": "^1.0.2",
     "@headlessui/react": "^2.2.1",
     "@telegram-apps/analytics": "^1.6.4",
-    "@tma.js/sdk-react": "^3.0.9",
+    "@tma.js/sdk-react": "^3.0.19",
     "@ton/core": "^0.62.1",
     "@ton/crypto": "^3.3.0",
     "@ton/ton": "^15.4.0",
