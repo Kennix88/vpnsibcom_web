@@ -29,7 +29,9 @@ export async function GET(
       agent,
     )
 
-    if (!resData || !resData.marzbanSubRes) {
+    console.log(resData)
+
+    if (!resData) {
       console.error(
         `[Subscription Error] Subscription data not found for token: ${token}`,
       )
