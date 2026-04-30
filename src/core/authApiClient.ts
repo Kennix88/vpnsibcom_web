@@ -527,7 +527,11 @@ class ApiClient {
     })
   }
 
-  async confirmAds(verifyKey: string, verificationCode?: string) {
+  async confirmAds(
+    verifyKey: string,
+    verificationCode?: string,
+    isTaddy?: boolean,
+  ) {
     return this.safeRequest<{
       success: boolean
       user: UserDataInterface
@@ -535,6 +539,7 @@ class ApiClient {
       const { data } = await this.instance.post(`/ads/confirm`, {
         verifyKey,
         verificationCode,
+        isTaddy,
       })
 
       return data
