@@ -36,20 +36,27 @@ export function TaskAdsReward() {
     adRef.current = null
   }, [])
 
-  const reward = useCallback(async () => {
-    try {
-      if (adRef.current == null) return
-      const response = await authApiClient.confirmAds(adRef.current.verifyKey)
-      await setUser(response.user)
-      if (response.success) {
-        toast.success(t('earned'))
+  const reward = useCallback(
+    async (isTaddy = false) => {
+      try {
+        if (adRef.current == null) return
+        const response = await authApiClient.confirmAds(
+          adRef.current.verifyKey,
+          undefined,
+          isTaddy,
+        )
+        await setUser(response.user)
+        if (response.success) {
+          toast.success(t('earned'))
+        }
+      } catch (error) {
+        console.error('Failed to load ad', error)
+      } finally {
+        adRef.current = null
       }
-    } catch (error) {
-      console.error('Failed to load ad', error)
-    } finally {
-      adRef.current = null
-    }
-  }, [setUser, t])
+    },
+    [setUser, t],
+  )
 
   const fetchAd = useCallback(async (): Promise<void> => {
     try {
@@ -66,7 +73,6 @@ export function TaskAdsReward() {
 
         if (!containerRef.current) {
           const div = document.createElement('div')
-          div.id = 'ads-reward-task-container'
           document.body.appendChild(div)
           containerRef.current = div
         }
@@ -79,30 +85,48 @@ export function TaskAdsReward() {
           cleanup()
         }
 
-        const handleReward = async () => {
-          await reward()
+        const handleReward = async (isTaddy = false) => {
+          await reward(isTaddy)
           handleClose()
         }
 
-        if (nextAd.network === AdsNetworkEnum.ADSGRAM) {
-          const { default: AdsgramReward } = await import('./AdsgramReward')
-          root.render(
-            <AdsgramReward
-              blockId={nextAd.blockId as `${number}` | `int-${number}`}
-              onReward={handleReward}
-            />,
-          )
-        } else if (nextAd.network === AdsNetworkEnum.ADSONAR) {
-          const { default: AdsonarReward } = await import('./AdsonarReward')
-          root.render(
-            <AdsonarReward
-              blockId={String(nextAd.blockId)}
-              onReward={handleReward}
-            />,
-          )
-        } else {
-          handleClose()
+        const showFallbackAd = async () => {
+          if (nextAd.network === AdsNetworkEnum.ADSGRAM) {
+            const { default: AdsgramReward } = await import('./AdsgramReward')
+            root.render(
+              <AdsgramReward
+                blockId={nextAd.blockId as `${number}` | `int-${number}`}
+                onReward={handleReward}
+              />,
+            )
+          } else if (nextAd.network === AdsNetworkEnum.ADSONAR) {
+            const { default: AdsonarReward } = await import('./AdsonarReward')
+            root.render(
+              <AdsonarReward
+                blockId={String(nextAd.blockId)}
+                onReward={handleReward}
+              />,
+            )
+          } else {
+            handleClose()
+          }
         }
+
+        const { default: TaddyInterstitial } =
+          await import('./TaddyInterstitial')
+        root.render(
+          <TaddyInterstitial
+            onClosed={handleClose}
+            onViewThrough={() => {
+              void handleReward(true)
+            }}
+            onShow={(success) => {
+              if (!success) {
+                void showFallbackAd()
+              }
+            }}
+          />,
+        )
         return
       } else if (response.isNoAds) {
         toast.warn('No ads available at the moment')
