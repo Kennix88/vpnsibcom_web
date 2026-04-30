@@ -18,10 +18,14 @@ export function useFullscreenAd() {
   const adRef = useRef<AdsDataInterface | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
 
-  const reward = useCallback(async () => {
+  const reward = useCallback(async (isTaddy = false) => {
     try {
       if (adRef.current == null) return
-      await authApiClient.confirmAds(adRef.current.verifyKey)
+      await authApiClient.confirmAds(
+        adRef.current.verifyKey,
+        undefined,
+        isTaddy,
+      )
     } catch (error) {
       console.error('Failed to load ad', error)
     } finally {
@@ -58,7 +62,6 @@ export function useFullscreenAd() {
         // создаём динамический контейнер
         if (!containerRef.current) {
           const div = document.createElement('div')
-          div.id = 'ads-fullscreen-container'
           document.body.appendChild(div)
           containerRef.current = div
         }
@@ -67,8 +70,8 @@ export function useFullscreenAd() {
         const root = createRoot(containerRef.current)
         mountedRootRef.current = root
 
-        const handleClose = async () => {
-          await reward()
+        const handleClose = async (isTaddy = false) => {
+          await reward(isTaddy)
           if (mountedRootRef.current) {
             mountedRootRef.current.unmount()
             mountedRootRef.current = null
@@ -79,25 +82,43 @@ export function useFullscreenAd() {
           }
         }
 
-        if (ad.network === AdsNetworkEnum.ADSGRAM) {
-          const { default: AdsgramFullscreen } =
-            await import('./AdsgramFullscreen')
-          root.render(
-            <AdsgramFullscreen
-              blockId={ad.blockId as `${number}` | `int-${number}`}
-              onClose={handleClose}
-            />,
-          )
-        } else if (ad.network === AdsNetworkEnum.ADSONAR) {
-          const { default: AdsonarFullscreen } =
-            await import('./AdsonarFullscreen')
-          root.render(
-            <AdsonarFullscreen
-              blockId={String(ad.blockId)}
-              onClose={handleClose}
-            />,
-          )
+        const showFallbackAd = async () => {
+          if (ad.network === AdsNetworkEnum.ADSGRAM) {
+            const { default: AdsgramFullscreen } =
+              await import('./AdsgramFullscreen')
+            root.render(
+              <AdsgramFullscreen
+                blockId={ad.blockId as `${number}` | `int-${number}`}
+                onClose={handleClose}
+              />,
+            )
+          } else if (ad.network === AdsNetworkEnum.ADSONAR) {
+            const { default: AdsonarFullscreen } =
+              await import('./AdsonarFullscreen')
+            root.render(
+              <AdsonarFullscreen
+                blockId={String(ad.blockId)}
+                onClose={handleClose}
+              />,
+            )
+          }
         }
+
+        const { default: TaddyInterstitial } =
+          await import('./TaddyInterstitial')
+
+        root.render(
+          <TaddyInterstitial
+            onClosed={() => {
+              void handleClose(true)
+            }}
+            onShow={(success) => {
+              if (!success) {
+                void showFallbackAd()
+              }
+            }}
+          />,
+        )
       } catch (err) {
         console.error('[useFullscreenAd] failed:', err)
       }
