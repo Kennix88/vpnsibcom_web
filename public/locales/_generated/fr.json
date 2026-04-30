@@ -1,1 +1,359 @@
-{"billing":{"title":"Facturation","description":"Mouvement de vos finances","wallet":{"title":"Portefeuille","payment":"Recharger","paymentInfo":"Compte utilisé pour les paiements.","withdrawal":"Retirer","withdrawalInfo":"Compte à partir duquel les fonds peuvent être retirés.","holdInfo":"Fonds gelés.\nIls seront bientôt crédités sur le compte de paiement."},"payment":{"title":"Recharger le solde","sum":"Montant du rechargement","enterSum":"Entrez le montant","sort":{"all":"Tout","crypto":"Cryptomonnaie","card":"Cartes","sbp":"SBP","wallets":"Portefeuilles","skins":"Skins"},"method":"Méthode de paiement","split":"Achetez des Telegram Stars sans KYC, avec un avantage allant jusqu'à 40% sur la plateforme Split!","splitBay":"Acheter des STARS","walletInfo":"Payez en TON, USDT-TON, DOGS, NOT, HMSTR, JETTON et autres jetons du réseau TON en connectant votre portefeuille TON.","limitMessage":"Disponible de {min} à {max} {symbol}. Actuellement: {convertedAmount} {symbol}","commission":"Commission","toBalance":"Sera crédité sur le solde","pay":"Payer"},"subscription":{"title":"Abonnement","addSubscription":"Ajouter un abonnement","pay":"Payer","addFree":"🎁 Ajouter gratuitement","selectPeriod":"Sélectionnez la période","periodMultiplier":"Multiplicateur de période","selectPlan":"Sélectionnez un plan","selectServer":"Sélectionnez un serveur","base":"De base","premium":"Premium","orSelect":"ou au choix","name":{"default":"Abonnement","label":"Nom de l'abonnement","tooltip":"Nom de l'abonnement qui sera affiché dans la liste des abonnements.","placeholder":"Entrez le nom de l'abonnement"},"privileges":{"selectServers":"Choisissez les serveurs nécessaires","oneBaseServer":"Un serveur de base au choix","oneBaseOrPremiumServer":"Un serveur de base ou premium au choix","accessAllServers":"Accès à tous les serveurs","accessAllBaseServers":"Accès à tous les serveurs de base","accessBaseServers":"Accès à {{baseCount}} serveurs de base","accessBaseAndPremiumServers":"Accès à {{baseCount}} serveurs de base et {{premiumCount}} serveurs premium","trafficPlan":"Sans date d'expiration, paiement uniquement pour le trafic!","devices":"Jusqu'à {count} appareils simultanés","customDevices":"Nombre d'appareils requis","servers":"Accès à tous les serveurs","baseServers":"Accès aux serveurs de base","premiumServers":"Accès aux serveurs premium","customServers":"Nombre de serveurs requis","traffic":"Trafic illimité","customTraffic":"Quantité de trafic requise","dailyTraffic":"{count} Go de trafic quotidien","weeklyTraffic":"{count} Go de trafic hebdomadaire","monthlyTraffic":"{count} Go de trafic mensuel","yearlyTraffic":"{count} Go de trafic annuel","security":"Connexion sécurisée","speed":"Sans restrictions de vitesse","masking":"Masquage de votre trafic","noAds":"Pas de publicité","devicesSupport":"Large support d'appareils","xray":"Noyau XRAY fiable","opensource":"Code source ouvert"},"trafficReset":{"title":"Réinitialisation du trafic","daily":"Quotidien","weekly":"Hebdomadaire","monthly":"Mensuel","yearly":"Annuel"},"period":{"hour":"1 heure","day":"1 jour","week":"1 semaine","month":"1 mois","threeMonth":"3 mois","sixMonth":"6 mois","year":"1 an","twoYear":"2 ans","threeYear":"3 ans","indefinitely":"Indéfiniment"},"options":{"title":"Options","autoRenewal":"Renouvellement automatique","autoRenewalDescription":"Renouveler automatiquement l'abonnement","info":"L'abonnement sera automatiquement renouvelé à partir de votre solde","period":"Mémoriser la période"},"traffic":"Trafic","addTraffic":"Ajouter du trafic","addingTraffic":"Ajout de trafic","buy":"Acheter","extension":"Extension","subscriptionExtension":"Extension d'abonnement","freeExtension":"🎁 Prolonger gratuitement","summary":{"title":"Total","name":"Nom","traffic":"Trafic","unlimit":"Illimité","daily":"quotidien","weekly":"hebdomadaire","monthly":"mensuel","yearly":"annuel","servers":"Serveurs","fullServers":"Accès à tous","allBase":"Tous les serveurs de base","notServers":"Non défini!","period":"Période","periodDiscount":"Remise pour la période","roleDiscount":"Remise pour le rôle","autoRenewal":"Renouvellement automatique","yes":"Oui","no":"Non","toPaid":"À payer"},"purchase":"Payer"}},"common":{"modal":{"cancel":"Annuler","accept":"Accepter","close":"Fermer"},"scrolling":"Faites défiler vers le bas","clipboard":{"copied":"Copié dans le presse-papiers!","failed":"Échec de la copie!"},"freePlan":{"trialAvailable":"Vous avez une période d'essai de {days} jours disponible.","activate":"Activer","activationFailed":"Échec de l'activation du plan gratuit"},"units":{"bytes":"B","kilobytes":"Ko","megabytes":"Mo","gigabytes":"Go","terabytes":"To","petabytes":"Po","exabytes":"Eo","zettabytes":"Zo","yottabytes":"Yo"}},"freePlan":{"trialAvailable":"Vous avez {gb} Go de trafic bonus disponible pour l'abonnement d'essai pour une durée illimitée.","activate":"Activer","activationFailed":"Échec de l'activation du plan gratuit","modalTitle":"Activation de la période d'essai","modalAction":"Activer","modalConfirmation":"Voulez-vous vraiment activer la période d'essai?"},"friends":{"title":"Amis","get":"Obtenez des récompenses","for":"pour inviter des amis","level":"niveau","total":"Total","list":{"title":"Vos amis","top":"Top","empty":"Personne ici pour l'instant 🥲"},"bonuses":{"title":"Bonus","inviteTitle":"Pour l'invitation d'un ami","paymentTitle":"Pour les actions d'un ami","inviteInfo":"Après le premier paiement d'un ami ou l'activation d'une période d'essai!","paymentInfo":"Recevez un pourcentage de nos revenus pour les amis et ceux que vos amis ont invités pour toujours!","lvl1Info":"Ceux que vous avez invités","lvl2Info":"Ceux que les amis ont invités","lvl3Info":"Ceux que les amis des amis ont invités 😁"},"invite":{"title":"Inviter un ami","message":"Envoyer un message","copy":"Copier le lien","story":"Envoyer en story"},"statistics":{"title":"Statistiques","earnTitle":"Vos gains","inviteTitle":"Invité","earnInfo":"Vous avez gagné tout le temps","inviteInfo":"Invité | Activé | Dont Standard | Dont Premium"}},"greenCheck":{"loading":"Vérification de la sécurité de la connexion...","danger":"Votre connexion N'EST PAS sécurisée!\nConnectez le VPN!","success":"Votre connexion est sécurisée!"},"navbar":{"home":"Accueil","earning":"Gains","gifts":"Cadeaux","friends":"Amis","billing":"Facturation","settings":"Paramètres","profile":"Profil","games":"Jeux"},"subscriptions":{"title":"Abonnement","connection":"Connexion","configs":"Configurations","addSubscription":"Ajouter un abonnement","addSubscriptionTitle":"Ajout d'abonnement","yourSubscriptions":"Vos abonnements","noSubscriptions":"Vous n'avez pas d'abonnements actifs","loading":"Chargement des données d'abonnement...","notFound":"Abonnement introuvable","renewSubscription":"Renouveler l'abonnement","autoRenewalEnabled":"Renouvellement automatique activé","autoRenewalDisabled":"Renouvellement automatique désactivé","subscriptionDeleted":"L'abonnement a été supprimé avec succès","subscriptionDataUpdated":"Les données d'abonnement ont été mises à jour avec succès","subscriptionRenewed":"Abonnement renouvelé avec succès","changeServer":"Changer de serveur","changeServerTitle":"Changement de serveur","changeServerWarning":"ATTENTION: Le changement de serveur prend 2 minutes. Après le changement de serveur, vous devez mettre à jour les données dans l'application!","active":"Actif","notActive":"Inactif","online":"En ligne","offline":"Hors ligne","traffic":"Trafic","trafficReset":{"daily":"Quotidien","weekly":"Hebdomadaire","monthly":"Mensuel","yearly":"Annuel","unlimit":"Illimité"},"inTotal":"Total","servers":"Serveurs","fullServers":"Accès à tous","allBase":"Tous les serveurs de base","base":"De base","premium":"Premium","devices":"Appareils","period":"Fréquence de paiement","expires":"Expire","autoRenewal":"Renouvellement automatique","actions":"Actions","save":"Enregistrer","required":"Recommandé!","paid":"Payant!","instruction":{"stage1":"Télécharger l'application","stage2":"Ajouter un abonnement à l'application","copyUrl":"Copier l'URL de l'abonnement","openQR":"Code QR de l'abonnement","scanApp":"Scanner dans l'application","scanPhone":"Scanner sur le téléphone","add":"Ajouter à l'application"},"platform":"Plateforme","success":{"serversUpdated":"Serveurs mis à jour avec succès"},"errors":{"loadFailed":"Échec du chargement des abonnements","disableAutoRenewalFailed":"Erreur de désactivation du renouvellement automatique!","enableAutoRenewalFailed":"Erreur d'activation du renouvellement automatique!","deleteSubscriptionFailed":"Erreur de suppression de l'abonnement!","resetSubscriptionFailed":"Erreur de réinitialisation des données d'abonnement!","renewSubscriptionFailed":"Échec du renouvellement de l'abonnement!","fetchingServers":"Échec du chargement des serveurs","updatingServers":"Échec de la mise à jour des serveurs","serverLimitReached":"Vous avez atteint la limite de serveurs","serverLimitReachedPremium":"Vous avez atteint la limite de serveurs premium","serverLimitReachedBase":"Vous avez atteint la limite de serveurs de base"},"periods":{"trial":"Période d'essai","hour":"1 heure","day":"1 jour","week":"1 semaine","month":"1 mois","threeMonth":"3 mois","sixMonth":"6 mois","year":"1 an","twoYear":"2 ans","threeYear":"3 ans","indefinitely":"Indéfiniment"},"modals":{"delete":{"title":"Suppression de l'abonnement","button":"Supprimer","action":"Supprimer","message":"Voulez-vous vraiment supprimer définitivement l'abonnement? Il ne pourra pas être restauré! Aucune compensation n'est prévue!"},"qr":{"title":"Code QR de l'abonnement","description":"Scanner dans l'application client"},"refresh":{"title":"Réinitialisation des données d'abonnement","button":"Réinitialiser les données","action":"Réinitialiser","message":"Voulez-vous vraiment réinitialiser les données d'abonnement? Après cela, les clés et l'adresse de l'abonnement changeront! Vous devrez ajouter l'abonnement à nouveau dans l'application! La réinitialisation est généralement effectuée si votre abonnement a été divulgué ou si quelqu'un y a eu accès!"},"autoRenewal":{"enableTitle":"Activation du renouvellement automatique","disableTitle":"Désactivation du renouvellement automatique","enableAction":"Activer","disableAction":"Désactiver","enableMessage":"Voulez-vous activer le renouvellement automatique de l'abonnement? Les fonds seront débités automatiquement à l'expiration de l'abonnement.","disableMessage":"Voulez-vous désactiver le renouvellement automatique de l'abonnement? Après l'expiration, l'abonnement sera désactivé."},"renew":{"title":"Renouvellement de l'abonnement","action":"Renouveler","message":"Voulez-vous renouveler l'abonnement? {price} étoiles seront débitées de votre solde."}}},"user":{"role":"Rôle","discount":"Remise","wallet":"Portefeuille","usage":"Utilisation","inPayments":"en paiements"},"wallet":{"connect":"Connecter le portefeuille TON","disconnect":"Détacher","replace":"Remplacer"},"earning":{"title":"Earning","earned":"Reward received","rewardTask":{"title":"Watch ad"}}}
+{
+  "billing": {
+    "title": "Facturation",
+    "description": "Mouvement de vos finances",
+    "wallet": {
+      "title": "Portefeuille",
+      "payment": "Recharger",
+      "paymentInfo": "Compte utilisé pour les paiements.",
+      "withdrawal": "Retirer",
+      "withdrawalInfo": "Compte à partir duquel les fonds peuvent être retirés.",
+      "holdInfo": "Fonds gelés.\nIls seront bientôt crédités sur le compte de paiement."
+    },
+    "payment": {
+      "title": "Recharger le solde",
+      "sum": "Montant du rechargement",
+      "enterSum": "Entrez le montant",
+      "sort": {
+        "all": "Tout",
+        "crypto": "Cryptomonnaie",
+        "card": "Cartes",
+        "sbp": "SBP",
+        "wallets": "Portefeuilles",
+        "skins": "Skins"
+      },
+      "method": "Méthode de paiement",
+      "split": "Achetez des Telegram Stars sans KYC, avec un avantage allant jusqu'à 40% sur la plateforme Split!",
+      "splitBay": "Acheter des STARS",
+      "walletInfo": "Payez en TON, USDT-TON, DOGS, NOT, HMSTR, JETTON et autres jetons du réseau TON en connectant votre portefeuille TON.",
+      "limitMessage": "Disponible de {min} à {max} {symbol}. Actuellement: {convertedAmount} {symbol}",
+      "commission": "Commission",
+      "toBalance": "Sera crédité sur le solde",
+      "pay": "Payer"
+    },
+    "subscription": {
+      "title": "Abonnement",
+      "addSubscription": "Ajouter un abonnement",
+      "pay": "Payer",
+      "addFree": "🎁 Ajouter gratuitement",
+      "selectPeriod": "Sélectionnez la période",
+      "periodMultiplier": "Multiplicateur de période",
+      "selectPlan": "Sélectionnez un plan",
+      "selectServer": "Sélectionnez un serveur",
+      "base": "De base",
+      "premium": "Premium",
+      "orSelect": "ou au choix",
+      "name": {
+        "default": "Abonnement",
+        "label": "Nom de l'abonnement",
+        "tooltip": "Nom de l'abonnement qui sera affiché dans la liste des abonnements.",
+        "placeholder": "Entrez le nom de l'abonnement"
+      },
+      "privileges": {
+        "selectServers": "Choisissez les serveurs nécessaires",
+        "oneBaseServer": "Un serveur de base au choix",
+        "oneBaseOrPremiumServer": "Un serveur de base ou premium au choix",
+        "accessAllServers": "Accès à tous les serveurs",
+        "accessAllBaseServers": "Accès à tous les serveurs de base",
+        "accessBaseServers": "Accès à {{baseCount}} serveurs de base",
+        "accessBaseAndPremiumServers": "Accès à {{baseCount}} serveurs de base et {{premiumCount}} serveurs premium",
+        "trafficPlan": "Sans date d'expiration, paiement uniquement pour le trafic!",
+        "devices": "Jusqu'à {count} appareils simultanés",
+        "customDevices": "Nombre d'appareils requis",
+        "servers": "Accès à tous les serveurs",
+        "baseServers": "Accès aux serveurs de base",
+        "premiumServers": "Accès aux serveurs premium",
+        "customServers": "Nombre de serveurs requis",
+        "traffic": "Trafic illimité",
+        "customTraffic": "Quantité de trafic requise",
+        "dailyTraffic": "{count} Go de trafic quotidien",
+        "weeklyTraffic": "{count} Go de trafic hebdomadaire",
+        "monthlyTraffic": "{count} Go de trafic mensuel",
+        "yearlyTraffic": "{count} Go de trafic annuel",
+        "security": "Connexion sécurisée",
+        "speed": "Sans restrictions de vitesse",
+        "masking": "Masquage de votre trafic",
+        "noAds": "Pas de publicité",
+        "devicesSupport": "Large support d'appareils",
+        "xray": "Noyau XRAY fiable",
+        "opensource": "Code source ouvert"
+      },
+      "trafficReset": {
+        "title": "Réinitialisation du trafic",
+        "daily": "Quotidien",
+        "weekly": "Hebdomadaire",
+        "monthly": "Mensuel",
+        "yearly": "Annuel"
+      },
+      "period": {
+        "hour": "1 heure",
+        "day": "1 jour",
+        "week": "1 semaine",
+        "month": "1 mois",
+        "threeMonth": "3 mois",
+        "sixMonth": "6 mois",
+        "year": "1 an",
+        "twoYear": "2 ans",
+        "threeYear": "3 ans",
+        "indefinitely": "Indéfiniment"
+      },
+      "options": {
+        "title": "Options",
+        "autoRenewal": "Renouvellement automatique",
+        "autoRenewalDescription": "Renouveler automatiquement l'abonnement",
+        "info": "L'abonnement sera automatiquement renouvelé à partir de votre solde",
+        "period": "Mémoriser la période"
+      },
+      "traffic": "Trafic",
+      "addTraffic": "Ajouter du trafic",
+      "addingTraffic": "Ajout de trafic",
+      "buy": "Acheter",
+      "extension": "Extension",
+      "subscriptionExtension": "Extension d'abonnement",
+      "freeExtension": "🎁 Prolonger gratuitement",
+      "summary": {
+        "title": "Total",
+        "name": "Nom",
+        "traffic": "Trafic",
+        "unlimit": "Illimité",
+        "daily": "quotidien",
+        "weekly": "hebdomadaire",
+        "monthly": "mensuel",
+        "yearly": "annuel",
+        "servers": "Serveurs",
+        "fullServers": "Accès à tous",
+        "allBase": "Tous les serveurs de base",
+        "notServers": "Non défini!",
+        "period": "Période",
+        "periodDiscount": "Remise pour la période",
+        "roleDiscount": "Remise pour le rôle",
+        "autoRenewal": "Renouvellement automatique",
+        "yes": "Oui",
+        "no": "Non",
+        "toPaid": "À payer"
+      },
+      "purchase": "Payer"
+    }
+  },
+  "common": {
+    "modal": {
+      "cancel": "Annuler",
+      "accept": "Accepter",
+      "close": "Fermer"
+    },
+    "scrolling": "Faites défiler vers le bas",
+    "clipboard": {
+      "copied": "Copié dans le presse-papiers!",
+      "failed": "Échec de la copie!"
+    },
+    "freePlan": {
+      "trialAvailable": "Vous avez une période d'essai de {days} jours disponible.",
+      "activate": "Activer",
+      "activationFailed": "Échec de l'activation du plan gratuit"
+    },
+    "units": {
+      "bytes": "B",
+      "kilobytes": "Ko",
+      "megabytes": "Mo",
+      "gigabytes": "Go",
+      "terabytes": "To",
+      "petabytes": "Po",
+      "exabytes": "Eo",
+      "zettabytes": "Zo",
+      "yottabytes": "Yo"
+    }
+  },
+  "freePlan": {
+    "trialAvailable": "Vous avez {gb} Go de trafic bonus disponible pour l'abonnement d'essai pour une durée illimitée.",
+    "activate": "Activer",
+    "activationFailed": "Échec de l'activation du plan gratuit",
+    "modalTitle": "Activation de la période d'essai",
+    "modalAction": "Activer",
+    "modalConfirmation": "Voulez-vous vraiment activer la période d'essai?"
+  },
+  "friends": {
+    "title": "Amis",
+    "get": "Obtenez des récompenses",
+    "for": "pour inviter des amis",
+    "level": "niveau",
+    "total": "Total",
+    "list": {
+      "title": "Vos amis",
+      "top": "Top",
+      "empty": "Personne ici pour l'instant 🥲"
+    },
+    "bonuses": {
+      "title": "Bonus",
+      "inviteTitle": "Pour l'invitation d'un ami",
+      "paymentTitle": "Pour les actions d'un ami",
+      "inviteInfo": "Après le premier paiement d'un ami ou l'activation d'une période d'essai!",
+      "paymentInfo": "Recevez un pourcentage de nos revenus pour les amis et ceux que vos amis ont invités pour toujours!",
+      "lvl1Info": "Ceux que vous avez invités",
+      "lvl2Info": "Ceux que les amis ont invités",
+      "lvl3Info": "Ceux que les amis des amis ont invités 😁"
+    },
+    "invite": {
+      "title": "Inviter un ami",
+      "message": "Envoyer un message",
+      "copy": "Copier le lien",
+      "story": "Envoyer en story"
+    },
+    "statistics": {
+      "title": "Statistiques",
+      "earnTitle": "Vos gains",
+      "inviteTitle": "Invité",
+      "earnInfo": "Vous avez gagné tout le temps",
+      "inviteInfo": "Invité | Activé | Dont Standard | Dont Premium"
+    }
+  },
+  "greenCheck": {
+    "loading": "Vérification de la sécurité de la connexion...",
+    "danger": "Votre connexion N'EST PAS sécurisée!\nConnectez le VPN!",
+    "success": "Votre connexion est sécurisée!"
+  },
+  "navbar": {
+    "home": "Accueil",
+    "earning": "Gains",
+    "gifts": "Cadeaux",
+    "friends": "Amis",
+    "billing": "Facturation",
+    "settings": "Paramètres",
+    "profile": "Profil",
+    "games": "Jeux"
+  },
+  "subscriptions": {
+    "title": "Abonnement",
+    "connection": "Connexion",
+    "configs": "Configurations",
+    "addSubscription": "Ajouter un abonnement",
+    "addSubscriptionTitle": "Ajout d'abonnement",
+    "yourSubscriptions": "Vos abonnements",
+    "noSubscriptions": "Vous n'avez pas d'abonnements actifs",
+    "loading": "Chargement des données d'abonnement...",
+    "notFound": "Abonnement introuvable",
+    "renewSubscription": "Renouveler l'abonnement",
+    "autoRenewalEnabled": "Renouvellement automatique activé",
+    "autoRenewalDisabled": "Renouvellement automatique désactivé",
+    "subscriptionDeleted": "L'abonnement a été supprimé avec succès",
+    "subscriptionDataUpdated": "Les données d'abonnement ont été mises à jour avec succès",
+    "subscriptionRenewed": "Abonnement renouvelé avec succès",
+    "changeServer": "Changer de serveur",
+    "changeServerTitle": "Changement de serveur",
+    "changeServerWarning": "ATTENTION: Le changement de serveur prend 2 minutes. Après le changement de serveur, vous devez mettre à jour les données dans l'application!",
+    "active": "Actif",
+    "notActive": "Inactif",
+    "online": "En ligne",
+    "offline": "Hors ligne",
+    "traffic": "Trafic",
+    "trafficReset": {
+      "daily": "Quotidien",
+      "weekly": "Hebdomadaire",
+      "monthly": "Mensuel",
+      "yearly": "Annuel",
+      "unlimit": "Illimité"
+    },
+    "inTotal": "Total",
+    "servers": "Serveurs",
+    "fullServers": "Accès à tous",
+    "allBase": "Tous les serveurs de base",
+    "base": "De base",
+    "premium": "Premium",
+    "devices": "Appareils",
+    "period": "Fréquence de paiement",
+    "expires": "Expire",
+    "autoRenewal": "Renouvellement automatique",
+    "actions": "Actions",
+    "save": "Enregistrer",
+    "required": "Recommandé!",
+    "paid": "Payant!",
+    "instruction": {
+      "stage1": "Télécharger l'application",
+      "stage2": "Ajouter un abonnement à l'application",
+      "copyUrl": "Copier l'URL de l'abonnement",
+      "openQR": "Code QR de l'abonnement",
+      "scanApp": "Scanner dans l'application",
+      "scanPhone": "Scanner sur le téléphone",
+      "add": "Ajouter à l'application"
+    },
+    "platform": "Plateforme",
+    "success": {
+      "serversUpdated": "Serveurs mis à jour avec succès"
+    },
+    "errors": {
+      "loadFailed": "Échec du chargement des abonnements",
+      "disableAutoRenewalFailed": "Erreur de désactivation du renouvellement automatique!",
+      "enableAutoRenewalFailed": "Erreur d'activation du renouvellement automatique!",
+      "deleteSubscriptionFailed": "Erreur de suppression de l'abonnement!",
+      "resetSubscriptionFailed": "Erreur de réinitialisation des données d'abonnement!",
+      "renewSubscriptionFailed": "Échec du renouvellement de l'abonnement!",
+      "fetchingServers": "Échec du chargement des serveurs",
+      "updatingServers": "Échec de la mise à jour des serveurs",
+      "serverLimitReached": "Vous avez atteint la limite de serveurs",
+      "serverLimitReachedPremium": "Vous avez atteint la limite de serveurs premium",
+      "serverLimitReachedBase": "Vous avez atteint la limite de serveurs de base"
+    },
+    "periods": {
+      "trial": "Période d'essai",
+      "hour": "1 heure",
+      "day": "1 jour",
+      "week": "1 semaine",
+      "month": "1 mois",
+      "threeMonth": "3 mois",
+      "sixMonth": "6 mois",
+      "year": "1 an",
+      "twoYear": "2 ans",
+      "threeYear": "3 ans",
+      "indefinitely": "Indéfiniment"
+    },
+    "modals": {
+      "delete": {
+        "title": "Suppression de l'abonnement",
+        "button": "Supprimer",
+        "action": "Supprimer",
+        "message": "Voulez-vous vraiment supprimer définitivement l'abonnement? Il ne pourra pas être restauré! Aucune compensation n'est prévue!"
+      },
+      "qr": {
+        "title": "Code QR de l'abonnement",
+        "description": "Scanner dans l'application client"
+      },
+      "refresh": {
+        "title": "Réinitialisation des données d'abonnement",
+        "button": "Réinitialiser les données",
+        "action": "Réinitialiser",
+        "message": "Voulez-vous vraiment réinitialiser les données d'abonnement? Après cela, les clés et l'adresse de l'abonnement changeront! Vous devrez ajouter l'abonnement à nouveau dans l'application! La réinitialisation est généralement effectuée si votre abonnement a été divulgué ou si quelqu'un y a eu accès!"
+      },
+      "autoRenewal": {
+        "enableTitle": "Activation du renouvellement automatique",
+        "disableTitle": "Désactivation du renouvellement automatique",
+        "enableAction": "Activer",
+        "disableAction": "Désactiver",
+        "enableMessage": "Voulez-vous activer le renouvellement automatique de l'abonnement? Les fonds seront débités automatiquement à l'expiration de l'abonnement.",
+        "disableMessage": "Voulez-vous désactiver le renouvellement automatique de l'abonnement? Après l'expiration, l'abonnement sera désactivé."
+      },
+      "renew": {
+        "title": "Renouvellement de l'abonnement",
+        "action": "Renouveler",
+        "message": "Voulez-vous renouveler l'abonnement? {price} étoiles seront débitées de votre solde."
+      }
+    }
+  },
+  "user": {
+    "role": "Rôle",
+    "discount": "Remise",
+    "wallet": "Portefeuille",
+    "usage": "Utilisation",
+    "inPayments": "en paiements"
+  },
+  "wallet": {
+    "connect": "Connecter le portefeuille TON",
+    "disconnect": "Détacher",
+    "replace": "Remplacer"
+  },
+  "earning": {
+    "title": "Earning",
+    "earned": "Reward received",
+    "rewardTask": {
+      "title": "Watch ad"
+    }
+  }
+}
