@@ -23,7 +23,7 @@ import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react'
 import { addDays, eachDayOfInterval } from 'date-fns'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { MdAutoMode } from 'react-icons/md'
 import { toast } from 'react-toastify'
 import { PeriodButtonInterface } from '../add-subscription/AddSubscription'
@@ -47,6 +47,10 @@ export default function RenewButton({
   const { subscriptions, setSubscriptions } = useSubscriptionsStore()
   const { user, setUser } = useUserStore()
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [pendingMethod, setPendingMethod] = useState<
+    PaymentMethodEnum | 'BALANCE' | 'USDT' | null
+  >(null)
+  const renewInFlightRef = useRef(false)
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [isUpdatePeriod, setIsUpdatePeriod] = useState<boolean>(false)
   const [periodButton, setPeriodButton] =
@@ -279,6 +283,7 @@ export default function RenewButton({
     subscription: SubscriptionDataInterface,
     method: PaymentMethodEnum | 'BALANCE' | 'USDT',
   ) => {
+    if (renewInFlightRef.current) return
     try {
       if (method === PaymentMethodEnum.TON_TON && !wallet?.account?.address) {
         try {
@@ -288,6 +293,8 @@ export default function RenewButton({
         }
         return
       }
+      renewInFlightRef.current = true
+      setPendingMethod(method)
       setIsLoading(true)
       const data = await authApiClient.renewSubscription(
         subscription.id,
@@ -336,6 +343,8 @@ export default function RenewButton({
     } catch {
       toast.error('Error when renewing a subscription')
     } finally {
+      renewInFlightRef.current = false
+      setPendingMethod(null)
       setIsLoading(false)
       setIsOpenModal(false)
     }
@@ -621,7 +630,9 @@ export default function RenewButton({
                           ? 'opacity-50 cursor-not-allowed'
                           : ' cursor-pointer'
                       } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-                      {price <= 0 ? (
+                      {pendingMethod === 'BALANCE' && isLoading ? (
+                        'Processing...'
+                      ) : price <= 0 ? (
                         t('freeExtension')
                       ) : (
                         <>
@@ -642,8 +653,14 @@ export default function RenewButton({
                           ? 'opacity-50 cursor-not-allowed'
                           : ' cursor-pointer'
                       } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-                      <Currency type={'tg-star'} w={18} />
-                      {price}
+                      {pendingMethod === PaymentMethodEnum.STARS && isLoading ? (
+                        'Processing...'
+                      ) : (
+                        <>
+                          <Currency type={'tg-star'} w={18} />
+                          {price}
+                        </>
+                      )}
                     </button>
                     {rates && (
                       <button
@@ -661,14 +678,21 @@ export default function RenewButton({
                             ? 'opacity-50 cursor-not-allowed'
                             : ' cursor-pointer'
                         } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-                        <Currency type={'ton'} w={18} />
-                        {roundUp(
-                          fxUtil(
-                            price,
-                            CurrencyEnum.XTR,
-                            CurrencyEnum.TON,
-                            rates,
-                          ),
+                        {pendingMethod === PaymentMethodEnum.TON_TON &&
+                        isLoading ? (
+                          'Processing...'
+                        ) : (
+                          <>
+                            <Currency type={'ton'} w={18} />
+                            {roundUp(
+                              fxUtil(
+                                price,
+                                CurrencyEnum.XTR,
+                                CurrencyEnum.TON,
+                                rates,
+                              ),
+                            )}
+                          </>
                         )}
                       </button>
                     )}
@@ -690,8 +714,14 @@ export default function RenewButton({
                           ? 'opacity-50 cursor-not-allowed'
                           : ' cursor-pointer'
                       } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-                      <Currency type={'usdt'} w={18} />
-                      {roundUp(price * subscriptions.tgStarsToUSD)}
+                      {pendingMethod === 'USDT' && isLoading ? (
+                        'Processing...'
+                      ) : (
+                        <>
+                          <Currency type={'usdt'} w={18} />
+                          {roundUp(price * subscriptions.tgStarsToUSD)}
+                        </>
+                      )}
                     </button>
                   </div>
                 </div>
