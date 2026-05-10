@@ -73,6 +73,7 @@ export default function SubscriptionElement({
   const [isOpenModalQR, setIsOpenModalQR] = useState<string | null>(null)
   const qrRef = useRef<HTMLDivElement>(null)
   const qrCodeRef = useRef<QRCodeStyling | null>(null)
+  const destructiveActionInFlightRef = useRef(false)
 
   useEffect(() => {
     if (!isOpenModalQR || !qrRef.current) return
@@ -115,7 +116,9 @@ export default function SubscriptionElement({
   const deleteSubscription = async (
     subscription: SubscriptionDataInterface,
   ) => {
+    if (destructiveActionInFlightRef.current) return
     try {
+      destructiveActionInFlightRef.current = true
       setIsOpenModalDelete(null)
       setUpdatingButtons(subscription.id)
       const data = await authApiClient.deleteSubscription(subscription.id)
@@ -126,6 +129,7 @@ export default function SubscriptionElement({
     } catch {
       toast.error(t('errors.deleteSubscriptionFailed'))
     } finally {
+      destructiveActionInFlightRef.current = false
       setUpdatingButtons(null)
     }
   }
@@ -133,7 +137,9 @@ export default function SubscriptionElement({
   const resetSubscriptionToken = async (
     subscription: SubscriptionDataInterface,
   ) => {
+    if (destructiveActionInFlightRef.current) return
     try {
+      destructiveActionInFlightRef.current = true
       setIsOpenModalRefresh(null)
       setUpdatingButtons(subscription.id)
       const data = await authApiClient.resetSubscriptionToken(subscription.id)
@@ -144,6 +150,7 @@ export default function SubscriptionElement({
     } catch {
       toast.error(t('errors.resetSubscriptionFailed'))
     } finally {
+      destructiveActionInFlightRef.current = false
       setUpdatingButtons(null)
     }
   }
@@ -538,7 +545,9 @@ export default function SubscriptionElement({
                   disabled={updatingButtons === subscription.id}
                   className={`grow p-2 rounded-md bg-[var(--warning)] text-[var(--on-warning)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex gap-2 items-center `}>
                   <FaArrowsRotate size={18} />
-                  {t('modals.refresh.button')}
+                  {updatingButtons === subscription.id
+                    ? 'Processing...'
+                    : t('modals.refresh.button')}
                 </button>
 
                 <Modal
@@ -558,7 +567,9 @@ export default function SubscriptionElement({
                   disabled={updatingButtons === subscription.id}
                   className={`grow p-2 rounded-md bg-[var(--error)] text-[var(--on-error)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex gap-2 items-center `}>
                   <HiTrash size={18} />
-                  {t('modals.delete.button')}
+                  {updatingButtons === subscription.id
+                    ? 'Processing...'
+                    : t('modals.delete.button')}
                 </button>
 
                 <Modal
