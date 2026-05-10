@@ -10,7 +10,7 @@ import { SubscriptionDataInterface } from '@app/types/subscription-data.interfac
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { BiServer } from 'react-icons/bi'
 import { toast } from 'react-toastify'
 import Modal from '../Modal'
@@ -32,6 +32,7 @@ export default function ChangeServersButton({
   const [premiumServersCount, setPremiumServersCount] = useState<number>(
     subscription.premiumServersCount,
   )
+  const updateServersInFlightRef = useRef(false)
   const { setSubscriptions } = useSubscriptionsStore()
   const { setUser } = useUserStore()
   const t = useTranslations('subscriptions')
@@ -90,7 +91,9 @@ export default function ChangeServersButton({
   }
 
   const handleSave = async () => {
+    if (updateServersInFlightRef.current) return
     try {
+      updateServersInFlightRef.current = true
       setIsLoading(true)
       setIsOpenModal(false)
       const data = await authApiClient.updateServerSubscription(
@@ -104,6 +107,7 @@ export default function ChangeServersButton({
     } catch {
       toast.error('Failed to update subscription servers')
     } finally {
+      updateServersInFlightRef.current = false
       setIsLoading(false)
     }
   }
@@ -117,7 +121,7 @@ export default function ChangeServersButton({
         disabled={isLoading}
         className={`grow p-2 rounded-md bg-[var(--secondary-container)] text-[var(--on-secondary-container)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex gap-2 items-center `}>
         <BiServer size={18} />
-        {t('changeServer')}
+        {isLoading ? 'Processing...' : t('changeServer')}
       </button>
 
       <Modal
