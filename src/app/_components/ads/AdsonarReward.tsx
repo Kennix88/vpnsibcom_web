@@ -5,9 +5,11 @@ import { SonarReturnStatus } from '@app/types/sonar'
 export default function AdsonarReward({
   blockId,
   onReward,
+  onClose,
 }: {
   blockId: string
   onReward: () => void
+  onClose: () => void
 }) {
   const showRewardedAd = () => {
     /* eslint-disable @typescript-eslint/ban-ts-comment */
@@ -25,10 +27,12 @@ export default function AdsonarReward({
         // Добавьте логику для момента, когда реклама становится видимой пользователю
       },
 
-      onError: () => {},
+      onError: () => {
+        onClose()
+      },
 
       onClose: () => {
-        // Добавьте логику для момента, когда объявление закрылось (например, возобновить контент, показать следующую страницу)
+        onClose()
       },
 
       onReward: () => {
@@ -38,9 +42,12 @@ export default function AdsonarReward({
       // Здесь вы также можете обработать результат попытки показа рекламы с помощью Promise
       if (result.status === 'error') {
         console.error('Не удалось показать рекламу:', result.message) // Лог ошибки, если что-то пошло не так
+        onClose()
       } else {
         console.log('Статус рекламы:', result.status) // Лог текущего статуса рекламы
       }
+    }).catch(() => {
+      onClose()
     })
   }
 
