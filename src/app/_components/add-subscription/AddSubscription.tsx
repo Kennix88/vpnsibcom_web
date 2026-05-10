@@ -26,7 +26,7 @@ import { addDays, eachDayOfInterval } from 'date-fns'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BiServer, BiSolidMask } from 'react-icons/bi'
 import { FaCircleInfo, FaShieldHeart } from 'react-icons/fa6'
 import { IoLogoGithub, IoShieldHalf } from 'react-icons/io5'
@@ -87,6 +87,10 @@ export default function AddSubscription() {
   const [isAutoRenewal, setIsAutoRenewal] = useState(true)
   const [planSelected, setPlanSelected] = useState<PlansInterface | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [pendingMethod, setPendingMethod] = useState<
+    PaymentMethodEnum | 'BALANCE' | 'USDT' | null
+  >(null)
+  const purchaseInFlightRef = useRef(false)
   const [trafficReset, setTrafficReset] = useState<TrafficResetEnum>(
     TrafficResetEnum.DAY,
   )
@@ -421,7 +425,7 @@ export default function AddSubscription() {
   const handlePurchase = async (
     method: PaymentMethodEnum | 'BALANCE' | 'USDT',
   ) => {
-    if (isLoading || !planSelected || !periodButton) return
+    if (purchaseInFlightRef.current || !planSelected || !periodButton) return
     if (method === PaymentMethodEnum.TON_TON && !wallet?.account?.address) {
       try {
         await tonConnectUI.openModal()
@@ -430,6 +434,8 @@ export default function AddSubscription() {
       }
       return
     }
+    purchaseInFlightRef.current = true
+    setPendingMethod(method)
     setIsLoading(true)
 
     try {
@@ -490,6 +496,8 @@ export default function AddSubscription() {
     } catch {
       toast.error('Error updating data')
     } finally {
+      purchaseInFlightRef.current = false
+      setPendingMethod(null)
       setIsLoading(false)
       router.push('/tma')
     }
@@ -701,6 +709,7 @@ export default function AddSubscription() {
         usdtBalance={user.balance.usdt}
         onPayment={(method) => handlePurchase(method)}
         user={user}
+        pendingMethod={pendingMethod}
       />
     </div>
   )
