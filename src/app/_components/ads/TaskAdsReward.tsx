@@ -26,7 +26,7 @@ const createAdContainer = () => {
 
 export function TaskAdsReward() {
   const OVERLAY_TIMEOUT_MS = 25000
-  const isTaddyEnabled = config.isTaddyEnabled
+  const isTaddyEnabled = config.isTaddyEnabled as boolean
 
   const { user, setUser } = useUserStore()
   const t = useTranslations('earning')

@@ -23,7 +23,7 @@ const createAdContainer = () => {
 
 export function useFullscreenAd() {
   const OVERLAY_TIMEOUT_MS = 25000
-  const isTaddyEnabled = config.isTaddyEnabled
+  const isTaddyEnabled = config.isTaddyEnabled as boolean
   const { user } = useUserStore()
   const executedRef = useRef(false)
   const mountedRootRef = useRef<Root | null>(null)
