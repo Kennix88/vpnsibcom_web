@@ -3,7 +3,7 @@
 import { authApiClient } from '@app/core/authApiClient'
 import { useSubscriptionsStore } from '@app/store/subscriptions.store'
 import { useUserStore } from '@app/store/user.store'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { AiOutlineStop } from 'react-icons/ai'
 import { FaCheck, FaPen } from 'react-icons/fa6'
 import { toast } from 'react-toastify'
@@ -22,11 +22,14 @@ export default function EditName({
   const [inputName, setInputName] = useState(name)
   const [isEditName, setIsEditName] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const editInFlightRef = useRef(false)
   const { setSubscriptions } = useSubscriptionsStore()
   const { setUser } = useUserStore()
 
   const editNameSubscription = async (subscriptionId: string, name: string) => {
+    if (editInFlightRef.current) return
     try {
+      editInFlightRef.current = true
       setIsLoading(true)
       const data = await authApiClient.editSubscriptionName(
         subscriptionId,
@@ -39,6 +42,7 @@ export default function EditName({
     } catch {
       toast.error('Failed to update subscription name')
     } finally {
+      editInFlightRef.current = false
       setIsLoading(false)
     }
   }
@@ -71,7 +75,7 @@ export default function EditName({
             editNameSubscription(subscriptionId, inputName)
             setIsEditName(false)
           }}>
-          <FaCheck size={14} />
+          {isLoading ? '...' : <FaCheck size={14} />}
         </button>
       </div>
     )
