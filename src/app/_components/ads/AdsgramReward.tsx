@@ -6,9 +6,11 @@ import { useCallback, useRef } from 'react'
 export default function AdsgramReward({
   blockId,
   onReward,
+  onClose,
 }: {
   blockId: `${number}` | `int-${number}`
   onReward: () => void
+  onClose: () => void
 }) {
   const errorCountRef = useRef(0)
 
@@ -16,11 +18,10 @@ export default function AdsgramReward({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (result?: any) => {
       console.warn('Adsgram error result:', result)
-      if (errorCountRef.current < 3) {
-        errorCountRef.current++
-      }
+      errorCountRef.current++
+      onClose()
     },
-    [],
+    [onClose],
   )
 
   // используем наш хук — он вернёт функцию showAd
