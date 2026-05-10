@@ -1,4 +1,5 @@
 'use client'
+import { config } from '@app/config/client'
 import { authApiClient } from '@app/core/authApiClient'
 import { AdsNetworkEnum } from '@app/enums/ads-network.enum'
 import { AdsPlaceEnum } from '@app/enums/ads-place.enum'
@@ -14,7 +15,19 @@ import { toast } from 'react-toastify'
 import Currency from '../Currency'
 import { CountdownTimer } from './CountdownTimer'
 
+const createAdContainer = () => {
+  const div = document.createElement('div')
+  div.style.position = 'fixed'
+  div.style.inset = '0'
+  div.style.pointerEvents = 'none'
+  document.body.appendChild(div)
+  return div
+}
+
 export function TaskAdsReward() {
+  const OVERLAY_TIMEOUT_MS = 25000
+  const isTaddyEnabled = config.isTaddyEnabled
+
   const { user, setUser } = useUserStore()
   const t = useTranslations('earning')
   const [amountReward, setAmountReward] = useState<number | null>(null)
@@ -22,8 +35,27 @@ export function TaskAdsReward() {
   const mountedRootRef = useRef<Root | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
   const isShowingRef = useRef(false)
+  const overlayTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const setTaddyOverlayVisible = useCallback((visible: boolean) => {
+    if (!containerRef.current) return
+    containerRef.current.style.width = visible ? '100vw' : '0'
+    containerRef.current.style.height = visible ? '100vh' : '0'
+    containerRef.current.style.zIndex = visible ? '99' : '-1'
+    containerRef.current.style.background = visible
+      ? 'rgba(0, 0, 0, 0.7)'
+      : 'transparent'
+  }, [])
+
+  const resetOverlayTimeout = useCallback(() => {
+    if (overlayTimeoutRef.current) {
+      clearTimeout(overlayTimeoutRef.current)
+      overlayTimeoutRef.current = null
+    }
+  }, [])
 
   const cleanup = useCallback(() => {
+    resetOverlayTimeout()
     if (mountedRootRef.current) {
       mountedRootRef.current.unmount()
       mountedRootRef.current = null
@@ -34,7 +66,13 @@ export function TaskAdsReward() {
     }
     isShowingRef.current = false
     adRef.current = null
-  }, [])
+  }, [resetOverlayTimeout])
+
+  const scheduleCleanup = useCallback(() => {
+    setTimeout(() => {
+      cleanup()
+    }, 0)
+  }, [cleanup])
 
   const reward = useCallback(
     async (isTaddy = false) => {
@@ -72,17 +110,20 @@ export function TaskAdsReward() {
         adRef.current = nextAd
 
         if (!containerRef.current) {
-          const div = document.createElement('div')
-          document.body.appendChild(div)
-          containerRef.current = div
+          containerRef.current = createAdContainer()
         }
 
         if (mountedRootRef.current) return
         const root = createRoot(containerRef.current)
         mountedRootRef.current = root
+        setTaddyOverlayVisible(isTaddyEnabled)
+        resetOverlayTimeout()
+        overlayTimeoutRef.current = setTimeout(() => {
+          scheduleCleanup()
+        }, OVERLAY_TIMEOUT_MS)
 
         const handleClose = () => {
-          cleanup()
+          scheduleCleanup()
         }
 
         const handleReward = async (isTaddy = false) => {
@@ -91,12 +132,14 @@ export function TaskAdsReward() {
         }
 
         const showFallbackAd = async () => {
+          setTaddyOverlayVisible(false)
           if (nextAd.network === AdsNetworkEnum.ADSGRAM) {
             const { default: AdsgramReward } = await import('./AdsgramReward')
             root.render(
               <AdsgramReward
                 blockId={nextAd.blockId as `${number}` | `int-${number}`}
                 onReward={handleReward}
+                onClose={handleClose}
               />,
             )
           } else if (nextAd.network === AdsNetworkEnum.ADSONAR) {
@@ -105,39 +148,55 @@ export function TaskAdsReward() {
               <AdsonarReward
                 blockId={String(nextAd.blockId)}
                 onReward={handleReward}
+                onClose={handleClose}
               />,
+            )
+          } else if (nextAd.network === AdsNetworkEnum.RICHADS) {
+            const { default: RichadsReward } = await import('./RichadsReward')
+            root.render(
+              <RichadsReward onReward={handleReward} onClose={handleClose} />,
             )
           } else {
             handleClose()
           }
         }
 
-        const { default: TaddyInterstitial } =
-          await import('./TaddyInterstitial')
-        root.render(
-          <TaddyInterstitial
-            onClosed={handleClose}
-            onViewThrough={() => {
-              void handleReward(true)
-            }}
-            onShow={(success) => {
-              if (!success) {
-                void showFallbackAd()
-              }
-            }}
-          />,
-        )
+        if (isTaddyEnabled) {
+          const { default: TaddyInterstitial } =
+            await import('./TaddyInterstitial')
+          root.render(
+            <TaddyInterstitial
+              onClosed={handleClose}
+              onViewThrough={() => {
+                void handleReward(true)
+              }}
+              onShow={(success) => {
+                if (!success) {
+                  void showFallbackAd()
+                }
+              }}
+            />,
+          )
+        } else {
+          void showFallbackAd()
+        }
         return
       } else if (response.isNoAds) {
         toast.warn('No ads available at the moment')
       }
-      cleanup()
+      scheduleCleanup()
     } catch (error) {
       console.error('Failed to load ad', error)
-      cleanup()
+      scheduleCleanup()
       // toast.error(t('errors.loadFailed'))
     }
-  }, [cleanup, reward])
+  }, [
+    isTaddyEnabled,
+    resetOverlayTimeout,
+    reward,
+    scheduleCleanup,
+    setTaddyOverlayVisible,
+  ])
 
   const fetchReward = useCallback(async (): Promise<void> => {
     try {
