@@ -5,7 +5,7 @@ import { useSubscriptionsStore } from '@app/store/subscriptions.store'
 import { SubscriptionDataInterface } from '@app/types/subscription-data.interface'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 
 export default function AutoRenewalSwitch({
@@ -18,6 +18,7 @@ export default function AutoRenewalSwitch({
   const t = useTranslations('subscriptions')
   const [isEnabled, setIsEnabled] = useState(subscription.isAutoRenewal)
   const [loading, setLoading] = useState(false)
+  const toggleInFlightRef = useRef(false)
   const { setSubscriptions } = useSubscriptionsStore()
 
   /**
@@ -26,6 +27,8 @@ export default function AutoRenewalSwitch({
    * @returns Promise<void>
    */
   const toggleAutoRenewal = async (subscriptionId: string) => {
+    if (toggleInFlightRef.current) return
+    toggleInFlightRef.current = true
     setLoading(true)
     try {
       const data =
@@ -45,6 +48,7 @@ export default function AutoRenewalSwitch({
           : t('errors.enableAutoRenewalFailed'),
       )
     } finally {
+      toggleInFlightRef.current = false
       setLoading(false)
     }
   }
@@ -58,8 +62,11 @@ export default function AutoRenewalSwitch({
   return (
     <button
       disabled={loading}
+      aria-busy={loading}
       onClick={() => toggleAutoRenewal(subscription.id)}
-      className="relative inline-flex items-center rounded-full transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer"
+      className={`relative inline-flex items-center rounded-full transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
+        loading ? 'cursor-wait opacity-70' : 'cursor-pointer'
+      }`}
       style={{
         width: trackWidth,
         height: trackHeight,
