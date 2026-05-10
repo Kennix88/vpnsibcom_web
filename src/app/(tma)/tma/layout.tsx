@@ -4,6 +4,7 @@ import { Metadata } from 'next'
 import { getLocale } from 'next-intl/server'
 // import 'normalize.css/normalize.css'
 import { CheckPlatform } from '@app/app/(tma)/tma/_components/CheckPlatform'
+import { config } from '@app/config/client'
 import Script from 'next/script'
 import React from 'react'
 import { ToastContainer } from 'react-toastify'
@@ -13,7 +14,7 @@ import { InitData } from '../_components/InitData'
 
 export const metadata: Metadata = {
   title: 'TMA - VPNsib',
-  description: 'VPNsib is an open source VPN service.',
+  description: 'VPNsib - VPN service.',
 }
 
 export default async function TmaLayout({
@@ -38,6 +39,29 @@ export default async function TmaLayout({
           id="taddy"
           strategy="beforeInteractive"
           src={'https://sdk.taddy.pro/web/taddy.min.js?1317'}
+        />
+
+        <Script
+          id="richads-sdk"
+          strategy="beforeInteractive"
+          src="https://richinfo.co/richpartners/telegram/js/tg-ob.js"
+        />
+        <Script
+          id="richads-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.richadsController = window.richadsController || null;
+              if (!window.richadsController && window.TelegramAdsController) {
+                window.richadsController = new window.TelegramAdsController();
+                window.richadsController.initialize({
+                  pubId: "${config.richadsPubId}",
+                  appId: "${config.richadsAppId}",
+                  debug: ${process.env.NODE_ENV === 'development'},
+                });
+              }
+            `,
+          }}
         />
       </head>
       <body className="bg-[var(--background)]">
