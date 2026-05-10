@@ -15,6 +15,9 @@ export const config = {
   TMA_IDENTIFIER: process.env.NEXT_PUBLIC_TMA_IDENTIFIER as string,
   // taddyPubId: '72b92dd008f87edb93bba1d29469b162',
   taddyPubId: '14cbeb980853dd416003462ca4db7c12',
+  richadsPubId: process.env.NEXT_PUBLIC_RICHADS_PUB_ID || '1001262',
+  richadsAppId: process.env.NEXT_PUBLIC_RICHADS_APP_ID || '6023',
+  isTaddyEnabled: process.env.NEXT_PUBLIC_TADDY_ENABLED || 'true',
 }
 
 if (typeof window !== 'undefined' && !config.apiUrl) {
