@@ -54,26 +54,42 @@ export default function RichadsReward({
           w.richadsController = instance
         }
 
-        const result = await w.richadsController.triggerInterstitialVideo()
-        const status = (
-          typeof result === 'string'
-            ? result
-            : result &&
-                typeof result === 'object' &&
-                'status' in result &&
-                typeof (result as RichadsResult).status === 'string'
-              ? (result as RichadsResult).status
-              : ''
-        ).toLowerCase()
-        const rewarded =
+        const controller = w.richadsController
+        if (!controller) {
+          console.warn('RichAds controller not initialized')
+          onClose()
+          return
+        }
+
+        const result = await controller.triggerInterstitialVideo()
+        let status = ''
+        if (typeof result === 'string') {
+          status = result
+        } else if (
+          result &&
+          typeof result === 'object' &&
+          'status' in result &&
+          typeof (result as RichadsResult).status === 'string'
+        ) {
+          status = (result as RichadsResult).status ?? ''
+        }
+        status = status.toLowerCase()
+
+        let rewardedFromResult: boolean | undefined
+        if (
           result &&
           typeof result === 'object' &&
           'rewarded' in result &&
           typeof (result as RichadsResult).rewarded === 'boolean'
-            ? (result as RichadsResult).rewarded
-            : status === 'success' ||
-              status.includes('reward') ||
-              status.includes('complete')
+        ) {
+          rewardedFromResult = (result as RichadsResult).rewarded
+        }
+
+        const rewarded =
+          rewardedFromResult ??
+          (status === 'success' ||
+            status.includes('reward') ||
+            status.includes('complete'))
 
         if (rewarded) {
           onReward()

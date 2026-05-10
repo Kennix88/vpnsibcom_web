@@ -39,7 +39,7 @@ export function CountdownTimer({ expiryDate }: CountdownTimerProps) {
     }, 1000)
 
     return () => clearInterval(interval)
-  }, [expiryDate])
+  }, [expiryDate, setUser])
 
   return (
     <div className="font-bold flex items-center justify-center bg-[var(--error)] text-[var(--on-error)] px-2 py-1 rounded-md uppercase cursor-not-allowed w-[52px] text-sm">
