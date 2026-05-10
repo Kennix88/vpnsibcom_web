@@ -23,6 +23,7 @@ export const PaymentActions = ({
   usdtBalance,
   tgStarsToUSD,
   user,
+  pendingMethod = null,
 }: {
   isAllBaseServers: boolean
   isAllPremiumServers: boolean
@@ -35,11 +36,14 @@ export const PaymentActions = ({
   user: UserDataInterface
   tgStarsToUSD: number
   onPayment: (method: PaymentMethodEnum | 'BALANCE' | 'USDT') => Promise<void>
+  pendingMethod?: PaymentMethodEnum | 'BALANCE' | 'USDT' | null
 }) => {
   const { rates } = useCurrencyStore()
   const t = useTranslations('billing.subscription')
   const hasSelectedServers =
     isAllBaseServers || isAllPremiumServers || serversSelected.length > 0
+
+  const isPending = Boolean(isLoading)
 
   return (
     <div className="flex flex-col gap-2 w-full">
@@ -60,25 +64,20 @@ export const PaymentActions = ({
               onClick={() => {
                 onPayment('BALANCE')
               }}
-              disabled={isLoading || price > balance}
+              disabled={isPending || price > balance}
               className={`py-2 px-4 rounded-md bg-[var(--star-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
-                price > balance
+                isPending || price > balance
                   ? 'opacity-50 cursor-not-allowed'
                   : ' cursor-pointer'
               } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-              {price <= 0 ? (
+              {pendingMethod === 'BALANCE' && isPending ? (
+                'Processing...'
+              ) : price <= 0 ? (
                 t('addFree')
               ) : (
                 <>
                   <Currency type={'star'} w={18} />
-                  <div>
-                    {price}
-                    {/* {price !== priceNoDiscount && (
-                      <span className="opacity-70 text-[12px] line-through">
-                        ({priceNoDiscount})
-                      </span>
-                    )} */}
-                  </div>
+                  <div>{price}</div>
                 </>
               )}
             </button>
@@ -86,53 +85,44 @@ export const PaymentActions = ({
               onClick={() => {
                 onPayment(PaymentMethodEnum.STARS)
               }}
-              disabled={isLoading || price <= 0 || price < user.minPayStars}
+              disabled={isPending || price <= 0 || price < user.minPayStars}
               className={`py-2 px-4 rounded-md bg-[var(--star-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
-                isLoading || price <= 0 || price < user.minPayStars
+                isPending || price <= 0 || price < user.minPayStars
                   ? 'opacity-50 cursor-not-allowed'
                   : ' cursor-pointer'
               } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-              <Currency type={'tg-star'} w={18} />
-              <div>
-                {price}
-                {/* {price !== priceNoDiscount && (
-                  <span className="opacity-70 text-[12px] line-through">
-                    ({priceNoDiscount})
-                  </span>
-                )} */}
-              </div>
+              {pendingMethod === PaymentMethodEnum.STARS && isPending ? (
+                'Processing...'
+              ) : (
+                <>
+                  <Currency type={'tg-star'} w={18} />
+                  <div>{price}</div>
+                </>
+              )}
             </button>
             {rates && (
               <button
                 onClick={() => {
                   onPayment(PaymentMethodEnum.TON_TON)
                 }}
-                disabled={isLoading || price <= 0 || price < user.minPayStars}
+                disabled={isPending || price <= 0 || price < user.minPayStars}
                 className={`py-2 px-4 rounded-md bg-[var(--ton-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
-                  isLoading || price <= 0 || price < user.minPayStars
+                  isPending || price <= 0 || price < user.minPayStars
                     ? 'opacity-50 cursor-not-allowed'
                     : ' cursor-pointer'
                 } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-                <Currency type={'ton'} w={18} />
-                <div>
-                  {roundUp(
-                    fxUtil(price, CurrencyEnum.XTR, CurrencyEnum.TON, rates),
-                  )}
-                  {/* {price !== priceNoDiscount && (
-                    <span className="opacity-70 text-[12px] line-through">
-                      (
+                {pendingMethod === PaymentMethodEnum.TON_TON && isPending ? (
+                  'Processing...'
+                ) : (
+                  <>
+                    <Currency type={'ton'} w={18} />
+                    <div>
                       {roundUp(
-                        fxUtil(
-                          priceNoDiscount,
-                          CurrencyEnum.XTR,
-                          CurrencyEnum.TON,
-                          rates,
-                        ),
+                        fxUtil(price, CurrencyEnum.XTR, CurrencyEnum.TON, rates),
                       )}
-                      )
-                    </span>
-                  )} */}
-                </div>
+                    </div>
+                  </>
+                )}
               </button>
             )}
             <button
@@ -140,19 +130,25 @@ export const PaymentActions = ({
                 onPayment('USDT')
               }}
               disabled={
-                isLoading ||
+                isPending ||
                 roundUp(price * tgStarsToUSD) > usdtBalance ||
                 price <= 0
               }
               className={`py-2 px-4 rounded-md bg-[var(--usdt-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
-                isLoading ||
+                isPending ||
                 roundUp(price * tgStarsToUSD) > usdtBalance ||
                 price <= 0
                   ? 'opacity-50 cursor-not-allowed'
                   : ' cursor-pointer'
               } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-              <Currency type={'usdt'} w={18} />
-              {price <= 0 ? 0 : roundUp(price * tgStarsToUSD)}
+              {pendingMethod === 'USDT' && isPending ? (
+                'Processing...'
+              ) : (
+                <>
+                  <Currency type={'usdt'} w={18} />
+                  {price <= 0 ? 0 : roundUp(price * tgStarsToUSD)}
+                </>
+              )}
             </button>
           </div>
         </>
