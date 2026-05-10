@@ -19,7 +19,7 @@ import { beginCell, toNano } from '@ton/core'
 import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { FaPlus } from 'react-icons/fa6'
 import { toast } from 'react-toastify'
 import Currency from '../Currency'
@@ -37,6 +37,10 @@ export default function AddTrafficButton({
   const { user, setUser } = useUserStore()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
+  const [pendingMethod, setPendingMethod] = useState<
+    PaymentMethodEnum | 'BALANCE' | 'USDT' | null
+  >(null)
+  const addTrafficInFlightRef = useRef(false)
   const [trafficLimitGb, setTrafficLimitGb] = useState(1)
   const wallet = useTonWallet()
   const [tonConnectUI] = useTonConnectUI()
@@ -139,6 +143,7 @@ export default function AddTrafficButton({
     trafficLimitGb: number,
     method: PaymentMethodEnum | 'BALANCE' | 'USDT',
   ) => {
+    if (addTrafficInFlightRef.current) return
     try {
       if (method === PaymentMethodEnum.TON_TON && !wallet?.account?.address) {
         try {
@@ -148,6 +153,8 @@ export default function AddTrafficButton({
         }
         return
       }
+      addTrafficInFlightRef.current = true
+      setPendingMethod(method)
       setIsLoading(true)
       const data = await authApiClient.addTrafficSubscription(
         subscription.id,
@@ -193,6 +200,8 @@ export default function AddTrafficButton({
     } catch {
       toast.error('Error adding traffic')
     } finally {
+      addTrafficInFlightRef.current = false
+      setPendingMethod(null)
       setIsOpenModal(false)
       setIsLoading(false)
     }
@@ -316,7 +325,9 @@ export default function AddTrafficButton({
                     ? 'opacity-50 cursor-not-allowed'
                     : ' cursor-pointer'
                 } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-                {price <= 0 ? (
+                {pendingMethod === 'BALANCE' && isLoading ? (
+                  'Processing...'
+                ) : price <= 0 ? (
                   t('addFree')
                 ) : (
                   <>
@@ -339,8 +350,14 @@ export default function AddTrafficButton({
                     ? 'opacity-50 cursor-not-allowed'
                     : ' cursor-pointer'
                 } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-                <Currency type={'tg-star'} w={18} />
-                {price}
+                {pendingMethod === PaymentMethodEnum.STARS && isLoading ? (
+                  'Processing...'
+                ) : (
+                  <>
+                    <Currency type={'tg-star'} w={18} />
+                    {price}
+                  </>
+                )}
               </button>
               {rates && (
                 <button
@@ -357,9 +374,15 @@ export default function AddTrafficButton({
                       ? 'opacity-50 cursor-not-allowed'
                       : ' cursor-pointer'
                   } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-                  <Currency type={'ton'} w={18} />
-                  {roundUp(
-                    fxUtil(price, CurrencyEnum.XTR, CurrencyEnum.TON, rates),
+                  {pendingMethod === PaymentMethodEnum.TON_TON && isLoading ? (
+                    'Processing...'
+                  ) : (
+                    <>
+                      <Currency type={'ton'} w={18} />
+                      {roundUp(
+                        fxUtil(price, CurrencyEnum.XTR, CurrencyEnum.TON, rates),
+                      )}
+                    </>
                   )}
                 </button>
               )}
@@ -379,8 +402,14 @@ export default function AddTrafficButton({
                     ? 'opacity-50 cursor-not-allowed'
                     : ' cursor-pointer'
                 } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-                <Currency type={'usdt'} w={18} />
-                {price <= 0 ? 0 : roundUp(price * subscriptions.tgStarsToUSD)}
+                {pendingMethod === 'USDT' && isLoading ? (
+                  'Processing...'
+                ) : (
+                  <>
+                    <Currency type={'usdt'} w={18} />
+                    {price <= 0 ? 0 : roundUp(price * subscriptions.tgStarsToUSD)}
+                  </>
+                )}
               </button>
             </div>
           </div>
