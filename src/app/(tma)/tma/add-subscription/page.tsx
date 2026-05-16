@@ -3,7 +3,6 @@ import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
 import AddSubscription from '@app/app/_components/add-subscription/AddSubscription'
 import SocialButtons from '@app/app/_components/SocialButtons'
 import TopBar from '@app/app/_components/TopBar'
-import Version from '@app/app/_components/Version'
 import { useTranslations } from 'next-intl'
 
 export default function Page() {
@@ -21,7 +20,7 @@ export default function Page() {
         <AddSubscription />
         <br />
         <SocialButtons />
-        <Version />
+        {/*<Version />*/}
       </div>
     </TmaPage>
   )
