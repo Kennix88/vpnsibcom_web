@@ -2,7 +2,6 @@ import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
 import SocialButtons from '@app/app/_components/SocialButtons'
 import Subscription from '@app/app/_components/subscription/Subscription'
 import TopBar from '@app/app/_components/TopBar'
-import Version from '@app/app/_components/Version'
 
 export default async function Page({
   params,
@@ -16,7 +15,7 @@ export default async function Page({
       <Subscription token={id} isToken={false} />
       <div className="flex flex-col gap-4">
         <SocialButtons />
-        <Version />
+        {/*<Version />*/}
       </div>
     </TmaPage>
   )
