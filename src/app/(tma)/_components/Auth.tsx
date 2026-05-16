@@ -2,6 +2,7 @@
 import Loader from '@app/app/_components/Loader'
 import { config } from '@app/config/client'
 import { authApiClient } from '@app/core/authApiClient'
+import { resetAllStores } from '@app/store/resetAllStores'
 import { useUserStore } from '@app/store/user.store'
 
 import { TonConnectUIProvider } from '@tonconnect/ui-react'
@@ -14,8 +15,6 @@ export function Auth({ children }: PropsWithChildren) {
 
   // main effect: detect initData change and re-auth
   useEffect(() => {
-    if (user && accessToken) return
-
     const handleInit = async () => {
       if (bootstrapAuthPromise) {
         await bootstrapAuthPromise
@@ -29,6 +28,10 @@ export function Auth({ children }: PropsWithChildren) {
         console.warn('No Telegram initData found')
         return
       }
+
+      // Always force fresh Telegram login for each TMA session entry.
+      // This prevents showing stale persisted data from previous TG account.
+      resetAllStores()
 
       bootstrapAuthPromise = (async () => {
         try {
@@ -47,7 +50,7 @@ export function Auth({ children }: PropsWithChildren) {
     }
 
     handleInit()
-  }, [accessToken, setAccessToken, setUser, user])
+  }, [setAccessToken, setUser])
 
   if (!user || !accessToken) {
     return <Loader />
