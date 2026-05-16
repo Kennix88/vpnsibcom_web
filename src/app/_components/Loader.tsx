@@ -2,7 +2,6 @@
 
 import Image from 'next/image'
 import SocialButtons from './SocialButtons'
-import Version from './Version'
 
 const Loader = () => {
   return (
@@ -20,7 +19,7 @@ const Loader = () => {
       <div className="loader"></div>
       <div className="flex flex-col gap-4 justify-center">
         <SocialButtons />
-        <Version />
+        {/*<Version />*/}
       </div>
     </div>
   )
