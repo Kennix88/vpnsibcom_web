@@ -6,10 +6,7 @@ import { useUserStore } from '@app/store/user.store'
 
 import { AnimatePresence, motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
-import { FiPlus } from 'react-icons/fi'
 
 import SubscriptionElement from './subscription/SubscriptionElement'
 
@@ -24,8 +21,8 @@ export function Subscriptions() {
   const { user } = useUserStore()
   const [loading, setLoading] = useState(true)
 
-  const location = usePathname()
-  const url = location === '/app' ? '/app' : '/tma'
+  // const location = usePathname()
+  // const url = location === '/app' ? '/app' : '/tma'
 
   const fetchSubscriptions = useCallback(async (): Promise<void> => {
     try {
@@ -48,10 +45,10 @@ export function Subscriptions() {
 
   if (!user) return null
 
-  const isDisabledAddSub =
-    subscriptions &&
-    subscriptions.subscriptions &&
-    subscriptions.subscriptions.length < user.limitSubscriptions
+  // const isDisabledAddSub =
+  //   subscriptions &&
+  //   subscriptions.subscriptions &&
+  //   subscriptions.subscriptions.length < user.limitSubscriptions
 
   return (
     <div className="flex flex-col gap-4 items-center font-extralight font-mono max-w-[600px] w-full">
@@ -65,7 +62,7 @@ export function Subscriptions() {
             /{user?.limitSubscriptions || 0}
           </span>
 
-          {isDisabledAddSub && (
+          {/*{isDisabledAddSub && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -76,7 +73,7 @@ export function Subscriptions() {
                 <FiPlus size={18} />
               </Link>
             </motion.div>
-          )}
+          )}*/}
         </div>
       </div>
 
@@ -145,7 +142,7 @@ export function Subscriptions() {
           </AnimatePresence>
         </div>
       )}
-      {isDisabledAddSub && (
+      {/*{isDisabledAddSub && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -157,7 +154,7 @@ export function Subscriptions() {
             <span>{t('addSubscription')}</span>
           </Link>
         </motion.div>
-      )}
+      )}*/}
     </div>
   )
 }
