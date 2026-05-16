@@ -7,12 +7,21 @@ import { useUserStore } from '@app/store/user.store'
 import { TonConnectUIProvider } from '@tonconnect/ui-react'
 import { PropsWithChildren, useEffect } from 'react'
 
+let bootstrapAuthPromise: Promise<void> | null = null
+
 export function Auth({ children }: PropsWithChildren) {
   const { user, accessToken, setUser, setAccessToken } = useUserStore()
 
   // main effect: detect initData change and re-auth
   useEffect(() => {
+    if (user && accessToken) return
+
     const handleInit = async () => {
+      if (bootstrapAuthPromise) {
+        await bootstrapAuthPromise
+        return
+      }
+
       const { retrieveRawInitData } = await import('@tma.js/sdk-react')
       const initDataRaw = retrieveRawInitData()
       // await clearClientPersistence()
@@ -21,20 +30,24 @@ export function Auth({ children }: PropsWithChildren) {
         return
       }
 
-      try {
-        const { accessToken: newToken, user: newUser } =
-          await authApiClient.telegramLogin(initDataRaw)
-        // ensure local store updated
-        setAccessToken(newToken)
-        setUser(newUser)
-      } catch (err) {
-        console.error('Error during initData handling', err)
-      }
+      bootstrapAuthPromise = (async () => {
+        try {
+          const { accessToken: newToken, user: newUser } =
+            await authApiClient.telegramLogin(initDataRaw)
+          setAccessToken(newToken)
+          setUser(newUser)
+        } catch (err) {
+          console.error('Error during initData handling', err)
+        } finally {
+          bootstrapAuthPromise = null
+        }
+      })()
+
+      await bootstrapAuthPromise
     }
 
     handleInit()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [accessToken, setAccessToken, setUser, user])
 
   if (!user || !accessToken) {
     return <Loader />
