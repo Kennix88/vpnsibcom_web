@@ -14,26 +14,54 @@ export function TMA({ children }: PropsWithChildren) {
   const initDataUser = useSignal(initData.user)
 
   useEffect(() => {
-    // const debug =
-    //   (launchParams.tgWebAppStartParam || '').includes('platformer_debug') ||
-    //   process.env.NODE_ENV === 'development'
+    let cancelled = false
 
-    initTelegramSDK({
-      // debug,
-      // eruda:
-      //   debug && ['ios', 'android'].includes(launchParams.tgWebAppPlatform),
-      // mockForMacOS: launchParams.tgWebAppPlatform === 'macos',
-      debug: false,
-      eruda: false,
-      mockForMacOS: false,
-    })
+    const init = async () => {
+      try {
+        // const debug =
+        //   (launchParams.tgWebAppStartParam || '').includes('platformer_debug') ||
+        //   process.env.NODE_ENV === 'development'
 
-    setInitialized(true)
+        await initTelegramSDK({
+          // debug,
+          // eruda:
+          //   debug && ['ios', 'android'].includes(launchParams.tgWebAppPlatform),
+          // mockForMacOS: launchParams.tgWebAppPlatform === 'macos',
+          debug: false,
+          eruda: false,
+          mockForMacOS: false,
+        })
+
+        if (!cancelled) {
+          setInitialized(true)
+        }
+      } catch (err) {
+        console.error('Failed to init Telegram SDK', err)
+      }
+    }
+
+    init()
+
+    return () => {
+      cancelled = true
+    }
   }, [launchParams])
 
   useEffect(() => {
+    if (!initialized) return
+
     const initAnalytics = async () => {
       try {
+        const w = window as Window & {
+          TelegramGameProxy?: { receiveEvent?: (...args: unknown[]) => void }
+        }
+        if (!w.TelegramGameProxy) {
+          w.TelegramGameProxy = {}
+        }
+        if (typeof w.TelegramGameProxy.receiveEvent !== 'function') {
+          w.TelegramGameProxy.receiveEvent = () => {}
+        }
+
         const { default: TelegramAnalytics } =
           await import('@telegram-apps/analytics')
         TelegramAnalytics.init({
@@ -45,7 +73,7 @@ export function TMA({ children }: PropsWithChildren) {
       }
     }
     initAnalytics()
-  }, [])
+  }, [initialized])
 
   useEffect(() => {
     if (initDataUser) {
@@ -58,9 +86,9 @@ export function TMA({ children }: PropsWithChildren) {
   }
 
   return (
-    <Auth>
-      {children}
+    <>
       <AnalyticsInit />
-    </Auth>
+      <Auth>{children}</Auth>
+    </>
   )
 }
