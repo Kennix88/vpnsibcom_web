@@ -2,7 +2,6 @@
 import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
 import SocialButtons from '@app/app/_components/SocialButtons'
 import TopBar from '@app/app/_components/TopBar'
-import Version from '@app/app/_components/Version'
 import { useTranslations } from 'next-intl'
 import dynamic from 'next/dynamic'
 const TaskAdsReward = dynamic(
@@ -40,7 +39,7 @@ export default function Page() {
       </div>
       <div className="flex flex-col gap-4">
         <SocialButtons />
-        <Version />
+        {/*<Version />*/}
       </div>
     </TmaPage>
   )
