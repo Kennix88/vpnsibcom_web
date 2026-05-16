@@ -6,7 +6,6 @@ import GreenCheck from '@app/app/_components/GreenCheck'
 import SocialButtons from '@app/app/_components/SocialButtons'
 import { Subscriptions } from '@app/app/_components/Subscriptions'
 import TopBar from '@app/app/_components/TopBar'
-import Version from '@app/app/_components/Version'
 import dynamic from 'next/dynamic'
 
 const TaskAdsReward = dynamic(
@@ -31,7 +30,6 @@ export default function Page() {
         <Subscriptions />
         <br />
         <SocialButtons />
-        <Version />
       </div>
     </TmaPage>
   )
