@@ -1,5 +1,6 @@
 'use client'
 import { Auth } from '@app/app/(tma)/_components/Auth'
+import { TmaAdScripts } from '@app/app/(tma)/_components/TmaAdScripts'
 import AnalyticsInit from '@app/app/_components/AnalyticsInit'
 import Loader from '@app/app/_components/Loader'
 import { config } from '@app/config/client'
@@ -87,6 +88,7 @@ export function TMA({ children }: PropsWithChildren) {
 
   return (
     <>
+      <TmaAdScripts />
       <AnalyticsInit />
       <Auth>{children}</Auth>
     </>
