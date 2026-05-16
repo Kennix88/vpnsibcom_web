@@ -37,7 +37,7 @@ export function useFullscreenAd() {
     containerRef.current.style.height = visible ? '100vh' : '0'
     containerRef.current.style.zIndex = visible ? '99' : '-1'
     containerRef.current.style.background = visible
-      ? 'rgba(0, 0, 0, 0.7)'
+      ? 'rgba(0, 0, 0, 1)'
       : 'transparent'
   }, [])
 
