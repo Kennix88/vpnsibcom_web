@@ -48,6 +48,7 @@ interface SilentAuthOptions {
 class ApiClient {
   private instance: AxiosInstance
   private readonly config: ApiClientConfig
+  private reauthPromise: Promise<void> | null = null
 
   constructor(config: ApiClientConfig) {
     this.config = config
@@ -90,45 +91,105 @@ class ApiClient {
   private async handleResponseError(error: AxiosError) {
     const originalRequest = error.config as InternalAxiosRequestConfig & {
       _retry?: boolean
+      _skipAuthRetry?: boolean
     }
 
-    if (error.response?.status !== 401 || originalRequest._retry) {
+    if (
+      error.response?.status !== 401 ||
+      originalRequest._retry ||
+      originalRequest._skipAuthRetry
+    ) {
       return Promise.reject(error)
     }
 
     originalRequest._retry = true
 
-    return this.handleAuthError(error, {
+    await this.handleAuthError(error, {
       redirectTo: originalRequest.url?.includes('/app') ? '/app/login' : '/tma',
     })
+
+    const token = useUserStore.getState().accessToken
+    if (token) {
+      if (!(originalRequest.headers instanceof AxiosHeaders)) {
+        originalRequest.headers = new AxiosHeaders(originalRequest.headers)
+      }
+      originalRequest.headers.set('Authorization', `Bearer ${token}`)
+    }
+
+    return this.instance.request(originalRequest)
   }
 
   private async handleAuthError(error: Error, options: SilentAuthOptions = {}) {
-    const store = useUserStore.getState()
-    store.reset()
-
-    if (typeof window !== 'undefined') {
-      try {
-        const { retrieveRawInitData } = await import('@tma.js/sdk-react')
-        const initData = retrieveRawInitData()
-        if (initData) {
-          const { accessToken, user } = await this.telegramLogin(initData)
-          store.setAccessToken(accessToken)
-          store.setUser(user)
-          // After silent auth, we can retry the original request
-          // This requires more complex logic to replay the request, for now, we just re-throw
-          throw error
-        }
-      } catch (silentAuthError) {
-        console.error('Silent re-auth failed:', silentAuthError)
-      }
+    if (!this.reauthPromise) {
+      this.reauthPromise = this.reauthenticate()
     }
 
+    try {
+      await this.reauthPromise
+      return
+    } catch (silentAuthError) {
+      console.error('Silent re-auth failed:', silentAuthError)
+    } finally {
+      this.reauthPromise = null
+    }
+
+    await useUserStore.getState().reset()
     if (typeof window !== 'undefined' && options.redirectTo) {
       window.location.replace(options.redirectTo)
     }
 
     throw error
+  }
+
+  private async reauthenticate(): Promise<void> {
+    if (typeof window === 'undefined') return
+
+    try {
+      const { data } = await this.instance.post<
+        ApiResponse<{ accessToken: string; user: UserDataInterface }>
+      >(
+        '/auth/refresh',
+        {},
+        {
+          headers: new AxiosHeaders({
+            'X-Silent-Reauth': '1',
+          }),
+          // избегаем рекурсивного auth-retry для самого refresh запроса
+          _skipAuthRetry: true,
+        } as InternalAxiosRequestConfig & { _skipAuthRetry: boolean },
+      )
+
+      const { accessToken, user } = data.data
+      const store = useUserStore.getState()
+      store.setAccessToken(accessToken)
+      store.setUser(user)
+      return
+    } catch {
+      // fallback to telegram login
+    }
+
+    const { retrieveRawInitData } = await import('@tma.js/sdk-react')
+    const initData = retrieveRawInitData()
+    if (!initData) {
+      throw new Error('No Telegram initData found')
+    }
+
+    await this.instance
+      .post<ApiResponse<{ accessToken: string; user: UserDataInterface }>>(
+        '/auth/telegram',
+        { initData },
+        {
+          headers: {
+            'X-Silent-Reauth': '1',
+          },
+        },
+      )
+      .then(({ data }) => {
+        const { accessToken, user } = data.data
+        const store = useUserStore.getState()
+        store.setAccessToken(accessToken)
+        store.setUser(user)
+      })
   }
 
   private async handleApiError(error: unknown): Promise<never> {
