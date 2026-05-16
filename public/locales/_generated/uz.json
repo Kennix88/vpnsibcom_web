@@ -1,1 +1,359 @@
-{"billing":{"title":"Billing","description":"Moliyaviy harakatlaringiz","wallet":{"title":"Hamyon","payment":"To'ldirish","paymentInfo":"To'lovlar uchun ishlatiladigan hisob.","withdrawal":"Yechib olish","withdrawalInfo":"Pul yechib olish mumkin bo'lgan hisob.","holdInfo":"Muzlatilgan mablag'lar.\nYaqin orada ular to'lov hisobiga tushadi."},"payment":{"title":"Balansni to'ldirish","sum":"To'ldirish miqdori","enterSum":"Miqdorni kiriting","sort":{"all":"Hammasi","crypto":"Kriptovalyuta","card":"Kartalar","sbp":"SBP","wallets":"Hamyonlar","skins":"Skinlar"},"method":"To'lov usuli","split":"Telegram Stars'ni KYC'siz, 40% gacha foyda bilan Split platformasida sotib olishingiz mumkin!","splitBay":"STARS sotib olish","walletInfo":"TON, USDT-TON, DOGS, NOT, HMSTR, JETTON va boshqa TON tarmog'idagi tokenlar bilan TON-hamyonni ulab to'lang.","limitMessage":"{min} dan {max} {symbol} gacha mavjud. Hozir: {convertedAmount} {symbol}","commission":"Komissiya","toBalance":"Balansga tushadi","pay":"To'lash"},"subscription":{"title":"Obuna","addSubscription":"Obuna qo'shish","pay":"To'lash","addFree":"🎁 Bepul qo'shish","selectPeriod":"Davrni tanlang","periodMultiplier":"Davr ko'paytirgichi","selectPlan":"Tarifni tanlang","selectServer":"Serverni tanlang","base":"Asosiy","premium":"Premium","orSelect":"yoki tanlash","name":{"default":"Obuna","label":"Obuna nomi","tooltip":"Obunalar ro'yxatida ko'rsatiladigan obuna nomi.","placeholder":"Obuna nomini kiriting"},"privileges":{"selectServers":"Kerakli serverlarni tanlang","oneBaseServer":"Tanlash uchun bitta asosiy server","oneBaseOrPremiumServer":"Tanlash uchun bitta asosiy yoki premium server","accessAllServers":"Barcha serverlarga kirish","accessAllBaseServers":"Barcha asosiy serverlarga kirish","accessBaseServers":"{{baseCount}} asosiy serverlarga kirish","accessBaseAndPremiumServers":"{{baseCount}} asosiy va {{premiumCount}} premium serverlarga kirish","trafficPlan":"Muddatsiz, faqat trafik uchun to'lov!","devices":"{count} tagacha bir vaqtda ishlaydigan qurilmalar","customDevices":"Kerakli miqdordagi qurilmalar","servers":"Barcha serverlarga kirish","baseServers":"Asosiy serverlarga kirish","premiumServers":"Premium serverlarga kirish","customServers":"Kerakli miqdordagi serverlar","traffic":"Cheksiz trafik","customTraffic":"Kerakli miqdordagi trafik","dailyTraffic":"Har kuni {count} GB trafik","weeklyTraffic":"Har hafta {count} GB trafik","monthlyTraffic":"Har oy {count} GB trafik","yearlyTraffic":"Har yili {count} GB trafik","security":"Himoyalangan ulanish","speed":"Tezlik cheklovlari yo'q","masking":"Trafikingizni yashirish","noAds":"Reklamasiz","devicesSupport":"Qurilmalarni keng qo'llab-quvvatlash","xray":"Ishonchli XRAY yadrosi","opensource":"Ochiq kod"},"trafficReset":{"title":"Trafikni tiklash","daily":"Har kuni","weekly":"Har hafta","monthly":"Har oy","yearly":"Har yili"},"period":{"hour":"1 soat","day":"1 kun","week":"1 hafta","month":"1 oy","threeMonth":"3 oy","sixMonth":"6 oy","year":"1 yil","twoYear":"2 yil","threeYear":"3 yil","indefinitely":"Muddatsiz"},"options":{"title":"Parametrlar","autoRenewal":"Avtomatik yangilash","autoRenewalDescription":"Obunani avtomatik ravishda yangilash","info":"Obuna avtomatik ravishda balansingizdan yangilanadi","period":"Davrni eslab qolish"},"traffic":"Trafik","addTraffic":"Trafik qo'shish","addingTraffic":"Trafik qo'shilmoqda","buy":"Sotib olish","extension":"Uaytirish","subscriptionExtension":"Obunani uzaytirish","freeExtension":"🎁 Bepul uzaytirish","summary":{"title":"Jami","name":"Ism","traffic":"Trafik","unlimit":"Cheksiz","daily":"har kuni","weekly":"har hafta","monthly":"har oy","yearly":"har yili","servers":"Serverlar","fullServers":"Barchasiga kirish","allBase":"Barcha asosiy","notServers":"Belgilanmagan!","period":"Davr","periodDiscount":"Davr uchun chegirma","roleDiscount":"Rol uchun chegirma","autoRenewal":"Avtomatik yangilash","yes":"Ha","no":"Yo'q","toPaid":"To'lovga"},"purchase":"Sotib olish"}},"common":{"modal":{"cancel":"Bekor qilish","accept":"Qabul qilish","close":"Yopish"},"scrolling":"Pastga aylantiring","clipboard":{"copied":"Buferga nusxalandi!","failed":"Nusxalash amalga oshmadi!"},"freePlan":{"trialAvailable":"Sizga {days} kunlik sinov muddati mavjud.","activate":"Faollashtirish","activationFailed":"Bepul rejani faollashtirib bo'lmadi"},"units":{"bytes":"B","kilobytes":"KB","megabytes":"MB","gigabytes":"GB","terabytes":"TB","petabytes":"PB","exabytes":"EB","zettabytes":"ZB","yottabytes":"YB"}},"freePlan":{"trialAvailable":"Sizga Trial obunasi uchun cheklanmagan muddatga {gb} Gb bonusli trafik mavjud.","activate":"Faollashtirish","activationFailed":"Bepul rejani faollashtirib bo'lmadi","modalTitle":"Sinov muddatini faollashtirish","modalAction":"Faollashtirish","modalConfirmation":"Haqiqatan ham sinov muddatini faollashtirmoqchimisiz?"},"friends":{"title":"Do'stlar","get":"Mukofot oling","for":"do'stlarni taklif qilish uchun","level":"daraja","total":"Jami","list":{"title":"Sizning do'stlaringiz","top":"Yuqori","empty":"Hozircha hech kim yo'q 🥲"},"bonuses":{"title":"Bonuslar","inviteTitle":"Do'stni taklif qilish uchun","paymentTitle":"Do'stning harakatlari uchun","inviteInfo":"Do'st birinchi to'lovni amalga oshirgandan yoki sinov muddatini faollashtirgandan so'ng!","paymentInfo":"Do'stlar va ularning do'stlari tomonidan taklif qilinganlardan bizning daromadimizdan foiz oling!","lvl1Info":"Siz taklif qilganlar","lvl2Info":"Do'stlar taklif qilganlar","lvl3Info":"Do'stlarning do'stlari taklif qilganlar 😁"},"invite":{"title":"Do'stni taklif qilish","message":"Xabar yuborish","copy":"Havolani nusxalash","story":"Hikoyalarga yuborish"},"statistics":{"title":"Statistika","earnTitle":"Sizning daromadingiz","inviteTitle":"Taklif qilingan","earnInfo":"Siz barcha vaqt davomida ishlab topdingiz","inviteInfo":"Taklif qilingan | Faollashtirilgan | Ulardan Standart | Ulardan Premium"}},"greenCheck":{"loading":"Ulanish xavfsizligi tekshirilmoqda...","danger":"Sizning ulanishingiz HIMOYALANMAGAN!\nVPNni ulang!","success":"Sizning ulanishingiz himoyalangan!"},"navbar":{"home":"Bosh sahifa","earning":"Daromad","gifts":"Sovg'alar","friends":"Do'stlar","billing":"Billing","settings":"Sozlamalar","profile":"Profil","games":"O'yinlar"},"subscriptions":{"title":"Obuna","connection":"Ulanish","configs":"Konfiguratsiyalar","addSubscription":"Obuna qo'shish","addSubscriptionTitle":"Obuna qo'shish","yourSubscriptions":"Sizning obunalaringiz","noSubscriptions":"Sizda faol obunalar yo'q","loading":"Obuna ma'lumotlari yuklanmoqda...","notFound":"Obuna topilmadi","renewSubscription":"Obunani uzaytirish","autoRenewalEnabled":"Avtomatik yangilash yoqilgan","autoRenewalDisabled":"Avtomatik yangilash o'chirilgan","subscriptionDeleted":"Obuna muvaffaqiyatli o'chirildi","subscriptionDataUpdated":"Obuna ma'lumotlari muvaffaqiyatli yangilandi","subscriptionRenewed":"Obuna muvaffaqiyatli uzaytirildi","changeServer":"Serverni o'zgartirish","changeServerTitle":"Serverni o'zgartirish","changeServerWarning":"DIQQAT: Serverni o'zgartirish 2 daqiqa ichida amalga oshiriladi. Serverni o'zgartirgandan so'ng, ilovadagi ma'lumotlarni yangilash kerak!","active":"Faol","notActive":"Faol emas","online":"Onlayn","offline":"Oflayn","traffic":"Trafik","trafficReset":{"daily":"Har kuni","weekly":"Har hafta","monthly":"Har oy","yearly":"Har yili","unlimit":"Cheksiz"},"inTotal":"Jami","servers":"Serverlar","fullServers":"Barchasiga kirish","allBase":"Barcha asosiy","base":"Asosiy","premium":"Premium","devices":"Qurilmalar","period":"To'lov davri","expires":"Tugaydi","autoRenewal":"Avtomatik yangilash","actions":"Harakatlar","save":"Saqlash","required":"Tavsiya etiladi!","paid":"Pullik!","instruction":{"stage1":"Ilovani yuklab olish","stage2":"Ilovaga obuna qo'shish","copyUrl":"Obuna URL manzilini nusxalash","openQR":"Obuna QR-kodi","scanApp":"Ilovada skanerlash","scanPhone":"Telefonda skanerlash","add":"Ilovaga qo'shish"},"platform":"Platforma","success":{"serversUpdated":"Serverlar muvaffaqiyatli yangilandi"},"errors":{"loadFailed":"Obunalarni yuklab bo'lmadi","disableAutoRenewalFailed":"Avtomatik yangilashni o'chirishda xato!","enableAutoRenewalFailed":"Avtomatik yangilashni yoqishda xato!","deleteSubscriptionFailed":"Obunani o'chirishda xato!","resetSubscriptionFailed":"Obuna ma'lumotlarini tiklashda xato!","renewSubscriptionFailed":"Obunani uzaytirib bo'lmadi!","fetchingServers":"Serverlarni yuklab bo'lmadi","updatingServers":"Serverlarni yangilab bo'lmadi","serverLimitReached":"Serverlar bo'yicha limitga yetdingiz","serverLimitReachedPremium":"Premium serverlar bo'yicha limitga yetdingiz","serverLimitReachedBase":"Asosiy serverlar bo'yicha limitga yetdingiz"},"periods":{"trial":"Sinov muddati","hour":"1 soat","day":"1 kun","week":"1 hafta","month":"1 oy","threeMonth":"3 oy","sixMonth":"6 oy","year":"1 yil","twoYear":"2 yil","threeYear":"3 yil","indefinitely":"Muddatsiz"},"modals":{"delete":{"title":"Obunani o'chirish","button":"O'chirish","action":"O'chirish","message":"Obunani butunlay o'chirib tashlashni xohlaysizmi? Uni tiklab bo'lmaydi! Kompensatsiya ko'zda tutilmagan!"},"qr":{"title":"Obuna QR-kodi","description":"Mijoz ilovasida skanerlang"},"refresh":{"title":"Obuna ma'lumotlarini tiklash","button":"Ma'lumotlarni tiklash","action":"Tiklash","message":"Obuna ma'lumotlarini tiklashni xohlaysizmi? Shundan so'ng kalitlar va obuna manzili yangilariga o'zgaradi! Obunani ilovaga qayta qo'shish kerak bo'ladi! Odatda, obunangiz tarmoqqa sizib chiqqan yoki kimdir unga kirish huquqiga ega bo'lgan bo'lsa, tiklash amalga oshiriladi!"},"autoRenewal":{"enableTitle":"Avtomatik yangilashni yoqish","disableTitle":"Avtomatik yangilashni o'chirish","enableAction":"Yoqish","disableAction":"O'chirish","enableMessage":"Obunani avtomatik yangilashni yoqishni xohlaysizmi? Obuna muddati tugagach, mablag'lar avtomatik ravishda yechib olinadi.","disableMessage":"Obunani avtomatik yangilashni o'chirishni xohlaysizmi? Muddati tugagach, obuna faolsizlantiriladi."},"renew":{"title":"Obunani uzaytirish","action":"Uzaytirish","message":"Obunani uzaytirishni xohlaysizmi? Balansingizdan {price} yulduz yechib olinadi."}}},"user":{"role":"Rol","discount":"Chegirma","wallet":"Hamyon","usage":"Foydalanish","inPayments":"to'lovlarda"},"wallet":{"connect":"TON-hamyonni ulash","disconnect":"Ajratish","replace":"Almashtirish"},"earning":{"title":"Earning","earned":"Reward received","rewardTask":{"title":"Watch ad"}}}
+{
+  "billing": {
+    "title": "Billing",
+    "description": "Moliyaviy harakatlaringiz",
+    "wallet": {
+      "title": "Hamyon",
+      "payment": "To'ldirish",
+      "paymentInfo": "To'lovlar uchun ishlatiladigan hisob.",
+      "withdrawal": "Yechib olish",
+      "withdrawalInfo": "Pul yechib olish mumkin bo'lgan hisob.",
+      "holdInfo": "Muzlatilgan mablag'lar.\nYaqin orada ular to'lov hisobiga tushadi."
+    },
+    "payment": {
+      "title": "Balansni to'ldirish",
+      "sum": "To'ldirish miqdori",
+      "enterSum": "Miqdorni kiriting",
+      "sort": {
+        "all": "Hammasi",
+        "crypto": "Kriptovalyuta",
+        "card": "Kartalar",
+        "sbp": "SBP",
+        "wallets": "Hamyonlar",
+        "skins": "Skinlar"
+      },
+      "method": "To'lov usuli",
+      "split": "Telegram Stars'ni KYC'siz, 40% gacha foyda bilan Split platformasida sotib olishingiz mumkin!",
+      "splitBay": "STARS sotib olish",
+      "walletInfo": "TON, USDT-TON, DOGS, NOT, HMSTR, JETTON va boshqa TON tarmog'idagi tokenlar bilan TON-hamyonni ulab to'lang.",
+      "limitMessage": "{min} dan {max} {symbol} gacha mavjud. Hozir: {convertedAmount} {symbol}",
+      "commission": "Komissiya",
+      "toBalance": "Balansga tushadi",
+      "pay": "To'lash"
+    },
+    "subscription": {
+      "title": "Obuna",
+      "addSubscription": "Obuna qo'shish",
+      "pay": "To'lash",
+      "addFree": "🎁 Bepul qo'shish",
+      "selectPeriod": "Davrni tanlang",
+      "periodMultiplier": "Davr ko'paytirgichi",
+      "selectPlan": "Tarifni tanlang",
+      "selectServer": "Serverni tanlang",
+      "base": "Asosiy",
+      "premium": "Premium",
+      "orSelect": "yoki tanlash",
+      "name": {
+        "default": "Obuna",
+        "label": "Obuna nomi",
+        "tooltip": "Obunalar ro'yxatida ko'rsatiladigan obuna nomi.",
+        "placeholder": "Obuna nomini kiriting"
+      },
+      "privileges": {
+        "selectServers": "Kerakli serverlarni tanlang",
+        "oneBaseServer": "Tanlash uchun bitta asosiy server",
+        "oneBaseOrPremiumServer": "Tanlash uchun bitta asosiy yoki premium server",
+        "accessAllServers": "Barcha serverlarga kirish",
+        "accessAllBaseServers": "Barcha asosiy serverlarga kirish",
+        "accessBaseServers": "{{baseCount}} asosiy serverlarga kirish",
+        "accessBaseAndPremiumServers": "{{baseCount}} asosiy va {{premiumCount}} premium serverlarga kirish",
+        "trafficPlan": "Muddatsiz, faqat trafik uchun to'lov!",
+        "devices": "{count} tagacha bir vaqtda ishlaydigan qurilmalar",
+        "customDevices": "Kerakli miqdordagi qurilmalar",
+        "servers": "Barcha serverlarga kirish",
+        "baseServers": "Asosiy serverlarga kirish",
+        "premiumServers": "Premium serverlarga kirish",
+        "customServers": "Kerakli miqdordagi serverlar",
+        "traffic": "Cheksiz trafik",
+        "customTraffic": "Kerakli miqdordagi trafik",
+        "dailyTraffic": "Har kuni {count} GB trafik",
+        "weeklyTraffic": "Har hafta {count} GB trafik",
+        "monthlyTraffic": "Har oy {count} GB trafik",
+        "yearlyTraffic": "Har yili {count} GB trafik",
+        "security": "Himoyalangan ulanish",
+        "speed": "Tezlik cheklovlari yo'q",
+        "masking": "Trafikingizni yashirish",
+        "noAds": "Reklamasiz",
+        "devicesSupport": "Qurilmalarni keng qo'llab-quvvatlash",
+        "xray": "Ishonchli XRAY yadrosi",
+        "opensource": "Ochiq kod"
+      },
+      "trafficReset": {
+        "title": "Trafikni tiklash",
+        "daily": "Har kuni",
+        "weekly": "Har hafta",
+        "monthly": "Har oy",
+        "yearly": "Har yili"
+      },
+      "period": {
+        "hour": "1 soat",
+        "day": "1 kun",
+        "week": "1 hafta",
+        "month": "1 oy",
+        "threeMonth": "3 oy",
+        "sixMonth": "6 oy",
+        "year": "1 yil",
+        "twoYear": "2 yil",
+        "threeYear": "3 yil",
+        "indefinitely": "Muddatsiz"
+      },
+      "options": {
+        "title": "Parametrlar",
+        "autoRenewal": "Avtomatik yangilash",
+        "autoRenewalDescription": "Obunani avtomatik ravishda yangilash",
+        "info": "Obuna avtomatik ravishda balansingizdan yangilanadi",
+        "period": "Davrni eslab qolish"
+      },
+      "traffic": "Trafik",
+      "addTraffic": "Trafik qo'shish",
+      "addingTraffic": "Trafik qo'shilmoqda",
+      "buy": "Sotib olish",
+      "extension": "Uaytirish",
+      "subscriptionExtension": "Obunani uzaytirish",
+      "freeExtension": "🎁 Bepul uzaytirish",
+      "summary": {
+        "title": "Jami",
+        "name": "Ism",
+        "traffic": "Trafik",
+        "unlimit": "Cheksiz",
+        "daily": "har kuni",
+        "weekly": "har hafta",
+        "monthly": "har oy",
+        "yearly": "har yili",
+        "servers": "Serverlar",
+        "fullServers": "Barchasiga kirish",
+        "allBase": "Barcha asosiy",
+        "notServers": "Belgilanmagan!",
+        "period": "Davr",
+        "periodDiscount": "Davr uchun chegirma",
+        "roleDiscount": "Rol uchun chegirma",
+        "autoRenewal": "Avtomatik yangilash",
+        "yes": "Ha",
+        "no": "Yo'q",
+        "toPaid": "To'lovga"
+      },
+      "purchase": "Sotib olish"
+    }
+  },
+  "common": {
+    "modal": {
+      "cancel": "Bekor qilish",
+      "accept": "Qabul qilish",
+      "close": "Yopish"
+    },
+    "scrolling": "Pastga aylantiring",
+    "clipboard": {
+      "copied": "Buferga nusxalandi!",
+      "failed": "Nusxalash amalga oshmadi!"
+    },
+    "freePlan": {
+      "trialAvailable": "Sizga {days} kunlik sinov muddati mavjud.",
+      "activate": "Faollashtirish",
+      "activationFailed": "Bepul rejani faollashtirib bo'lmadi"
+    },
+    "units": {
+      "bytes": "B",
+      "kilobytes": "KB",
+      "megabytes": "MB",
+      "gigabytes": "GB",
+      "terabytes": "TB",
+      "petabytes": "PB",
+      "exabytes": "EB",
+      "zettabytes": "ZB",
+      "yottabytes": "YB"
+    }
+  },
+  "freePlan": {
+    "trialAvailable": "Sizga Trial obunasi uchun cheklanmagan muddatga {gb} Gb bonusli trafik mavjud.",
+    "activate": "Faollashtirish",
+    "activationFailed": "Bepul rejani faollashtirib bo'lmadi",
+    "modalTitle": "Sinov muddatini faollashtirish",
+    "modalAction": "Faollashtirish",
+    "modalConfirmation": "Haqiqatan ham sinov muddatini faollashtirmoqchimisiz?"
+  },
+  "friends": {
+    "title": "Do'stlar",
+    "get": "Mukofot oling",
+    "for": "do'stlarni taklif qilish uchun",
+    "level": "daraja",
+    "total": "Jami",
+    "list": {
+      "title": "Sizning do'stlaringiz",
+      "top": "Yuqori",
+      "empty": "Hozircha hech kim yo'q 🥲"
+    },
+    "bonuses": {
+      "title": "Bonuslar",
+      "inviteTitle": "Do'stni taklif qilish uchun",
+      "paymentTitle": "Do'stning harakatlari uchun",
+      "inviteInfo": "Do'st birinchi to'lovni amalga oshirgandan yoki sinov muddatini faollashtirgandan so'ng!",
+      "paymentInfo": "Do'stlar va ularning do'stlari tomonidan taklif qilinganlardan bizning daromadimizdan foiz oling!",
+      "lvl1Info": "Siz taklif qilganlar",
+      "lvl2Info": "Do'stlar taklif qilganlar",
+      "lvl3Info": "Do'stlarning do'stlari taklif qilganlar 😁"
+    },
+    "invite": {
+      "title": "Do'stni taklif qilish",
+      "message": "Xabar yuborish",
+      "copy": "Havolani nusxalash",
+      "story": "Hikoyalarga yuborish"
+    },
+    "statistics": {
+      "title": "Statistika",
+      "earnTitle": "Sizning daromadingiz",
+      "inviteTitle": "Taklif qilingan",
+      "earnInfo": "Siz barcha vaqt davomida ishlab topdingiz",
+      "inviteInfo": "Taklif qilingan | Faollashtirilgan | Ulardan Standart | Ulardan Premium"
+    }
+  },
+  "greenCheck": {
+    "loading": "Ulanish xavfsizligi tekshirilmoqda...",
+    "danger": "Sizning ulanishingiz HIMOYALANMAGAN!\nVPNni ulang!",
+    "success": "Sizning ulanishingiz himoyalangan!"
+  },
+  "navbar": {
+    "home": "Bosh sahifa",
+    "earning": "Daromad",
+    "gifts": "Sovg'alar",
+    "friends": "Do'stlar",
+    "billing": "Billing",
+    "settings": "Sozlamalar",
+    "profile": "Profil",
+    "games": "O'yinlar"
+  },
+  "subscriptions": {
+    "title": "Obuna",
+    "connection": "Ulanish",
+    "configs": "Konfiguratsiyalar",
+    "addSubscription": "Obuna qo'shish",
+    "addSubscriptionTitle": "Obuna qo'shish",
+    "yourSubscriptions": "Sizning obunalaringiz",
+    "noSubscriptions": "Sizda faol obunalar yo'q",
+    "loading": "Obuna ma'lumotlari yuklanmoqda...",
+    "notFound": "Obuna topilmadi",
+    "renewSubscription": "Obunani uzaytirish",
+    "autoRenewalEnabled": "Avtomatik yangilash yoqilgan",
+    "autoRenewalDisabled": "Avtomatik yangilash o'chirilgan",
+    "subscriptionDeleted": "Obuna muvaffaqiyatli o'chirildi",
+    "subscriptionDataUpdated": "Obuna ma'lumotlari muvaffaqiyatli yangilandi",
+    "subscriptionRenewed": "Obuna muvaffaqiyatli uzaytirildi",
+    "changeServer": "Serverni o'zgartirish",
+    "changeServerTitle": "Serverni o'zgartirish",
+    "changeServerWarning": "DIQQAT: Serverni o'zgartirish 2 daqiqa ichida amalga oshiriladi. Serverni o'zgartirgandan so'ng, ilovadagi ma'lumotlarni yangilash kerak!",
+    "active": "Faol",
+    "notActive": "Faol emas",
+    "online": "Onlayn",
+    "offline": "Oflayn",
+    "traffic": "Trafik",
+    "trafficReset": {
+      "daily": "Har kuni",
+      "weekly": "Har hafta",
+      "monthly": "Har oy",
+      "yearly": "Har yili",
+      "unlimit": "Cheksiz"
+    },
+    "inTotal": "Jami",
+    "servers": "Serverlar",
+    "fullServers": "Barchasiga kirish",
+    "allBase": "Barcha asosiy",
+    "base": "Asosiy",
+    "premium": "Premium",
+    "devices": "Qurilmalar",
+    "period": "To'lov davri",
+    "expires": "Tugaydi",
+    "autoRenewal": "Avtomatik yangilash",
+    "actions": "Harakatlar",
+    "save": "Saqlash",
+    "required": "Tavsiya etiladi!",
+    "paid": "Pullik!",
+    "instruction": {
+      "stage1": "Ilovani yuklab olish",
+      "stage2": "Ilovaga obuna qo'shish",
+      "copyUrl": "Obuna URL manzilini nusxalash",
+      "openQR": "Obuna QR-kodi",
+      "scanApp": "Ilovada skanerlash",
+      "scanPhone": "Telefonda skanerlash",
+      "add": "Ilovaga qo'shish"
+    },
+    "platform": "Platforma",
+    "success": {
+      "serversUpdated": "Serverlar muvaffaqiyatli yangilandi"
+    },
+    "errors": {
+      "loadFailed": "Obunalarni yuklab bo'lmadi",
+      "disableAutoRenewalFailed": "Avtomatik yangilashni o'chirishda xato!",
+      "enableAutoRenewalFailed": "Avtomatik yangilashni yoqishda xato!",
+      "deleteSubscriptionFailed": "Obunani o'chirishda xato!",
+      "resetSubscriptionFailed": "Obuna ma'lumotlarini tiklashda xato!",
+      "renewSubscriptionFailed": "Obunani uzaytirib bo'lmadi!",
+      "fetchingServers": "Serverlarni yuklab bo'lmadi",
+      "updatingServers": "Serverlarni yangilab bo'lmadi",
+      "serverLimitReached": "Serverlar bo'yicha limitga yetdingiz",
+      "serverLimitReachedPremium": "Premium serverlar bo'yicha limitga yetdingiz",
+      "serverLimitReachedBase": "Asosiy serverlar bo'yicha limitga yetdingiz"
+    },
+    "periods": {
+      "trial": "Sinov muddati",
+      "hour": "1 soat",
+      "day": "1 kun",
+      "week": "1 hafta",
+      "month": "1 oy",
+      "threeMonth": "3 oy",
+      "sixMonth": "6 oy",
+      "year": "1 yil",
+      "twoYear": "2 yil",
+      "threeYear": "3 yil",
+      "indefinitely": "Muddatsiz"
+    },
+    "modals": {
+      "delete": {
+        "title": "Obunani o'chirish",
+        "button": "O'chirish",
+        "action": "O'chirish",
+        "message": "Obunani butunlay o'chirib tashlashni xohlaysizmi? Uni tiklab bo'lmaydi! Kompensatsiya ko'zda tutilmagan!"
+      },
+      "qr": {
+        "title": "Obuna QR-kodi",
+        "description": "Mijoz ilovasida skanerlang"
+      },
+      "refresh": {
+        "title": "Obuna ma'lumotlarini tiklash",
+        "button": "Ma'lumotlarni tiklash",
+        "action": "Tiklash",
+        "message": "Obuna ma'lumotlarini tiklashni xohlaysizmi? Shundan so'ng kalitlar va obuna manzili yangilariga o'zgaradi! Obunani ilovaga qayta qo'shish kerak bo'ladi! Odatda, obunangiz tarmoqqa sizib chiqqan yoki kimdir unga kirish huquqiga ega bo'lgan bo'lsa, tiklash amalga oshiriladi!"
+      },
+      "autoRenewal": {
+        "enableTitle": "Avtomatik yangilashni yoqish",
+        "disableTitle": "Avtomatik yangilashni o'chirish",
+        "enableAction": "Yoqish",
+        "disableAction": "O'chirish",
+        "enableMessage": "Obunani avtomatik yangilashni yoqishni xohlaysizmi? Obuna muddati tugagach, mablag'lar avtomatik ravishda yechib olinadi.",
+        "disableMessage": "Obunani avtomatik yangilashni o'chirishni xohlaysizmi? Muddati tugagach, obuna faolsizlantiriladi."
+      },
+      "renew": {
+        "title": "Obunani uzaytirish",
+        "action": "Uzaytirish",
+        "message": "Obunani uzaytirishni xohlaysizmi? Balansingizdan {price} yulduz yechib olinadi."
+      }
+    }
+  },
+  "user": {
+    "role": "Rol",
+    "discount": "Chegirma",
+    "wallet": "Hamyon",
+    "usage": "Foydalanish",
+    "inPayments": "to'lovlarda"
+  },
+  "wallet": {
+    "connect": "TON-hamyonni ulash",
+    "disconnect": "Ajratish",
+    "replace": "Almashtirish"
+  },
+  "earning": {
+    "title": "Earning",
+    "earned": "Reward received",
+    "rewardTask": {
+      "title": "Watch ad"
+    }
+  }
+}
