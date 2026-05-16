@@ -7,8 +7,8 @@ import LanguageSwitcher from '@app/app/_components/LanguageSwitcher'
 import SocialButtons from '@app/app/_components/SocialButtons'
 import { TonWalletConnect } from '@app/app/_components/ton/TonWalletConnect'
 import { TonWalletManager } from '@app/app/_components/ton/TonWalletManager'
-import Version from '@app/app/_components/Version'
 import { authApiClient } from '@app/core/authApiClient'
+import { UserRolesEnum } from '@app/enums/user-roles.enum'
 import { useSlicedAddress } from '@app/hooks/useSlicedAddress'
 import { useUserStore } from '@app/store/user.store'
 import { useCopyToClipboard } from '@app/utils/copy-to-clipboard.util'
@@ -104,23 +104,25 @@ export default function Page() {
               {user && limitLengthString(user.id)} <FaCopy />
             </div>
           </div>
-          <div
-            className={
-              'flex flex-row flex-wrap items-center justify-between gap-2 py-2'
-            }>
+          {user && user.role !== UserRolesEnum.USER && (
             <div
               className={
-                'font-medium text-[var(--on-background)]/80 font-mono'
+                'flex flex-row flex-wrap items-center justify-between gap-2 py-2'
               }>
-              {t('role')}:
+              <div
+                className={
+                  'font-medium text-[var(--on-background)]/80 font-mono'
+                }>
+                {t('role')}:
+              </div>
+              <div
+                className={
+                  'text-sm font-bold font-mono text-[var(--on-primary-container)] flex flex-row gap-2 transition-all duration-200 hover:brightness-110 active:scale-[0.97]'
+                }>
+                {user && user.roleName.toUpperCase()}
+              </div>
             </div>
-            <div
-              className={
-                'text-sm font-bold font-mono text-[var(--on-primary-container)] flex flex-row gap-2 transition-all duration-200 hover:brightness-110 active:scale-[0.97]'
-              }>
-              {user && user.roleName.toUpperCase()}
-            </div>
-          </div>
+          )}
 
           {user &&
             user.roleDiscount !== null &&
@@ -176,7 +178,7 @@ export default function Page() {
       </div>
       <div className="flex flex-col mt-8 gap-4">
         <SocialButtons />
-        <Version />
+        {/*<Version />*/}
       </div>
     </TmaPage>
   )
