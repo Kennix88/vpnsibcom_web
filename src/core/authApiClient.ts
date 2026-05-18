@@ -105,7 +105,7 @@ class ApiClient {
     originalRequest._retry = true
 
     await this.handleAuthError(error, {
-      redirectTo: originalRequest.url?.includes('/app') ? '/app/login' : '/tma',
+      redirectTo: originalRequest.url?.includes('/app') ? '/app/login' : undefined,
     })
 
     const token = useUserStore.getState().accessToken
@@ -135,7 +135,10 @@ class ApiClient {
 
     await useUserStore.getState().reset()
     if (typeof window !== 'undefined' && options.redirectTo) {
-      window.location.replace(options.redirectTo)
+      const current = `${window.location.pathname}${window.location.search}`
+      if (current !== options.redirectTo) {
+        window.location.replace(options.redirectTo)
+      }
     }
 
     throw error
@@ -150,11 +153,8 @@ class ApiClient {
       >(
         '/auth/refresh',
         {},
+        // избегаем рекурсивного auth-retry для самого refresh запроса
         {
-          headers: new AxiosHeaders({
-            'X-Silent-Reauth': '1',
-          }),
-          // избегаем рекурсивного auth-retry для самого refresh запроса
           _skipAuthRetry: true,
         } as InternalAxiosRequestConfig & { _skipAuthRetry: boolean },
       )
@@ -182,11 +182,6 @@ class ApiClient {
       .post<ApiResponse<{ accessToken: string; user: UserDataInterface }>>(
         '/auth/telegram',
         { initData, ...(startParam ? { startParam } : {}) },
-        {
-          headers: {
-            'X-Silent-Reauth': '1',
-          },
-        },
       )
       .then(({ data }) => {
         const { accessToken, user } = data.data
