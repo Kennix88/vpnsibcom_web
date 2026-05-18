@@ -3,12 +3,15 @@
 import { config } from '@app/config/client'
 import { useEffect, useRef } from 'react'
 
+let isTaddyInterstitialRunning = false
+
 type Props = {
   pubId?: string
   payload?: Record<string, unknown>
   onClosed?: () => void
   onViewThrough?: (id: string) => void
   onShow?: (success: boolean) => void
+  onStartFailed?: () => void
   waitForMs?: number
 }
 
@@ -18,6 +21,7 @@ export default function TaddyInterstitial({
   onClosed,
   onViewThrough,
   onShow,
+  onStartFailed,
   waitForMs = 3000,
 }: Props) {
   const startedRef = useRef(false)
@@ -48,18 +52,26 @@ export default function TaddyInterstitial({
     }
 
     const run = async () => {
+      let interstitialStarted = false
       try {
+        if (isTaddyInterstitialRunning) {
+          console.warn('Taddy interstitial already running, skip duplicate call')
+          onStartFailed?.()
+          return
+        }
+        isTaddyInterstitialRunning = true
+
         const taddy = await waitForTaddy()
 
         if (!taddy) {
           console.warn('Taddy SDK not available on window')
-          onShow?.(false)
+          onStartFailed?.()
           return
         }
 
         if (!pubId) {
           console.warn('Taddy pubId is not configured')
-          onShow?.(false)
+          onStartFailed?.()
           return
         }
 
@@ -73,6 +85,7 @@ export default function TaddyInterstitial({
           await taddy.ready()
         }
 
+        interstitialStarted = true
         const success = await taddy.ads().interstitial({
           payload,
           onClosed: () => {
@@ -92,9 +105,11 @@ export default function TaddyInterstitial({
         }
       } catch (error) {
         console.error('Failed to show Taddy interstitial', error)
-        if (!cancelled) {
-          onShow?.(false)
+        if (!cancelled && !interstitialStarted) {
+          onStartFailed?.()
         }
+      } finally {
+        isTaddyInterstitialRunning = false
       }
     }
 
@@ -104,7 +119,15 @@ export default function TaddyInterstitial({
       cancelled = true
       window.clearTimeout(timerId)
     }
-  }, [onClosed, onShow, onViewThrough, payload, pubId, waitForMs])
+  }, [
+    onClosed,
+    onShow,
+    onStartFailed,
+    onViewThrough,
+    payload,
+    pubId,
+    waitForMs,
+  ])
 
   return null
 }
