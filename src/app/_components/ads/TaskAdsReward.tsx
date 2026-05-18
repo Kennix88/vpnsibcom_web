@@ -13,6 +13,10 @@ import { FaPlay } from 'react-icons/fa6'
 import { MdDoubleArrow } from 'react-icons/md'
 import { toast } from 'react-toastify'
 import Currency from '../Currency'
+import {
+  releaseAdDisplayLock,
+  tryAcquireAdDisplayLock,
+} from './adDisplayLock'
 import { CountdownTimer } from './CountdownTimer'
 
 const createAdContainer = () => {
@@ -25,6 +29,7 @@ const createAdContainer = () => {
 }
 
 export function TaskAdsReward() {
+  const TASK_AD_OWNER = 'task-reward-ad'
   const OVERLAY_TIMEOUT_MS = 25000
   const isTaddyEnabled = config.isTaddyEnabled as boolean
 
@@ -66,6 +71,7 @@ export function TaskAdsReward() {
     }
     isShowingRef.current = false
     adRef.current = null
+    releaseAdDisplayLock(TASK_AD_OWNER)
   }, [resetOverlayTimeout])
 
   const scheduleCleanup = useCallback(() => {
@@ -99,6 +105,7 @@ export function TaskAdsReward() {
   const fetchAd = useCallback(async (): Promise<void> => {
     try {
       if (isShowingRef.current) return
+      if (!tryAcquireAdDisplayLock(TASK_AD_OWNER)) return
       isShowingRef.current = true
 
       const response = await authApiClient.getAds(
@@ -170,10 +177,8 @@ export function TaskAdsReward() {
               onViewThrough={() => {
                 void handleReward(true)
               }}
-              onShow={(success) => {
-                if (!success) {
-                  void showFallbackAd()
-                }
+              onStartFailed={() => {
+                void showFallbackAd()
               }}
             />,
           )
