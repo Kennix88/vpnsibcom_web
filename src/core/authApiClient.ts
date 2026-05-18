@@ -168,8 +168,12 @@ class ApiClient {
       // fallback to telegram login
     }
 
-    const { retrieveRawInitData } = await import('@tma.js/sdk-react')
+    const { retrieveLaunchParams, retrieveRawInitData } = await import(
+      '@tma.js/sdk-react'
+    )
     const initData = retrieveRawInitData()
+    const launchParams = retrieveLaunchParams()
+    const startParam = launchParams.tgWebAppStartParam?.trim()
     if (!initData) {
       throw new Error('No Telegram initData found')
     }
@@ -177,7 +181,7 @@ class ApiClient {
     await this.instance
       .post<ApiResponse<{ accessToken: string; user: UserDataInterface }>>(
         '/auth/telegram',
-        { initData },
+        { initData, ...(startParam ? { startParam } : {}) },
         {
           headers: {
             'X-Silent-Reauth': '1',
@@ -224,12 +228,15 @@ class ApiClient {
   }
 
   // Authentication methods
-  async telegramLogin(initData: string) {
+  async telegramLogin(initData: string, startParam?: string) {
     return this.safeRequest<{ accessToken: string; user: UserDataInterface }>(
       async () => {
         const { data } = await this.instance.post<
           ApiResponse<{ accessToken: string; user: UserDataInterface }>
-        >('/auth/telegram', { initData })
+        >('/auth/telegram', {
+          initData,
+          ...(startParam?.trim() ? { startParam: startParam.trim() } : {}),
+        })
 
         const { accessToken, user } = data.data
         const store = useUserStore.getState()
