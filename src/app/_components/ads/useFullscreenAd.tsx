@@ -11,6 +11,10 @@ import { AdsPlaceEnum } from '@app/enums/ads-place.enum'
 import { AdsDataInterface } from '@app/enums/ads-res.interface'
 import { AdsTypeEnum } from '@app/enums/ads-type.enum'
 import { useUserStore } from '@app/store/user.store'
+import {
+  releaseAdDisplayLock,
+  tryAcquireAdDisplayLock,
+} from './adDisplayLock'
 
 const createAdContainer = () => {
   const div = document.createElement('div')
@@ -22,6 +26,7 @@ const createAdContainer = () => {
 }
 
 export function useFullscreenAd() {
+  const FULLSCREEN_AD_OWNER = 'fullscreen-ad'
   const OVERLAY_TIMEOUT_MS = 25000
   const isTaddyEnabled = config.isTaddyEnabled as boolean
   const { user } = useUserStore()
@@ -74,6 +79,7 @@ export function useFullscreenAd() {
       containerRef.current = null
     }
     adRef.current = null
+    releaseAdDisplayLock(FULLSCREEN_AD_OWNER)
   }, [resetOverlayTimeout])
 
   const scheduleCleanup = useCallback(() => {
@@ -96,6 +102,9 @@ export function useFullscreenAd() {
             addMinutes(new Date(user.lastFullscreenViewedAt), 3),
           )
         ) {
+          return
+        }
+        if (!tryAcquireAdDisplayLock(FULLSCREEN_AD_OWNER)) {
           return
         }
 
@@ -169,10 +178,8 @@ export function useFullscreenAd() {
               onClosed={() => {
                 void handleClose(true)
               }}
-              onShow={(success) => {
-                if (!success) {
-                  void showFallbackAd()
-                }
+              onStartFailed={() => {
+                void showFallbackAd()
               }}
             />,
           )
