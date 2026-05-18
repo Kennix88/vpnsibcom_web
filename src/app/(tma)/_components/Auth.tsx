@@ -21,8 +21,12 @@ export function Auth({ children }: PropsWithChildren) {
         return
       }
 
-      const { retrieveRawInitData } = await import('@tma.js/sdk-react')
+      const { retrieveLaunchParams, retrieveRawInitData } = await import(
+        '@tma.js/sdk-react'
+      )
       const initDataRaw = retrieveRawInitData()
+      const launchParams = retrieveLaunchParams()
+      const startParam = launchParams.tgWebAppStartParam?.trim()
       // await clearClientPersistence()
       if (!initDataRaw) {
         console.warn('No Telegram initData found')
@@ -36,7 +40,7 @@ export function Auth({ children }: PropsWithChildren) {
       bootstrapAuthPromise = (async () => {
         try {
           const { accessToken: newToken, user: newUser } =
-            await authApiClient.telegramLogin(initDataRaw)
+            await authApiClient.telegramLogin(initDataRaw, startParam)
           setAccessToken(newToken)
           setUser(newUser)
         } catch (err) {
