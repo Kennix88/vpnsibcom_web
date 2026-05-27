@@ -32,18 +32,15 @@ export default function Page() {
   return (
     <TmaPage back={true}>
       <TopBar />
-      <div className="flex flex-row gap-4 my-4 flex-wrap justify-center">
-        <div className="flex flex-col gap-2 uppercase font-mono w-full">
+      <div className="flex flex-col gap-4 mt-4 flex-wrap justify-center items-center">
+        <div className="flex flex-col gap-2 uppercase font-mono w-full max-w-md">
           <div className="text-2xl font-bold ">{t('title')}</div>
           {/*<div className="text-md font-bold font-mono">*/}
           {/*  {t('get')} <span className="opacity-80 font-normal">{t('for')}</span>*/}
           {/*</div>*/}
         </div>
         <Payments />
-      </div>
-      <div className="flex flex-col gap-4">
         <SocialButtons />
-        {/*<Version />*/}
       </div>
     </TmaPage>
   )
