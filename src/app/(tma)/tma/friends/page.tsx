@@ -34,16 +34,13 @@ export default function Page() {
   return (
     <TmaPage back={false}>
       <TopBar />
-      <div className="flex flex-row gap-4 my-4 flex-wrap justify-center">
+      <div className="flex flex-col gap-4 my-4 justify-center items-center max-w-md w-full">
         <FriendsTitle />
         <FriendsBonuses />
         <FriendsInviteButtons />
         <FriendsStatistics />
         {/*<FriendsList />*/}
-      </div>
-      <div className="flex flex-col gap-4">
         <SocialButtons />
-        {/*<Version />*/}
       </div>
     </TmaPage>
   )
