@@ -11,10 +11,7 @@ import { AdsPlaceEnum } from '@app/enums/ads-place.enum'
 import { AdsDataInterface } from '@app/enums/ads-res.interface'
 import { AdsTypeEnum } from '@app/enums/ads-type.enum'
 import { useUserStore } from '@app/store/user.store'
-import {
-  releaseAdDisplayLock,
-  tryAcquireAdDisplayLock,
-} from './adDisplayLock'
+import { releaseAdDisplayLock, tryAcquireAdDisplayLock } from './adDisplayLock'
 
 const createAdContainer = () => {
   const div = document.createElement('div')
@@ -175,10 +172,22 @@ export function useFullscreenAd() {
 
           root.render(
             <TaddyInterstitial
+              canCloseImmediately={true}
               onClosed={() => {
                 void handleClose(true)
               }}
+              autoCloseOnViewed={false}
+              // demo={true}
+              onShow={(isShow) => {
+                if (isShow) void handleClose(true)
+              }}
               onStartFailed={() => {
+                void showFallbackAd()
+              }}
+              onError={() => {
+                void showFallbackAd()
+              }}
+              onNoFill={() => {
                 void showFallbackAd()
               }}
             />,
