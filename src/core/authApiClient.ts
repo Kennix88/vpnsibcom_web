@@ -147,13 +147,12 @@ class ApiClient {
   private async reauthenticate(): Promise<void> {
     if (typeof window === 'undefined') return
 
-    try {
+    const loginViaTelegram = async (initData: string, startParam?: string) => {
       const { data } = await this.instance.post<
         ApiResponse<{ accessToken: string; user: UserDataInterface }>
       >(
-        '/auth/refresh',
-        {},
-        // избегаем рекурсивного auth-retry для самого refresh запроса
+        '/auth/telegram',
+        { initData, ...(startParam ? { startParam } : {}) },
         {
           _skipAuthRetry: true,
         } as InternalAxiosRequestConfig & { _skipAuthRetry: boolean },
@@ -163,32 +162,37 @@ class ApiClient {
       const store = useUserStore.getState()
       store.setAccessToken(accessToken)
       store.setUser(user)
-      return
-    } catch {
-      // fallback to telegram login
     }
 
-    const { retrieveLaunchParams, retrieveRawInitData } = await import(
-      '@tma.js/sdk-react'
-    )
-    const initData = retrieveRawInitData()
-    const launchParams = retrieveLaunchParams()
-    const startParam = launchParams.tgWebAppStartParam?.trim()
-    if (!initData) {
-      throw new Error('No Telegram initData found')
-    }
-
-    await this.instance
-      .post<ApiResponse<{ accessToken: string; user: UserDataInterface }>>(
-        '/auth/telegram',
-        { initData, ...(startParam ? { startParam } : {}) },
+    try {
+      const { retrieveLaunchParams, retrieveRawInitData } = await import(
+        '@tma.js/sdk-react'
       )
-      .then(({ data }) => {
-        const { accessToken, user } = data.data
-        const store = useUserStore.getState()
-        store.setAccessToken(accessToken)
-        store.setUser(user)
-      })
+      const initData = retrieveRawInitData()
+      if (initData) {
+        const launchParams = retrieveLaunchParams()
+        const startParam = launchParams.tgWebAppStartParam?.trim()
+        await loginViaTelegram(initData, startParam)
+        return
+      }
+    } catch {
+      // Not in TMA context, continue with refresh flow.
+    }
+
+    const { data } = await this.instance.post<
+      ApiResponse<{ accessToken: string; user: UserDataInterface }>
+    >(
+      '/auth/refresh',
+      {},
+      {
+        _skipAuthRetry: true,
+      } as InternalAxiosRequestConfig & { _skipAuthRetry: boolean },
+    )
+
+    const { accessToken, user } = data.data
+    const store = useUserStore.getState()
+    store.setAccessToken(accessToken)
+    store.setUser(user)
   }
 
   private async handleApiError(error: unknown): Promise<never> {
