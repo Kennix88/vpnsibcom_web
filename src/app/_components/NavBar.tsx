@@ -1,5 +1,6 @@
 'use client'
 import { useUserStore } from '@app/store/user.store'
+import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -11,6 +12,7 @@ export default function NavBar() {
   const t = useTranslations('navbar')
   const location = usePathname()
   const url = location === '/app' ? '/app' : '/tma'
+
   const { user } = useUserStore()
 
   const navItems = [
@@ -19,33 +21,23 @@ export default function NavBar() {
       href: url,
       icon: (
         <Image
-          src={'/logo.png'}
+          src="/logo.png"
           alt="Logo"
-          width={24}
-          height={24}
-          className={'rounded-md'}
+          width={22}
+          height={22}
+          className="rounded-md"
         />
       ),
     },
-    // {
-    //   name: t('earning'),
-    //   href: url + '/earning',
-    //   icon: <FaFire size={24} />,
-    // },
-    // {
-    //   name: t('games'),
-    //   href: url + '/games',
-    //   icon: <IoLogoGameControllerA size={24} />,
-    // },
     {
       name: t('friends'),
       href: url + '/friends',
-      icon: <FaUserFriends size={24} />,
+      icon: <FaUserFriends size={20} />,
     },
     {
       name: t('profile'),
       href: url + '/profile',
-      icon: <Avatar url={user?.photoUrl} w={24} className={'cursor-pointer'} />,
+      icon: <Avatar url={user?.photoUrl} w={22} className="cursor-pointer" />,
     },
   ]
 
@@ -64,39 +56,90 @@ export default function NavBar() {
   if (!isMainUrls) return null
 
   return (
-    <div
-      className={`bottom-0 left-0 right-0 fixed flex flex-row py-4 items-center justify-center z-[50] `}>
+    <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center pb-4 px-4 pointer-events-none">
+      {/* Fade-out gradient above the bar */}
       <div
-        className={`grid grid-cols-3 max-w-[320px] grid-rows-1 gap-2 p-2 rounded-xl bg-[var(--surface-container)] bg-opacity-90 justify-center`}>
-        {navItems.map((item) => (
-          <Link
-            href={`${item.href}`}
-            key={item.name}
-            className={`flex flex-col items-center justify-center font-[600] text-[12px] gap-1 ${
-              location !==
-              `${item.href} transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer`
-                ? 'text-[var(--on-surface-variant)]'
-                : 'text-[var(--on-surface)]'
-            }`}>
-            <div
-              className={`px-3 py-1 rounded-lg ${
-                location !== `${item.href}`
-                  ? 'text-[var(--on-surface-variant)]'
-                  : 'text-[var(--on-surface)] bg-[var(--secondary-container)]'
-              }`}>
-              {item.icon}
-            </div>
-            <span
-              className={`font-mono font-bold ${
-                location !== `${item.href}`
-                  ? 'text-[var(--on-surface-variant)]'
-                  : 'text-[var(--on-surface)]'
-              }`}>
-              {item.name}
-            </span>
-          </Link>
-        ))}
-      </div>
+        className="absolute bottom-0 left-0 right-0 h-28 pointer-events-none"
+        style={{
+          background:
+            'linear-gradient(to top, var(--background) 0%, transparent 100%)',
+          opacity: 0.85,
+        }}
+      />
+
+      <motion.nav
+        className="relative pointer-events-auto flex items-center gap-1 px-2 py-2 rounded-2xl"
+        style={{
+          background:
+            'linear-gradient(135deg, var(--surface-container-high) 0%, var(--surface-container) 100%)',
+          border: '1px solid var(--surface-strong-border)',
+          boxShadow:
+            '0 8px 32px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06)',
+          backdropFilter: 'blur(16px)',
+        }}
+        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.4, ease: [0.2, 0, 0, 1] }}>
+        {navItems.map((item) => {
+          const isActive = location === item.href
+
+          return (
+            <Link
+              key={item.name}
+              href={item.href}
+              className="relative flex flex-col items-center justify-center gap-1 px-5 py-1.5 rounded-xl transition-all duration-200 active:scale-[0.93] min-w-[72px]"
+              style={{
+                color: isActive
+                  ? 'var(--on-primary-container)'
+                  : 'var(--on-surface-variant)',
+              }}>
+              {/* Active pill background */}
+              {isActive && (
+                <motion.div
+                  layoutId="nav-active-pill"
+                  className="absolute inset-0 rounded-xl"
+                  style={{
+                    background:
+                      'linear-gradient(135deg, var(--primary-container) 0%, color-mix(in srgb, var(--primary-container) 70%, var(--surface-container-highest)) 100%)',
+                    boxShadow: '0 0 12px rgba(195,166,255,0.18)',
+                  }}
+                  transition={{
+                    type: 'spring',
+                    stiffness: 380,
+                    damping: 32,
+                  }}
+                />
+              )}
+
+              {/* Icon */}
+              <div
+                className="relative z-10 transition-transform duration-200"
+                style={{
+                  color: isActive
+                    ? 'var(--primary)'
+                    : 'var(--on-surface-variant)',
+                  filter: isActive
+                    ? 'drop-shadow(0 0 6px rgba(195,166,255,0.45))'
+                    : 'none',
+                }}>
+                {item.icon}
+              </div>
+
+              {/* Label */}
+              <span
+                className="relative z-10 font-mono text-[10px] font-bold tracking-wide leading-none transition-all duration-200"
+                style={{
+                  color: isActive
+                    ? 'var(--on-primary-container)'
+                    : 'var(--on-surface-variant)',
+                  opacity: isActive ? 1 : 0.6,
+                }}>
+                {item.name}
+              </span>
+            </Link>
+          )
+        })}
+      </motion.nav>
     </div>
   )
 }
