@@ -9,6 +9,24 @@ import { initTelegramSDK } from '@app/core/initTelegramSDK'
 import { initData, retrieveLaunchParams, useSignal } from '@tma.js/sdk-react'
 import { PropsWithChildren, useEffect, useMemo, useState } from 'react'
 
+function getTelegramAnalyticsHost(token?: string) {
+  if (!token) return undefined
+
+  try {
+    const [payload] = token.split('!')
+    if (!payload) return undefined
+
+    const decoded = JSON.parse(window.atob(payload)) as {
+      app_domain?: string
+    }
+    return decoded.app_domain
+      ? new URL(decoded.app_domain).hostname
+      : undefined
+  } catch {
+    return undefined
+  }
+}
+
 export function TMA({ children }: PropsWithChildren) {
   const [initialized, setInitialized] = useState(false)
   const launchParams = useMemo(() => retrieveLaunchParams(), [])
@@ -61,6 +79,11 @@ export function TMA({ children }: PropsWithChildren) {
         }
         if (typeof w.TelegramGameProxy.receiveEvent !== 'function') {
           w.TelegramGameProxy.receiveEvent = () => {}
+        }
+
+        const analyticsHost = getTelegramAnalyticsHost(config.TMA_TOKEN)
+        if (analyticsHost && analyticsHost !== window.location.hostname) {
+          return
         }
 
         const { default: TelegramAnalytics } =
