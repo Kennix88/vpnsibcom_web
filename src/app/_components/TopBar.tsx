@@ -10,9 +10,9 @@ export default function TopBar() {
   const location = usePathname()
   const url = location === '/app' ? '/app' : '/tma'
   return (
-    <div className="flex gap-2 justify-between items-center w-full">
+    <div className="flex gap-2 justify-between items-center w-full max-w-md">
       <Link href={url + '/profile'}>
-        <Avatar url={user?.photoUrl} className={'cursor-pointer'} />
+        <Avatar url={user?.photoUrl} className={'cursor-pointer'} withStatus />
       </Link>
       <div className={'flex justify-end items-center gap-2 '}>
         <Balance type={'payment'} fixedNumber={3} />
