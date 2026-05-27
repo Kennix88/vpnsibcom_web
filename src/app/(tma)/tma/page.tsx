@@ -2,7 +2,6 @@
 import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
 import { useFullscreenAd } from '@app/app/_components/ads/useFullscreenAd'
 import { FreePlanActivated } from '@app/app/_components/FreePlanAtivated'
-import GreenCheck from '@app/app/_components/GreenCheck'
 import SocialButtons from '@app/app/_components/SocialButtons'
 import { Subscriptions } from '@app/app/_components/Subscriptions'
 import TopBar from '@app/app/_components/TopBar'
@@ -24,7 +23,7 @@ export default function Page() {
     <TmaPage back={false}>
       <div className="flex flex-col gap-4 items-center">
         <TopBar />
-        <GreenCheck />
+        {/*<GreenCheck />*/}
         <FreePlanActivated />
         <TaskAdsReward />
         <Subscriptions />
