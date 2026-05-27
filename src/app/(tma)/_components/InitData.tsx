@@ -8,7 +8,7 @@ import { useUserStore } from '@app/store/user.store'
 import { PropsWithChildren, useEffect } from 'react'
 
 export function InitData({ children }: PropsWithChildren) {
-  const { user, accessToken, setUser } = useUserStore()
+  const { user, accessToken } = useUserStore()
   const { setCurrencies, setRates } = useCurrencyStore()
 
   useEffect(() => {
@@ -32,18 +32,6 @@ export function InitData({ children }: PropsWithChildren) {
       setServerLocale(user.languageCode)
     }
   }, [user])
-
-  useEffect(() => {
-    const getMe = async () => {
-      try {
-        const data = await authApiClient.getMe()
-        setUser(data)
-      } catch (error) {
-        console.error('Failed to fetch user data', error)
-      }
-    }
-    getMe()
-  }, [setUser])
 
   if (!user || !accessToken) {
     return <Loader />
