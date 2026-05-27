@@ -12,7 +12,7 @@ export default function FriendsStatistics() {
   const t = useTranslations('friends')
 
   return (
-    <div className="flex flex-col gap-1 font-extralight font-mono max-w-[400px] w-full">
+    <div className="flex flex-col gap-1 font-extralight font-mono max-w-md w-full">
       <div className="px-4 opacity-50 flex flex-row gap-2 items-center">
         {t('statistics.title')}
       </div>
