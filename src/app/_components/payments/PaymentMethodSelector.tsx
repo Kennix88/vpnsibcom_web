@@ -1,361 +1,414 @@
-'use client'
+// 'use client'
 
-import TgStar from '@app/app/_components/Currency'
-import Loader from '@app/app/_components/Loader'
-import { PaymentMethodIcons } from '@app/app/_components/payments/payment-method-icons'
-import { TonWalletConnect } from '@app/app/_components/ton/TonWalletConnect'
-import TooltipWrapper from '@app/app/_components/TooltipWrapper'
-import { config } from '@app/config/client'
-import { CurrencyEnum } from '@app/enums/currency.enum'
-import { PaymentMethodTypeEnum } from '@app/enums/payment-method-type.enum'
-import { PaymentSystemEnum } from '@app/enums/payment-system.enum'
-import { useUserStore } from '@app/store/user.store'
-import { CurrencyInterface } from '@app/types/currency.interface'
-import { PaymentMethodsDataInterface } from '@app/types/payment-methods-data.interface'
-import { RatesInterface } from '@app/types/rates.interface'
-import { hexToRgb } from '@app/utils/color.util'
-import { fxUtil } from '@app/utils/fx.util'
-import { useTonWallet } from '@tonconnect/ui-react'
-import clsx from 'clsx'
-import { motion } from 'framer-motion'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useEffect, useMemo, useState } from 'react'
-import { FaCircleInfo } from 'react-icons/fa6'
-import { TbCheck } from 'react-icons/tb'
-import { useTranslations } from 'use-intl'
+// import TgStar from '@app/app/_components/Currency'
+// import Loader from '@app/app/_components/Loader'
+// import { PaymentMethodIcons } from '@app/app/_components/payments/payment-method-icons'
+// import { TonWalletConnect } from '@app/app/_components/ton/TonWalletConnect'
+// import TooltipWrapper from '@app/app/_components/TooltipWrapper'
+// import { config } from '@app/config/client'
+// import { CurrencyEnum } from '@app/enums/currency.enum'
+// import { PaymentMethodTypeEnum } from '@app/enums/payment-method-type.enum'
+// import { PaymentSystemEnum } from '@app/enums/payment-system.enum'
+// import { useUserStore } from '@app/store/user.store'
+// import { CurrencyInterface } from '@app/types/currency.interface'
+// import { PaymentMethodsDataInterface } from '@app/types/payment-methods-data.interface'
+// import { RatesInterface } from '@app/types/rates.interface'
+// import { fxUtil } from '@app/utils/fx.util'
+// import { useTonWallet } from '@tonconnect/ui-react'
+// import { AnimatePresence, motion } from 'framer-motion'
+// import { CheckCircle2, Info } from 'lucide-react'
+// import Image from 'next/image'
+// import Link from 'next/link'
+// import { useEffect, useMemo, useState } from 'react'
+// import { useTranslations } from 'use-intl'
 
-type Props = {
-  methods?: PaymentMethodsDataInterface[]
-  currencies: CurrencyInterface[]
-  amount: number
-  rates: RatesInterface
-  isLoading?: boolean
-  selectedKey?: string
-  onSelect: (method: PaymentMethodsDataInterface) => void
-  isTma?: boolean
-}
+// type Props = {
+//   methods?: PaymentMethodsDataInterface[]
+//   currencies: CurrencyInterface[]
+//   amount: number
+//   rates: RatesInterface
+//   isLoading?: boolean
+//   selectedKey?: string
+//   onSelect: (method: PaymentMethodsDataInterface) => void
+//   isTma?: boolean
+// }
 
-export const PaymentMethodSelector = ({
-  methods = [],
-  currencies,
-  amount,
-  rates,
-  isLoading,
-  selectedKey,
-  onSelect,
-  isTma = false,
-}: Props) => {
-  const t = useTranslations('billing.payment')
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
-  const [type, setType] = useState<PaymentMethodTypeEnum | 'ALL'>('ALL')
-  const { user } = useUserStore()
-  const wallet = useTonWallet()
+// /* ─── System icon map — avoids a giant if/else ────────────────────── */
+// const SYSTEM_ICONS: Partial<Record<PaymentSystemEnum, string>> = {
+//   [PaymentSystemEnum.TELEGRAM]: '/icons/telegram.svg',
+//   [PaymentSystemEnum.TON_BLOCKCHAIN]: '/icons/TON.svg',
+//   [PaymentSystemEnum.PAYEER]: '/icons/payeer.svg',
+//   [PaymentSystemEnum.VOLET]: '/icons/volet.svg',
+//   [PaymentSystemEnum.WATA]: '/icons/wata.svg',
+//   [PaymentSystemEnum.CRYPTOMUS]: '/icons/cryptomus.svg',
+//   [PaymentSystemEnum.PAYPALYCH]: '/icons/paypalych.svg',
+//   [PaymentSystemEnum.SKINSBACK]: '/icons/skinsback.svg',
+//   [PaymentSystemEnum.TOME]: '/icons/tome.svg',
+// }
 
-  const methodsWithLimits = useMemo(() => {
-    return methods.map((method) => {
-      const convertedAmount = fxUtil(
-        amount,
-        CurrencyEnum.XTR,
-        method.currency.key,
-        rates,
-      )
-      const disabled =
-        convertedAmount < method.minAmount || convertedAmount > method.maxAmount
+// /* ─── Filter pill ─────────────────────────────────────────────────── */
+// function FilterPill({
+//   label,
+//   active,
+//   onClick,
+// }: {
+//   label: string
+//   active: boolean
+//   onClick: () => void
+// }) {
+//   return (
+//     <motion.button
+//       onClick={onClick}
+//       whileHover={{ scale: 1.04 }}
+//       whileTap={{ scale: 0.94 }}
+//       className="relative px-3 py-1.5 rounded-full text-xs font-mono font-bold cursor-pointer"
+//       style={{
+//         background: active
+//           ? 'rgba(195,166,255,0.18)'
+//           : 'rgba(255,255,255,0.05)',
+//         color: active ? 'var(--primary)' : 'var(--on-surface)',
+//         border: active
+//           ? '1px solid rgba(195,166,255,0.4)'
+//           : '1px solid rgba(255,255,255,0.07)',
+//         transition: 'all 150ms ease',
+//         opacity: active ? 1 : 0.65,
+//       }}>
+//       {label}
+//       {active && (
+//         <motion.span
+//           layoutId="pill-active"
+//           className="absolute inset-0 rounded-full pointer-events-none"
+//           style={{ boxShadow: '0 0 10px rgba(195,166,255,0.18)' }}
+//         />
+//       )}
+//     </motion.button>
+//   )
+// }
 
-      return { method, disabled, convertedAmount }
-    })
-  }, [methods, amount, rates])
+// /* ─── Method card ─────────────────────────────────────────────────── */
+// interface MethodCardProps {
+//   method: PaymentMethodsDataInterface
+//   currency: CurrencyInterface
+//   convertedAmount: number
+//   disabled: boolean
+//   isSelected: boolean
+//   onSelect: () => void
+//   t: ReturnType<typeof useTranslations>
+// }
 
-  if (!mounted || isLoading || !user) {
-    return (
-      <div className="flex justify-center items-center h-32">
-        <Loader />
-      </div>
-    )
-  }
+// function MethodCard({
+//   method,
+//   currency,
+//   convertedAmount,
+//   disabled,
+//   isSelected,
+//   onSelect,
+//   t,
+// }: MethodCardProps) {
+//   const systemIcon = SYSTEM_ICONS[method.system as PaymentSystemEnum]
+//   const hasCommission = method.commission * 100 - 100 > 0
+//   const currencyLabel =
+//     currency.key !== currency.symbol
+//       ? `${currency.key}-${currency.symbol}`
+//       : currency.symbol
 
-  const filterButtons: {
-    name: string
-    type: PaymentMethodTypeEnum | 'ALL'
-  }[] = [
-    {
-      name: t('sort.all'),
-      type: 'ALL',
-    },
-    {
-      name: t('sort.crypto'),
-      type: PaymentMethodTypeEnum.CRYPTOCURRENCY,
-    },
-    {
-      name: t('sort.card'),
-      type: PaymentMethodTypeEnum.CARD,
-    },
-    {
-      name: t('sort.sbp'),
-      type: PaymentMethodTypeEnum.SBP,
-    },
-    {
-      name: t('sort.wallets'),
-      type: PaymentMethodTypeEnum.WALLET,
-    },
-    {
-      name: t('sort.skins'),
-      type: PaymentMethodTypeEnum.SKINS,
-    },
-  ]
+//   const card = (
+//     <motion.button
+//       disabled={disabled}
+//       whileHover={disabled ? {} : { scale: 1.015, y: -1 }}
+//       whileTap={disabled ? {} : { scale: 0.975 }}
+//       onClick={onSelect}
+//       className="relative flex flex-col gap-2 p-3 rounded-2xl text-left w-full"
+//       style={{
+//         background: isSelected
+//           ? 'rgba(55,227,162,0.09)'
+//           : 'rgba(255,255,255,0.04)',
+//         border: isSelected
+//           ? '1px solid rgba(55,227,162,0.4)'
+//           : '1px solid rgba(255,255,255,0.07)',
+//         boxShadow: isSelected ? '0 0 18px rgba(55,227,162,0.1)' : 'none',
+//         opacity: disabled ? 0.45 : 1,
+//         cursor: disabled ? 'not-allowed' : 'pointer',
+//         transition: 'all 160ms ease',
+//       }}>
+//       {/* Top row: icon + name + currency badge */}
+//       <div className="flex items-center gap-2.5 w-full">
+//         <Image
+//           src={PaymentMethodIcons[method.key] || '/icons/cards.svg'}
+//           alt={method.name}
+//           width={36}
+//           height={36}
+//           className="rounded-lg shrink-0"
+//         />
 
-  return (
-    <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
-      <div className="px-4 opacity-50 flex flex-row gap-2 items-center w-full">
-        {t('method')}
-      </div>
-      <div className="flex flex-wrap gap-2 w-full justify-center bg-[var(--surface-container-lowest)] p-4 rounded-md">
-        {!isTma && (
-          <div
-            className={
-              'flex flex-row gap-2 flex-wrap items-center w-full pb-2 border-b-2 border-[var(--on-surface)]/50'
-            }>
-            {filterButtons.map((el) => (
-              <button
-                key={el.type}
-                onClick={() => setType(el.type)}
-                className={clsx(
-                  'relative grow gap-2 rounded-md py-1 px-2 text-sm text-center cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]',
-                  el.type === type
-                    ? 'bg-[var(--primary)] text-[var(--on-primary)]'
-                    : 'bg-[var(--surface-container)] text-[var(--on-surface)]',
-                )}>
-                {el.name}
-              </button>
-            ))}
-          </div>
-        )}
-        <div
-          className={
-            'bg-[var(--surface-container)] text-[var(--on-surface)] rounded-md flex flex-col gap-2 py-2 px-4 w-full max-w-[400px]'
-          }>
-          <div className={'flex flex-row gap-2 items-center text-xs'}>
-            <FaCircleInfo className={'text-3xl'} />
-            {t('split')}
-          </div>
-          <Link
-            href={config.SPLIT_TG_REF_URL}
-            className={
-              'flex flex-row gap-2 items-center justify-center px-4 py-2 bg-[var(--surface-container-high)] rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer text-sm'
-            }
-            target={'_blank'}>
-            {t('splitBay')} <TgStar type={'tg-star'} w={15} />
-          </Link>
-        </div>
+//         <div className="flex flex-col min-w-0 flex-1">
+//           <span
+//             className="text-sm font-bold font-mono truncate"
+//             style={{ color: 'var(--on-surface)' }}>
+//             {method.name}
+//           </span>
 
-        {methodsWithLimits
-          .sort((a, b) => a.method.system.localeCompare(b.method.system))
-          .sort((a, b) => {
-            if (a.method.type == PaymentMethodTypeEnum.STARS) return -2
-            if (b.method.type == PaymentMethodTypeEnum.STARS) return 2
-            if (a.method.type == PaymentMethodTypeEnum.CRYPTOCURRENCY) return -1
-            if (b.method.type == PaymentMethodTypeEnum.CRYPTOCURRENCY) return 1
-            return a.method.type.localeCompare(b.method.type)
-          })
-          .filter((el) =>
-            !wallet?.account.address
-              ? el.method.system != PaymentSystemEnum.TON_BLOCKCHAIN
-              : true,
-          )
-          .filter((el) => type === 'ALL' || el.method.type === type)
-          .map(({ method, disabled, convertedAmount }) => {
-            const currency = currencies.find(
-              (c) => c.key === method.currency.key,
-            )
-            if (!currency) return null
+//           {/* System label */}
+//           {systemIcon && (
+//             <span
+//               className="flex items-center gap-1 text-[11px] font-mono"
+//               style={{ color: 'var(--on-surface)', opacity: 0.45 }}>
+//               <Image
+//                 src={systemIcon}
+//                 alt={method.system}
+//                 width={12}
+//                 height={12}
+//               />
+//               {method.system.replace(/_/g, ' ').toLowerCase()}
+//             </span>
+//           )}
+//         </div>
 
-            const isSelected = method.key === selectedKey
+//         {/* Currency pill */}
+//         <span
+//           className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-lg shrink-0"
+//           style={{
+//             background: 'var(--tertiary-container)',
+//             color: 'var(--on-tertiary-container)',
+//           }}>
+//           {currencyLabel}
+//         </span>
+//       </div>
 
-            const card = (
-              <motion.button
-                key={method.key}
-                disabled={disabled}
-                whileTap={{ scale: disabled ? 1 : 0.97 }}
-                onClick={() => onSelect(method)}
-                className={clsx(
-                  'relative grow flex flex-col items-start justify-between gap-1 rounded-md p-2 shadow-sm text-left transition',
-                  disabled
-                    ? 'opacity-50 pointer-events-none grow'
-                    : 'cursor-pointer',
-                  isSelected && 'border-2 border-[var(--primary)]',
-                )}
-                style={{
-                  backgroundColor: isSelected
-                    ? `rgba(${hexToRgb('#005138')?.r}, ${hexToRgb('#005138')?.g}, ${hexToRgb('#005138')?.b}, 0.3)`
-                    : `var(--surface-container-low)`,
-                  border: isSelected
-                    ? `2px solid rgba(${hexToRgb('#005138')?.r}, ${hexToRgb('#005138')?.g}, ${hexToRgb('#005138')?.b}, 0.7)`
-                    : 'none',
-                }}>
-                <div className="flex gap-2 items-start w-full justify-between">
-                  <div className="flex gap-2 items-center ">
-                    <Image
-                      src={PaymentMethodIcons[method.key] || '/icons/cards.svg'}
-                      alt=""
-                      width={40}
-                      height={40}
-                    />
-                    <div>
-                      <div className="font-extrabold text-sm">
-                        {method.name}
-                      </div>
-                      <div
-                        className={'text-xs flex flex-row gap-1 items-center'}>
-                        {method.system == PaymentSystemEnum.TELEGRAM ? (
-                          <>
-                            <span className={'opacity-70'}>Telegram</span>
-                            <Image
-                              src={'/icons/telegram.svg'}
-                              alt="Telegram"
-                              width={15}
-                              height={15}
-                            />
-                          </>
-                        ) : method.system ==
-                          PaymentSystemEnum.TON_BLOCKCHAIN ? (
-                          <>
-                            <span className={'opacity-70'}>TON on-chain</span>
-                            <Image
-                              src={'/icons/TON.svg'}
-                              alt="TON"
-                              width={15}
-                              height={15}
-                            />
-                          </>
-                        ) : method.system == PaymentSystemEnum.PAYEER ? (
-                          <>
-                            <span className={'opacity-70'}>Payeer</span>
-                            <Image
-                              src={'/icons/payeer.svg'}
-                              alt="Payeer"
-                              width={15}
-                              height={15}
-                            />
-                          </>
-                        ) : method.system == PaymentSystemEnum.VOLET ? (
-                          <>
-                            <span className={'opacity-70'}>Volet</span>
-                            <Image
-                              src={'/icons/volet.svg'}
-                              alt="Volet"
-                              width={15}
-                              height={15}
-                            />
-                          </>
-                        ) : method.system == PaymentSystemEnum.WATA ? (
-                          <>
-                            <span className={'opacity-70'}>Wata</span>
-                            <Image
-                              src={'/icons/wata.svg'}
-                              alt="Wata"
-                              width={15}
-                              height={15}
-                            />
-                          </>
-                        ) : method.system == PaymentSystemEnum.CRYPTOMUS ? (
-                          <>
-                            <span className={'opacity-70'}>Cryptomus</span>
-                            <Image
-                              src={'/icons/cryptomus.svg'}
-                              alt="Cryptomus"
-                              width={15}
-                              height={15}
-                            />
-                          </>
-                        ) : method.system == PaymentSystemEnum.PAYPALYCH ? (
-                          <>
-                            <span className={'opacity-70'}>Paypalych</span>
-                            <Image
-                              src={'/icons/paypalych.svg'}
-                              alt="Paypalych"
-                              width={15}
-                              height={15}
-                            />
-                          </>
-                        ) : method.system == PaymentSystemEnum.SKINSBACK ? (
-                          <>
-                            <span className={'opacity-70'}>Skinsback</span>
-                            <Image
-                              src={'/icons/skinsback.svg'}
-                              alt="Skinsback"
-                              width={15}
-                              height={15}
-                            />
-                          </>
-                        ) : (
-                          method.system == PaymentSystemEnum.TOME && (
-                            <>
-                              <span className={'opacity-70'}>Tome</span>
-                              <Image
-                                src={'/icons/tome.svg'}
-                                alt="Tome"
-                                width={15}
-                                height={15}
-                              />
-                            </>
-                          )
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-xs px-2 py-1 text-[var(--on-tertiary-container)] bg-[var(--tertiary-container)] text-center rounded-md writespace-nowrap">
-                    {currency?.key !== currency?.symbol
-                      ? `${currency?.key}-${currency?.symbol}`
-                      : `${currency?.symbol}`}
-                  </div>
-                </div>
+//       {/* Commission row */}
+//       {hasCommission && (
+//         <div
+//           className="text-[11px] font-mono"
+//           style={{ color: 'var(--error)', opacity: 0.85 }}>
+//           {t('commission')}: +{(method.commission * 100 - 100).toFixed(2)}%
+//         </div>
+//       )}
 
-                {isSelected && (
-                  <div className="absolute top-[-10px] right-[-10px] text-xs z-10 w-5 h-5 text-center rounded-full flex items-center justify-center bg-[var(--success-container)] text-[var(--on-success-container)]">
-                    <TbCheck />
-                  </div>
-                )}
-                <div className="text-xs flex gap-1 items-center opacity-80 flex-row justify-end w-full">
-                  {/*<span>{method.type}</span>*/}
-                  {method.commission * 100 - 100 > 0 && (
-                    <div className="text-xs text-[var(--error)]">
-                      {t('commission')}:{' '}
-                      {(method.commission * 100 - 100).toFixed(2)}%{' '}
-                      {currency?.key !== currency?.symbol &&
-                        `${currency?.key}-`}
-                      {currency?.symbol}
-                    </div>
-                  )}
-                </div>
-              </motion.button>
-            )
+//       {/* Selected checkmark */}
+//       <AnimatePresence>
+//         {isSelected && (
+//           <motion.span
+//             key="check"
+//             initial={{ scale: 0, opacity: 0 }}
+//             animate={{ scale: 1, opacity: 1 }}
+//             exit={{ scale: 0, opacity: 0 }}
+//             transition={{ type: 'spring', stiffness: 500 }}
+//             className="absolute -top-2.5 -right-2.5">
+//             <CheckCircle2
+//               size={20}
+//               style={{
+//                 color: 'var(--success)',
+//                 fill: 'var(--success-container)',
+//               }}
+//             />
+//           </motion.span>
+//         )}
+//       </AnimatePresence>
+//     </motion.button>
+//   )
 
-            return disabled ? (
-              <TooltipWrapper
-                key={method.key}
-                prompt={t('limitMessage', {
-                  min: method.minAmount,
-                  max: method.maxAmount,
-                  symbol: currency.symbol,
-                  convertedAmount: convertedAmount.toFixed(2),
-                })}
-                placement="top">
-                {card}
-              </TooltipWrapper>
-            ) : (
-              card
-            )
-          })}
+//   return disabled ? (
+//     <TooltipWrapper
+//       prompt={t('limitMessage', {
+//         min: method.minAmount,
+//         max: method.maxAmount,
+//         symbol: currency.symbol,
+//         convertedAmount: convertedAmount.toFixed(2),
+//       })}
+//       placement="top">
+//       {card}
+//     </TooltipWrapper>
+//   ) : (
+//     card
+//   )
+// }
 
-        {!isTma && !wallet?.account.address && (
-          <div className={'flex flex-col gap-2 w-full max-w-[400px]'}>
-            <div>{t('walletInfo')}</div>
-            <TonWalletConnect />
-          </div>
-        )}
-      </div>
-    </div>
-  )
-}
+// /* ─── Main component ──────────────────────────────────────────────── */
+// export const PaymentMethodSelector = ({
+//   methods = [],
+//   currencies,
+//   amount,
+//   rates,
+//   isLoading,
+//   selectedKey,
+//   onSelect,
+//   isTma = false,
+// }: Props) => {
+//   const t = useTranslations('billing.payment')
+//   const [mounted, setMounted] = useState(false)
+//   useEffect(() => setMounted(true), [])
+//   const [type, setType] = useState<PaymentMethodTypeEnum | 'ALL'>('ALL')
+//   const { user } = useUserStore()
+//   const wallet = useTonWallet()
+
+//   const methodsWithLimits = useMemo(() => {
+//     return methods.map((method) => {
+//       const convertedAmount = fxUtil(
+//         amount,
+//         CurrencyEnum.XTR,
+//         method.currency.key,
+//         rates,
+//       )
+//       const disabled =
+//         convertedAmount < method.minAmount || convertedAmount > method.maxAmount
+//       return { method, disabled, convertedAmount }
+//     })
+//   }, [methods, amount, rates])
+
+//   const filterButtons: { name: string; type: PaymentMethodTypeEnum | 'ALL' }[] =
+//     [
+//       { name: t('sort.all'), type: 'ALL' },
+//       { name: t('sort.crypto'), type: PaymentMethodTypeEnum.CRYPTOCURRENCY },
+//       { name: t('sort.card'), type: PaymentMethodTypeEnum.CARD },
+//       { name: t('sort.sbp'), type: PaymentMethodTypeEnum.SBP },
+//       { name: t('sort.wallets'), type: PaymentMethodTypeEnum.WALLET },
+//       { name: t('sort.skins'), type: PaymentMethodTypeEnum.SKINS },
+//     ]
+
+//   if (!mounted || isLoading || !user) {
+//     return (
+//       <div className="flex justify-center items-center h-32">
+//         <Loader />
+//       </div>
+//     )
+//   }
+
+//   const visible = methodsWithLimits
+//     .sort((a, b) => a.method.system.localeCompare(b.method.system))
+//     .sort((a, b) => {
+//       if (a.method.type === PaymentMethodTypeEnum.STARS) return -2
+//       if (b.method.type === PaymentMethodTypeEnum.STARS) return 2
+//       if (a.method.type === PaymentMethodTypeEnum.CRYPTOCURRENCY) return -1
+//       if (b.method.type === PaymentMethodTypeEnum.CRYPTOCURRENCY) return 1
+//       return a.method.type.localeCompare(b.method.type)
+//     })
+//     .filter((el) =>
+//       !wallet?.account.address
+//         ? el.method.system !== PaymentSystemEnum.TON_BLOCKCHAIN
+//         : true,
+//     )
+//     .filter((el) => type === 'ALL' || el.method.type === type)
+
+//   return (
+//     <div className="flex flex-col gap-3 w-full">
+//       {/* Label */}
+//       <div className="px-1 flex items-center gap-2">
+//         <span
+//           className="block w-1 h-1 rounded-full"
+//           style={{ background: 'var(--primary)' }}
+//         />
+//         <span
+//           className="text-xs font-mono"
+//           style={{ color: 'var(--on-background)', opacity: 0.42 }}>
+//           {t('method')}
+//         </span>
+//       </div>
+
+//       {/* Glass wrapper */}
+//       <div
+//         className="rounded-2xl overflow-hidden flex flex-col gap-0"
+//         style={{
+//           background: 'var(--glass-bg)',
+//           backdropFilter: 'blur(var(--glass-blur))',
+//           WebkitBackdropFilter: 'blur(var(--glass-blur))',
+//           border: '1px solid rgba(255,255,255,0.07)',
+//           boxShadow: '0 6px 28px rgba(0,0,0,0.28)',
+//         }}>
+//         {/* Filter pills */}
+//         {!isTma && (
+//           <div
+//             className="flex flex-wrap gap-2 px-4 py-3"
+//             style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+//             {filterButtons.map((f) => (
+//               <FilterPill
+//                 key={f.type}
+//                 label={f.name}
+//                 active={type === f.type}
+//                 onClick={() => setType(f.type)}
+//               />
+//             ))}
+//           </div>
+//         )}
+
+//         {/* Split info banner */}
+//         <div
+//           className="flex items-center justify-between gap-3 px-4 py-2.5 flex-wrap"
+//           style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+//           <div className="flex items-center gap-2">
+//             <Info
+//               size={13}
+//               aria-hidden
+//               style={{ color: 'var(--primary)', opacity: 0.7 }}
+//             />
+//             <span
+//               className="text-xs font-mono"
+//               style={{ color: 'var(--on-surface)', opacity: 0.55 }}>
+//               {t('split')}
+//             </span>
+//           </div>
+//           <Link
+//             href={config.SPLIT_TG_REF_URL}
+//             target="_blank"
+//             className="flex items-center gap-1.5 text-xs font-bold font-mono px-3 py-1 rounded-xl"
+//             style={{
+//               background: 'rgba(195,166,255,0.09)',
+//               color: 'var(--primary)',
+//               border: '1px solid rgba(195,166,255,0.2)',
+//             }}>
+//             {t('splitBay')} <TgStar type="tg-star" w={13} />
+//           </Link>
+//         </div>
+
+//         {/* Method cards */}
+//         <motion.div
+//           className="grid grid-cols-2 gap-3 p-3"
+//           initial="hidden"
+//           animate="visible"
+//           variants={{ visible: { transition: { staggerChildren: 0.04 } } }}>
+//           {visible.map(({ method, disabled, convertedAmount }, i) => {
+//             const currency = currencies.find(
+//               (c) => c.key === method.currency.key,
+//             )
+//             if (!currency) return null
+//             return (
+//               <motion.div
+//                 key={method.key}
+//                 variants={{
+//                   hidden: { opacity: 0, y: 10 },
+//                   visible: {
+//                     opacity: 1,
+//                     y: 0,
+//                     transition: { duration: 0.28, ease: [0.2, 0, 0, 1] },
+//                   },
+//                 }}>
+//                 <MethodCard
+//                   method={method}
+//                   currency={currency}
+//                   convertedAmount={convertedAmount}
+//                   disabled={disabled}
+//                   isSelected={method.key === selectedKey}
+//                   onSelect={() => onSelect(method)}
+//                   t={t}
+//                 />
+//               </motion.div>
+//             )
+//           })}
+//         </motion.div>
+
+//         {/* Wallet connect prompt */}
+//         {!isTma && !wallet?.account.address && (
+//           <div
+//             className="flex flex-col gap-2 p-4"
+//             style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+//             <p
+//               className="text-xs font-mono"
+//               style={{ color: 'var(--on-surface)', opacity: 0.55 }}>
+//               {t('walletInfo')}
+//             </p>
+//             <TonWalletConnect />
+//           </div>
+//         )}
+//       </div>
+//     </div>
+//   )
+// }
