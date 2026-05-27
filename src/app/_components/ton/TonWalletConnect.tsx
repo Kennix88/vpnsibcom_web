@@ -1,13 +1,11 @@
 'use client'
-
 import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react'
+import { motion } from 'framer-motion'
 import { toast } from 'react-toastify'
-import { useTranslations } from 'use-intl'
 
 export function TonWalletConnect() {
   const [tonConnectUI] = useTonConnectUI()
   const wallet = useTonWallet()
-  const t = useTranslations('wallet')
 
   const handleConnect = async () => {
     try {
@@ -20,10 +18,59 @@ export function TonWalletConnect() {
   if (wallet?.account?.address) return null
 
   return (
-    <button
+    <motion.button
       onClick={handleConnect}
-      className="bg-[var(--primary)] text-[var(--on-primary)] font-medium text-sm px-4 py-2 rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer font-mono w-full max-w-[400px]">
-      {t('connect')}
-    </button>
+      className="relative flex items-center justify-center gap-2 w-full max-w-[400px] px-4 py-2.5 rounded-xl font-mono font-bold text-sm overflow-hidden cursor-pointer"
+      style={{
+        background:
+          'linear-gradient(135deg, var(--ton) 0%, color-mix(in srgb, var(--ton) 70%, var(--primary)) 100%)',
+        color: 'var(--on-ton)',
+        boxShadow:
+          '0 0 18px var(--ton-container-rgba), inset 0 1px 0 rgba(255,255,255,0.15)',
+        border: '1px solid rgba(0,136,204,0.3)',
+      }}
+      whileTap={{ scale: 0.97 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 20 }}>
+      {/* Shimmer overlay */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            'linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%)',
+        }}
+        animate={{ x: ['-100%', '200%'] }}
+        transition={{
+          duration: 2.8,
+          repeat: Infinity,
+          ease: 'linear',
+          repeatDelay: 1.5,
+        }}
+      />
+
+      {/* TON diamond icon */}
+
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 40 40"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg">
+        <g clip-path="url(#clip0_429_157)">
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M10.9894 8.00011L28.1437 8C28.7506 8 29.357 8.08913 29.9908 8.38461C30.7505 8.73874 31.1533 9.29692 31.4356 9.7097C31.4576 9.74182 31.4781 9.77492 31.4971 9.80878C31.8289 10.3995 32 11.0373 32 11.7234C32 12.3753 31.8449 13.0855 31.4971 13.7045C31.4938 13.7106 31.4904 13.7163 31.487 13.7222L20.6492 32.3392C20.4102 32.7498 19.9703 33.0016 19.4953 33C19.0202 32.9984 18.5821 32.7433 18.3461 32.3311L7.70725 13.7538C7.70419 13.7488 7.70113 13.7438 7.69807 13.7386C7.4546 13.3374 7.07807 12.717 7.0122 11.9163C6.95169 11.18 7.11718 10.4422 7.48715 9.80255C7.85712 9.16278 8.41409 8.65135 9.08402 8.33829C9.80233 8.00262 10.5303 8.00011 10.9894 8.00011ZM18.1702 10.6596H10.9894C10.5176 10.6596 10.3365 10.6886 10.2099 10.7478C10.0348 10.8296 9.88775 10.964 9.78944 11.134C9.69113 11.3041 9.64667 11.5011 9.66284 11.6984C9.67212 11.8114 9.71822 11.9408 9.9901 12.3892C9.99578 12.3986 10.0013 12.4081 10.0068 12.4176L18.1702 26.6723V10.6596ZM20.8298 10.6596V26.7427L29.1822 12.395C29.2765 12.2237 29.3404 11.9762 29.3404 11.7234C29.3404 11.5184 29.2979 11.3403 29.2029 11.1568C29.1032 11.0134 29.0424 10.9375 28.9916 10.8855C28.948 10.841 28.9145 10.8172 28.8671 10.7951C28.6696 10.7031 28.4675 10.6596 28.1437 10.6596H20.8298Z"
+            fill="white"
+          />
+        </g>
+        <defs>
+          <clipPath id="clip0_429_157">
+            <rect width="40" height="40" rx="5" fill="white" />
+          </clipPath>
+        </defs>
+      </svg>
+
+      <span>Подключить</span>
+    </motion.button>
   )
 }
