@@ -25,6 +25,14 @@ export function resetAllStores() {
   useServersStore.setState({ serversData: null })
   useSubscriptionsStore.setState({ subscriptions: null })
 
+  useUserStore.persist?.clearStorage()
+  useCurrencyStore.persist?.clearStorage()
+  usePaymentMethodsStore.persist?.clearStorage()
+  usePlansStore.persist?.clearStorage()
+  useRefferlsStore.persist?.clearStorage()
+  useServersStore.persist?.clearStorage()
+  useSubscriptionsStore.persist?.clearStorage()
+
   if (typeof window !== 'undefined') {
     for (const key of STORE_KEYS) {
       window.localStorage.removeItem(key)
