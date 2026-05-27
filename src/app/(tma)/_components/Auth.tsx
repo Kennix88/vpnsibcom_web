@@ -6,57 +6,76 @@ import { resetAllStores } from '@app/store/resetAllStores'
 import { useUserStore } from '@app/store/user.store'
 
 import { TonConnectUIProvider } from '@tonconnect/ui-react'
-import { PropsWithChildren, useEffect } from 'react'
+import { PropsWithChildren, useEffect, useState } from 'react'
 
 let bootstrapAuthPromise: Promise<void> | null = null
+let bootstrapAuthInitDataRaw: string | null = null
 
 export function Auth({ children }: PropsWithChildren) {
   const { user, accessToken, setUser, setAccessToken } = useUserStore()
+  const [isBootstrapping, setIsBootstrapping] = useState(true)
 
   // main effect: detect initData change and re-auth
   useEffect(() => {
+    let cancelled = false
+
     const handleInit = async () => {
-      if (bootstrapAuthPromise) {
-        await bootstrapAuthPromise
-        return
-      }
+      setIsBootstrapping(true)
 
-      const { retrieveLaunchParams, retrieveRawInitData } = await import(
-        '@tma.js/sdk-react'
-      )
-      const initDataRaw = retrieveRawInitData()
-      const launchParams = retrieveLaunchParams()
-      const startParam = launchParams.tgWebAppStartParam?.trim()
-      // await clearClientPersistence()
-      if (!initDataRaw) {
-        console.warn('No Telegram initData found')
-        return
-      }
+      try {
+        const { retrieveLaunchParams, retrieveRawInitData } = await import(
+          '@tma.js/sdk-react'
+        )
+        const initDataRaw = retrieveRawInitData()
+        const launchParams = retrieveLaunchParams()
+        const startParam = launchParams.tgWebAppStartParam?.trim()
 
-      // Always force fresh Telegram login for each TMA session entry.
-      // This prevents showing stale persisted data from previous TG account.
-      resetAllStores()
-
-      bootstrapAuthPromise = (async () => {
-        try {
-          const { accessToken: newToken, user: newUser } =
-            await authApiClient.telegramLogin(initDataRaw, startParam)
-          setAccessToken(newToken)
-          setUser(newUser)
-        } catch (err) {
-          console.error('Error during initData handling', err)
-        } finally {
-          bootstrapAuthPromise = null
+        if (!initDataRaw) {
+          console.warn('No Telegram initData found')
+          return
         }
-      })()
 
-      await bootstrapAuthPromise
+        // If the same auth bootstrap is already in progress, just wait for it.
+        if (bootstrapAuthPromise && bootstrapAuthInitDataRaw === initDataRaw) {
+          await bootstrapAuthPromise
+          return
+        }
+
+        // Always force fresh Telegram login for each TMA session entry.
+        // This prevents showing stale persisted data from previous TG account.
+        resetAllStores()
+
+        bootstrapAuthInitDataRaw = initDataRaw
+        bootstrapAuthPromise = (async () => {
+          try {
+            const { accessToken: newToken, user: newUser } =
+              await authApiClient.telegramLogin(initDataRaw, startParam)
+            setAccessToken(newToken)
+            setUser(newUser)
+          } catch (err) {
+            console.error('Error during initData handling', err)
+          } finally {
+            bootstrapAuthPromise = null
+            bootstrapAuthInitDataRaw = null
+          }
+        })()
+
+        await bootstrapAuthPromise
+      } finally {
+        if (!cancelled) {
+          setIsBootstrapping(false)
+        }
+      }
     }
 
     handleInit()
+
+    return () => {
+      cancelled = true
+    }
   }, [setAccessToken, setUser])
 
-  if (!user || !accessToken) {
+  if (isBootstrapping || !user || !accessToken) {
     return <Loader />
   }
 
