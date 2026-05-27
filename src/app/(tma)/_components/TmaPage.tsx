@@ -47,5 +47,11 @@ export function TmaPage({
     }
   }, [back, router])
 
-  return <>{children}</>
+  return (
+    <div className="w-full flex justify-center">
+      <div className="max-w-md w-full flex flex-col items-stretch ">
+        {children}
+      </div>
+    </div>
+  )
 }
