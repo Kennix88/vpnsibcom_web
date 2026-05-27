@@ -38,13 +38,13 @@ export default function FriendsInviteButtons() {
   if (!user) return null
 
   return (
-    <div className="flex flex-col gap-1 items-center font-extralight font-mono max-w-[400px] w-full">
+    <div className="flex flex-col gap-1 items-center font-extralight font-mono max-w-md w-full">
       <div className="px-4 opacity-50 flex flex-row gap-2 items-center w-full ">
         {t('invite.title')}
       </div>
       <div
         className={
-          'text-sm bg-[var(--surface-container-lowest)] rounded-md flex flex-col gap-2 py-2 px-4 max-w-[400px] w-full'
+          'text-sm bg-[var(--surface-container-lowest)] rounded-md flex flex-col gap-2 py-2 px-4 max-w-md w-full'
         }>
         <div className={'flex flex-row justify-between py-2'}>
           <div className={'flex flex-wrap gap-2 items-center '}>
