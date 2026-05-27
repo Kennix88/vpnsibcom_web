@@ -51,7 +51,7 @@ export function Subscriptions() {
   //   subscriptions.subscriptions.length < user.limitSubscriptions
 
   return (
-    <div className="flex flex-col gap-4 items-center font-extralight font-mono max-w-[600px] w-full">
+    <div className="flex flex-col gap-4 items-center font-extralight font-mono max-w-md w-full">
       <div className="pl-4 opacity-70 flex flex-row gap-2 items-center justify-between w-full pb-2 border-b border-[var(--outline)]">
         <span>{t('yourSubscriptions')}</span>
         <div className="flex gap-2 items-center">
