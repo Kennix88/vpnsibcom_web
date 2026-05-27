@@ -6,6 +6,7 @@ import { AdsPlaceEnum } from '@app/enums/ads-place.enum'
 import { AdsDataInterface } from '@app/enums/ads-res.interface'
 import { AdsTypeEnum } from '@app/enums/ads-type.enum'
 import { useUserStore } from '@app/store/user.store'
+import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { createRoot, Root } from 'react-dom/client'
@@ -13,10 +14,7 @@ import { FaPlay } from 'react-icons/fa6'
 import { MdDoubleArrow } from 'react-icons/md'
 import { toast } from 'react-toastify'
 import Currency from '../Currency'
-import {
-  releaseAdDisplayLock,
-  tryAcquireAdDisplayLock,
-} from './adDisplayLock'
+import { releaseAdDisplayLock, tryAcquireAdDisplayLock } from './adDisplayLock'
 import { CountdownTimer } from './CountdownTimer'
 
 const createAdContainer = () => {
@@ -35,7 +33,10 @@ export function TaskAdsReward() {
 
   const { user, setUser } = useUserStore()
   const t = useTranslations('earning')
+
   const [amountReward, setAmountReward] = useState<number | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+
   const adRef = useRef<AdsDataInterface | null>(null)
   const mountedRootRef = useRef<Root | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -71,13 +72,12 @@ export function TaskAdsReward() {
     }
     isShowingRef.current = false
     adRef.current = null
+    setIsLoading(false)
     releaseAdDisplayLock(TASK_AD_OWNER)
   }, [resetOverlayTimeout])
 
   const scheduleCleanup = useCallback(() => {
-    setTimeout(() => {
-      cleanup()
-    }, 0)
+    setTimeout(() => cleanup(), 0)
   }, [cleanup])
 
   const reward = useCallback(
@@ -90,9 +90,7 @@ export function TaskAdsReward() {
           isTaddy,
         )
         await setUser(response.user)
-        if (response.success) {
-          toast.success(t('earned'))
-        }
+        if (response.success) toast.success(t('earned'))
       } catch (error) {
         console.error('Failed to load ad', error)
       } finally {
@@ -107,32 +105,30 @@ export function TaskAdsReward() {
       if (isShowingRef.current) return
       if (!tryAcquireAdDisplayLock(TASK_AD_OWNER)) return
       isShowingRef.current = true
+      setIsLoading(true)
 
       const response = await authApiClient.getAds(
         AdsPlaceEnum.REWARD_TASK,
         AdsTypeEnum.REWARD,
       )
+
       if (!response.isNoAds && response.ad) {
         const nextAd = response.ad
         adRef.current = nextAd
 
-        if (!containerRef.current) {
-          containerRef.current = createAdContainer()
-        }
-
+        if (!containerRef.current) containerRef.current = createAdContainer()
         if (mountedRootRef.current) return
+
         const root = createRoot(containerRef.current)
         mountedRootRef.current = root
         setTaddyOverlayVisible(isTaddyEnabled)
         resetOverlayTimeout()
-        overlayTimeoutRef.current = setTimeout(() => {
-          scheduleCleanup()
-        }, OVERLAY_TIMEOUT_MS)
+        overlayTimeoutRef.current = setTimeout(
+          () => scheduleCleanup(),
+          OVERLAY_TIMEOUT_MS,
+        )
 
-        const handleClose = () => {
-          scheduleCleanup()
-        }
-
+        const handleClose = () => scheduleCleanup()
         const handleReward = async (isTaddy = false) => {
           await reward(isTaddy)
           handleClose()
@@ -173,13 +169,16 @@ export function TaskAdsReward() {
             await import('./TaddyInterstitial')
           root.render(
             <TaddyInterstitial
+              canCloseImmediately={false}
+              requiredViewSeconds={5}
               onClosed={handleClose}
-              onViewThrough={() => {
-                void handleReward(true)
+              autoCloseOnViewed={false}
+              onShow={(isShow) => {
+                if (isShow) void handleReward(true)
               }}
-              onStartFailed={() => {
-                void showFallbackAd()
-              }}
+              onStartFailed={() => void showFallbackAd()}
+              onError={() => void showFallbackAd()}
+              onNoFill={() => void showFallbackAd()}
             />,
           )
         } else {
@@ -187,13 +186,13 @@ export function TaskAdsReward() {
         }
         return
       } else if (response.isNoAds) {
-        toast.warn('No ads available at the moment')
+        toast.warn('Нет рекламы на текущий момент!')
       }
+
       scheduleCleanup()
     } catch (error) {
       console.error('Failed to load ad', error)
       scheduleCleanup()
-      // toast.error(t('errors.loadFailed'))
     }
   }, [
     isTaddyEnabled,
@@ -209,51 +208,123 @@ export function TaskAdsReward() {
       if (response) setAmountReward(response.amount)
       else setAmountReward(null)
     } catch (error) {
-      console.error('Failed to load ad', error)
-      // toast.error(t('errors.loadFailed'))
+      console.error('Failed to load reward', error)
     }
-  }, [setAmountReward])
+  }, [])
 
   useEffect(() => {
     fetchReward()
   }, [fetchReward])
 
   useEffect(() => {
-    return () => {
-      cleanup()
-    }
+    return () => cleanup()
   }, [cleanup])
 
-  if (amountReward == null || !user) {
-    return null
-  }
+  if (amountReward == null || !user) return null
+
+  const isCoolingDown =
+    user.nextAdsRewardAt && new Date(user.nextAdsRewardAt) > new Date()
 
   return (
-    <div className="px-2 py-1 bg-[var(--surface-container-lowest)] rounded-md font-bold flex items-center justify-between gap-2 w-full">
-      <div className="w-[40px] h-[40px] rounded-md bg-[var(--tertiary)] text-[var(--on-tertiary)] flex items-center justify-center">
-        <FaPlay className="text-xl" />
+    <motion.div
+      className="relative flex items-center gap-3 w-full rounded-xl overflow-hidden max-w-md"
+      style={{
+        background:
+          'linear-gradient(135deg, var(--surface-container-high) 0%, var(--surface-container) 100%)',
+        border: '1px solid var(--surface-strong-border)',
+        boxShadow:
+          '0 4px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)',
+        padding: '10px 12px',
+      }}
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35, ease: [0.2, 0, 0, 1] }}>
+      {/* Left accent line */}
+      <div
+        className="absolute left-0 top-0 bottom-0 w-[3px] rounded-l-xl"
+        style={{
+          background:
+            'linear-gradient(to bottom, var(--tertiary), var(--primary))',
+        }}
+      />
+
+      {/* Play icon */}
+      <div
+        className="flex items-center justify-center w-10 h-10 rounded-xl shrink-0 ml-1"
+        style={{
+          background:
+            'linear-gradient(135deg, var(--tertiary-container) 0%, color-mix(in srgb, var(--tertiary-container) 60%, transparent) 100%)',
+          color: 'var(--tertiary)',
+          boxShadow: '0 0 0 1px rgba(239,184,200,0.15)',
+        }}>
+        <FaPlay size={14} />
       </div>
-      <div className="flex flex-col gap-0.5 grow">
-        <div className="text-[14px] font-bold font-mono">
+
+      {/* Title + reward badge */}
+      <div className="flex flex-col gap-1 grow min-w-0">
+        <span
+          className="text-[13px] font-bold font-mono leading-tight truncate"
+          style={{ color: 'var(--on-surface)' }}>
           {t('rewardTask.title')}
-        </div>
-        <div className="text-[12px] flex gap-2 flex-wrap font-mono">
-          <div className="inline-flex gap-1 items-center px-1 py-1 rounded-md bg-[var(--star-container-rgba)] w-fit">
-            <Currency w={18} type={'star'} />+{amountReward}
+        </span>
+
+        <div className="flex items-center gap-1.5">
+          {/* Star reward badge */}
+          <div
+            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-mono text-[11px] font-bold"
+            style={{
+              background: 'var(--star-container-rgba)',
+              color: 'var(--on-secondary-container)',
+              border: '1px solid rgba(254,189,4,0.2)',
+            }}>
+            <Currency w={13} type="star" />
+            <span>+{amountReward}</span>
           </div>
         </div>
       </div>
-      {user.nextAdsRewardAt && new Date(user.nextAdsRewardAt) > new Date() ? (
-        <CountdownTimer expiryDate={user.nextAdsRewardAt} />
-      ) : (
-        <>
-          <button
+
+      {/* Right action */}
+      <div className="shrink-0">
+        {isCoolingDown ? (
+          <div
+            className="flex items-center justify-center px-2 py-1.5 rounded-lg font-mono text-[11px]"
+            style={{
+              background: 'var(--surface-container-highest)',
+              color: 'var(--on-surface-variant)',
+              border: '1px solid var(--outline-variant)',
+            }}>
+            <CountdownTimer expiryDate={user.nextAdsRewardAt!} />
+          </div>
+        ) : (
+          <motion.button
             onClick={fetchAd}
-            className="font-medium flex items-center justify-center bg-[var(--primary)] text-[var(--on-primary)] px-2 py-1 rounded-md uppercase cursor-pointer w-[52px]">
-            <MdDoubleArrow size={18} />
-          </button>
-        </>
-      )}
-    </div>
+            disabled={isLoading}
+            className="relative flex items-center justify-center gap-1 px-3 py-2 rounded-lg font-mono text-[12px] font-bold uppercase cursor-pointer overflow-hidden"
+            style={{
+              background: isLoading
+                ? 'var(--surface-container-highest)'
+                : 'linear-gradient(135deg, var(--primary) 0%, var(--primary-active) 100%)',
+              color: isLoading
+                ? 'var(--disabled-content)'
+                : 'var(--on-primary)',
+              boxShadow: isLoading ? 'none' : '0 0 14px rgba(195,166,255,0.3)',
+            }}
+            whileTap={{ scale: 0.93 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 20 }}>
+            {isLoading ? (
+              /* Spinning ring while loading */
+              <motion.div
+                className="w-4 h-4 rounded-full border-2 border-transparent"
+                style={{ borderTopColor: 'var(--primary)' }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 0.9, repeat: Infinity, ease: 'linear' }}
+              />
+            ) : (
+              <MdDoubleArrow size={18} />
+            )}
+          </motion.button>
+        )}
+      </div>
+    </motion.div>
   )
 }
