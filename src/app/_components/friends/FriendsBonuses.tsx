@@ -10,7 +10,7 @@ export default function FriendsBonuses() {
   const t = useTranslations('friends')
 
   return (
-    <div className="flex flex-col gap-1 items-center font-extralight font-mono max-w-[400px] w-full">
+    <div className="flex flex-col gap-1 items-center font-extralight font-mono max-w-md w-full">
       <div className="px-4 opacity-50 flex flex-row gap-2 items-center w-full ">
         {t('bonuses.title')}
       </div>
@@ -65,7 +65,7 @@ export default function FriendsBonuses() {
         </div>*/}
       <div
         className={
-          'bg-[var(--surface-container-lowest)] rounded-md flex flex-col gap-2 p-4 max-w-[400px] w-full'
+          'bg-[var(--surface-container-lowest)] rounded-md flex flex-col gap-2 p-4 max-w-md w-full'
         }>
         {/*<div className={'flex flex-row gap-2 items-center'}>
           {t('bonuses.paymentTitle')}{' '}
