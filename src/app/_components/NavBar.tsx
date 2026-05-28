@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { FaUserFriends } from 'react-icons/fa'
+import { FaMoneyBill1Wave } from 'react-icons/fa6'
 import { useTranslations } from 'use-intl'
 import Avatar from './Avatar'
 
@@ -30,9 +30,9 @@ export default function NavBar() {
       ),
     },
     {
-      name: t('friends'),
+      name: 'Заработать',
       href: url + '/friends',
-      icon: <FaUserFriends size={20} />,
+      icon: <FaMoneyBill1Wave size={20} />,
     },
     {
       name: t('profile'),
