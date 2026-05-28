@@ -2,14 +2,34 @@
 import { config } from '@app/config/client'
 import { useUserStore } from '@app/store/user.store'
 import { useCopyToClipboard } from '@app/utils/copy-to-clipboard.util'
-import { FaCopy, FaShareNodes } from 'react-icons/fa6'
+import { AnimatePresence, motion } from 'framer-motion'
+import { CheckCheck, Copy, Link2, Share2 } from 'lucide-react'
+import { useState } from 'react'
 import { RiTelegram2Fill } from 'react-icons/ri'
-import { useTranslations } from 'use-intl'
 
+/* ─── Copy-feedback hook ─────────────────────────────────────────── */
+function useCopyFeedback(value: string) {
+  const copy = useCopyToClipboard()
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = () => {
+    copy(value)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2200)
+  }
+
+  return { copied, handleCopy }
+}
+
+/* ─── Component ──────────────────────────────────────────────────── */
 export default function FriendsInviteButtons() {
-  const copyToClipboard = useCopyToClipboard()
   const { user } = useUserStore()
-  const t = useTranslations('friends')
+  const { copied: urlCopied, handleCopy: handleCopyUrl } = useCopyFeedback(
+    user?.inviteUrl ?? '',
+  )
+  const { copied: btnCopied, handleCopy: handleCopyBtn } = useCopyFeedback(
+    user?.inviteUrl ?? '',
+  )
 
   const handleShareMessage = async () => {
     try {
@@ -38,41 +58,159 @@ export default function FriendsInviteButtons() {
   if (!user) return null
 
   return (
-    <div className="flex flex-col gap-1 items-center font-extralight font-mono max-w-md w-full">
-      <div className="px-4 opacity-50 flex flex-row gap-2 items-center w-full ">
-        {t('invite.title')}
+    <div className="w-full flex flex-col gap-3">
+      {/* Section label */}
+      <div className="px-1 flex items-center gap-2">
+        <span
+          className="block w-1 h-1 rounded-full"
+          style={{ background: 'var(--primary)' }}
+        />
+        <span
+          className="text-xs font-mono tracking-widest uppercase"
+          style={{ color: 'var(--on-background)', opacity: 0.42 }}>
+          Пригласить друга
+        </span>
       </div>
-      <div
-        className={
-          'text-sm bg-[var(--surface-container-lowest)] rounded-md flex flex-col gap-2 py-2 px-4 max-w-md w-full'
-        }>
-        <div className={'flex flex-row justify-between py-2'}>
-          <div className={'flex flex-wrap gap-2 items-center '}>
-            <button
-              onClick={handleShareMessage}
-              className={
-                'w-full flex gap-2 items-center justify-center bg-[var(--primary)] text-[var(--on-primary)] font-bold text-md px-4 py-2 rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer uppercase tracking-wide'
-              }>
-              {t('invite.message')} <FaShareNodes />
-            </button>
-            <button
-              onClick={() => copyToClipboard(user.inviteUrl)}
-              className={
-                'w-full flex gap-2 items-center justify-center bg-[var(--primary)] text-[var(--on-primary)] font-bold text-md px-4 py-2 rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer uppercase tracking-wide'
-              }>
-              {t('invite.copy')}
-              <FaCopy />
-            </button>
-            <button
-              onClick={handleShareStory}
-              className={
-                'w-full flex gap-2 items-center justify-center bg-[var(--primary)] text-[var(--on-primary)] font-bold text-md px-4 py-2 rounded-md transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer uppercase tracking-wide'
-              }>
-              {t('invite.story')}
-              <RiTelegram2Fill />
-            </button>
-          </div>
-        </div>
+
+      {/* Link preview chip */}
+      <motion.button
+        onClick={handleCopyUrl}
+        whileHover={{ scale: 1.01 }}
+        whileTap={{ scale: 0.98 }}
+        className="flex items-center gap-2.5 w-full px-4 py-2.5 rounded-xl font-mono text-xs cursor-pointer"
+        style={{
+          background: urlCopied
+            ? 'rgba(55,227,162,0.09)'
+            : 'rgba(255,255,255,0.04)',
+          border: urlCopied
+            ? '1px solid rgba(55,227,162,0.3)'
+            : '1px solid rgba(255,255,255,0.08)',
+          transition: 'all 180ms ease',
+        }}>
+        <AnimatePresence mode="wait" initial={false}>
+          {urlCopied ? (
+            <motion.span
+              key="check"
+              initial={{ scale: 0.6, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.6, opacity: 0 }}
+              style={{ color: 'var(--success)' }}
+              className="shrink-0">
+              <CheckCheck size={14} />
+            </motion.span>
+          ) : (
+            <motion.span
+              key="link"
+              initial={{ scale: 0.6, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.6, opacity: 0 }}
+              style={{ color: 'var(--primary)', opacity: 0.7 }}
+              className="shrink-0">
+              <Link2 size={14} />
+            </motion.span>
+          )}
+        </AnimatePresence>
+
+        <span
+          className="truncate flex-1 text-left"
+          style={{
+            color: urlCopied ? 'var(--success)' : 'var(--on-background)',
+            opacity: urlCopied ? 1 : 0.5,
+          }}>
+          {urlCopied ? 'Скопировано!' : user.inviteUrl || '—'}
+        </span>
+
+        <Copy
+          size={12}
+          aria-hidden
+          style={{ color: 'var(--on-background)', opacity: 0.3, flexShrink: 0 }}
+        />
+      </motion.button>
+
+      {/* Primary action — Telegram share */}
+      <motion.button
+        onClick={handleShareMessage}
+        whileHover={{ scale: 1.02, y: -2 }}
+        whileTap={{ scale: 0.97 }}
+        className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl font-bold font-mono text-base cursor-pointer relative overflow-hidden"
+        style={{
+          background:
+            'linear-gradient(135deg, var(--primary-container), rgba(195,166,255,0.25))',
+          border: '1px solid rgba(195,166,255,0.35)',
+          color: 'var(--on-primary-container)',
+          boxShadow: '0 4px 24px rgba(195,166,255,0.2)',
+        }}>
+        {/* Animated sheen */}
+        <motion.span
+          aria-hidden
+          className="absolute inset-0 pointer-events-none"
+          animate={{
+            background: [
+              'linear-gradient(105deg, transparent 30%, rgba(195,166,255,0.08) 50%, transparent 70%)',
+              'linear-gradient(105deg, transparent 60%, rgba(195,166,255,0.08) 80%, transparent 100%)',
+            ],
+          }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }}
+        />
+        <Share2 size={18} aria-hidden />
+        Пригласить в Telegram
+      </motion.button>
+
+      {/* Secondary row */}
+      <div className="flex gap-2">
+        {/* Copy link */}
+        <motion.button
+          onClick={handleCopyBtn}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.97 }}
+          className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold font-mono text-sm cursor-pointer"
+          style={{
+            background: btnCopied
+              ? 'rgba(55,227,162,0.1)'
+              : 'rgba(255,255,255,0.05)',
+            border: btnCopied
+              ? '1px solid rgba(55,227,162,0.3)'
+              : '1px solid rgba(255,255,255,0.09)',
+            color: btnCopied ? 'var(--success)' : 'var(--on-surface)',
+            transition: 'all 180ms ease',
+          }}>
+          <AnimatePresence mode="wait" initial={false}>
+            {btnCopied ? (
+              <motion.span
+                key="done"
+                className="flex items-center gap-2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}>
+                <CheckCheck size={15} /> Скопировано
+              </motion.span>
+            ) : (
+              <motion.span
+                key="copy"
+                className="flex items-center gap-2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}>
+                <Copy size={15} /> Ссылка
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </motion.button>
+
+        {/* Story */}
+        <motion.button
+          onClick={handleShareStory}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.97 }}
+          className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold font-mono text-sm cursor-pointer"
+          style={{
+            background: 'rgba(0,136,204,0.1)',
+            border: '1px solid rgba(0,136,204,0.22)',
+            color: 'var(--ton)',
+          }}>
+          <RiTelegram2Fill size={16} aria-hidden />
+          Сторис
+        </motion.button>
       </div>
     </div>
   )
