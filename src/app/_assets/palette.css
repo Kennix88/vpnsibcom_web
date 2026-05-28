@@ -1,6 +1,7 @@
 :root {
   /* Star (FEBD04) */
-  --star: #febd04;
+  --star: #f5a623;
+  --star-gradient: linear-gradient(135deg, #f5a623, #febd04);
   --on-star: #3a2e00;
   --star-container: #ffe08f;
   --on-star-container: #241c00;
@@ -67,6 +68,14 @@
   --primary-hover: #b89eff;
   --primary-active: #9f73f2;
   --inverse-primary: #6b5aa8;
+  --primary-deep: #9d71ff;
+  --primary-gradient: linear-gradient(135deg, #9d71ff, #c3a6ff);
+  --primary-glow: rgba(157, 113, 255, 0.28);
+
+  --cta: #ff8c42;
+  --on-cta: #1a0a00;
+  --cta-container: rgba(255, 140, 66, 0.14);
+  --cta-glow: rgba(255, 140, 66, 0.22);
 
   /* === ACCENT (сетевой/connection) === */
   --accent-network: #6ae3ff; /* индикатор соединения, ping, актив */
@@ -94,10 +103,10 @@
 
   --surface-dim: #0f0d11;
   --surface-bright: #39363b;
-  --surface-container-lowest: #0b0a0d;
-  --surface-container-low: #18161a;
-  --surface-container: #1f1d23;
-  --surface-container-high: #27242b;
+  --surface-container-lowest: #080608;
+  --surface-container-low: #131116;
+  --surface-container: #1e1b22;
+  --surface-container-high: #2d2933;
   --surface-container-highest: #312e35;
 
   --inverse-surface: #f5f2f7;
