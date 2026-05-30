@@ -20,7 +20,7 @@ export default function HappDeepLinkButton({
   return (
     <Link
       className="flex items-center justify-center p-1 rounded-md"
-      href={`/deeplink/?link=${encodeURI(deepLink)}`}
+      href={`${encodeURI(deepLink)}`}
       style={{
         background: `${client.color}`,
       }}
