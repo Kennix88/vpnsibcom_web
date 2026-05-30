@@ -7,9 +7,9 @@ import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import LanguageSwitcher from '../LanguageSwitcher'
-import AppsList from './AppsList'
-import LinksList from './LinksList'
-import SubscriptionElement from './SubscriptionElement'
+import Loader from '../Loader'
+import SocialButtons from '../SocialButtons'
+import SubscriptionCard from './SubscriptionCard'
 
 export default function Subscription({
   token,
@@ -22,7 +22,6 @@ export default function Subscription({
 
   const [subscription, setSubscription] =
     useState<SubscriptionDataInterface | null>(null)
-  const [tab, setTab] = useState<'apps' | 'links'>('apps')
 
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
@@ -67,12 +66,7 @@ export default function Subscription({
   }, [isToken, token, t])
 
   if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center w-full h-full p-4 gap-4">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[var(--primary)]"></div>
-        <div className="text-lg font-medium">{t('loading')}</div>
-      </div>
-    )
+    return <Loader />
   }
 
   if (error) {
@@ -98,53 +92,26 @@ export default function Subscription({
     <div className="w-full flex justify-center font-mono">
       <div className="max-w-lg flex w-full flex-col gap-4 py-4">
         <div className="flex flex-wrap justify-between gap-2">
-          <h1 className="text-2xl font-bold uppercase">{t('title')}</h1>
+          <div className="flex items-center gap-2">
+            <span
+              className="block w-2 h-2 rounded-full"
+              style={{ background: 'var(--primary)' }}
+            />
+            <span
+              className="text-2xl tracking-widest uppercase"
+              style={{ color: 'var(--on-background)', opacity: 0.42 }}>
+              Подписка
+            </span>
+          </div>
           {isToken && <LanguageSwitcher isPublic={true} />}
         </div>
-        <SubscriptionElement
+        <SubscriptionCard
           subscription={subscription}
           isList={false}
           isPublic={isToken}
           isDefaultOpen={true}
         />
-
-        <div className="flex items-center divide-x-2 divide-[var(--surface-container-highest)]">
-          <button
-            onClick={() => setTab('apps')}
-            className="grow cursor-pointer rounded-l-md h-8 transition-all duration-200 hover:brightness-110 active:scale-[0.97]"
-            style={{
-              backgroundColor:
-                tab == 'apps'
-                  ? 'var(--primary)'
-                  : 'var(--surface-container-lowest)',
-              color:
-                tab == 'apps'
-                  ? 'var(--on-primary)'
-                  : 'var(--on-surface-container)',
-            }}>
-            {t('connection')}
-          </button>
-          <button
-            onClick={() => setTab('links')}
-            className="grow cursor-pointer rounded-r-md h-8 transition-all duration-200 hover:brightness-110 active:scale-[0.97]"
-            style={{
-              backgroundColor:
-                tab !== 'apps'
-                  ? 'var(--primary)'
-                  : 'var(--surface-container-lowest)',
-              color:
-                tab !== 'apps'
-                  ? 'var(--on-primary)'
-                  : 'var(--on-surface-container)',
-            }}>
-            {t('configs')} (Pro)
-          </button>
-        </div>
-        {tab == 'apps' ? (
-          <AppsList subscriptionUrl={subscription.subscriptionUrl} />
-        ) : (
-          <LinksList links={subscription.links} />
-        )}
+        <SocialButtons />
       </div>
     </div>
   )
