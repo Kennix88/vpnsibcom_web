@@ -5,8 +5,8 @@ import 'react-toastify/dist/ReactToastify.css'
 import '../_assets/globals.css'
 
 export const metadata = {
-  title: 'Your subscription - VPNsib',
-  description: 'Your subscription',
+  title: 'Подписка - VPNsib',
+  description: 'Подписка',
 }
 
 export default async function RootLayout({
