@@ -3,37 +3,84 @@
 import { authApiClient } from '@app/core/authApiClient'
 import { useSubscriptionsStore } from '@app/store/subscriptions.store'
 import { useUserStore } from '@app/store/user.store'
-
 import { AnimatePresence, motion } from 'framer-motion'
-import { useTranslations } from 'next-intl'
+import { Layers } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
+import { useTranslations } from 'use-intl'
+import SubscriptionCard from './subscription/SubscriptionCard'
 
-import SubscriptionElement from './subscription/SubscriptionElement'
+/* ─── Skeleton card ──────────────────────────────────────────────── */
+function SkeletonCard({ delay }: { delay: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay, duration: 0.3 }}
+      className="rounded-2xl overflow-hidden"
+      style={{
+        background: 'var(--glass-bg)',
+        border: '1px solid rgba(255,255,255,0.07)',
+      }}>
+      {/* Header skeleton */}
+      <div
+        className="flex items-center gap-3 px-4 py-3"
+        style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+        <div
+          className="w-8 h-8 rounded-xl animate-pulse"
+          style={{ background: 'rgba(255,255,255,0.07)' }}
+        />
+        <div className="flex-1 space-y-1.5">
+          <div
+            className="h-3 rounded-lg animate-pulse"
+            style={{ background: 'rgba(255,255,255,0.07)', width: '55%' }}
+          />
+          <div
+            className="h-2.5 rounded-lg animate-pulse"
+            style={{ background: 'rgba(255,255,255,0.05)', width: '30%' }}
+          />
+        </div>
+        <div
+          className="w-7 h-7 rounded-full animate-pulse"
+          style={{ background: 'rgba(255,255,255,0.06)' }}
+        />
+      </div>
+      {/* Body skeleton */}
+      <div className="flex items-center justify-between gap-3 px-4 py-3">
+        <div className="flex gap-2">
+          {[1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className="w-8 h-8 rounded-lg animate-pulse"
+              style={{
+                background: 'rgba(255,255,255,0.05)',
+                animationDelay: `${i * 80}ms`,
+              }}
+            />
+          ))}
+        </div>
+        <div
+          className="w-20 h-8 rounded-xl animate-pulse"
+          style={{ background: 'rgba(195,166,255,0.08)' }}
+        />
+      </div>
+    </motion.div>
+  )
+}
 
-/**
- * Component for displaying user subscriptions
- * @returns JSX.Element
- */
+/* ─── Component ──────────────────────────────────────────────────── */
 export function Subscriptions() {
   const t = useTranslations('subscriptions')
-
   const { subscriptions, setSubscriptions } = useSubscriptionsStore()
   const { user } = useUserStore()
   const [loading, setLoading] = useState(true)
 
-  // const location = usePathname()
-  // const url = location === '/app' ? '/app' : '/tma'
-
-  const fetchSubscriptions = useCallback(async (): Promise<void> => {
+  const fetchSubscriptions = useCallback(async () => {
     try {
       setLoading(true)
       const response = await authApiClient.getSubscriptons()
       setSubscriptions(response.subscriptions)
-      // setOpenSub(response.subscriptions.subscriptions[0].id)
-      console.log('Subscriptions loaded successfully')
-    } catch (error) {
-      console.error('Failed to load subscriptions', error)
-      // toast.error(t('errors.loadFailed'))
+    } catch (err) {
+      console.error('Failed to load subscriptions', err)
     } finally {
       setLoading(false)
     }
@@ -45,116 +92,101 @@ export function Subscriptions() {
 
   if (!user) return null
 
-  // const isDisabledAddSub =
-  //   subscriptions &&
-  //   subscriptions.subscriptions &&
-  //   subscriptions.subscriptions.length < user.limitSubscriptions
+  const count = subscriptions?.subscriptions?.length ?? 0
+  const limit = user.limitSubscriptions ?? 0
 
   return (
-    <div className="flex flex-col gap-4 items-center font-extralight font-mono max-w-md w-full">
-      <div className="pl-4 opacity-70 flex flex-row gap-2 items-center justify-between w-full pb-2 border-b border-[var(--outline)]">
-        <span>{t('yourSubscriptions')}</span>
-        <div className="flex gap-2 items-center">
-          <span className="text-sm">
-            {subscriptions && subscriptions.subscriptions
-              ? subscriptions.subscriptions.length
-              : 0}
-            /{user?.limitSubscriptions || 0}
+    <div className="flex flex-col gap-3 w-full font-mono">
+      {/* Section header */}
+      <div className="flex items-center justify-between px-1">
+        <div className="flex items-center gap-2">
+          <span
+            className="block w-1 h-1 rounded-full"
+            style={{ background: 'var(--primary)' }}
+          />
+          <span
+            className="text-xs tracking-widest uppercase"
+            style={{ color: 'var(--on-background)', opacity: 0.42 }}>
+            {t('yourSubscriptions')}
           </span>
-
-          {/*{isDisabledAddSub && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="flex justify-center">
-              <Link
-                href={`${url}/add-subscription`}
-                className="flex items-center justify-center w-7 h-7 gap-2 rounded-md bg-[var(--secondary-container)] text-[var(--on-secondary-container)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer">
-                <FiPlus size={18} />
-              </Link>
-            </motion.div>
-          )}*/}
+        </div>
+        {/* Count badge */}
+        <div
+          className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold"
+          style={{
+            background:
+              count >= limit
+                ? 'rgba(255,107,102,0.1)'
+                : 'rgba(195,166,255,0.1)',
+            color: count >= limit ? 'var(--error)' : 'var(--primary)',
+            border: `1px solid ${count >= limit ? 'rgba(255,107,102,0.2)' : 'rgba(195,166,255,0.2)'}`,
+          }}>
+          <Layers size={11} aria-hidden />
+          {count}/{limit}
         </div>
       </div>
 
-      {/* Loader - Redesigned to match subscription items */}
+      {/* Skeletons */}
       {loading && (
-        <div className="flex flex-col gap-2 w-full">
-          {[1, 2].map((item) => (
-            <motion.div
-              key={`skeleton-${item}`}
-              className="relative bg-[var(--surface-container-lowest)] rounded-md overflow-hidden">
-              {/* Skeleton header */}
-              <div className="animate-pulse h-10 bg-[var(--primary)] w-full rounded-t-md flex items-center px-4 py-2">
-                <div className="h-4 bg-[var(--on-primary)] opacity-30 rounded w-3/4"></div>
-              </div>
-
-              {/* Skeleton body */}
-              <div className="flex flex-row flex-wrap gap-2 px-2 py-2 items-center justify-between">
-                <div className="animate-pulse h-6 bg-[var(--primary-container)] opacity-30 rounded w-1/3"></div>
-                <div className="animate-pulse h-5 bg-[var(--primary-container)] opacity-30 rounded w-1/4"></div>
-              </div>
-
-              {/* Skeleton footer */}
-              <div className="flex flex-wrap justify-between items-center px-2 py-2 border-t border-[var(--outline)]">
-                <div className="flex gap-2 items-center">
-                  <div className="animate-pulse h-8 w-8 bg-[var(--primary-container)] opacity-30 rounded-md"></div>
-                  <div className="h-4 w-[1px] bg-[var(--outline)]"></div>
-                  <div className="animate-pulse h-8 w-8 bg-[var(--primary-container)] opacity-30 rounded-md"></div>
-                  <div className="h-4 w-[1px] bg-[var(--outline)]"></div>
-                  <div className="animate-pulse h-8 w-8 bg-[var(--primary-container)] opacity-30 rounded-md"></div>
-                </div>
-                <div className="flex gap-2 items-center">
-                  <div className="animate-pulse h-8 w-8 bg-[var(--primary-container)] opacity-30 rounded-md"></div>
-                  <div className="animate-pulse h-8 w-8 bg-[var(--primary-container)] opacity-30 rounded-md"></div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+        <div className="flex flex-col gap-3">
+          <SkeletonCard delay={0} />
+          <SkeletonCard delay={0.08} />
         </div>
       )}
 
-      {/* Subscriptions List */}
+      {/* List */}
       {!loading && (
-        <div className="flex flex-col gap-4 w-full">
-          <AnimatePresence>
-            {subscriptions?.subscriptions.length === 0 ? (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="text-center py-4">
+        <AnimatePresence mode="popLayout">
+          {count === 0 ? (
+            <motion.div
+              key="empty"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="flex flex-col items-center gap-3 py-10 rounded-2xl"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid rgba(255,255,255,0.06)',
+              }}>
+              <div
+                className="w-12 h-12 rounded-2xl flex items-center justify-center"
+                style={{
+                  background: 'rgba(195,166,255,0.1)',
+                  color: 'var(--primary)',
+                }}>
+                <Layers size={22} />
+              </div>
+              <p
+                className="text-sm"
+                style={{ color: 'var(--on-background)', opacity: 0.45 }}>
                 {t('noSubscriptions')}
-              </motion.div>
-            ) : (
-              <>
-                {subscriptions?.subscriptions.map((subscription) => (
-                  <SubscriptionElement
-                    key={subscription.id}
-                    subscription={subscription}
+              </p>
+            </motion.div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {subscriptions!.subscriptions.map((sub, i) => (
+                <motion.div
+                  key={sub.id}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.97 }}
+                  transition={{
+                    delay: i * 0.06,
+                    duration: 0.32,
+                    ease: [0.2, 0, 0, 1],
+                  }}>
+                  <SubscriptionCard
+                    subscription={sub}
                     isList={true}
                     isPublic={false}
-                    isDefaultOpen={false}
+                    isDefaultOpen={i === 0}
                   />
-                ))}
-              </>
-            )}
-          </AnimatePresence>
-        </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </AnimatePresence>
       )}
-      {/*{isDisabledAddSub && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="flex justify-center">
-          <Link
-            href={`${url}/add-subscription`}
-            className="flex items-center justify-center px-4 py-2 gap-2 rounded-md bg-[var(--secondary-container)] text-[var(--on-secondary-container)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer">
-            <FiPlus size={18} />
-            <span>{t('addSubscription')}</span>
-          </Link>
-        </motion.div>
-      )}*/}
     </div>
   )
 }
