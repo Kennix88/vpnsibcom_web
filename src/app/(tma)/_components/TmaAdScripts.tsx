@@ -23,7 +23,11 @@ export function TmaAdScripts() {
     if (w.richadsController) return
 
     const tryInit = () => {
-      if (!w.TelegramAdsController || !w.Telegram?.WebApp || w.richadsController) {
+      if (
+        !w.TelegramAdsController ||
+        !w.Telegram?.WebApp ||
+        w.richadsController
+      ) {
         return false
       }
 
@@ -71,6 +75,20 @@ export function TmaAdScripts() {
         strategy="afterInteractive"
         src="https://richinfo.co/richpartners/telegram/js/tg-ob.js"
       />
+
+      {/*<Script
+        id="telega"
+        strategy="afterInteractive"
+        src="https://inapp.telega.io/sdk/v1/sdk.js"
+      />
+      <Script
+        id="telega-ads"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `const ads = window.TelegaIn.AdsController.create_miniapp({
+              token: '5a6ba556-002d-4636-8ef5-fcecd23fd9d9' });`,
+        }}
+      />*/}
     </>
   )
 }
