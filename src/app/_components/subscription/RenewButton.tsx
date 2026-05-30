@@ -21,7 +21,8 @@ import { invoice } from '@tma.js/sdk-react'
 import { beginCell, toNano } from '@ton/core'
 import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react'
 import { addDays, eachDayOfInterval } from 'date-fns'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
+import { Loader2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { MdAutoMode } from 'react-icons/md'
@@ -38,6 +39,158 @@ export interface TrafficPeriodButtonInterface {
   minDays: number
 }
 
+/* ─── Section label ──────────────────────────────────────────────── */
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex items-center gap-2 px-1 mb-1">
+      <span
+        className="block w-1 h-1 rounded-full"
+        style={{ background: 'var(--primary)' }}
+      />
+      <span
+        className="text-[11px] font-mono tracking-widest uppercase"
+        style={{ color: 'var(--on-background)', opacity: 0.42 }}>
+        {children}
+      </span>
+    </div>
+  )
+}
+
+/* ─── Glass chip button ──────────────────────────────────────────── */
+function Chip({
+  active,
+  children,
+  onClick,
+  disabled,
+}: {
+  active: boolean
+  children: React.ReactNode
+  onClick: () => void
+  disabled?: boolean
+}) {
+  return (
+    <motion.button
+      onClick={onClick}
+      disabled={disabled}
+      whileHover={disabled ? {} : { scale: 1.04, y: -1 }}
+      whileTap={disabled ? {} : { scale: 0.95 }}
+      className="px-3 py-2 rounded-xl text-xs font-bold font-mono grow cursor-pointer"
+      style={{
+        background: active
+          ? 'rgba(195,166,255,0.22)'
+          : 'rgba(255,255,255,0.05)',
+        border: active
+          ? '1px solid rgba(195,166,255,0.5)'
+          : '1px solid rgba(255,255,255,0.08)',
+        color: active ? 'var(--primary)' : 'var(--on-surface)',
+        opacity: disabled ? 0.4 : 1,
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        boxShadow: active ? '0 0 12px rgba(195,166,255,0.18)' : 'none',
+        transition: 'all 140ms ease',
+      }}>
+      {children}
+    </motion.button>
+  )
+}
+
+/* ─── Pay button ─────────────────────────────────────────────────── */
+function PayBtn({
+  onClick,
+  disabled,
+  isLoading,
+  colorVar,
+  glowRgb,
+  children,
+}: {
+  onClick: () => void
+  disabled: boolean
+  isLoading: boolean
+  colorVar: string
+  glowRgb: string
+  children: React.ReactNode
+}) {
+  return (
+    <motion.button
+      onClick={onClick}
+      disabled={disabled}
+      whileHover={disabled ? {} : { scale: 1.02, y: -1 }}
+      whileTap={disabled ? {} : { scale: 0.96 }}
+      className="grow flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold font-mono text-sm"
+      style={{
+        background: `rgba(${glowRgb},0.13)`,
+        border: `1px solid rgba(${glowRgb},0.3)`,
+        color: colorVar,
+        opacity: disabled ? 0.45 : 1,
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        boxShadow: disabled ? 'none' : `0 4px 16px rgba(${glowRgb},0.14)`,
+        transition: 'opacity 150ms ease',
+      }}>
+      <AnimatePresence mode="wait" initial={false}>
+        {isLoading ? (
+          <motion.span
+            key="spin"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}>
+            <Loader2 size={15} className="animate-spin" />
+          </motion.span>
+        ) : (
+          <motion.span
+            key="content"
+            className="flex items-center gap-2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}>
+            {children}
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </motion.button>
+  )
+}
+
+/* ─── Summary row ────────────────────────────────────────────────── */
+function SummaryRow({
+  label,
+  value,
+}: {
+  label: string
+  value: React.ReactNode
+}) {
+  return (
+    <div
+      className="flex items-center justify-between gap-2 py-2.5 px-4"
+      style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+      <span
+        className="text-xs font-mono"
+        style={{ color: 'var(--on-background)', opacity: 0.5 }}>
+        {label}
+      </span>
+      <div
+        className="text-xs font-mono font-bold"
+        style={{ color: 'var(--on-surface)' }}>
+        {value}
+      </div>
+    </div>
+  )
+}
+
+/* ─── Glass card wrapper ─────────────────────────────────────────── */
+function GlassCard({ children }: { children: React.ReactNode }) {
+  return (
+    <div
+      className="rounded-2xl overflow-hidden"
+      style={{
+        background: 'var(--glass-bg)',
+        backdropFilter: 'blur(var(--glass-blur))',
+        border: '1px solid rgba(255,255,255,0.07)',
+      }}>
+      {children}
+    </div>
+  )
+}
+
+/* ─── Main component ─────────────────────────────────────────────── */
 export default function RenewButton({
   subscription,
 }: {
@@ -46,13 +199,13 @@ export default function RenewButton({
   const { rates } = useCurrencyStore()
   const { subscriptions, setSubscriptions } = useSubscriptionsStore()
   const { user, setUser } = useUserStore()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [pendingMethod, setPendingMethod] = useState<
     PaymentMethodEnum | 'BALANCE' | 'USDT' | null
   >(null)
   const renewInFlightRef = useRef(false)
-  const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
-  const [isUpdatePeriod, setIsUpdatePeriod] = useState<boolean>(false)
+  const [isOpenModal, setIsOpenModal] = useState(false)
+  const [isUpdatePeriod, setIsUpdatePeriod] = useState(false)
   const [periodButton, setPeriodButton] =
     useState<PeriodButtonInterface | null>(null)
   const [periodButtons, setPeriodButtons] = useState<PeriodButtonInterface[]>(
@@ -67,11 +220,7 @@ export default function RenewButton({
 
   const trafficPeriodButtons = useMemo(
     () => [
-      {
-        key: TrafficResetEnum.DAY,
-        label: t('trafficReset.daily'),
-        minDays: 0,
-      },
+      { key: TrafficResetEnum.DAY, label: t('trafficReset.daily'), minDays: 0 },
       {
         key: TrafficResetEnum.WEEK,
         label: t('trafficReset.weekly'),
@@ -93,7 +242,6 @@ export default function RenewButton({
 
   useEffect(() => {
     if (!subscriptions || !user) return
-
     const buttons: PeriodButtonInterface[] = [
       {
         key: SubscriptionPeriodEnum.HOUR,
@@ -146,20 +294,16 @@ export default function RenewButton({
         discount: subscriptions.indefinitelyRatio,
       },
     ]
-
-    const findTrafficPeriodButton = trafficPeriodButtons.find(
-      (btn) => btn.key === subscription.trafficReset,
+    setTrafficPeriodButton(
+      trafficPeriodButtons.find((b) => b.key === subscription.trafficReset) ??
+        null,
     )
-
-    setTrafficPeriodButton(findTrafficPeriodButton || null)
     setPeriodButtons(buttons)
     setPeriodButton(buttons[3])
   }, [subscriptions, user, subscription.trafficReset, t, trafficPeriodButtons])
 
-  // Стабильная функция, чтобы не ломать зависимости
   const getFinalPercent = useCallback((ratio: number) => 100 - ratio * 100, [])
 
-  // price и priceNoDiscount — не хуки, можно считать сразу (всегда)
   const price = calculateSubscriptionCost({
     period: periodButton?.key || subscription.period,
     periodMultiplier,
@@ -193,77 +337,55 @@ export default function RenewButton({
     settings: subscriptions!,
   })
 
-  // useMemo — вызываем всегда, внутри безопасно обрабатываем отсутствие данных
   const summaryItems = useMemo(() => {
     if (!user || !subscriptions || !periodButton) return []
-
     return [
       {
         name: t('summary.traffic'),
-        value: (
-          <div>
-            {subscription.isUnlimitTraffic
-              ? t('summary.unlimit')
-              : subscription.plan.key === PlansEnum.TRAFFIC
-                ? `${subscription.trafficLimitGb} GB`
-                : trafficPeriodButton?.key === TrafficResetEnum.DAY
-                  ? `${subscription.trafficLimitGb} GB ${t('summary.daily')}`
-                  : trafficPeriodButton?.key === TrafficResetEnum.WEEK
-                    ? `${(subscription.trafficLimitGb || 0) * 7} GB ${t('summary.weekly')}`
-                    : trafficPeriodButton?.key === TrafficResetEnum.MONTH
-                      ? `${(subscription.trafficLimitGb || 0) * 30} GB ${t('summary.monthly')}`
-                      : `${(subscription.trafficLimitGb || 0) * 365} GB ${t('summary.yearly')}`}
-          </div>
-        ),
         isVisible: true,
+        value: subscription.isUnlimitTraffic
+          ? t('summary.unlimit')
+          : `${subscription.trafficLimitGb} GB`,
       },
       {
         name: t('summary.period'),
-        value: (
-          <div className="flex gap-1 items-center">
-            <div>{periodButton.label}</div>
-            {periodMultiplier > 1 && (
-              <div className="rounded-md w-[22px] h-[22px] justify-center items-center flex bg-[var(--primary)] text-[var(--on-primary)] text-xs font-bold">
-                x{periodMultiplier}
-              </div>
-            )}
-          </div>
-        ),
         isVisible: subscription.plan.key !== PlansEnum.TRAFFIC,
+        value:
+          periodButton.label +
+          (periodMultiplier > 1 ? ` ×${periodMultiplier}` : ''),
       },
       {
         name: t('summary.periodDiscount'),
-        value: <div>{getFinalPercent(periodButton.discount)}%</div>,
         isVisible:
           periodButton.key !== SubscriptionPeriodEnum.INDEFINITELY &&
           getFinalPercent(periodButton.discount) > 0,
+        value: `${getFinalPercent(periodButton.discount)}%`,
       },
       {
         name: t('summary.roleDiscount'),
-        value: <div>{getFinalPercent(user.roleDiscount)}%</div>,
         isVisible: getFinalPercent(user.roleDiscount) > 0,
+        value: `${getFinalPercent(user.roleDiscount)}%`,
       },
       {
         name: t('summary.toPaid'),
+        isVisible: true,
         value: (
-          <div className="flex gap-2 items-center">
+          <div className="flex items-center gap-1.5">
             <Currency type="star" w={14} />
-            <div>
-              {price}
-              {price !== priceNoDiscount && (
-                <span className="opacity-70 text-[12px] line-through">
-                  ({priceNoDiscount})
-                </span>
-              )}
-            </div>
+            <span>{price}</span>
+            {price !== priceNoDiscount && (
+              <span
+                className="line-through text-[11px]"
+                style={{ opacity: 0.5 }}>
+                ({priceNoDiscount})
+              </span>
+            )}
           </div>
         ),
-        isVisible: true,
       },
     ]
   }, [
     subscription,
-    trafficPeriodButton,
     periodButton,
     periodMultiplier,
     user,
@@ -274,74 +396,70 @@ export default function RenewButton({
     t,
   ])
 
-  // Теперь guard — рендерим null только после того, как все хуки/мемо вызваны
   if (!user || !subscriptions || !periodButton) return null
+
+  if (
+    subscription.period === SubscriptionPeriodEnum.TRIAL ||
+    subscription.period === SubscriptionPeriodEnum.TRAFFIC ||
+    subscription.period === SubscriptionPeriodEnum.INDEFINITELY ||
+    subscription.plan.key === PlansEnum.TRAFFIC ||
+    subscription.plan.key === PlansEnum.TRIAL ||
+    subscription.nextRenewalStars === undefined
+  )
+    return null
 
   const balance = user.balance.payment
 
   const renewSubscription = async (
-    subscription: SubscriptionDataInterface,
+    sub: SubscriptionDataInterface,
     method: PaymentMethodEnum | 'BALANCE' | 'USDT',
   ) => {
     if (renewInFlightRef.current) return
     try {
       if (method === PaymentMethodEnum.TON_TON && !wallet?.account?.address) {
-        try {
-          await tonConnectUI.openModal()
-        } catch {
-          toast.error('Error when opening a wallet')
-        }
+        await tonConnectUI
+          .openModal()
+          .catch(() => toast.error('Error when opening a wallet'))
         return
       }
       renewInFlightRef.current = true
       setPendingMethod(method)
       setIsLoading(true)
       const data = await authApiClient.renewSubscription(
-        subscription.id,
+        sub.id,
         method,
         isUpdatePeriod,
-        periodButton?.key || subscription.period,
+        periodButton?.key || sub.period,
         periodMultiplier,
-        trafficPeriodButton?.key ?? subscription.trafficReset,
+        trafficPeriodButton?.key ?? sub.trafficReset,
       )
-
       if (!data.invoice) {
         setUser(data.user)
         setSubscriptions(data.subscriptions)
-        toast.success('Subsctription renewed')
-      } else {
-        if (data.invoice?.isTonPayment) {
-          const amountNano = toNano(data.invoice?.amountTon.toString())
-
-          // payload с ID платежа в виде комментария
-          const payload = beginCell()
-            .storeUint(0, 32) // opcode text_comment
-            .storeStringTail(data.invoice?.token || '')
-            .endCell()
-
-          // транзакция
-          const tx = {
-            validUntil: Math.floor(Date.now() / 1000) + 300, // 5 минут
+        toast.success('Подписка продлена')
+      } else if (data.invoice.isTonPayment) {
+        const amountNano = toNano(data.invoice.amountTon.toString())
+        const payload = beginCell()
+          .storeUint(0, 32)
+          .storeStringTail(data.invoice.token || '')
+          .endCell()
+        await tonConnectUI
+          .sendTransaction({
+            validUntil: Math.floor(Date.now() / 1000) + 300,
             messages: [
               {
-                address: data.invoice?.linkPay || '',
+                address: data.invoice.linkPay || '',
                 amount: amountNano.toString(),
                 payload: payload.toBoc().toString('base64'),
               },
             ],
-          }
-
-          try {
-            await tonConnectUI.sendTransaction(tx)
-          } catch (err) {
-            console.error('Ошибка при оплате', err)
-          }
-        } else {
-          await invoice.openUrl(data.invoice?.linkPay || '')
-        }
+          })
+          .catch((err) => console.error(err))
+      } else {
+        await invoice.openUrl(data.invoice.linkPay || '')
       }
     } catch {
-      toast.error('Error when renewing a subscription')
+      toast.error('Ошибка продления подписки')
     } finally {
       renewInFlightRef.current = false
       setPendingMethod(null)
@@ -352,383 +470,275 @@ export default function RenewButton({
 
   return (
     <>
-      {subscription.period !== SubscriptionPeriodEnum.TRIAL &&
-        subscription.period !== SubscriptionPeriodEnum.TRAFFIC &&
-        subscription.period !== SubscriptionPeriodEnum.INDEFINITELY &&
-        subscription.plan.key !== PlansEnum.TRAFFIC &&
-        subscription.plan.key !== PlansEnum.TRIAL &&
-        subscription.nextRenewalStars !== undefined && (
-          <>
-            <button
-              onClick={() => {
-                setIsOpenModal(true)
-              }}
-              disabled={isLoading}
-              className={`grow p-2 rounded-md bg-[var(--secondary-container)] text-[var(--on-secondary-container)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex gap-2 items-center `}>
-              <MdAutoMode size={18} />
-              {t('extension')}
-            </button>
+      <motion.button
+        onClick={() => setIsOpenModal(true)}
+        disabled={isLoading}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.97 }}
+        className="grow flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-bold font-mono cursor-pointer"
+        style={{
+          background: 'rgba(195,166,255,0.1)',
+          color: 'var(--primary)',
+          border: '1px solid rgba(195,166,255,0.2)',
+        }}>
+        <MdAutoMode size={18} />
+        {t('extension')}
+      </motion.button>
 
-            <Modal
-              isOpen={isOpenModal}
-              onClose={() => setIsOpenModal(false)}
-              title={t('subscriptionExtension')}>
-              <div className="flex flex-col gap-4">
-                <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
-                  <div className="flex gap-2 items-end justify-between w-full px-4 ">
-                    <div className="opacity-50 flex flex-row gap-2 items-center">
-                      {t('selectPeriod')}
-                    </div>
-                    <div className="flex gap-2 items-center ">
-                      <Currency type="star" w={18} />
-                      {price}
-                    </div>
+      <Modal
+        isOpen={isOpenModal}
+        onClose={() => setIsOpenModal(false)}
+        title={t('subscriptionExtension')}>
+        <div className="flex flex-col gap-4">
+          {/* Period selector */}
+          <div>
+            <SectionLabel>{t('selectPeriod')}</SectionLabel>
+            <GlassCard>
+              <div className="flex flex-wrap gap-2 p-3">
+                {periodButtons.map((btn) => (
+                  <Chip
+                    key={btn.key}
+                    active={btn.key === periodButton.key}
+                    onClick={() => {
+                      if (btn.key === SubscriptionPeriodEnum.INDEFINITELY)
+                        setPeriodMultiplier(1)
+                      setPeriodButton(btn)
+                    }}>
+                    {btn.label}
+                    {btn.discount < 1
+                      ? ` (-${getFinalPercent(btn.discount)}%)`
+                      : ''}
+                  </Chip>
+                ))}
+              </div>
+
+              {/* Multiplier */}
+              {periodButton.key !== SubscriptionPeriodEnum.INDEFINITELY && (
+                <div
+                  style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}
+                  className="p-3 flex flex-col gap-2">
+                  <span
+                    className="text-[11px] font-mono"
+                    style={{ color: 'var(--on-background)', opacity: 0.4 }}>
+                    {t('periodMultiplier')}
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <Chip
+                      active={false}
+                      onClick={() =>
+                        setPeriodMultiplier(Math.max(1, periodMultiplier - 1))
+                      }>
+                      −
+                    </Chip>
+                    <input
+                      type="number"
+                      value={periodMultiplier}
+                      onChange={(e) =>
+                        setPeriodMultiplier(
+                          Math.max(1, parseInt(e.target.value) || 1),
+                        )
+                      }
+                      className="w-16 text-center bg-transparent rounded-lg px-2 py-1.5 text-sm font-mono font-bold focus:outline-none"
+                      style={{
+                        border: '1px solid rgba(195,166,255,0.3)',
+                        color: 'var(--on-surface)',
+                        caretColor: 'var(--primary)',
+                      }}
+                    />
+                    <Chip
+                      active={false}
+                      onClick={() => setPeriodMultiplier(periodMultiplier + 1)}>
+                      +
+                    </Chip>
                   </div>
-
-                  <motion.div
-                    layout
-                    className="text-sm bg-[var(--surface-container-lowest)] rounded-xl flex flex-row flex-wrap gap-2 items-center p-4 w-full shadow-md">
-                    {periodButtons.map((btn) => {
-                      const isActive = btn.key === periodButton.key
-                      const bgOpacity = isActive ? 0.3 : 0.15
+                  <div className="flex flex-wrap gap-2">
+                    {PERIOD_MULTIPLIERS.map((val) => {
+                      const rgb = getButtonColor(val)
                       return (
                         <motion.button
-                          key={btn.key}
+                          key={val}
                           whileTap={{ scale: 0.95 }}
-                          onClick={() => {
-                            if (
-                              btn.key === SubscriptionPeriodEnum.INDEFINITELY
-                            ) {
-                              setPeriodMultiplier(1)
-                            }
-                            setPeriodButton(btn)
-                          }}
-                          className="flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-sm font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]"
+                          onClick={() => setPeriodMultiplier(val)}
+                          className="grow px-3 py-2 rounded-xl text-xs font-mono font-bold cursor-pointer"
                           style={{
-                            backgroundColor: `rgba(216, 197, 255, ${bgOpacity})`,
-                            border: isActive
-                              ? `1px solid rgba(216, 197, 255, 0.7)`
-                              : '1px solid transparent',
+                            background:
+                              periodMultiplier === val
+                                ? `rgba(${rgb},0.22)`
+                                : `rgba(${rgb},0.09)`,
+                            border:
+                              periodMultiplier === val
+                                ? `1px solid rgba(${rgb},0.55)`
+                                : '1px solid transparent',
+                            color: `rgb(${rgb})`,
+                            transition: 'all 130ms ease',
                           }}>
-                          {btn.label}{' '}
-                          {btn.discount < 1 &&
-                            `(-${getFinalPercent(btn.discount)}%)`}
+                          ×{val}
                         </motion.button>
                       )
                     })}
-
-                    {periodButton?.key !==
-                      SubscriptionPeriodEnum.INDEFINITELY && (
-                      <>
-                        <div className="w-full flex flex-col gap-1 opacity-50">
-                          {t('periodMultiplier')}
-                        </div>
-                        <button
-                          onClick={() =>
-                            setPeriodMultiplier(
-                              Math.max(1, periodMultiplier - 1),
-                            )
-                          }
-                          className="flex grow items-center justify-center text-white px-3 py-1.5 rounded-md cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97] "
-                          style={{
-                            backgroundColor: 'rgba(216, 197, 255, 0.15)',
-                          }}>
-                          -
-                        </button>
-                        <input
-                          type="number"
-                          value={periodMultiplier}
-                          onChange={(e) =>
-                            setPeriodMultiplier(
-                              Math.max(1, parseInt(e.target.value) || 1),
-                            )
-                          }
-                          className="border max-w-[100px] border-[var(--on-surface)]/50 rounded-md px-2 py-1 bg-transparent focus:border-[var(--primary)] focus:outline-none"
-                        />
-                        <button
-                          onClick={() =>
-                            setPeriodMultiplier(periodMultiplier + 1)
-                          }
-                          className="flex grow items-center justify-center text-white px-3 py-1.5 rounded-md cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97] "
-                          style={{
-                            backgroundColor: 'rgba(216, 197, 255, 0.15)',
-                          }}>
-                          +
-                        </button>
-
-                        {PERIOD_MULTIPLIERS.map((val) => {
-                          const isActive = periodMultiplier === val
-                          const rgb = getButtonColor(val)
-                          const bgOpacity = isActive ? 0.3 : 0.15
-                          return (
-                            <motion.button
-                              key={val}
-                              whileTap={{ scale: 0.95 }}
-                              onClick={() => setPeriodMultiplier(val)}
-                              className="flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-sm font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]"
-                              style={{
-                                backgroundColor: `rgba(${rgb}, ${bgOpacity})`,
-                                border: isActive
-                                  ? `1px solid rgba(${rgb}, 0.7)`
-                                  : '1px solid transparent',
-                              }}>
-                              x{val}
-                            </motion.button>
-                          )
-                        })}
-                      </>
-                    )}
-                  </motion.div>
+                  </div>
                 </div>
+              )}
+            </GlassCard>
+          </div>
 
-                {periodButton?.key !== SubscriptionPeriodEnum.INDEFINITELY && (
-                  <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
+          {/* Update period checkbox */}
+          {periodButton.key !== SubscriptionPeriodEnum.INDEFINITELY && (
+            <GlassCard>
+              <div className="flex items-center justify-between px-4 py-3">
+                <span
+                  className="text-xs font-mono"
+                  style={{ color: 'var(--on-background)', opacity: 0.55 }}>
+                  {t('options.period')}
+                </span>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={isUpdatePeriod}
+                    onChange={() => setIsUpdatePeriod(!isUpdatePeriod)}
+                    className="sr-only"
+                  />
+                  <div
+                    className="w-10 h-6 rounded-full transition-all duration-200 flex items-center px-0.5"
+                    style={{
+                      background: isUpdatePeriod
+                        ? 'var(--primary)'
+                        : 'rgba(255,255,255,0.1)',
+                    }}>
                     <motion.div
-                      layout
-                      className="text-sm bg-[var(--surface-container-lowest)] divide-y divide-[var(--primary)] rounded-xl flex flex-col p-4 py-2 w-full shadow-md">
-                      <motion.div className="flex flex-row gap-3 items-center justify-between py-2 text-sm font-mono">
-                        <div className="flex gap-2 items-center">
-                          <div className="opacity-50">
-                            {t('options.period')}:
-                          </div>
-                        </div>
-                        <div className="relative flex items-center">
-                          <input
-                            type="checkbox"
-                            id="autoRenewalCheckbox"
-                            checked={isUpdatePeriod}
-                            onChange={() => setIsUpdatePeriod(!isUpdatePeriod)}
-                            className="sr-only peer"
-                          />
-                          <label
-                            htmlFor="autoRenewalCheckbox"
-                            className="flex items-center justify-center w-5 h-5 bg-transparent border border-[var(--on-surface)]/50 rounded-md cursor-pointer peer-focus:border-[var(--primary)] peer-focus:ring-2 peer-focus:ring-[var(--primary)]/20 peer-checked:bg-[var(--primary)] peer-checked:border-[var(--primary)] transition-all duration-200 hover:brightness-110 active:scale-[0.97]">
-                            {isUpdatePeriod && (
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-4 w-4 text-[var(--on-primary)]"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                strokeWidth={2}>
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M5 13l4 4L19 7"
-                                />
-                              </svg>
-                            )}
-                          </label>
-                        </div>
-                      </motion.div>
-                    </motion.div>
-                  </div>
-                )}
-
-                {subscription.trafficReset !== TrafficResetEnum.NO_RESET &&
-                  subscription.trafficLimitGb !== undefined &&
-                  !subscription.isUnlimitTraffic && (
-                    <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
-                      <div className="flex gap-2 items-end justify-between w-full px-4 ">
-                        <div className="opacity-50 flex flex-row gap-2 items-center">
-                          {t('trafficReset.title')}
-                        </div>
-                        <div>
-                          {trafficPeriodButton?.key === TrafficResetEnum.DAY
-                            ? subscription.trafficLimitGb
-                            : trafficPeriodButton?.key === TrafficResetEnum.WEEK
-                              ? (subscription.trafficLimitGb || 0) * 7
-                              : trafficPeriodButton?.key ===
-                                  TrafficResetEnum.MONTH
-                                ? (subscription.trafficLimitGb || 0) * 30
-                                : trafficPeriodButton?.key ===
-                                    TrafficResetEnum.YEAR
-                                  ? (subscription.trafficLimitGb || 0) * 365
-                                  : ''}{' '}
-                          GB
-                        </div>
-                      </div>
-
-                      <motion.div
-                        layout
-                        className="text-sm bg-[var(--surface-container-lowest)] rounded-xl flex flex-row flex-wrap gap-2 items-center p-4 w-full shadow-md">
-                        {trafficPeriodButtons.map((btn) => {
-                          const isActive = btn.key === trafficPeriodButton?.key
-                          const expiresDays = eachDayOfInterval({
-                            start: new Date(),
-                            end: addDays(
-                              new Date(subscription.expiredAt || new Date()),
-                              calculateDaysByPeriod(
-                                periodButton.key,
-                                periodMultiplier,
-                              ) || 0,
-                            ),
-                          }).length
-                          const isDisabled = btn.minDays >= expiresDays
-                          const bgOpacity = isActive ? 0.3 : 0.15
-                          return (
-                            <motion.button
-                              key={btn.key}
-                              disabled={isDisabled}
-                              whileTap={{ scale: 0.95 }}
-                              onClick={() => {
-                                setTrafficPeriodButton(btn)
-                              }}
-                              className={`flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-sm font-mono transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
-                                isDisabled
-                                  ? 'opacity-50 cursor-not-allowed'
-                                  : ' cursor-pointer'
-                              }`}
-                              style={{
-                                backgroundColor: `rgba(216, 197, 255, ${bgOpacity})`,
-                                border: isActive
-                                  ? `1px solid rgba(216, 197, 255, 0.7)`
-                                  : '1px solid transparent',
-                              }}>
-                              {btn.label}
-                            </motion.button>
-                          )
-                        })}
-                      </motion.div>
-                    </div>
-                  )}
-
-                <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
-                  <div className="px-4 opacity-50 flex flex-row gap-2 items-center w-full">
-                    {t('summary.title')}
-                  </div>
-
-                  <motion.div
-                    layout
-                    className="text-sm bg-[var(--surface-container-lowest)] divide-y divide-[var(--primary)] rounded-xl flex flex-col p-4 py-2 w-full shadow-md">
-                    {summaryItems.map(
-                      (item) =>
-                        item.isVisible && (
-                          <motion.div
-                            key={item.name}
-                            className="flex flex-row gap-3 items-center justify-between px-4 py-2 text-sm font-mono">
-                            <div className="opacity-50">{item.name}:</div>
-                            {item.value}
-                          </motion.div>
-                        ),
-                    )}
-                  </motion.div>
-                </div>
-
-                <div className="grow flex flex-col gap-2">
-                  <div className="px-4 opacity-50 flex flex-wrap items-center gap-2 font-mono">
-                    {t('extension')}
-                  </div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <button
-                      onClick={() => {
-                        renewSubscription(subscription, 'BALANCE')
+                      animate={{ x: isUpdatePeriod ? 16 : 0 }}
+                      transition={{
+                        type: 'spring',
+                        stiffness: 500,
+                        damping: 30,
                       }}
-                      disabled={isLoading || price > balance}
-                      className={`py-2 px-4 rounded-md bg-[var(--star-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
-                        price > balance
-                          ? 'opacity-50 cursor-not-allowed'
-                          : ' cursor-pointer'
-                      } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-                      {pendingMethod === 'BALANCE' && isLoading ? (
-                        'Processing...'
-                      ) : price <= 0 ? (
-                        t('freeExtension')
-                      ) : (
-                        <>
-                          <Currency type={'star'} w={18} />
-                          {price}
-                        </>
-                      )}
-                    </button>
-                    <button
-                      onClick={() => {
-                        renewSubscription(subscription, PaymentMethodEnum.STARS)
-                      }}
-                      disabled={
-                        isLoading || price <= 0 || price < user.minPayStars
-                      }
-                      className={`py-2 px-4 rounded-md bg-[var(--star-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
-                        isLoading || price <= 0 || price < user.minPayStars
-                          ? 'opacity-50 cursor-not-allowed'
-                          : ' cursor-pointer'
-                      } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-                      {pendingMethod === PaymentMethodEnum.STARS && isLoading ? (
-                        'Processing...'
-                      ) : (
-                        <>
-                          <Currency type={'tg-star'} w={18} />
-                          {price}
-                        </>
-                      )}
-                    </button>
-                    {rates && (
-                      <button
-                        onClick={() => {
-                          renewSubscription(
-                            subscription,
-                            PaymentMethodEnum.TON_TON,
-                          )
-                        }}
-                        disabled={
-                          isLoading || price <= 0 || price < user.minPayStars
-                        }
-                        className={`py-2 px-4 rounded-md bg-[var(--ton-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
-                          isLoading || price <= 0 || price < user.minPayStars
-                            ? 'opacity-50 cursor-not-allowed'
-                            : ' cursor-pointer'
-                        } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-                        {pendingMethod === PaymentMethodEnum.TON_TON &&
-                        isLoading ? (
-                          'Processing...'
-                        ) : (
-                          <>
-                            <Currency type={'ton'} w={18} />
-                            {roundUp(
-                              fxUtil(
-                                price,
-                                CurrencyEnum.XTR,
-                                CurrencyEnum.TON,
-                                rates,
-                              ),
-                            )}
-                          </>
-                        )}
-                      </button>
-                    )}
-                    <button
-                      onClick={() => {
-                        renewSubscription(subscription, 'USDT')
-                      }}
-                      disabled={
-                        isLoading ||
-                        roundUp(price * subscriptions.tgStarsToUSD) >
-                          user.balance.usdt ||
-                        price <= 0
-                      }
-                      className={`py-2 px-4 rounded-md bg-[var(--usdt-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
-                        isLoading ||
-                        roundUp(price * subscriptions.tgStarsToUSD) >
-                          user.balance.usdt ||
-                        price <= 0
-                          ? 'opacity-50 cursor-not-allowed'
-                          : ' cursor-pointer'
-                      } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-                      {pendingMethod === 'USDT' && isLoading ? (
-                        'Processing...'
-                      ) : (
-                        <>
-                          <Currency type={'usdt'} w={18} />
-                          {roundUp(price * subscriptions.tgStarsToUSD)}
-                        </>
-                      )}
-                    </button>
+                      className="w-5 h-5 rounded-full"
+                      style={{ background: 'white' }}
+                    />
                   </div>
-                </div>
+                </label>
               </div>
-            </Modal>
-          </>
-        )}
+            </GlassCard>
+          )}
+
+          {/* Traffic period */}
+          {subscription.trafficReset !== TrafficResetEnum.NO_RESET &&
+            subscription.trafficLimitGb !== undefined &&
+            !subscription.isUnlimitTraffic && (
+              <div>
+                <SectionLabel>{t('trafficReset.title')}</SectionLabel>
+                <GlassCard>
+                  <div className="flex flex-wrap gap-2 p-3">
+                    {trafficPeriodButtons.map((btn) => {
+                      const expiresDays = eachDayOfInterval({
+                        start: new Date(),
+                        end: addDays(
+                          new Date(subscription.expiredAt || new Date()),
+                          calculateDaysByPeriod(
+                            periodButton.key,
+                            periodMultiplier,
+                          ) || 0,
+                        ),
+                      }).length
+                      const isDisabled = btn.minDays >= expiresDays
+                      return (
+                        <Chip
+                          key={btn.key}
+                          active={btn.key === trafficPeriodButton?.key}
+                          onClick={() => setTrafficPeriodButton(btn)}
+                          disabled={isDisabled}>
+                          {btn.label}
+                        </Chip>
+                      )
+                    })}
+                  </div>
+                </GlassCard>
+              </div>
+            )}
+
+          {/* Summary */}
+          <div>
+            <SectionLabel>{t('summary.title')}</SectionLabel>
+            <GlassCard>
+              {summaryItems
+                .filter((i) => i.isVisible)
+                .map((item) => (
+                  <SummaryRow
+                    key={item.name}
+                    label={`${item.name}:`}
+                    value={item.value}
+                  />
+                ))}
+            </GlassCard>
+          </div>
+
+          {/* Pay buttons */}
+          <div>
+            <SectionLabel>{t('extension')}</SectionLabel>
+            <div className="flex flex-wrap gap-2">
+              <PayBtn
+                onClick={() => renewSubscription(subscription, 'BALANCE')}
+                disabled={isLoading || price > balance}
+                isLoading={pendingMethod === 'BALANCE' && isLoading}
+                colorVar="var(--star)"
+                glowRgb="245,166,35">
+                {price <= 0 ? (
+                  t('freeExtension')
+                ) : (
+                  <>
+                    <Currency type="star" w={16} />
+                    {price}
+                  </>
+                )}
+              </PayBtn>
+              <PayBtn
+                onClick={() =>
+                  renewSubscription(subscription, PaymentMethodEnum.STARS)
+                }
+                disabled={isLoading || price <= 0 || price < user.minPayStars}
+                isLoading={
+                  pendingMethod === PaymentMethodEnum.STARS && isLoading
+                }
+                colorVar="var(--star)"
+                glowRgb="245,166,35">
+                <Currency type="tg-star" w={16} />
+                {price}
+              </PayBtn>
+              {rates && (
+                <PayBtn
+                  onClick={() =>
+                    renewSubscription(subscription, PaymentMethodEnum.TON_TON)
+                  }
+                  disabled={isLoading || price <= 0 || price < user.minPayStars}
+                  isLoading={
+                    pendingMethod === PaymentMethodEnum.TON_TON && isLoading
+                  }
+                  colorVar="var(--ton)"
+                  glowRgb="0,136,204">
+                  <Currency type="ton" w={16} />
+                  {roundUp(
+                    fxUtil(price, CurrencyEnum.XTR, CurrencyEnum.TON, rates),
+                  )}
+                </PayBtn>
+              )}
+              <PayBtn
+                onClick={() => renewSubscription(subscription, 'USDT')}
+                disabled={
+                  isLoading ||
+                  roundUp(price * subscriptions.tgStarsToUSD) >
+                    user.balance.usdt ||
+                  price <= 0
+                }
+                isLoading={pendingMethod === 'USDT' && isLoading}
+                colorVar="var(--usdt)"
+                glowRgb="80,175,149">
+                <Currency type="usdt" w={16} />
+                {roundUp(price * subscriptions.tgStarsToUSD)}
+              </PayBtn>
+            </div>
+          </div>
+        </div>
+      </Modal>
     </>
   )
 }
