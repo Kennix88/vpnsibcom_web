@@ -17,15 +17,158 @@ import { fxUtil } from '@app/utils/fx.util'
 import { invoice } from '@tma.js/sdk-react'
 import { beginCell, toNano } from '@ton/core'
 import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
+import { Loader2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useMemo, useRef, useState } from 'react'
+import { ReactNode, useMemo, useRef, useState } from 'react'
 import { FaPlus } from 'react-icons/fa6'
 import { toast } from 'react-toastify'
 import Currency from '../Currency'
 import Modal from '../Modal'
 import { TRAFFIC_GBS } from '../add-subscription/constants'
 import { getTrafficCountButtonColor } from '../add-subscription/functions'
+
+function SectionLabel({ children }: { children: ReactNode }) {
+  return (
+    <div className="flex items-center gap-2 px-1 mb-1">
+      <span
+        className="block w-1 h-1 rounded-full"
+        style={{ background: 'var(--primary)' }}
+      />
+      <span
+        className="text-[11px] font-mono tracking-widest uppercase"
+        style={{ color: 'var(--on-background)', opacity: 0.42 }}>
+        {children}
+      </span>
+    </div>
+  )
+}
+
+function Chip({
+  active,
+  children,
+  onClick,
+  disabled,
+}: {
+  active: boolean
+  children: ReactNode
+  onClick: () => void
+  disabled?: boolean
+}) {
+  return (
+    <motion.button
+      onClick={onClick}
+      disabled={disabled}
+      whileHover={disabled ? {} : { scale: 1.04, y: -1 }}
+      whileTap={disabled ? {} : { scale: 0.95 }}
+      className="px-3 py-2 rounded-xl text-xs font-bold font-mono grow cursor-pointer"
+      style={{
+        background: active
+          ? 'rgba(195,166,255,0.22)'
+          : 'rgba(255,255,255,0.05)',
+        border: active
+          ? '1px solid rgba(195,166,255,0.5)'
+          : '1px solid rgba(255,255,255,0.08)',
+        color: active ? 'var(--primary)' : 'var(--on-surface)',
+        opacity: disabled ? 0.4 : 1,
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        boxShadow: active ? '0 0 12px rgba(195,166,255,0.18)' : 'none',
+        transition: 'all 140ms ease',
+      }}>
+      {children}
+    </motion.button>
+  )
+}
+
+function GlassCard({ children }: { children: ReactNode }) {
+  return (
+    <div
+      className="rounded-2xl overflow-hidden"
+      style={{
+        background: 'var(--glass-bg)',
+        backdropFilter: 'blur(var(--glass-blur))',
+        border: '1px solid rgba(255,255,255,0.07)',
+      }}>
+      {children}
+    </div>
+  )
+}
+
+function SummaryRow({ label, value }: { label: string; value: ReactNode }) {
+  return (
+    <div
+      className="flex items-center justify-between gap-2 py-2.5 px-4"
+      style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+      <span
+        className="text-xs font-mono"
+        style={{ color: 'var(--on-background)', opacity: 0.5 }}>
+        {label}
+      </span>
+
+      <div
+        className="text-xs font-mono font-bold"
+        style={{ color: 'var(--on-surface)' }}>
+        {value}
+      </div>
+    </div>
+  )
+}
+
+function PayBtn({
+  onClick,
+  disabled,
+  isLoading,
+  colorVar,
+  glowRgb,
+  children,
+}: {
+  onClick: () => void
+  disabled: boolean
+  isLoading: boolean
+  colorVar: string
+  glowRgb: string
+  children: ReactNode
+}) {
+  return (
+    <motion.button
+      onClick={onClick}
+      disabled={disabled || isLoading}
+      whileHover={!disabled && !isLoading ? { scale: 1.02, y: -1 } : {}}
+      whileTap={!disabled && !isLoading ? { scale: 0.96 } : {}}
+      className="grow flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold font-mono text-sm"
+      style={{
+        background: `rgba(${glowRgb},0.13)`,
+        border: `1px solid rgba(${glowRgb},0.3)`,
+        color: colorVar,
+        opacity: disabled && !isLoading ? 0.45 : 1,
+        cursor: disabled || isLoading ? 'not-allowed' : 'pointer',
+        boxShadow:
+          disabled || isLoading ? 'none' : `0 4px 16px rgba(${glowRgb},0.14)`,
+        transition: 'opacity 150ms ease',
+      }}>
+      <AnimatePresence mode="wait" initial={false}>
+        {isLoading ? (
+          <motion.span
+            key="spin"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}>
+            <Loader2 size={15} className="animate-spin" />
+          </motion.span>
+        ) : (
+          <motion.span
+            key="content"
+            className="flex items-center gap-2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}>
+            {children}
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </motion.button>
+  )
+}
 
 export default function AddTrafficButton({
   subscription,
@@ -35,115 +178,125 @@ export default function AddTrafficButton({
   const { rates } = useCurrencyStore()
   const { subscriptions, setSubscriptions } = useSubscriptionsStore()
   const { user, setUser } = useUserStore()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
+
+  const [isLoading, setIsLoading] = useState(false)
+  const [isOpenModal, setIsOpenModal] = useState(false)
+
   const [pendingMethod, setPendingMethod] = useState<
     PaymentMethodEnum | 'BALANCE' | 'USDT' | null
   >(null)
-  const addTrafficInFlightRef = useRef(false)
+
   const [trafficLimitGb, setTrafficLimitGb] = useState(1)
+
+  const addTrafficInFlightRef = useRef(false)
+
   const wallet = useTonWallet()
   const [tonConnectUI] = useTonConnectUI()
+
   const t = useTranslations('billing.subscription')
 
-  // Проверяем валидность подписки
   const isValidSubscription =
-    (subscription.plan.key === PlansEnum.TRAFFIC ||
-      subscription.plan.key === PlansEnum.TRIAL) &&
-    user &&
-    subscriptions
+    subscription.plan.key === PlansEnum.TRAFFIC ||
+    subscription.plan.key === PlansEnum.TRIAL
 
-  // Определяем все переменные и хуки до любых условных возвратов
-  // Используем дефолтные значения для случая, когда isValidSubscription = false
-  const balance = user?.balance?.payment || 0
-  const usdtBalance = user?.balance?.usdt || 0
+  const price =
+    user && subscriptions
+      ? calculateSubscriptionCost({
+          period: subscription.period,
+          periodMultiplier: subscription.periodMultiplier,
+          isPremium: user.isPremium,
+          isTgProgramPartner: user.isTgProgramPartner,
+          devicesCount: subscription.devicesCount,
+          serversCount: subscription.baseServersCount,
+          premiumServersCount: subscription.premiumServersCount,
+          trafficLimitGb,
+          isAllBaseServers: subscription.isAllBaseServers,
+          isAllPremiumServers: subscription.isAllPremiumServers,
+          isUnlimitTraffic: false,
+          userDiscount: user.roleDiscount,
+          plan: subscription.plan,
+          settings: subscriptions,
+        })
+      : 0
 
-  // Вычисляем цены только если подписка валидна
-  const price = isValidSubscription
-    ? calculateSubscriptionCost({
-        period: subscription.period,
-        periodMultiplier: subscription.periodMultiplier,
-        isPremium: user.isPremium,
-        isTgProgramPartner: user.isTgProgramPartner,
-        devicesCount: subscription.devicesCount,
-        serversCount: subscription.baseServersCount,
-        premiumServersCount: subscription.premiumServersCount,
-        trafficLimitGb: trafficLimitGb,
-        isAllBaseServers: subscription.isAllBaseServers,
-        isAllPremiumServers: subscription.isAllPremiumServers,
-        isUnlimitTraffic: false,
-        userDiscount: user.roleDiscount,
-        plan: subscription.plan,
-        settings: subscriptions,
-      })
-    : 0
-
-  const priceNoDiscount = isValidSubscription
-    ? calculateSubscriptionCostNoDiscount({
-        period: subscription.period,
-        periodMultiplier: subscription.periodMultiplier,
-        isPremium: user.isPremium,
-        isTgProgramPartner: user.isTgProgramPartner,
-        devicesCount: subscription.devicesCount,
-        serversCount: subscription.baseServersCount,
-        premiumServersCount: subscription.premiumServersCount,
-        trafficLimitGb: trafficLimitGb,
-        isAllBaseServers: subscription.isAllBaseServers,
-        isAllPremiumServers: subscription.isAllPremiumServers,
-        isUnlimitTraffic: false,
-        plan: subscription.plan,
-        settings: subscriptions,
-      })
-    : 0
+  const priceNoDiscount =
+    user && subscriptions
+      ? calculateSubscriptionCostNoDiscount({
+          period: subscription.period,
+          periodMultiplier: subscription.periodMultiplier,
+          isPremium: user.isPremium,
+          isTgProgramPartner: user.isTgProgramPartner,
+          devicesCount: subscription.devicesCount,
+          serversCount: subscription.baseServersCount,
+          premiumServersCount: subscription.premiumServersCount,
+          trafficLimitGb,
+          isAllBaseServers: subscription.isAllBaseServers,
+          isAllPremiumServers: subscription.isAllPremiumServers,
+          isUnlimitTraffic: false,
+          plan: subscription.plan,
+          settings: subscriptions,
+        })
+      : 0
 
   const getFinalPercent = (ratio: number) => 100 - ratio * 100
 
-  // Используем useMemo безусловно, до любых условных возвратов
   const summaryItems = useMemo(
-    () =>
-      isValidSubscription
-        ? [
-            {
-              name: t('summary.traffic'),
-              value: <div>{`${trafficLimitGb} GB`}</div>,
-              isVisible: true,
-            },
-            {
-              name: t('summary.roleDiscount'),
-              value: <div>{getFinalPercent(user.roleDiscount)}%</div>,
-              isVisible: getFinalPercent(user.roleDiscount) > 0,
-            },
-            {
-              name: t('summary.toPaid'),
-              value: (
-                <div className="flex gap-2 items-center">
-                  <Currency type="star" w={14} />
-                  <div>
-                    {price}
-                    {price !== priceNoDiscount && (
-                      <span className="opacity-70 text-[12px] line-through">
-                        ({priceNoDiscount})
-                      </span>
-                    )}
-                  </div>
-                </div>
-              ),
-              isVisible: true,
-            },
-          ]
-        : [],
-    [trafficLimitGb, user, price, priceNoDiscount, t, isValidSubscription],
+    () => [
+      {
+        name: t('summary.traffic'),
+        value: <span>{trafficLimitGb} GB</span>,
+        isVisible: true,
+      },
+      {
+        name: t('summary.roleDiscount'),
+        value: <span>{getFinalPercent(user?.roleDiscount || 1)}%</span>,
+        isVisible: getFinalPercent(user?.roleDiscount || 1) > 0,
+      },
+      {
+        name: t('summary.toPaid'),
+        value: (
+          <span className="flex items-center gap-1.5 font-bold">
+            <Currency type="star" w={14} />
+            {price}
+
+            {price !== priceNoDiscount && (
+              <span className="opacity-40 text-[11px] line-through font-normal">
+                {priceNoDiscount}
+              </span>
+            )}
+          </span>
+        ),
+        isVisible: true,
+      },
+    ],
+    [trafficLimitGb, user?.roleDiscount, price, priceNoDiscount, t],
   )
 
-  // Если подписка невалидна, возвращаем null
-  if (!isValidSubscription) return null
+  if (!isValidSubscription || !user || !subscriptions) {
+    return null
+  }
+
+  const balance = user.balance?.payment || 0
+  const usdtBalance = user.balance?.usdt || 0
+
+  const tonPrice = rates
+    ? roundUp(fxUtil(price, CurrencyEnum.XTR, CurrencyEnum.TON, rates))
+    : null
+
+  const usdtPrice = roundUp(price * subscriptions.tgStarsToUSD)
+
+  const canBalance = !isLoading && price <= balance
+  const canStars = !isLoading && price > 0 && price >= user.minPayStars
+  const canTon = !isLoading && price > 0 && price >= user.minPayStars
+  const canUsdt = !isLoading && usdtPrice <= usdtBalance && price > 0
 
   const addTraffic = async (
-    subscription: SubscriptionDataInterface,
-    trafficLimitGb: number,
+    sub: SubscriptionDataInterface,
+    trafficGb: number,
     method: PaymentMethodEnum | 'BALANCE' | 'USDT',
   ) => {
     if (addTrafficInFlightRef.current) return
+
     try {
       if (method === PaymentMethodEnum.TON_TON && !wallet?.account?.address) {
         try {
@@ -151,37 +304,40 @@ export default function AddTrafficButton({
         } catch {
           toast.error('Error when opening a wallet')
         }
+
         return
       }
+
       addTrafficInFlightRef.current = true
+
       setPendingMethod(method)
       setIsLoading(true)
+
       const data = await authApiClient.addTrafficSubscription(
-        subscription.id,
-        trafficLimitGb,
+        sub.id,
+        trafficGb,
         method,
       )
 
       if (!data.invoice) {
         setUser(data.user)
         setSubscriptions(data.subscriptions)
+
         toast.success('Traffic added successfully')
       } else {
-        if (data.invoice?.isTonPayment) {
-          const amountNano = toNano(data.invoice?.amountTon.toString())
+        if (data.invoice.isTonPayment) {
+          const amountNano = toNano(data.invoice.amountTon.toString())
 
-          // payload с ID платежа в виде комментария
           const payload = beginCell()
-            .storeUint(0, 32) // opcode text_comment
-            .storeStringTail(data.invoice?.token || '')
+            .storeUint(0, 32)
+            .storeStringTail(data.invoice.token || '')
             .endCell()
 
-          // транзакция
           const tx = {
-            validUntil: Math.floor(Date.now() / 1000) + 300, // 5 минут
+            validUntil: Math.floor(Date.now() / 1000) + 300,
             messages: [
               {
-                address: data.invoice?.linkPay || '',
+                address: data.invoice.linkPay || '',
                 amount: amountNano.toString(),
                 payload: payload.toBoc().toString('base64'),
               },
@@ -194,13 +350,14 @@ export default function AddTrafficButton({
             console.error('Ошибка при оплате', err)
           }
         } else {
-          await invoice.openUrl(data.invoice?.linkPay || '')
+          await invoice.openUrl(data.invoice.linkPay || '')
         }
       }
     } catch {
       toast.error('Error adding traffic')
     } finally {
       addTrafficInFlightRef.current = false
+
       setPendingMethod(null)
       setIsOpenModal(false)
       setIsLoading(false)
@@ -209,208 +366,226 @@ export default function AddTrafficButton({
 
   return (
     <>
-      <button
-        onClick={() => {
-          setIsOpenModal(true)
-        }}
+      <motion.button
+        onClick={() => setIsOpenModal(true)}
         disabled={isLoading}
-        className={`grow p-2 rounded-md bg-[var(--secondary-container)] text-[var(--on-secondary-container)] transition-all duration-200 hover:brightness-110 active:scale-[0.97] cursor-pointer flex gap-2 items-center `}>
-        <FaPlus size={18} />
+        whileHover={isLoading ? {} : { scale: 1.02, y: -1 }}
+        whileTap={isLoading ? {} : { scale: 0.97 }}
+        className="grow flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-bold font-mono cursor-pointer"
+        style={{
+          background: 'rgba(195,166,255,0.1)',
+          color: 'var(--primary)',
+          border: '1px solid rgba(195,166,255,0.2)',
+          opacity: isLoading ? 0.55 : 1,
+        }}>
+        <FaPlus size={16} />
         {t('addTraffic')}
-      </button>
+      </motion.button>
 
       <Modal
         isOpen={isOpenModal}
         onClose={() => setIsOpenModal(false)}
-        title={t('addingTraffic')}>
+        title={t('addingTraffic')}
+        showCancelButton={false}>
         <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
-            <div className="flex gap-2 items-end justify-between w-full px-4 ">
-              <div className="opacity-50 flex flex-row gap-2 items-center">
-                {t('traffic')}
-              </div>
-              <div className="flex gap-2 items-center ">
-                <Currency type="star" w={18} />
-                {price}
-              </div>
-            </div>
+          {/* TRAFFIC */}
 
-            <motion.div
-              layout
-              className="text-sm bg-[var(--surface-container-lowest)] rounded-xl flex flex-row flex-wrap gap-2 items-center p-4 w-full shadow-md">
-              <button
-                onClick={() => {
-                  setTrafficLimitGb(Math.max(1, trafficLimitGb - 1))
-                }}
-                className="flex grow items-center justify-center text-white px-3 py-1.5 rounded-md cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97] "
-                style={{ backgroundColor: 'rgba(216, 197, 255, 0.15)' }}>
-                -
-              </button>
-              <input
-                type="number"
-                value={trafficLimitGb}
-                onChange={(e) => {
-                  setTrafficLimitGb(Math.max(1, parseInt(e.target.value) || 1))
-                }}
-                className="border max-w-[100px] border-[var(--on-surface)]/50 rounded-md px-2 py-1 bg-transparent focus:border-[var(--primary)] focus:outline-none"
-              />
-              <button
-                onClick={() => {
-                  setTrafficLimitGb(trafficLimitGb + 1)
-                }}
-                className="flex grow items-center justify-center text-white px-3 py-1.5 rounded-md cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97] "
-                style={{ backgroundColor: 'rgba(216, 197, 255, 0.15)' }}>
-                +
-              </button>
+          <div>
+            <SectionLabel>{t('traffic')}</SectionLabel>
 
-              {TRAFFIC_GBS.map((val) => {
-                const isActive = trafficLimitGb === val
-                const rgb = getTrafficCountButtonColor(val)
-                const bgOpacity = isActive ? 0.3 : 0.15
-                return (
-                  <motion.button
-                    key={val}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => {
-                      setTrafficLimitGb(val)
-                    }}
-                    className="flex flex-row gap-2 grow items-center justify-center text-white px-3 py-1.5 rounded-md text-sm font-mono cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-[0.97]"
-                    style={{
-                      backgroundColor: `rgba(${rgb}, ${bgOpacity})`,
-                      border: isActive
-                        ? `1px solid rgba(${rgb}, 0.7)`
-                        : '1px solid transparent',
-                    }}>
-                    {val}
-                  </motion.button>
-                )
-              })}
-            </motion.div>
+            <GlassCard>
+              <div className="p-3 flex flex-col gap-3">
+                <div className="flex items-center gap-2">
+                  <Chip
+                    active={false}
+                    onClick={() =>
+                      setTrafficLimitGb(Math.max(1, trafficLimitGb - 1))
+                    }>
+                    −
+                  </Chip>
+
+                  <div className="flex-1 flex flex-col items-center gap-0.5">
+                    <AnimatePresence mode="popLayout">
+                      <motion.span
+                        key={trafficLimitGb}
+                        initial={{
+                          opacity: 0,
+                          y: -8,
+                          scale: 0.9,
+                        }}
+                        animate={{
+                          opacity: 1,
+                          y: 0,
+                          scale: 1,
+                        }}
+                        exit={{
+                          opacity: 0,
+                          y: 8,
+                          scale: 0.9,
+                        }}
+                        transition={{
+                          type: 'spring',
+                          stiffness: 400,
+                          damping: 30,
+                        }}
+                        className="text-2xl font-bold font-mono tabular-nums leading-none"
+                        style={{
+                          color: 'var(--primary)',
+                        }}>
+                        {trafficLimitGb}
+                      </motion.span>
+                    </AnimatePresence>
+
+                    <span className="text-[11px] font-mono opacity-40 uppercase tracking-widest">
+                      GB
+                    </span>
+                  </div>
+
+                  <Chip
+                    active={false}
+                    onClick={() => setTrafficLimitGb(trafficLimitGb + 1)}>
+                    +
+                  </Chip>
+                </div>
+
+                <input
+                  type="number"
+                  value={trafficLimitGb}
+                  onChange={(e) =>
+                    setTrafficLimitGb(
+                      Math.max(1, parseInt(e.target.value) || 1),
+                    )
+                  }
+                  className="w-full text-center text-sm font-mono rounded-xl px-3 py-2 bg-transparent focus:outline-none transition-colors"
+                  style={{
+                    border: '1px solid rgba(255,255,255,0.12)',
+                    color: 'var(--on-surface)',
+                    caretColor: 'var(--primary)',
+                  }}
+                />
+
+                <div className="flex flex-wrap gap-2">
+                  {TRAFFIC_GBS.map((val) => {
+                    const isActive = trafficLimitGb === val
+
+                    const rgb = getTrafficCountButtonColor(val)
+
+                    return (
+                      <motion.button
+                        key={val}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => setTrafficLimitGb(val)}
+                        className="grow min-w-[52px] px-3 py-2 rounded-xl text-xs font-mono font-bold cursor-pointer"
+                        style={{
+                          background: isActive
+                            ? `rgba(${rgb},0.22)`
+                            : `rgba(${rgb},0.09)`,
+                          border: isActive
+                            ? `1px solid rgba(${rgb},0.55)`
+                            : '1px solid transparent',
+                          color: `rgb(${rgb})`,
+                          transition: 'all 130ms ease',
+                        }}>
+                        {val}
+                      </motion.button>
+                    )
+                  })}
+                </div>
+              </div>
+            </GlassCard>
           </div>
 
-          <div className="flex flex-col gap-2 items-center font-extralight font-mono w-full">
-            <div className="px-4 opacity-50 flex flex-row gap-2 items-center w-full">
-              {t('summary.title')}
-            </div>
+          {/* SUMMARY */}
 
-            <motion.div
-              layout
-              className="text-sm bg-[var(--surface-container-lowest)] divide-y divide-[var(--primary)] rounded-xl flex flex-col p-4 py-2 w-full shadow-md">
-              {summaryItems.map(
-                (item) =>
-                  item.isVisible && (
-                    <motion.div
-                      key={item.name}
-                      className="flex flex-row gap-3 items-center justify-between px-4 py-2 text-sm font-mono">
-                      <div className="opacity-50">{item.name}:</div>
-                      {item.value}
-                    </motion.div>
-                  ),
-              )}
-            </motion.div>
+          <div>
+            <SectionLabel>{t('summary.title')}</SectionLabel>
+
+            <GlassCard>
+              {summaryItems
+                .filter((item) => item.isVisible)
+                .map((item) => (
+                  <SummaryRow
+                    key={item.name}
+                    label={`${item.name}:`}
+                    value={item.value}
+                  />
+                ))}
+            </GlassCard>
           </div>
 
-          <div className="grow flex flex-col gap-2">
-            <div className="px-4 opacity-50 flex flex-wrap items-center gap-2 font-mono">
+          {/* PAY */}
+
+          <div>
+            <SectionLabel>
               {t('buy')} {trafficLimitGb} GB
-            </div>
-            <div className="flex flex-wrap items-center gap-2">
-              <button
-                onClick={() => {
+            </SectionLabel>
+
+            <div className="grid grid-cols-2 gap-2">
+              <PayBtn
+                onClick={() =>
                   addTraffic(subscription, trafficLimitGb, 'BALANCE')
-                }}
-                disabled={isLoading || price > balance}
-                className={`py-2 px-4 rounded-md bg-[var(--star-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
-                  isLoading || price > balance
-                    ? 'opacity-50 cursor-not-allowed'
-                    : ' cursor-pointer'
-                } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-                {pendingMethod === 'BALANCE' && isLoading ? (
-                  'Processing...'
-                ) : price <= 0 ? (
-                  t('addFree')
+                }
+                disabled={!canBalance}
+                isLoading={pendingMethod === 'BALANCE' && isLoading}
+                colorVar="var(--star)"
+                glowRgb="245,166,35">
+                {price <= 0 ? (
+                  <span className="text-xs">{t('addFree')}</span>
                 ) : (
                   <>
-                    <Currency type={'star'} w={18} />
-                    {price}
+                    <Currency type="star" w={16} />
+                    <span>{price}</span>
                   </>
                 )}
-              </button>
-              <button
-                onClick={() => {
+              </PayBtn>
+
+              <PayBtn
+                onClick={() =>
                   addTraffic(
                     subscription,
                     trafficLimitGb,
                     PaymentMethodEnum.STARS,
                   )
-                }}
-                disabled={isLoading || price <= 0 || price < user.minPayStars}
-                className={`py-2 px-4 rounded-md bg-[var(--star-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
-                  isLoading || price <= 0 || price < user.minPayStars
-                    ? 'opacity-50 cursor-not-allowed'
-                    : ' cursor-pointer'
-                } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-                {pendingMethod === PaymentMethodEnum.STARS && isLoading ? (
-                  'Processing...'
-                ) : (
-                  <>
-                    <Currency type={'tg-star'} w={18} />
-                    {price}
-                  </>
-                )}
-              </button>
+                }
+                disabled={!canStars}
+                isLoading={
+                  pendingMethod === PaymentMethodEnum.STARS && isLoading
+                }
+                colorVar="var(--star)"
+                glowRgb="245,166,35">
+                <Currency type="tg-star" w={16} />
+                <span>{price}</span>
+              </PayBtn>
+
               {rates && (
-                <button
-                  onClick={() => {
+                <PayBtn
+                  onClick={() =>
                     addTraffic(
                       subscription,
                       trafficLimitGb,
                       PaymentMethodEnum.TON_TON,
                     )
-                  }}
-                  disabled={isLoading || price <= 0 || price < user.minPayStars}
-                  className={`py-2 px-4 rounded-md bg-[var(--ton-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
-                    isLoading || price <= 0 || price < user.minPayStars
-                      ? 'opacity-50 cursor-not-allowed'
-                      : ' cursor-pointer'
-                  } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-                  {pendingMethod === PaymentMethodEnum.TON_TON && isLoading ? (
-                    'Processing...'
-                  ) : (
-                    <>
-                      <Currency type={'ton'} w={18} />
-                      {roundUp(
-                        fxUtil(price, CurrencyEnum.XTR, CurrencyEnum.TON, rates),
-                      )}
-                    </>
-                  )}
-                </button>
+                  }
+                  disabled={!canTon}
+                  isLoading={
+                    pendingMethod === PaymentMethodEnum.TON_TON && isLoading
+                  }
+                  colorVar="var(--ton)"
+                  glowRgb="0,136,204">
+                  <Currency type="ton" w={16} />
+                  <span>{tonPrice}</span>
+                </PayBtn>
               )}
-              <button
-                onClick={() => {
-                  addTraffic(subscription, trafficLimitGb, 'USDT')
-                }}
-                disabled={
-                  isLoading ||
-                  roundUp(price * subscriptions.tgStarsToUSD) > usdtBalance ||
-                  price <= 0
-                }
-                className={`py-2 px-4 rounded-md bg-[var(--usdt-container-rgba)]  transition-all duration-200 hover:brightness-110 active:scale-[0.97] ${
-                  isLoading ||
-                  roundUp(price * subscriptions.tgStarsToUSD) > usdtBalance ||
-                  price <= 0
-                    ? 'opacity-50 cursor-not-allowed'
-                    : ' cursor-pointer'
-                } flex gap-2 items-center justify-center font-bold font-mono text-sm grow`}>
-                {pendingMethod === 'USDT' && isLoading ? (
-                  'Processing...'
-                ) : (
-                  <>
-                    <Currency type={'usdt'} w={18} />
-                    {price <= 0 ? 0 : roundUp(price * subscriptions.tgStarsToUSD)}
-                  </>
-                )}
-              </button>
+
+              <PayBtn
+                onClick={() => addTraffic(subscription, trafficLimitGb, 'USDT')}
+                disabled={!canUsdt}
+                isLoading={pendingMethod === 'USDT' && isLoading}
+                colorVar="var(--usdt)"
+                glowRgb="80,175,149">
+                <Currency type="usdt" w={16} />
+                <span>{price <= 0 ? 0 : usdtPrice}</span>
+              </PayBtn>
             </div>
           </div>
         </div>
