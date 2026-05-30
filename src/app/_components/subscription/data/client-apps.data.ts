@@ -40,7 +40,7 @@ export const CLIENT_APPS: ClientAppInterface[] = [
           },
           {
             iconType: IconTypeEnum.OTHER,
-            title: 'All installers',
+            title: 'Все способы установки',
             link: 'https://www.happ.su/main/',
           },
         ],
@@ -71,7 +71,7 @@ export const CLIENT_APPS: ClientAppInterface[] = [
           },
           {
             iconType: IconTypeEnum.OTHER,
-            title: 'All installers',
+            title: 'Все способы установки',
             link: 'https://www.happ.su/main/',
           },
         ],
@@ -87,17 +87,17 @@ export const CLIENT_APPS: ClientAppInterface[] = [
           },
           {
             iconType: IconTypeEnum.OTHER,
-            title: 'APK file',
+            title: 'APK файл',
             link: 'https://github.com/Happ-proxy/happ-android/releases/latest/download/Happ.apk',
           },
           {
             iconType: IconTypeEnum.OTHER,
-            title: 'APK Beta file',
+            title: 'APK Beta файл',
             link: 'https://github.com/Happ-proxy/happ-android/releases/latest/download/Happ_beta.apk',
           },
           {
             iconType: IconTypeEnum.OTHER,
-            title: 'All installers',
+            title: 'Все способы установки',
             link: 'https://www.happ.su/main/',
           },
         ],
@@ -113,12 +113,12 @@ export const CLIENT_APPS: ClientAppInterface[] = [
           },
           {
             iconType: IconTypeEnum.OTHER,
-            title: 'APK file',
+            title: 'APK файл',
             link: 'https://github.com/Happ-proxy/happ-android/releases/latest/download/Happ.apk',
           },
           {
             iconType: IconTypeEnum.OTHER,
-            title: 'All installers',
+            title: 'Все способы установки',
             link: 'https://www.happ.su/main/',
           },
         ],
@@ -129,12 +129,12 @@ export const CLIENT_APPS: ClientAppInterface[] = [
         downloadLinks: [
           {
             iconType: IconTypeEnum.OTHER,
-            title: 'Installer x86/x64',
+            title: 'Установщик (x86/x64)',
             link: 'https://github.com/Happ-proxy/happ-desktop/releases/latest/download/setup-Happ.x64.exe',
           },
           {
             iconType: IconTypeEnum.OTHER,
-            title: 'All installers',
+            title: 'Все способы установки',
             link: 'https://www.happ.su/main/',
           },
         ],
@@ -155,7 +155,7 @@ export const CLIENT_APPS: ClientAppInterface[] = [
           },
           {
             iconType: IconTypeEnum.OTHER,
-            title: 'All installers',
+            title: 'Все способы установки',
             link: 'https://www.happ.su/main/',
           },
         ],
@@ -166,12 +166,12 @@ export const CLIENT_APPS: ClientAppInterface[] = [
         downloadLinks: [
           {
             iconType: IconTypeEnum.OTHER,
-            title: 'File',
+            title: 'Файлы установки',
             link: 'https://github.com/Happ-proxy/happ-desktop/releases/',
           },
           {
             iconType: IconTypeEnum.OTHER,
-            title: 'All installers',
+            title: 'Все способы установки',
             link: 'https://www.happ.su/main/',
           },
         ],
@@ -187,7 +187,7 @@ export const CLIENT_APPS: ClientAppInterface[] = [
           },
           {
             iconType: IconTypeEnum.OTHER,
-            title: 'All installers',
+            title: 'Все способы установки',
             link: 'https://www.happ.su/main/',
           },
         ],
