@@ -13,6 +13,7 @@ import {
   useRef,
   useState,
 } from 'react'
+import { createPortal } from 'react-dom'
 
 type Placement = 'top' | 'bottom' | 'left' | 'right'
 type ColorKey = 'info' | 'warning' | 'error' | 'success' | 'default'
@@ -23,10 +24,7 @@ type TooltipProps = PropsWithChildren<{
   placement?: Placement
 }>
 
-/* ────────────────────────────────────────────────────────────── */
-/* Color config */
-/* ────────────────────────────────────────────────────────────── */
-
+/* ─── Color tokens ───────────────────────────────────────────────── */
 const COLOR_CFG: Record<
   ColorKey,
   { bg: string; text: string; border: string }
@@ -58,19 +56,17 @@ const COLOR_CFG: Record<
   },
 }
 
-/* ────────────────────────────────────────────────────────────── */
-/* Motion variants */
-/* ────────────────────────────────────────────────────────────── */
-
-type TooltipVariants = {
-  hidden: TargetAndTransition
-  show: TargetAndTransition
-  exit: TargetAndTransition
-}
-
+/* ─── Motion variants ────────────────────────────────────────────── */
 const OFFSET = 6
 
-const VARIANTS = {
+const VARIANTS: Record<
+  Placement,
+  {
+    hidden: TargetAndTransition
+    show: TargetAndTransition
+    exit: TargetAndTransition
+  }
+> = {
   top: {
     hidden: { opacity: 0, y: OFFSET, scale: 0.93 },
     show: { opacity: 1, y: 0, scale: 1 },
@@ -91,12 +87,9 @@ const VARIANTS = {
     show: { opacity: 1, x: 0, scale: 1 },
     exit: { opacity: 0, x: -OFFSET / 2, scale: 0.95 },
   },
-} satisfies Record<Placement, TooltipVariants>
+}
 
-/* ────────────────────────────────────────────────────────────── */
-/* Arrow */
-/* ────────────────────────────────────────────────────────────── */
-
+/* ─── Arrow ──────────────────────────────────────────────────────── */
 const ARROW_SIZE = 7
 
 function Arrow({
@@ -116,8 +109,7 @@ function Arrow({
     transform: 'rotate(45deg)',
     zIndex: -1,
   }
-
-  const placements: Record<Placement, CSSProperties> = {
+  const styles: Record<Placement, CSSProperties> = {
     top: {
       ...base,
       bottom: -(ARROW_SIZE / 2),
@@ -151,14 +143,10 @@ function Arrow({
       borderBottom: `1px solid ${border}`,
     },
   }
-
-  return <span aria-hidden style={placements[placement]} />
+  return <span aria-hidden style={styles[placement]} />
 }
 
-/* ────────────────────────────────────────────────────────────── */
-/* Component */
-/* ────────────────────────────────────────────────────────────── */
-
+/* ─── Component ──────────────────────────────────────────────────── */
 export default function TooltipWrapper({
   children,
   prompt,
@@ -166,38 +154,99 @@ export default function TooltipWrapper({
   placement = 'top',
 }: TooltipProps) {
   const [visible, setVisible] = useState(false)
-
   const [pos, setPos] = useState<CSSProperties>({})
-
-  const [resolvedPlacement, setResolvedPlacement] =
-    useState<Placement>(placement)
+  const [resolvedPlacement, setResolved] = useState<Placement>(placement)
+  /* Портал монтируется только на клиенте */
+  const [mounted, setMounted] = useState(false)
 
   const wrapperRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
-
-  const touchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const touchTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const cfg = COLOR_CFG[color]
 
-  /* Hide on scroll */
+  /* SSR guard — createPortal недоступен на сервере */
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
+  /* Пересчитываем позицию каждый раз, когда тултип становится видимым,
+     а также при ресайзе и скролле. */
+  const recalcPos = () => {
+    if (!tooltipRef.current || !wrapperRef.current) return
+
+    const anchor = wrapperRef.current.getBoundingClientRect()
+    const tt = tooltipRef.current
+    const vw = window.innerWidth
+    const vh = window.innerHeight
+    const GAP = 8 // отступ от anchor
+    const MARGIN = 10 // min отступ от края экрана
+
+    const tw = tt.offsetWidth
+    const th = tt.offsetHeight
+
+    /* Auto-flip: если не влезает с нужной стороны — переворачиваем */
+    let next: Placement = placement
+    if (next === 'top' && anchor.top < th + GAP + MARGIN) next = 'bottom'
+    else if (next === 'bottom' && anchor.bottom + th + GAP + MARGIN > vh)
+      next = 'top'
+    else if (next === 'left' && anchor.left < tw + GAP + MARGIN) next = 'right'
+    else if (next === 'right' && anchor.right + tw + GAP + MARGIN > vw)
+      next = 'left'
+
+    setResolved(next)
+
+    let top = 0
+    let left = 0
+
+    switch (next) {
+      case 'top':
+        top = anchor.top - th - GAP
+        left = anchor.left + anchor.width / 2 - tw / 2
+        break
+      case 'bottom':
+        top = anchor.bottom + GAP
+        left = anchor.left + anchor.width / 2 - tw / 2
+        break
+      case 'left':
+        top = anchor.top + anchor.height / 2 - th / 2
+        left = anchor.left - tw - GAP
+        break
+      case 'right':
+        top = anchor.top + anchor.height / 2 - th / 2
+        left = anchor.right + GAP
+        break
+    }
+
+    /* Прижимаем к экрану, чтобы не вылезал за края */
+    setPos({
+      top: Math.max(MARGIN, Math.min(vh - th - MARGIN, top)),
+      left: Math.max(MARGIN, Math.min(vw - tw - MARGIN, left)),
+    })
+  }
+
+  /* Запускаем пересчёт сразу после появления тултипа в DOM */
+  useLayoutEffect(() => {
+    if (!visible) return
+    recalcPos()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visible])
+
+  /* Скрываем при прокрутке / ресайзе */
   useEffect(() => {
     if (!visible) return
-
     const hide = () => setVisible(false)
-
-    window.addEventListener('scroll', hide, true)
-
+    window.addEventListener('scroll', hide, { passive: true, capture: true })
+    window.addEventListener('resize', hide, { passive: true })
     return () => {
       window.removeEventListener('scroll', hide, true)
+      window.removeEventListener('resize', hide)
     }
   }, [visible])
 
-  /* Close on outside touch */
-
+  /* Закрываем по тапу снаружи (мобильный) */
   useEffect(() => {
     if (!visible) return
-
     const handler = (e: TouchEvent) => {
       if (
         wrapperRef.current &&
@@ -206,88 +255,67 @@ export default function TooltipWrapper({
         setVisible(false)
       }
     }
-
     document.addEventListener('touchstart', handler)
-
-    return () => {
-      document.removeEventListener('touchstart', handler)
-    }
+    return () => document.removeEventListener('touchstart', handler)
   }, [visible])
 
-  /* Position + auto flip */
-
-  useLayoutEffect(() => {
-    if (!visible || !tooltipRef.current || !wrapperRef.current) return
-
-    const tt = tooltipRef.current
-    const wr = wrapperRef.current.getBoundingClientRect()
-
-    const vw = window.innerWidth
-    const vh = window.innerHeight
-
-    const margin = 10
-
-    const tw = tt.offsetWidth
-    const th = tt.offsetHeight
-
-    let nextPlacement: Placement = placement
-
-    if (nextPlacement === 'top' && wr.top < th + margin) {
-      nextPlacement = 'bottom'
-    } else if (nextPlacement === 'bottom' && wr.bottom + th + margin > vh) {
-      nextPlacement = 'top'
-    } else if (nextPlacement === 'left' && wr.left < tw + margin) {
-      nextPlacement = 'right'
-    } else if (nextPlacement === 'right' && wr.right + tw + margin > vw) {
-      nextPlacement = 'left'
-    }
-
-    setResolvedPlacement(nextPlacement)
-
-    let top = 0
-    let left = 0
-
-    switch (nextPlacement) {
-      case 'top':
-        top = wr.top - th - margin
-        left = wr.left + wr.width / 2 - tw / 2
-        break
-
-      case 'bottom':
-        top = wr.bottom + margin
-        left = wr.left + wr.width / 2 - tw / 2
-        break
-
-      case 'left':
-        top = wr.top + wr.height / 2 - th / 2
-        left = wr.left - tw - margin
-        break
-
-      case 'right':
-        top = wr.top + wr.height / 2 - th / 2
-        left = wr.right + margin
-        break
-    }
-
-    setPos({
-      top: Math.max(margin, Math.min(vh - th - margin, top)),
-      left: Math.max(margin, Math.min(vw - tw - margin, left)),
-    })
-  }, [visible, placement])
-
-  /* Touch */
-
+  /* Touch handlers — toggle по короткому тапу */
   const onTouchStart = () => {
-    touchTimerRef.current = setTimeout(() => {
-      setVisible(true)
-    }, 80)
+    touchTimer.current = setTimeout(() => setVisible(true), 80)
+  }
+  const onTouchEnd = () => {
+    if (touchTimer.current) clearTimeout(touchTimer.current)
   }
 
-  const onTouchEnd = () => {
-    if (touchTimerRef.current) {
-      clearTimeout(touchTimerRef.current)
-    }
-  }
+  /* ── Tooltip node ──
+     position: fixed + координаты из getBoundingClientRect → не зависит
+     ни от каких родителей: overflow, transform, will-change, isolation и т.д.
+     Портал гарантирует, что узел живёт прямо в <body> и не обрезается
+     ни одним промежуточным контейнером.
+  */
+  const tooltipNode = (
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          ref={tooltipRef}
+          role="tooltip"
+          variants={VARIANTS[resolvedPlacement]}
+          initial="hidden"
+          animate="show"
+          exit="exit"
+          transition={{ duration: 0.18, ease: [0.2, 0, 0, 1] }}
+          style={{
+            ...pos,
+            position: 'fixed' /* ← не absolute, именно fixed */,
+            zIndex: 99999 /* ← поверх любых модалов / drawer'ов */,
+            maxWidth: 'min(90vw, 280px)',
+            width: 'max-content',
+            padding: '7px 12px',
+            borderRadius: 10,
+            fontSize: 12,
+            lineHeight: 1.55,
+            textAlign: 'center',
+            wordBreak: 'break-word',
+            whiteSpace: 'pre-wrap',
+            fontFamily: 'var(--font-mono, monospace)',
+            background: cfg.bg,
+            color: cfg.text,
+            border: `1px solid ${cfg.border}`,
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            boxShadow:
+              '0 8px 28px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.07)',
+          }}>
+          <Arrow
+            placement={resolvedPlacement}
+            bg={cfg.bg}
+            border={cfg.border}
+          />
+          {prompt}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
 
   return (
     <div
@@ -300,48 +328,8 @@ export default function TooltipWrapper({
       onClick={() => setVisible((v) => !v)}>
       {children}
 
-      <AnimatePresence>
-        {visible && (
-          <motion.div
-            ref={tooltipRef}
-            variants={VARIANTS[resolvedPlacement]}
-            initial="hidden"
-            animate="show"
-            exit="exit"
-            transition={{
-              duration: 0.18,
-              ease: [0.2, 0, 0, 1],
-            }}
-            className="fixed z-[8999]"
-            style={{
-              ...pos,
-              maxWidth: 'min(90vw, 280px)',
-              width: 'max-content',
-              padding: '7px 12px',
-              borderRadius: 10,
-              fontSize: 12,
-              lineHeight: 1.55,
-              textAlign: 'center',
-              wordBreak: 'break-word',
-              whiteSpace: 'pre-wrap',
-              background: cfg.bg,
-              color: cfg.text,
-              border: `1px solid ${cfg.border}`,
-              backdropFilter: 'blur(12px)',
-              WebkitBackdropFilter: 'blur(12px)',
-              boxShadow:
-                '0 8px 28px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.07)',
-            }}>
-            <Arrow
-              placement={resolvedPlacement}
-              bg={cfg.bg}
-              border={cfg.border}
-            />
-
-            {prompt}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Портал: тултип рендерится в document.body — вне любого родителя */}
+      {mounted && createPortal(tooltipNode, document.body)}
     </div>
   )
 }
