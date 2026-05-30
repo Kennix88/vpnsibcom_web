@@ -1,6 +1,5 @@
 'use client'
 import { publicApiClient } from '@app/core/publicApiClient'
-import getRandomEmoji from '@app/utils/get-random-emoji.util'
 import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
@@ -16,28 +15,21 @@ type ConnectionStatus = 'loading' | 'green' | 'danger'
 interface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {
   w?: number
   url?: string
-  /** Animated conic-gradient ring */
   ring?: boolean
-  /** Simple green online dot (ignored when withStatus=true) */
   online?: boolean
-  /** Fetch & show connection-status shield badge + reactive ring */
   withStatus?: boolean
 }
 
 /* ─── Status config ──────────────────────────────────────────────── */
 const STATUS_CFG = {
   loading: {
-    // ring colors for conic-gradient
     from: 'var(--warning)',
     via: 'rgba(255,171,64,0.4)',
-    // glow pulse rgba
     glow: '255,171,64',
-    // badge
     Icon: TbShieldExclamation,
     iconColor: 'var(--warning)',
     badgeBg: 'var(--warning-container)',
     badgeBorder: 'rgba(255,171,64,0.35)',
-    // ring animation: pulse continuously
     pulse: true,
   },
   green: {
@@ -86,6 +78,44 @@ function useConnectionStatus(enabled: boolean) {
   return status
 }
 
+/* ─── Fallback avatar ────────────────────────────────────────────── */
+/**
+ * Показывается когда url не передан или изображение не загрузилось.
+ * Градиентный фон из палитры + SVG-силуэт пользователя.
+ */
+function AvatarFallback({ size }: { size: number }) {
+  const iconSize = Math.round(size * 0.48)
+
+  return (
+    <div
+      className="absolute inset-0 rounded-full flex items-center justify-center overflow-hidden"
+      style={{
+        /* мягкий фиолетовый градиент из design-tokens */
+        background:
+          'linear-gradient(145deg, var(--primary-container), var(--secondary-container))',
+      }}>
+      {/* SVG силуэт — не зависит от внешних пакетов */}
+      <svg
+        width={iconSize}
+        height={iconSize}
+        viewBox="0 0 24 24"
+        fill="none"
+        aria-hidden>
+        {/* голова */}
+        <circle cx="12" cy="8" r="4" fill="var(--primary)" opacity="0.9" />
+        {/* тело */}
+        <path
+          d="M4 20c0-4 3.582-7 8-7s8 3 8 7"
+          stroke="var(--primary)"
+          strokeWidth="2"
+          strokeLinecap="round"
+          opacity="0.7"
+        />
+      </svg>
+    </div>
+  )
+}
+
 /* ─── Shield badge ───────────────────────────────────────────────── */
 function ShieldBadge({
   status,
@@ -115,10 +145,7 @@ function ShieldBadge({
           boxShadow: `0 2px 8px rgba(${cfg.glow},0.4)`,
         }}>
         <cfg.Icon
-          style={{
-            color: cfg.iconColor,
-            fontSize: Math.round(size * 0.65),
-          }}
+          style={{ color: cfg.iconColor, fontSize: Math.round(size * 0.65) }}
         />
       </motion.span>
     </AnimatePresence>
@@ -141,48 +168,50 @@ export default function Avatar({
     setImageError(false)
   }, [url])
 
-  // Derived ring config
+  const showFallback = !url || imageError
   const showRing = ring || withStatus
   const cfg = STATUS_CFG[status]
 
-  // Scale pulse glow to avatar size: ~11% of w, clamped 4–14px
   const pulseSpread = Math.round(Math.min(14, Math.max(4, w * 0.11)))
   const ringThickness = Math.max(2, Math.round(w * 0.035))
   const badgeSize = Math.max(16, Math.round(w * 0.32))
 
-  /* ── Base avatar image ─────────────────────────────────────────── */
+  /* ── Inner image/fallback ──────────────────────────────────────── */
   const imageNode = (
     <div
-      className="flex relative justify-center items-center rounded-full"
+      className="relative flex justify-center items-center rounded-full overflow-hidden"
       style={{
         width: showRing ? '100%' : w,
         height: showRing ? '100%' : w,
         background: 'var(--surface-container)',
       }}>
-      {getRandomEmoji()}
-      {url && !imageError && (
+      {showFallback ? (
+        <AvatarFallback size={showRing ? w : w} />
+      ) : (
         <Image
-          src={url}
+          src={url!}
           alt="Avatar"
           width={w}
           height={w}
-          className="absolute rounded-full"
+          className="absolute inset-0 rounded-full object-cover"
           onError={() => setImageError(true)}
         />
       )}
     </div>
   )
 
-  /* ── Plain avatar (no ring) ────────────────────────────────────── */
+  /* ── No ring ───────────────────────────────────────────────────── */
   if (!showRing) {
     return (
-      <div {...props} style={{ width: w, height: w, ...props.style }}>
+      <div
+        {...props}
+        style={{ width: w, height: w, position: 'relative', ...props.style }}>
         {imageNode}
       </div>
     )
   }
 
-  /* ── Ring + badge variant ──────────────────────────────────────── */
+  /* ── Ring + badge ──────────────────────────────────────────────── */
   const ringGradient = withStatus
     ? `conic-gradient(from 0deg, ${cfg.from}, ${cfg.via}, ${cfg.from})`
     : 'conic-gradient(from 0deg, var(--primary), var(--accent-network), var(--primary))'
@@ -195,7 +224,7 @@ export default function Avatar({
       {...props}
       className="relative inline-flex items-center justify-center shrink-0"
       style={{ width: w, height: w, ...props.style }}>
-      {/* Pulse glow layer — scaled to avatar size */}
+      {/* Pulse glow */}
       <motion.span
         aria-hidden
         className="absolute inset-0 rounded-full"
@@ -239,9 +268,10 @@ export default function Avatar({
         </div>
       </motion.div>
 
-      {/* Badge: status shield OR simple online dot */}
+      {/* Shield badge */}
       {withStatus && <ShieldBadge status={status} size={badgeSize} />}
 
+      {/* Simple online dot */}
       {online && !withStatus && (
         <motion.span
           initial={{ scale: 0, opacity: 0 }}
