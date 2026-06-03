@@ -67,16 +67,19 @@ export function useFullscreenAd() {
 
   const cleanup = useCallback(() => {
     resetOverlayTimeout()
-    if (mountedRootRef.current) {
-      mountedRootRef.current.unmount()
-      mountedRootRef.current = null
-    }
-    if (containerRef.current) {
-      containerRef.current.remove()
-      containerRef.current = null
-    }
+
+    const root = mountedRootRef.current
+    const container = containerRef.current
+
+    mountedRootRef.current = null
+    containerRef.current = null
     adRef.current = null
     releaseAdDisplayLock(FULLSCREEN_AD_OWNER)
+
+    window.setTimeout(() => {
+      root?.unmount()
+      container?.remove()
+    }, 0)
   }, [resetOverlayTimeout])
 
   const scheduleCleanup = useCallback(() => {
@@ -138,11 +141,24 @@ export function useFullscreenAd() {
 
         const showFallbackAd = async () => {
           setTaddyOverlayVisible(false)
-          if (ad.network === AdsNetworkEnum.ADSGRAM) {
-            const { default: AdsgramFullscreen } =
-              await import('./AdsgramFullscreen')
+          if (ad.network === AdsNetworkEnum.TADDY) {
+            const { default: TaddyInterstitialForSDK } =
+              await import('./TaddyInterstitialForSDK')
             root.render(
-              <AdsgramFullscreen
+              <TaddyInterstitialForSDK
+                onClosed={handleClose}
+                onShow={() => {
+                  void handleClose
+                }}
+                onStartFailed={() => void handleClose}
+                onError={() => void handleClose}
+                onNoFill={() => void handleClose}
+              />,
+            )
+          } else if (ad.network === AdsNetworkEnum.ADSGRAM) {
+            const { default: AdsgramAd } = await import('./AdsgramAd')
+            root.render(
+              <AdsgramAd
                 blockId={ad.blockId as `${number}` | `int-${number}`}
                 onClose={handleClose}
               />,
@@ -166,13 +182,14 @@ export function useFullscreenAd() {
           }
         }
 
-        if (isTaddyEnabled) {
+        if (isTaddyEnabled && ad.network !== AdsNetworkEnum.TADDY) {
           const { default: TaddyInterstitial } =
             await import('./TaddyInterstitial')
 
           root.render(
             <TaddyInterstitial
               canCloseImmediately={true}
+              requiredViewSeconds={10}
               onClosed={() => {
                 void handleClose(true)
               }}
