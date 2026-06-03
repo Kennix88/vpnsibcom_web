@@ -125,7 +125,10 @@ export default function AnalyticsInit() {
       var f=d.getElementsByTagName(s)[0], j=d.createElement(s);
       j.async=true;j.src="https://w.graspil.com";
       f.parentNode.insertBefore(j,f);
-    })(window,document,"script","graspil","${process.env.NEXT_PUBLIC_GRASPIL_ID}");`,
+    })(window,document,"script","graspil","${process.env.NEXT_PUBLIC_GRASPIL_ID}", {
+        trackClicks: 'tagged',
+        trackTgEvents: false
+      });`,
           }}
         />
       )}
