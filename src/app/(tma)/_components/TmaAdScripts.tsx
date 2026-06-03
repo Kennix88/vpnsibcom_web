@@ -68,6 +68,7 @@ export function TmaAdScripts() {
         id="taddy"
         strategy="afterInteractive"
         src="https://sdk.taddy.pro/web/taddy.min.js?1317"
+        data-pub-id={config.taddyPubId}
       />
 
       <Script
