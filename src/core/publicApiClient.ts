@@ -1,5 +1,6 @@
 import { PlansResponseDataInterface } from '@app/types/plans.interface'
 import { GetSubscriptionConfigResponseInterface } from '@app/types/subscription-data.interface'
+import { getTmaPlatform } from '@app/utils/get-tma-platform.util'
 
 import axios, {
   AxiosError,
@@ -31,6 +32,18 @@ class PublicApiClient {
       withCredentials: true,
     })
 
+    // Платформа TMA
+    this.instance.interceptors.request.use((config) => {
+      const platform = getTmaPlatform()
+      if (platform) {
+        if (!(config.headers instanceof AxiosHeaders)) {
+          config.headers = new AxiosHeaders(config.headers)
+        }
+        config.headers.set('X-Platform', platform)
+      }
+      return config
+    })
+
     // Добавляем интерцептор для обработки ошибок
     this.instance.interceptors.response.use(
       (response) => response,
@@ -47,6 +60,15 @@ class PublicApiClient {
   private async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
     try {
       const response = await this.instance.get<ApiResponse<T>>(url, config)
+      return response.data.data
+    } catch (error) {
+      throw this.handleError(error as AxiosError)
+    }
+  }
+
+  private async post<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+    try {
+      const response = await this.instance.post<ApiResponse<T>>(url, config)
       return response.data.data
     } catch (error) {
       throw this.handleError(error as AxiosError)
@@ -98,7 +120,6 @@ class PublicApiClient {
     return this.get('/servers/green-check')
   }
 
-  
   async getSubscriptionDataByToken(
     token: string,
     agent?: string,
@@ -138,6 +159,31 @@ class PublicApiClient {
    */
   async healthCheck(): Promise<{ status: string; version: string }> {
     return this.get('/health')
+  }
+
+  private async getRaw<T>(
+    url: string,
+    config?: AxiosRequestConfig,
+  ): Promise<T> {
+    try {
+      const response = await this.instance.get<T>(url, config)
+      return response.data
+    } catch (error) {
+      throw this.handleError(error as AxiosError)
+    }
+  }
+
+  async getRedirectAd(key: string): Promise<{
+    ok: boolean
+    reason?: string | null
+    redirectUrl: string
+    rewardStars: number
+  }> {
+    return this.getRaw(`/ads/ad-redirect/${key}`)
+  }
+
+  async confirmAdsIsRedirect(key: string): Promise<{ ok: boolean }> {
+    return this.getRaw(`/ads/confirm-easy/${key}`)
   }
 }
 
