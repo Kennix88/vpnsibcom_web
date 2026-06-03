@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'FastRunner Game',
-  description: 'FastRunner Game',
+  title: 'Арканум: демо-арена',
+  description: 'Арканум: демо-арена',
 }
 
 export default function RootLayout({
