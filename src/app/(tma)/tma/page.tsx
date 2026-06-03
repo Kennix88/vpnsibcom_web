@@ -1,5 +1,6 @@
 'use client'
 import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
+import { TaskAdsgramTask } from '@app/app/_components/ads/TaskAdsgram'
 import { useFullscreenAd } from '@app/app/_components/ads/useFullscreenAd'
 import { FreePlanActivated } from '@app/app/_components/FreePlanAtivated'
 import SocialButtons from '@app/app/_components/SocialButtons'
@@ -26,6 +27,7 @@ export default function Page() {
         {/*<GreenCheck />*/}
         <FreePlanActivated />
         <TaskAdsReward />
+        <TaskAdsgramTask />
         <Subscriptions />
         <br />
         <SocialButtons />
