@@ -21,6 +21,7 @@ import {
   SubscriptionResponseInterface,
 } from '@app/types/subscription-data.interface'
 import { UserDataInterface } from '@app/types/user-data.interface'
+import { getTmaPlatform } from '@app/utils/get-tma-platform.util'
 
 import axios, {
   AxiosError,
@@ -66,6 +67,18 @@ class ApiClient {
       },
     })
 
+    // Платформа TMA
+    instance.interceptors.request.use((config) => {
+      const platform = getTmaPlatform()
+      if (platform) {
+        if (!(config.headers instanceof AxiosHeaders)) {
+          config.headers = new AxiosHeaders(config.headers)
+        }
+        config.headers.set('X-Platform', platform)
+      }
+      return config
+    })
+
     instance.interceptors.request.use((config) => this.handleRequest(config))
     instance.interceptors.response.use(
       (response) => response,
@@ -105,7 +118,9 @@ class ApiClient {
     originalRequest._retry = true
 
     await this.handleAuthError(error, {
-      redirectTo: originalRequest.url?.includes('/app') ? '/app/login' : undefined,
+      redirectTo: originalRequest.url?.includes('/app')
+        ? '/app/login'
+        : undefined,
     })
 
     const token = useUserStore.getState().accessToken
@@ -150,13 +165,9 @@ class ApiClient {
     const loginViaTelegram = async (initData: string, startParam?: string) => {
       const { data } = await this.instance.post<
         ApiResponse<{ accessToken: string; user: UserDataInterface }>
-      >(
-        '/auth/telegram',
-        { initData, ...(startParam ? { startParam } : {}) },
-        {
-          _skipAuthRetry: true,
-        } as InternalAxiosRequestConfig & { _skipAuthRetry: boolean },
-      )
+      >('/auth/telegram', { initData, ...(startParam ? { startParam } : {}) }, {
+        _skipAuthRetry: true,
+      } as InternalAxiosRequestConfig & { _skipAuthRetry: boolean })
 
       const { accessToken, user } = data.data
       const store = useUserStore.getState()
@@ -165,9 +176,8 @@ class ApiClient {
     }
 
     try {
-      const { retrieveLaunchParams, retrieveRawInitData } = await import(
-        '@tma.js/sdk-react'
-      )
+      const { retrieveLaunchParams, retrieveRawInitData } =
+        await import('@tma.js/sdk-react')
       const initData = retrieveRawInitData()
       if (initData) {
         const launchParams = retrieveLaunchParams()
@@ -181,13 +191,9 @@ class ApiClient {
 
     const { data } = await this.instance.post<
       ApiResponse<{ accessToken: string; user: UserDataInterface }>
-    >(
-      '/auth/refresh',
-      {},
-      {
-        _skipAuthRetry: true,
-      } as InternalAxiosRequestConfig & { _skipAuthRetry: boolean },
-    )
+    >('/auth/refresh', {}, {
+      _skipAuthRetry: true,
+    } as InternalAxiosRequestConfig & { _skipAuthRetry: boolean })
 
     const { accessToken, user } = data.data
     const store = useUserStore.getState()
@@ -580,16 +586,16 @@ class ApiClient {
     )
   }
 
-  async getAdTaskReward() {
+  async getAdTaskReward(place: 'adsgram' | 'reward') {
     return this.safeRequest<TaskRewardResInterface>(async () => {
-      const { data } = await this.instance.get(`/ads/task-reward`)
+      const { data } = await this.instance.get(`/ads/task-reward/${place}`)
       return data
     })
   }
 
   async getAds(place: AdsPlaceEnum, type: AdsTypeEnum) {
     return this.safeRequest<AdsResInterface>(async () => {
-      const { data } = await this.instance.get(`/ads/${place}/${type}`)
+      const { data } = await this.instance.get(`/ads/get/${place}/${type}`)
       return data
     })
   }
