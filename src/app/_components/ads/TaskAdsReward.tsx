@@ -45,10 +45,11 @@ export function TaskAdsReward() {
     if (!containerRef.current) return
     containerRef.current.style.width = visible ? '100vw' : '0'
     containerRef.current.style.height = visible ? '100vh' : '0'
-    containerRef.current.style.zIndex = visible ? '99' : '-1'
+    containerRef.current.style.zIndex = visible ? '99999' : '-1'
     containerRef.current.style.background = visible
       ? 'rgba(0,0,0,1)'
       : 'transparent'
+    containerRef.current.style.pointerEvents = visible ? 'auto' : 'none'
   }, [])
 
   const resetOverlayTimeout = useCallback(() => {
@@ -60,21 +61,18 @@ export function TaskAdsReward() {
 
   const cleanup = useCallback(() => {
     resetOverlayTimeout()
-
-    if (mountedRootRef.current) {
-      mountedRootRef.current.unmount()
-      mountedRootRef.current = null
-    }
-
-    if (containerRef.current) {
-      containerRef.current.remove()
-      containerRef.current = null
-    }
-
+    const root = mountedRootRef.current
+    const container = containerRef.current
+    mountedRootRef.current = null
+    containerRef.current = null
     isShowingRef.current = false
     adRef.current = null
     setIsLoading(false)
     releaseAdDisplayLock(TASK_AD_OWNER)
+    window.setTimeout(() => {
+      root?.unmount()
+      container?.remove()
+    }, 0)
   }, [resetOverlayTimeout])
 
   const scheduleCleanup = useCallback(
@@ -86,15 +84,12 @@ export function TaskAdsReward() {
     async (isTaddy = false) => {
       try {
         if (!adRef.current) return
-
         const response = await authApiClient.confirmAds(
           adRef.current.verifyKey,
           undefined,
           isTaddy,
         )
-
         await setUser(response.user)
-
         if (response.success) toast.success('Награда получена!')
       } catch (err) {
         console.error('Failed to confirm ad', err)
@@ -145,10 +140,24 @@ export function TaskAdsReward() {
         const showFallbackAd = async () => {
           setTaddyOverlayVisible(false)
 
-          if (nextAd.network === AdsNetworkEnum.ADSGRAM) {
-            const { default: AdsgramReward } = await import('./AdsgramReward')
+          if (nextAd.network === AdsNetworkEnum.TADDY) {
+            const { default: TaddyInterstitialForSDK } =
+              await import('./TaddyInterstitialForSDK')
             root.render(
-              <AdsgramReward
+              <TaddyInterstitialForSDK
+                onClosed={handleClose}
+                onShow={(isShow) => {
+                  if (isShow) void handleReward
+                }}
+                onStartFailed={() => void handleClose}
+                onError={() => void handleClose}
+                onNoFill={() => void handleClose}
+              />,
+            )
+          } else if (nextAd.network === AdsNetworkEnum.ADSGRAM) {
+            const { default: AdsgramAd } = await import('./AdsgramAd')
+            root.render(
+              <AdsgramAd
                 blockId={nextAd.blockId as `${number}` | `int-${number}`}
                 onReward={handleReward}
                 onClose={handleClose}
@@ -173,13 +182,13 @@ export function TaskAdsReward() {
           }
         }
 
-        if (isTaddyEnabled) {
+        if (isTaddyEnabled && nextAd.network !== AdsNetworkEnum.TADDY) {
           const { default: TaddyInterstitial } =
             await import('./TaddyInterstitial')
           root.render(
             <TaddyInterstitial
               canCloseImmediately={false}
-              requiredViewSeconds={5}
+              requiredViewSeconds={10}
               onClosed={handleClose}
               autoCloseOnViewed={false}
               onShow={(isShow) => {
@@ -197,10 +206,7 @@ export function TaskAdsReward() {
         return
       }
 
-      if (response.isNoAds) {
-        toast.warn('Нет рекламы на текущий момент!')
-      }
-
+      if (response.isNoAds) toast.warn('Нет рекламы на текущий момент!')
       scheduleCleanup()
     } catch (err) {
       console.error('Failed to load ad', err)
@@ -216,7 +222,7 @@ export function TaskAdsReward() {
 
   const fetchReward = useCallback(async () => {
     try {
-      const response = await authApiClient.getAdTaskReward()
+      const response = await authApiClient.getAdTaskReward('reward')
       setAmountReward(response ? response.amount : null)
     } catch (err) {
       console.error('Failed to load reward', err)
@@ -226,16 +232,18 @@ export function TaskAdsReward() {
   useEffect(() => {
     fetchReward()
   }, [fetchReward])
-
-  useEffect(() => () => cleanup(), [cleanup])
+  useEffect(
+    () => () => {
+      scheduleCleanup()
+    },
+    [scheduleCleanup],
+  )
 
   if (amountReward == null || !user) return null
 
   const isCoolingDown =
     user.nextAdsRewardAt && new Date(user.nextAdsRewardAt) > new Date()
-
   const isActionable = !isCoolingDown && !isLoading
-
   const Shell = isActionable ? motion.button : motion.div
 
   return (
@@ -243,7 +251,8 @@ export function TaskAdsReward() {
       type={isActionable ? 'button' : undefined}
       onClick={isActionable ? fetchAd : undefined}
       disabled={isActionable ? false : undefined}
-      className="relative flex items-center gap-3 w-full rounded-2xl overflow-hidden text-left"
+      // ─── layout: все три зоны через flex, без фиксированной ширины на правой ───
+      className="relative flex items-center gap-2.5 w-full rounded-2xl overflow-hidden text-left"
       style={{
         background: 'var(--glass-bg)',
         backdropFilter: 'blur(var(--glass-blur))',
@@ -259,6 +268,7 @@ export function TaskAdsReward() {
       whileHover={isActionable ? { scale: 1.01 } : undefined}
       whileTap={isActionable ? { scale: 0.99 } : undefined}
       transition={{ duration: 0.35, ease: [0.2, 0, 0, 1] }}>
+      {/* Левая цветная полоска */}
       <div
         className="absolute left-0 top-0 bottom-0 w-[3px] rounded-l-2xl"
         style={{
@@ -269,6 +279,7 @@ export function TaskAdsReward() {
         }}
       />
 
+      {/* Иконка Play — фиксированный квадрат, не сжимается */}
       <motion.div
         animate={
           !isCoolingDown && !isLoading
@@ -286,7 +297,7 @@ export function TaskAdsReward() {
           repeat: !isCoolingDown && !isLoading ? Infinity : 0,
           ease: 'easeOut',
         }}
-        className="flex items-center justify-center w-10 h-10 rounded-xl shrink-0 ml-1"
+        className="flex items-center justify-center w-9 h-9 rounded-xl shrink-0 ml-1"
         style={{
           background: isCoolingDown
             ? 'rgba(255,171,64,0.08)'
@@ -295,12 +306,13 @@ export function TaskAdsReward() {
           border: `1px solid ${isCoolingDown ? 'rgba(255,171,64,0.2)' : 'rgba(255,140,66,0.25)'}`,
           transition: 'all 400ms ease',
         }}>
-        <Play size={14} style={{ marginLeft: 2 }} />
+        <Play size={13} style={{ marginLeft: 2 }} />
       </motion.div>
 
-      <div className="flex flex-col gap-1.5 grow min-w-0">
+      {/* Центр: заголовок + бейдж награды — grow + min-w-0 чтобы текст мог обрезаться */}
+      <div className="flex flex-col gap-1 grow min-w-0">
         <span
-          className="text-[13px] font-bold font-mono leading-tight"
+          className="text-[13px] font-bold font-mono leading-tight truncate"
           style={{ color: 'var(--on-surface)' }}>
           Смотри рекламу — получай Stars
         </span>
@@ -322,7 +334,11 @@ export function TaskAdsReward() {
         </AnimatePresence>
       </div>
 
-      <div className="shrink-0 flex items-center justify-center w-10 h-10 rounded-xl">
+      {/*
+        Правая зона — shrink-0 без фиксированной ширины.
+        CountdownTimer и кнопка Play сами определяют нужный размер.
+      */}
+      <div className="shrink-0 flex items-center justify-center">
         {isCoolingDown ? (
           <CountdownTimer expiryDate={user.nextAdsRewardAt!} />
         ) : (
@@ -334,8 +350,12 @@ export function TaskAdsReward() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.6 }}
                 transition={{ duration: 0.15 }}
-                className="flex items-center justify-center w-full h-full">
-                <Loader2 size={16} className="animate-spin" />
+                className="flex items-center justify-center w-9 h-9">
+                <Loader2
+                  size={16}
+                  className="animate-spin"
+                  style={{ color: 'var(--on-surface-variant)' }}
+                />
               </motion.span>
             ) : (
               <motion.span
@@ -344,9 +364,9 @@ export function TaskAdsReward() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.6 }}
                 transition={{ duration: 0.15 }}
-                className="flex items-center justify-center w-full h-full"
-                style={{ marginLeft: 2 }}>
-                <Play size={16} />
+                className="flex items-center justify-center w-9 h-9"
+                style={{ color: 'var(--on-surface-variant)' }}>
+                <Play size={15} style={{ marginLeft: 2 }} />
               </motion.span>
             )}
           </AnimatePresence>
