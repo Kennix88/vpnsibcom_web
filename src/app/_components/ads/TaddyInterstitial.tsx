@@ -444,7 +444,7 @@ export default function TaddyInterstitial({
           animate="visible"
           exit="exit"
           transition={{ duration: 0.2, ease: 'easeOut' }}
-          className="fixed inset-0 z-[9999] flex items-end justify-center bg-black/70 backdrop-blur-md sm:items-center"
+          className="pointer-events-auto fixed inset-0 z-[99999] flex items-end justify-center bg-black/70 backdrop-blur-md sm:items-center"
           role="dialog"
           aria-modal
           aria-label="Advertisement">
@@ -455,7 +455,7 @@ export default function TaddyInterstitial({
             animate="visible"
             exit="exit"
             className={[
-              'relative flex w-full max-w-[480px] flex-col overflow-hidden',
+              'pointer-events-auto relative flex w-full max-w-[480px] flex-col overflow-hidden',
               'bg-[var(--surface-container-low)]',
               // Mobile: full screen
               'h-dvh',
