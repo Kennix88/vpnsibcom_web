@@ -13,6 +13,9 @@ import { AdsTypeEnum } from '@app/enums/ads-type.enum'
 import { useUserStore } from '@app/store/user.store'
 import { releaseAdDisplayLock, tryAcquireAdDisplayLock } from './adDisplayLock'
 
+/** Задержка перед первым показом полноэкранной рекламы после входа (мс) */
+const STARTUP_DELAY_MS = 5000
+
 const createAdContainer = () => {
   const div = document.createElement('div')
   div.style.position = 'fixed'
@@ -26,20 +29,23 @@ export function useFullscreenAd() {
   const FULLSCREEN_AD_OWNER = 'fullscreen-ad'
   const OVERLAY_TIMEOUT_MS = 25000
   const isTaddyEnabled = config.isTaddyEnabled as boolean
+
   const { user } = useUserStore()
+
   const executedRef = useRef(false)
   const mountedRootRef = useRef<Root | null>(null)
   const adRef = useRef<AdsDataInterface | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
   const overlayTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const startupTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const setTaddyOverlayVisible = useCallback((visible: boolean) => {
     if (!containerRef.current) return
     containerRef.current.style.width = visible ? '100vw' : '0'
     containerRef.current.style.height = visible ? '100vh' : '0'
-    containerRef.current.style.zIndex = visible ? '99' : '-1'
+    containerRef.current.style.zIndex = visible ? '99999' : '-1'
     containerRef.current.style.background = visible
-      ? 'rgba(0, 0, 0, 1)'
+      ? 'rgba(0,0,0,1)'
       : 'transparent'
   }, [])
 
@@ -52,14 +58,14 @@ export function useFullscreenAd() {
 
   const reward = useCallback(async (isTaddy = false) => {
     try {
-      if (adRef.current == null) return
+      if (!adRef.current) return
       await authApiClient.confirmAds(
         adRef.current.verifyKey,
         undefined,
         isTaddy,
       )
     } catch (error) {
-      console.error('Failed to load ad', error)
+      console.error('[useFullscreenAd] reward confirm failed:', error)
     } finally {
       adRef.current = null
     }
@@ -67,15 +73,12 @@ export function useFullscreenAd() {
 
   const cleanup = useCallback(() => {
     resetOverlayTimeout()
-
     const root = mountedRootRef.current
     const container = containerRef.current
-
     mountedRootRef.current = null
     containerRef.current = null
     adRef.current = null
     releaseAdDisplayLock(FULLSCREEN_AD_OWNER)
-
     window.setTimeout(() => {
       root?.unmount()
       container?.remove()
@@ -83,18 +86,19 @@ export function useFullscreenAd() {
   }, [resetOverlayTimeout])
 
   const scheduleCleanup = useCallback(() => {
-    setTimeout(() => {
-      cleanup()
-    }, 0)
+    setTimeout(() => cleanup(), 0)
   }, [cleanup])
 
   useEffect(() => {
-    if (!user || executedRef.current) return
+    // Пользователь ещё не загружен — ждём
+    if (!user) return
+    // Уже запускался в этом инстансе хука
+    if (executedRef.current) return
     executedRef.current = true
 
     const run = async () => {
       try {
-        // rate limit: 3 минуты с последнего показа
+        // Rate limit: 3 минуты с последнего полноэкранного показа
         if (
           user.lastFullscreenViewedAt &&
           !isAfter(
@@ -104,35 +108,35 @@ export function useFullscreenAd() {
         ) {
           return
         }
-        if (!tryAcquireAdDisplayLock(FULLSCREEN_AD_OWNER)) {
-          return
-        }
+
+        // Атомарный захват лока — защита от одновременного запуска
+        // двух инстансов (напр., при быстрой навигации)
+        if (!tryAcquireAdDisplayLock(FULLSCREEN_AD_OWNER)) return
 
         const response = await authApiClient.getAds(
           AdsPlaceEnum.FULLSCREEN,
           AdsTypeEnum.VIEW,
         )
         if (response.isNoAds || !response.ad) {
-          scheduleCleanup()
+          releaseAdDisplayLock(FULLSCREEN_AD_OWNER)
           return
         }
 
         const { ad } = response
         adRef.current = ad
 
-        // создаём динамический контейнер
-        if (!containerRef.current) {
-          containerRef.current = createAdContainer()
-        }
+        if (!containerRef.current) containerRef.current = createAdContainer()
+        if (mountedRootRef.current) return
 
-        if (mountedRootRef.current) return // уже смонтирован
         const root = createRoot(containerRef.current)
         mountedRootRef.current = root
+
         setTaddyOverlayVisible(isTaddyEnabled)
         resetOverlayTimeout()
-        overlayTimeoutRef.current = setTimeout(() => {
-          scheduleCleanup()
-        }, OVERLAY_TIMEOUT_MS)
+        overlayTimeoutRef.current = setTimeout(
+          () => scheduleCleanup(),
+          OVERLAY_TIMEOUT_MS,
+        )
 
         const handleClose = async (isTaddy = false) => {
           await reward(isTaddy)
@@ -141,26 +145,24 @@ export function useFullscreenAd() {
 
         const showFallbackAd = async () => {
           setTaddyOverlayVisible(false)
+
           if (ad.network === AdsNetworkEnum.TADDY) {
             const { default: TaddyInterstitialForSDK } =
               await import('./TaddyInterstitialForSDK')
             root.render(
               <TaddyInterstitialForSDK
-                onClosed={handleClose}
-                onShow={() => {
-                  void handleClose
-                }}
-                onStartFailed={() => void handleClose}
-                onError={() => void handleClose}
-                onNoFill={() => void handleClose}
+                onClosed={() => void handleClose()}
+                onViewThrough={() => void handleClose()}
+                onError={() => void handleClose()}
+                onNoFill={() => void handleClose()}
               />,
             )
           } else if (ad.network === AdsNetworkEnum.ADSGRAM) {
             const { default: AdsgramAd } = await import('./AdsgramAd')
             root.render(
               <AdsgramAd
-                blockId={ad.blockId as `${number}` | `int-${number}`}
-                onClose={handleClose}
+                blockId={String(ad.blockId)}
+                onClose={() => void handleClose()}
               />,
             )
           } else if (ad.network === AdsNetworkEnum.ADSONAR) {
@@ -169,13 +171,16 @@ export function useFullscreenAd() {
             root.render(
               <AdsonarFullscreen
                 blockId={String(ad.blockId)}
-                onClose={handleClose}
+                onClose={() => void handleClose()}
               />,
             )
           } else if (ad.network === AdsNetworkEnum.RICHADS) {
             const { default: RichadsReward } = await import('./RichadsReward')
             root.render(
-              <RichadsReward onReward={handleClose} onClose={handleClose} />,
+              <RichadsReward
+                onReward={() => void handleClose()}
+                onClose={() => void handleClose()}
+              />,
             )
           } else {
             scheduleCleanup()
@@ -185,28 +190,18 @@ export function useFullscreenAd() {
         if (isTaddyEnabled && ad.network !== AdsNetworkEnum.TADDY) {
           const { default: TaddyInterstitial } =
             await import('./TaddyInterstitial')
-
           root.render(
             <TaddyInterstitial
               canCloseImmediately={true}
               requiredViewSeconds={10}
-              onClosed={() => {
-                void handleClose(true)
-              }}
               autoCloseOnViewed={false}
-              // demo={true}
+              onClosed={() => void handleClose(true)}
               onShow={(isShow) => {
                 if (isShow) void handleClose(true)
               }}
-              onStartFailed={() => {
-                void showFallbackAd()
-              }}
-              onError={() => {
-                void showFallbackAd()
-              }}
-              onNoFill={() => {
-                void showFallbackAd()
-              }}
+              onStartFailed={() => void showFallbackAd()}
+              onError={() => void showFallbackAd()}
+              onNoFill={() => void showFallbackAd()}
             />,
           )
         } else {
@@ -218,11 +213,14 @@ export function useFullscreenAd() {
       }
     }
 
-    // run после первой отрисовки
-    requestAnimationFrame(() => setTimeout(run, 0))
+    // Задержка перед первым показом — приложение должно устояться
+    startupTimerRef.current = setTimeout(run, STARTUP_DELAY_MS)
 
-    // cleanup при размонтировании страницы
     return () => {
+      if (startupTimerRef.current) {
+        clearTimeout(startupTimerRef.current)
+        startupTimerRef.current = null
+      }
       scheduleCleanup()
     }
   }, [
