@@ -56,6 +56,17 @@ export function TmaAdScripts() {
   return (
     <>
       <Script
+        id="adsgram-sdk"
+        strategy="afterInteractive"
+        src="https://sad.adsgram.ai/js/sad.min.js"
+        onLoad={() => {
+          console.log('[Adsgram] SDK loaded', !!window.Adsgram)
+        }}
+        onError={(e) => {
+          console.error('[Adsgram] SDK load failed', e)
+        }}
+      />
+      <Script
         id="adsonar"
         strategy="afterInteractive"
         src={
