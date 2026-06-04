@@ -132,9 +132,9 @@ export function TaskAdsReward() {
 
         const handleClose = () => scheduleCleanup()
 
-        const handleReward = async (isTaddy = false) => {
+        const handleReward = async (isTaddy = false, isClose = false) => {
           await reward(isTaddy)
-          handleClose()
+          if (isClose) handleClose()
         }
 
         const showFallbackAd = async () => {
@@ -145,22 +145,20 @@ export function TaskAdsReward() {
               await import('./TaddyInterstitialForSDK')
             root.render(
               <TaddyInterstitialForSDK
-                onClosed={handleClose}
-                onShow={(isShow) => {
-                  if (isShow) void handleReward
-                }}
-                onStartFailed={() => void handleClose}
-                onError={() => void handleClose}
-                onNoFill={() => void handleClose}
+                onClosed={() => void handleReward(false, true)}
+                // onViewThrough={() => void handleReward(false, true)}
+                onError={() => void handleClose()}
+                onNoFill={() => void handleClose()}
               />,
             )
           } else if (nextAd.network === AdsNetworkEnum.ADSGRAM) {
             const { default: AdsgramAd } = await import('./AdsgramAd')
             root.render(
               <AdsgramAd
-                blockId={nextAd.blockId as `${number}` | `int-${number}`}
-                onReward={handleReward}
+                blockId={String(nextAd.blockId)}
+                onReward={() => void handleReward()}
                 onClose={handleClose}
+                isDebug={process.env.NODE_ENV !== 'production'}
               />,
             )
           } else if (nextAd.network === AdsNetworkEnum.ADSONAR) {
@@ -168,14 +166,17 @@ export function TaskAdsReward() {
             root.render(
               <AdsonarReward
                 blockId={String(nextAd.blockId)}
-                onReward={handleReward}
+                onReward={() => void handleReward()}
                 onClose={handleClose}
               />,
             )
           } else if (nextAd.network === AdsNetworkEnum.RICHADS) {
             const { default: RichadsReward } = await import('./RichadsReward')
             root.render(
-              <RichadsReward onReward={handleReward} onClose={handleClose} />,
+              <RichadsReward
+                onReward={() => void handleReward()}
+                onClose={handleClose}
+              />,
             )
           } else {
             handleClose()
@@ -189,10 +190,10 @@ export function TaskAdsReward() {
             <TaddyInterstitial
               canCloseImmediately={false}
               requiredViewSeconds={10}
-              onClosed={handleClose}
               autoCloseOnViewed={false}
+              onClosed={handleClose}
               onShow={(isShow) => {
-                if (isShow) void handleReward(true)
+                if (isShow) void handleReward(true, true)
               }}
               onStartFailed={() => void showFallbackAd()}
               onError={() => void showFallbackAd()}
@@ -232,6 +233,7 @@ export function TaskAdsReward() {
   useEffect(() => {
     fetchReward()
   }, [fetchReward])
+
   useEffect(
     () => () => {
       scheduleCleanup()
@@ -251,35 +253,52 @@ export function TaskAdsReward() {
       type={isActionable ? 'button' : undefined}
       onClick={isActionable ? fetchAd : undefined}
       disabled={isActionable ? false : undefined}
-      // ─── layout: все три зоны через flex, без фиксированной ширины на правой ───
       className="relative flex items-center gap-2.5 w-full rounded-2xl overflow-hidden text-left"
       style={{
         background: 'var(--glass-bg)',
         backdropFilter: 'blur(var(--glass-blur))',
         WebkitBackdropFilter: 'blur(var(--glass-blur))',
-        border: '1px solid rgba(255,255,255,0.07)',
+        border: `1px solid ${isActionable ? 'rgba(255,140,66,0.13)' : 'rgba(255,255,255,0.07)'}`,
         boxShadow:
           '0 6px 24px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.06)',
         padding: '10px 12px',
         cursor: isActionable ? 'pointer' : 'default',
+        transition: 'border-color 400ms ease',
       }}
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={isActionable ? { scale: 1.01 } : undefined}
-      whileTap={isActionable ? { scale: 0.99 } : undefined}
+      whileHover={isActionable ? { scale: 1.012 } : undefined}
+      whileTap={isActionable ? { scale: 0.985 } : undefined}
       transition={{ duration: 0.35, ease: [0.2, 0, 0, 1] }}>
-      {/* Левая цветная полоска */}
+      {/* Left accent stripe */}
       <div
         className="absolute left-0 top-0 bottom-0 w-[3px] rounded-l-2xl"
         style={{
           background: isCoolingDown
-            ? 'linear-gradient(to bottom, rgba(255,171,64,0.4), rgba(255,171,64,0.15))'
-            : 'linear-gradient(to bottom, var(--cta), rgba(255,140,66,0.4))',
+            ? 'linear-gradient(to bottom, rgba(255,171,64,0.5), rgba(255,171,64,0.15))'
+            : 'linear-gradient(to bottom, var(--cta), rgba(255,140,66,0.3))',
           transition: 'background 500ms ease',
         }}
       />
 
-      {/* Иконка Play — фиксированный квадрат, не сжимается */}
+      {/* Shimmer sweep on actionable state */}
+      {isActionable && (
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              'linear-gradient(105deg, transparent 40%, rgba(255,140,66,0.055) 50%, transparent 60%)',
+          }}
+          animate={{ x: ['-100%', '200%'] }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            repeatDelay: 5,
+            ease: 'easeInOut',
+          }}
+        />
+      )}
+
       <motion.div
         animate={
           !isCoolingDown && !isLoading
@@ -309,35 +328,32 @@ export function TaskAdsReward() {
         <Play size={13} style={{ marginLeft: 2 }} />
       </motion.div>
 
-      {/* Центр: заголовок + бейдж награды — grow + min-w-0 чтобы текст мог обрезаться */}
+      {/* Center text */}
       <div className="flex flex-col gap-1 grow min-w-0">
         <span
-          className="text-[13px] font-bold font-mono leading-tight truncate"
+          className="text-[13px] font-bold font-mono"
           style={{ color: 'var(--on-surface)' }}>
           Смотри рекламу — получай Stars
         </span>
-
         <AnimatePresence mode="wait">
           <motion.div
             key={amountReward}
             initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ type: 'spring', stiffness: 400 }}
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg font-mono text-[11px] font-bold w-fit"
+            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg font-mono text-[12px] font-bold w-fit"
             style={{
-              background: 'rgba(245,166,35,0.12)',
+              background: 'rgba(245,166,35,0.15)',
               color: 'var(--star)',
-              border: '1px solid rgba(245,166,35,0.25)',
+              border: '1px solid rgba(245,166,35,0.3)',
+              letterSpacing: '0.02em',
             }}>
             <Currency w={12} type="star" />+{amountReward}
           </motion.div>
         </AnimatePresence>
       </div>
 
-      {/*
-        Правая зона — shrink-0 без фиксированной ширины.
-        CountdownTimer и кнопка Play сами определяют нужный размер.
-      */}
+      {/* Right zone */}
       <div className="shrink-0 flex items-center justify-center">
         {isCoolingDown ? (
           <CountdownTimer expiryDate={user.nextAdsRewardAt!} />
@@ -359,14 +375,29 @@ export function TaskAdsReward() {
               </motion.span>
             ) : (
               <motion.span
-                key="play"
+                key="arrow"
                 initial={{ opacity: 0, scale: 0.6 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.6 }}
                 transition={{ duration: 0.15 }}
                 className="flex items-center justify-center w-9 h-9"
-                style={{ color: 'var(--on-surface-variant)' }}>
-                <Play size={15} style={{ marginLeft: 2 }} />
+                style={{ color: 'var(--cta)' }}>
+                {/* Chevron right arrow */}
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true">
+                  <path
+                    d="M6 4L10 8L6 12"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </motion.span>
             )}
           </AnimatePresence>
