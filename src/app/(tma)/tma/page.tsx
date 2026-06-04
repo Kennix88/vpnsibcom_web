@@ -27,7 +27,7 @@ export default function Page() {
         {/*<GreenCheck />*/}
         <FreePlanActivated />
         <TaskAdsReward />
-        <TaskAdsgramTask />
+        <TaskAdsgramTask debug={process.env.NODE_ENV !== 'production'} />
         <Subscriptions />
         <br />
         <SocialButtons />
