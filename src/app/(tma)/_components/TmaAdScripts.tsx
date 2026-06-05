@@ -6,19 +6,7 @@ import { useEffect } from 'react'
 
 export function TmaAdScripts() {
   useEffect(() => {
-    type RichadsController = {
-      initialize: (params: {
-        pubId: string
-        appId: string
-        debug: boolean
-      }) => void
-    }
-
-    const w = window as Window & {
-      TelegramAdsController?: new () => RichadsController
-      richadsController?: RichadsController | null
-      Telegram?: { WebApp?: unknown }
-    }
+    const w = window
 
     if (w.richadsController) return
 
@@ -37,15 +25,14 @@ export function TmaAdScripts() {
         appId: config.richadsAppId,
         debug: process.env.NODE_ENV === 'development',
       })
+
       return true
     }
 
     if (tryInit()) return
 
     const timer = window.setInterval(() => {
-      if (tryInit()) {
-        window.clearInterval(timer)
-      }
+      if (tryInit()) window.clearInterval(timer)
     }, 250)
 
     return () => {
@@ -59,12 +46,6 @@ export function TmaAdScripts() {
         id="adsgram-sdk"
         strategy="afterInteractive"
         src="https://sad.adsgram.ai/js/sad.min.js"
-        onLoad={() => {
-          console.log('[Adsgram] SDK loaded', !!window.Adsgram)
-        }}
-        onError={(e) => {
-          console.error('[Adsgram] SDK load failed', e)
-        }}
       />
       <Script
         id="adsonar"
@@ -74,33 +55,17 @@ export function TmaAdScripts() {
           (process.env.NODE_ENV === 'development' ? '&isDebug=true' : '')
         }
       />
-
       <Script
         id="taddy"
         strategy="afterInteractive"
         src="https://sdk.taddy.pro/web/taddy.min.js?1317"
         data-pub-id={config.taddyPubId}
       />
-
       <Script
         id="richads-sdk"
         strategy="afterInteractive"
         src="https://richinfo.co/richpartners/telegram/js/tg-ob.js"
       />
-
-      {/*<Script
-        id="telega"
-        strategy="afterInteractive"
-        src="https://inapp.telega.io/sdk/v1/sdk.js"
-      />
-      <Script
-        id="telega-ads"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `const ads = window.TelegaIn.AdsController.create_miniapp({
-              token: '5a6ba556-002d-4636-8ef5-fcecd23fd9d9' });`,
-        }}
-      />*/}
     </>
   )
 }
