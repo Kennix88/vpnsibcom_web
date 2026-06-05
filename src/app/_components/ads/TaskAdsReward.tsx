@@ -21,13 +21,13 @@ const createAdContainer = () => {
   div.style.position = 'fixed'
   div.style.inset = '0'
   div.style.pointerEvents = 'none'
+  div.style.zIndex = '999'
   document.body.appendChild(div)
   return div
 }
 
 export function TaskAdsReward() {
   const TASK_AD_OWNER = 'task-reward-ad'
-  const OVERLAY_TIMEOUT_MS = 25000
   const isTaddyEnabled = config.isTaddyEnabled as boolean
 
   const { user, setUser } = useUserStore()
@@ -39,28 +39,8 @@ export function TaskAdsReward() {
   const mountedRootRef = useRef<Root | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
   const isShowingRef = useRef(false)
-  const overlayTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  const setTaddyOverlayVisible = useCallback((visible: boolean) => {
-    if (!containerRef.current) return
-    containerRef.current.style.width = visible ? '100vw' : '0'
-    containerRef.current.style.height = visible ? '100vh' : '0'
-    containerRef.current.style.zIndex = visible ? '99999' : '-1'
-    containerRef.current.style.background = visible
-      ? 'rgba(0,0,0,1)'
-      : 'transparent'
-    containerRef.current.style.pointerEvents = visible ? 'auto' : 'none'
-  }, [])
-
-  const resetOverlayTimeout = useCallback(() => {
-    if (overlayTimeoutRef.current) {
-      clearTimeout(overlayTimeoutRef.current)
-      overlayTimeoutRef.current = null
-    }
-  }, [])
 
   const cleanup = useCallback(() => {
-    resetOverlayTimeout()
     const root = mountedRootRef.current
     const container = containerRef.current
     mountedRootRef.current = null
@@ -73,7 +53,7 @@ export function TaskAdsReward() {
       root?.unmount()
       container?.remove()
     }, 0)
-  }, [resetOverlayTimeout])
+  }, [])
 
   const scheduleCleanup = useCallback(
     () => setTimeout(() => cleanup(), 0),
@@ -123,13 +103,6 @@ export function TaskAdsReward() {
         const root = createRoot(containerRef.current)
         mountedRootRef.current = root
 
-        setTaddyOverlayVisible(isTaddyEnabled)
-        resetOverlayTimeout()
-        overlayTimeoutRef.current = setTimeout(
-          () => scheduleCleanup(),
-          OVERLAY_TIMEOUT_MS,
-        )
-
         const handleClose = () => scheduleCleanup()
 
         const handleReward = async (isTaddy = false, isClose = false) => {
@@ -138,15 +111,12 @@ export function TaskAdsReward() {
         }
 
         const showFallbackAd = async () => {
-          setTaddyOverlayVisible(false)
-
           if (nextAd.network === AdsNetworkEnum.TADDY) {
             const { default: TaddyInterstitialForSDK } =
               await import('./TaddyInterstitialForSDK')
             root.render(
               <TaddyInterstitialForSDK
                 onClosed={() => void handleReward(false, true)}
-                // onViewThrough={() => void handleReward(false, true)}
                 onError={() => void handleClose()}
                 onNoFill={() => void handleClose()}
               />,
@@ -192,10 +162,10 @@ export function TaskAdsReward() {
               requiredViewSeconds={10}
               autoCloseOnViewed={false}
               onClosed={handleClose}
-              onShow={(isShow) => {
+              demo={true}
+              onViewed={(isShow) => {
                 if (isShow) void handleReward(true, true)
               }}
-              onStartFailed={() => void showFallbackAd()}
               onError={() => void showFallbackAd()}
               onNoFill={() => void showFallbackAd()}
             />,
@@ -213,13 +183,7 @@ export function TaskAdsReward() {
       console.error('Failed to load ad', err)
       scheduleCleanup()
     }
-  }, [
-    isTaddyEnabled,
-    resetOverlayTimeout,
-    reward,
-    scheduleCleanup,
-    setTaddyOverlayVisible,
-  ])
+  }, [isTaddyEnabled, reward, scheduleCleanup])
 
   const fetchReward = useCallback(async () => {
     try {
@@ -382,7 +346,6 @@ export function TaskAdsReward() {
                 transition={{ duration: 0.15 }}
                 className="flex items-center justify-center w-9 h-9"
                 style={{ color: 'var(--cta)' }}>
-                {/* Chevron right arrow */}
                 <svg
                   width="16"
                   height="16"
