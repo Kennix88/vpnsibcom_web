@@ -21,13 +21,13 @@ const createAdContainer = () => {
   div.style.position = 'fixed'
   div.style.inset = '0'
   div.style.pointerEvents = 'none'
+  div.style.zIndex = '999'
   document.body.appendChild(div)
   return div
 }
 
 export function useFullscreenAd() {
   const FULLSCREEN_AD_OWNER = 'fullscreen-ad'
-  const OVERLAY_TIMEOUT_MS = 25000
   const isTaddyEnabled = config.isTaddyEnabled as boolean
 
   const { user } = useUserStore()
@@ -36,25 +36,7 @@ export function useFullscreenAd() {
   const mountedRootRef = useRef<Root | null>(null)
   const adRef = useRef<AdsDataInterface | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
-  const overlayTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const startupTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  const setTaddyOverlayVisible = useCallback((visible: boolean) => {
-    if (!containerRef.current) return
-    containerRef.current.style.width = visible ? '100vw' : '0'
-    containerRef.current.style.height = visible ? '100vh' : '0'
-    containerRef.current.style.zIndex = visible ? '99999' : '-1'
-    containerRef.current.style.background = visible
-      ? 'rgba(0,0,0,1)'
-      : 'transparent'
-  }, [])
-
-  const resetOverlayTimeout = useCallback(() => {
-    if (overlayTimeoutRef.current) {
-      clearTimeout(overlayTimeoutRef.current)
-      overlayTimeoutRef.current = null
-    }
-  }, [])
 
   const reward = useCallback(async (isTaddy = false) => {
     try {
@@ -72,7 +54,6 @@ export function useFullscreenAd() {
   }, [])
 
   const cleanup = useCallback(() => {
-    resetOverlayTimeout()
     const root = mountedRootRef.current
     const container = containerRef.current
     mountedRootRef.current = null
@@ -83,7 +64,7 @@ export function useFullscreenAd() {
       root?.unmount()
       container?.remove()
     }, 0)
-  }, [resetOverlayTimeout])
+  }, [])
 
   const scheduleCleanup = useCallback(() => {
     setTimeout(() => cleanup(), 0)
@@ -131,21 +112,12 @@ export function useFullscreenAd() {
         const root = createRoot(containerRef.current)
         mountedRootRef.current = root
 
-        setTaddyOverlayVisible(isTaddyEnabled)
-        resetOverlayTimeout()
-        overlayTimeoutRef.current = setTimeout(
-          () => scheduleCleanup(),
-          OVERLAY_TIMEOUT_MS,
-        )
-
         const handleClose = async (isTaddy = false) => {
           await reward(isTaddy)
           scheduleCleanup()
         }
 
         const showFallbackAd = async () => {
-          setTaddyOverlayVisible(false)
-
           if (ad.network === AdsNetworkEnum.TADDY) {
             const { default: TaddyInterstitialForSDK } =
               await import('./TaddyInterstitialForSDK')
@@ -196,10 +168,9 @@ export function useFullscreenAd() {
               requiredViewSeconds={10}
               autoCloseOnViewed={false}
               onClosed={() => void handleClose(true)}
-              onShow={(isShow) => {
+              onViewed={(isShow) => {
                 if (isShow) void handleClose(true)
               }}
-              onStartFailed={() => void showFallbackAd()}
               onError={() => void showFallbackAd()}
               onNoFill={() => void showFallbackAd()}
             />,
@@ -223,12 +194,5 @@ export function useFullscreenAd() {
       }
       scheduleCleanup()
     }
-  }, [
-    isTaddyEnabled,
-    resetOverlayTimeout,
-    reward,
-    scheduleCleanup,
-    setTaddyOverlayVisible,
-    user,
-  ])
+  }, [isTaddyEnabled, reward, scheduleCleanup, user])
 }
