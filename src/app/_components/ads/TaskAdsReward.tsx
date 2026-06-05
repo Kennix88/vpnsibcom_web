@@ -162,7 +162,6 @@ export function TaskAdsReward() {
               requiredViewSeconds={10}
               autoCloseOnViewed={false}
               onClosed={handleClose}
-              demo={true}
               onViewed={(isShow) => {
                 if (isShow) void handleReward(true, true)
               }}
