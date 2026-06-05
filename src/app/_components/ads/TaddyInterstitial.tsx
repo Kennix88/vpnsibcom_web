@@ -11,7 +11,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 const TADDY_API_URL = 'https://api.taddy.pro/v1'
 const TADDY_SDK_VERSION = '1.3.17'
-const RING_SIZE = 40
+const RING_SIZE = 38
 const RING_STROKE = 2.5
 const RING_R = (RING_SIZE - RING_STROKE) / 2
 const RING_CIRCUM = 2 * Math.PI * RING_R
@@ -47,12 +47,13 @@ export type Props = {
   requiredViewSeconds?: number
   demo?: boolean
   autoCloseOnViewed?: boolean
+  // Called when the user dismisses the ad (without necessarily completing view)
   onClosed?: () => void
+  // Called when the required view time elapsed or the user clicked through
   onViewed?: (ad: TaddyAd) => void
-  onViewThrough?: (id: string) => void
-  onShow?: (success: boolean) => void
+  // Called when the ad network returns no fill
   onNoFill?: () => void
-  onStartFailed?: () => void
+  // Called on any load failure (missing pubId, network error, etc.)
   onError?: (error: unknown) => void
 }
 
@@ -63,7 +64,7 @@ const demoAd: TaddyAd = {
   title: 'VPNsib Premium',
   description:
     'Fast VPN access for every device with secure, zero-log traffic routing.',
-  image: 'https://kennix88.github.io/vpnsib-tonconnect-manifest/welcome-2.jpg',
+  image: '/logo.png',
   video: null,
   icon: '/logo.png',
   text: 'Get more traffic and premium servers with one tap.',
@@ -143,46 +144,88 @@ async function sendImpression(id: string): Promise<void> {
 
 const passthroughLoader = ({ src }: ImageLoaderProps) => src
 
-// ─── CountdownRing ────────────────────────────────────────────────────────────
-// SVG ring that drains linearly as remaining seconds decrease
+// ─── CornerTimer ──────────────────────────────────────────────────────────────
 
-function CountdownRing({
-  total,
+function CornerTimer({
+  closeEnabled,
   remaining,
+  total,
+  onClose,
 }: {
-  total: number
+  closeEnabled: boolean
   remaining: number
+  total: number
+  onClose: () => void
 }) {
   const progress = total > 0 ? remaining / total : 0
   const dash = RING_CIRCUM * progress
 
   return (
-    <svg
-      width={RING_SIZE}
-      height={RING_SIZE}
-      viewBox={`0 0 ${RING_SIZE} ${RING_SIZE}`}
-      className="absolute inset-0 -rotate-90"
-      aria-hidden>
-      <circle
-        cx={RING_SIZE / 2}
-        cy={RING_SIZE / 2}
-        r={RING_R}
-        fill="none"
-        stroke="rgba(255,255,255,0.1)"
-        strokeWidth={RING_STROKE}
-      />
-      <circle
-        cx={RING_SIZE / 2}
-        cy={RING_SIZE / 2}
-        r={RING_R}
-        fill="none"
-        stroke="var(--primary)"
-        strokeWidth={RING_STROKE}
-        strokeLinecap="round"
-        strokeDasharray={`${dash} ${RING_CIRCUM}`}
-        style={{ transition: 'stroke-dasharray 0.9s linear' }}
-      />
-    </svg>
+    <AnimatePresence mode="wait">
+      {closeEnabled ? (
+        <motion.button
+          key="close-btn"
+          type="button"
+          onClick={onClose}
+          initial={{ opacity: 0, scale: 0.65 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.65 }}
+          transition={{ type: 'spring', stiffness: 500, damping: 24 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.88 }}
+          className="flex size-[38px] cursor-pointer items-center justify-center rounded-full border border-white/[0.12] backdrop-blur-sm outline-none"
+          style={{ background: 'rgba(0,0,0,0.52)' }}
+          aria-label="Закрыть рекламу">
+          <X
+            size={14}
+            strokeWidth={2.8}
+            style={{ color: 'rgba(255,255,255,0.78)' }}
+          />
+        </motion.button>
+      ) : (
+        <motion.div
+          key="countdown-ring"
+          initial={{ opacity: 0, scale: 0.65 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="relative flex size-[38px] items-center justify-center">
+          <div
+            className="absolute inset-0 rounded-full border border-white/[0.1] backdrop-blur-sm"
+            style={{ background: 'rgba(0,0,0,0.52)' }}
+          />
+          <svg
+            width={RING_SIZE}
+            height={RING_SIZE}
+            viewBox={`0 0 ${RING_SIZE} ${RING_SIZE}`}
+            className="absolute inset-0 -rotate-90"
+            aria-hidden>
+            <circle
+              cx={RING_SIZE / 2}
+              cy={RING_SIZE / 2}
+              r={RING_R}
+              fill="none"
+              stroke="rgba(255,255,255,0.1)"
+              strokeWidth={RING_STROKE}
+            />
+            <circle
+              cx={RING_SIZE / 2}
+              cy={RING_SIZE / 2}
+              r={RING_R}
+              fill="none"
+              stroke="var(--primary)"
+              strokeWidth={RING_STROKE}
+              strokeLinecap="round"
+              strokeDasharray={`${dash} ${RING_CIRCUM}`}
+              style={{ transition: 'stroke-dasharray 0.9s linear' }}
+            />
+          </svg>
+          <span
+            className="relative z-10 select-none text-[11px] font-bold tabular-nums"
+            style={{ color: 'rgba(255,255,255,0.88)' }}>
+            {remaining}
+          </span>
+        </motion.div>
+      )}
+    </AnimatePresence>
   )
 }
 
@@ -191,28 +234,54 @@ function CountdownRing({
 function AdSkeleton() {
   return (
     <div className="flex h-full w-full flex-col">
-      {/* top bar */}
-      <div className="flex items-center justify-between px-4 py-3">
-        <div className="flex items-center gap-2">
-          <div className="size-8 animate-pulse rounded-lg bg-white/8" />
-          <div className="h-3 w-20 animate-pulse rounded bg-white/8" />
-        </div>
-        <div className="size-10 animate-pulse rounded-full bg-white/8" />
+      <div
+        className="relative w-full shrink-0 animate-pulse"
+        style={{
+          height: '46%',
+          minHeight: 200,
+          background: 'var(--surface-container-lowest)',
+        }}>
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-20"
+          style={{
+            background:
+              'linear-gradient(to top, var(--surface-container-low) 0%, transparent 100%)',
+          }}
+        />
       </div>
-
-      {/* media */}
-      <div className="min-h-0 flex-1 animate-pulse bg-white/[0.04]" />
-
-      {/* cta */}
-      <div className="flex flex-col gap-3 px-5 py-5">
-        <div className="flex items-center gap-3">
-          <div className="size-10 animate-pulse rounded-xl bg-white/8" />
-          <div className="flex flex-1 flex-col gap-2">
-            <div className="h-4 w-2/3 animate-pulse rounded bg-white/8" />
-            <div className="h-3 w-full animate-pulse rounded bg-white/8" />
-          </div>
+      <div className="-mt-[26px] ml-4 shrink-0">
+        <div
+          className="size-[54px] animate-pulse rounded-2xl border-2"
+          style={{
+            borderColor: 'var(--surface-container-low)',
+            background: 'rgba(255,255,255,0.07)',
+          }}
+        />
+      </div>
+      <div className="flex flex-1 flex-col gap-3 px-4 pt-2.5">
+        <div
+          className="h-[26px] w-2/3 animate-pulse rounded-lg"
+          style={{ background: 'rgba(255,255,255,0.08)' }}
+        />
+        <div className="space-y-1.5">
+          <div
+            className="h-3.5 w-full animate-pulse rounded"
+            style={{ background: 'rgba(255,255,255,0.06)' }}
+          />
+          <div
+            className="h-3.5 w-[80%] animate-pulse rounded"
+            style={{ background: 'rgba(255,255,255,0.06)' }}
+          />
         </div>
-        <div className="h-12 w-full animate-pulse rounded-xl bg-white/8" />
+        <div className="flex-1" />
+        <div
+          className="h-[52px] w-full animate-pulse rounded-2xl"
+          style={{ background: 'rgba(255,255,255,0.08)' }}
+        />
+        <div
+          className="mx-auto h-3.5 w-32 animate-pulse rounded"
+          style={{ background: 'rgba(255,255,255,0.04)' }}
+        />
       </div>
     </div>
   )
@@ -229,10 +298,7 @@ export default function TaddyInterstitial({
   autoCloseOnViewed = true,
   onClosed,
   onViewed,
-  onViewThrough,
-  onShow,
   onNoFill,
-  onStartFailed,
   onError,
 }: Props) {
   const [ad, setAd] = useState<TaddyAd | null>(demo ? demoAd : null)
@@ -252,45 +318,32 @@ export default function TaddyInterstitial({
   const closedAfterViewRef = useRef(false)
   const adRef = useRef<TaddyAd | null>(demo ? demoAd : null)
 
-  // ── Close + view helpers ───────────────────────────────────────────────────
+  // ── Helpers ────────────────────────────────────────────────────────────────
 
-  const closeWith = useCallback(
-    (success: boolean) => {
-      setOpen(false)
-      // callbacks fire after exit animation (300ms)
-      setTimeout(() => {
-        if (!success) {
-          onClosed?.()
-          onShow?.(false)
-        }
-      }, 300)
-    },
-    [onClosed, onShow],
-  )
+  const dismiss = useCallback(() => {
+    setOpen(false)
+    setTimeout(() => onClosed?.(), 300)
+  }, [onClosed])
 
   const markViewed = useCallback(
     async (currentAd: TaddyAd) => {
       if (finishedRef.current) return
       finishedRef.current = true
       onViewed?.(currentAd)
-      onViewThrough?.(currentAd.id)
-      onShow?.(true)
       if (autoCloseOnViewed && !closedAfterViewRef.current) {
         closedAfterViewRef.current = true
         onClosed?.()
         setOpen(false)
       }
     },
-    [autoCloseOnViewed, onClosed, onShow, onViewed, onViewThrough],
+    [autoCloseOnViewed, onClosed, onViewed],
   )
 
   // ── Load ad ────────────────────────────────────────────────────────────────
 
   useEffect(() => {
     if (demo) return
-
     let cancelled = false
-
     const load = async () => {
       try {
         if (isTaddyInterstitialRunning) {
@@ -299,22 +352,18 @@ export default function TaddyInterstitial({
           return
         }
         isTaddyInterstitialRunning = true
-
         if (!pubId) {
           setLoadState('error')
-          onStartFailed?.()
+          onError?.(new Error('pubId is required'))
           return
         }
-
         const next = await requestAd(pubId, payload)
         if (cancelled) return
-
         if (!next) {
           setLoadState('no-fill')
           onNoFill?.()
           return
         }
-
         adRef.current = next
         setAd(next)
         setLoadState('ready')
@@ -323,13 +372,11 @@ export default function TaddyInterstitial({
           console.error('TaddyInterstitial load failed', err)
           onError?.(err)
           setLoadState('error')
-          onStartFailed?.()
         }
       } finally {
         isTaddyInterstitialRunning = false
       }
     }
-
     void load()
     return () => {
       cancelled = true
@@ -353,7 +400,6 @@ export default function TaddyInterstitial({
 
   useEffect(() => {
     if (!ad || closeEnabled || remaining <= 0) return
-
     const timer = window.setInterval(() => {
       setRemaining((cur) => {
         const next = Math.max(0, cur - 1)
@@ -365,7 +411,6 @@ export default function TaddyInterstitial({
         return next
       })
     }, 1000)
-
     return () => window.clearInterval(timer)
   }, [ad, closeEnabled, markViewed, remaining])
 
@@ -374,7 +419,7 @@ export default function TaddyInterstitial({
   const handleClose = () => {
     if (!closeEnabled || finishedRef.current) return
     finishedRef.current = true
-    closeWith(false)
+    dismiss()
   }
 
   const handleOpen = () => {
@@ -384,51 +429,49 @@ export default function TaddyInterstitial({
     window.open(cur.link, '_blank', 'noopener,noreferrer')
   }
 
-  // ── Bail out on non-renderable states ─────────────────────────────────────
+  // ── Bail out ───────────────────────────────────────────────────────────────
 
   if (!open && (loadState === 'no-fill' || loadState === 'error')) return null
 
-  const hasMedia = Boolean(ad?.video || ad?.image)
   const title = ad?.title ?? 'Спонсор'
   const description = ad?.description ?? ad?.text ?? ''
   const buttonText = ad?.button ?? 'Открыть'
 
-  // ── Animation variants ────────────────────────────────────────────────────
+  // ── Variants ──────────────────────────────────────────────────────────────
 
-  const backdropVariants = {
+  const backdropVariants: Variants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1 },
     exit: { opacity: 0 },
   }
 
-  // Mobile: slide from bottom; tablet+: fade+scale from center
   const cardVariants: Variants = {
-    hidden: {
-      y: '50%',
-      opacity: 0,
-      scale: 0.97,
-    },
-
+    hidden: { y: '55%', opacity: 0, scale: 0.96 },
     visible: {
       y: 0,
       opacity: 1,
       scale: 1,
-      transition: {
-        type: 'spring' as const,
-        stiffness: 300,
-        damping: 30,
-        mass: 0.8,
-      },
+      transition: { type: 'spring', stiffness: 255, damping: 27, mass: 0.85 },
     },
-
     exit: {
-      y: '40%',
+      y: '45%',
       opacity: 0,
       scale: 0.96,
-      transition: {
-        duration: 0.22,
-        ease: [0.4, 0, 1, 1] as const,
-      },
+      transition: { duration: 0.24, ease: [0.4, 0, 1, 1] as const },
+    },
+  }
+
+  const contentContainerVariants: Variants = {
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.07, delayChildren: 0.18 } },
+  }
+
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: 'spring', stiffness: 340, damping: 28 },
     },
   }
 
@@ -443,8 +486,12 @@ export default function TaddyInterstitial({
           initial="hidden"
           animate="visible"
           exit="exit"
-          transition={{ duration: 0.2, ease: 'easeOut' }}
-          className="pointer-events-auto fixed inset-0 z-[99999] flex items-end justify-center bg-black/70 backdrop-blur-md sm:items-center"
+          transition={{ duration: 0.25, ease: 'easeOut' }}
+          className="pointer-events-auto fixed inset-0 z-[99999] flex items-end justify-center sm:items-center"
+          style={{
+            background: 'rgba(0,0,0,0.78)',
+            backdropFilter: 'blur(18px)',
+          }}
           role="dialog"
           aria-modal
           aria-label="Advertisement">
@@ -456,211 +503,309 @@ export default function TaddyInterstitial({
             exit="exit"
             className={[
               'pointer-events-auto relative flex w-full max-w-[480px] flex-col overflow-hidden',
-              'bg-[var(--surface-container-low)]',
-              // Mobile: full screen
               'h-dvh',
-              // Tablet+: floating card
-              'sm:h-auto sm:max-h-[90dvh] sm:rounded-2xl',
-              'sm:shadow-[0_24px_80px_rgba(0,0,0,0.7),0_0_0_1px_rgba(255,255,255,0.06)]',
-            ].join(' ')}>
+              'sm:h-auto sm:max-h-[92dvh] sm:rounded-3xl',
+              'sm:shadow-[0_32px_100px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.07)]',
+            ].join(' ')}
+            style={{ background: 'var(--surface-container-low)' }}>
+            {/* Ambient corner glow */}
+            <div
+              className="pointer-events-none absolute inset-0 z-0"
+              style={{
+                background:
+                  'radial-gradient(ellipse at 10% 105%, rgba(59,42,115,0.45) 0%, transparent 52%)',
+              }}
+            />
+
             {loadState === 'loading' ? (
               <AdSkeleton />
             ) : (
               <>
-                {/* ── Top bar ─────────────────────────────────────────── */}
-                <div className="flex shrink-0 items-center justify-between px-4 py-3">
-                  {/* Sponsor badge */}
-                  <div className="flex items-center gap-2 rounded-full border border-white/[0.07] bg-white/[0.06] py-1.5 pl-1.5 pr-3">
-                    {ad?.icon ? (
-                      <Image
-                        loader={passthroughLoader}
-                        unoptimized
-                        src={ad.icon}
-                        alt=""
-                        width={22}
-                        height={22}
-                        className="size-[22px] rounded-md object-cover"
-                      />
-                    ) : (
-                      <div className="size-[22px] rounded-md bg-white/10" />
-                    )}
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-white/45">
-                      Спонсор
-                    </span>
-                  </div>
-
-                  {/* Close / countdown */}
-                  <motion.button
-                    type="button"
-                    onClick={handleClose}
-                    disabled={!closeEnabled}
-                    whileHover={closeEnabled ? { scale: 1.08 } : {}}
-                    whileTap={closeEnabled ? { scale: 0.93 } : {}}
-                    className={[
-                      'relative flex size-10 shrink-0 items-center justify-center rounded-full',
-                      'border-none outline-none',
-                      closeEnabled
-                        ? 'cursor-pointer bg-white/10 hover:bg-white/15'
-                        : 'cursor-not-allowed bg-white/[0.06]',
-                    ].join(' ')}
-                    aria-label={
-                      closeEnabled ? 'Close ad' : `Close in ${remaining}s`
-                    }>
-                    {!closeEnabled && (
-                      <CountdownRing
-                        total={totalSeconds}
-                        remaining={remaining}
-                      />
-                    )}
-                    <span className="relative z-10 text-[15px] font-bold leading-none text-white/80 select-none">
-                      {closeEnabled ? (
-                        <X size={16} strokeWidth={2.5} />
-                      ) : (
-                        remaining
-                      )}
-                    </span>
-                  </motion.button>
-                </div>
-
-                {/* ── Media area ──────────────────────────────────────── */}
+                {/* ── Media area ─────────────────────────────────────── */}
                 <motion.button
                   type="button"
                   onClick={handleOpen}
-                  whileTap={{ scale: 0.99 }}
-                  className="relative min-h-0 flex-1 cursor-pointer overflow-hidden border-none bg-[var(--surface-container-lowest)] p-0"
+                  whileTap={{ scale: 0.994 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 28 }}
+                  className="relative z-10 w-full shrink-0 cursor-pointer overflow-hidden border-none p-0"
+                  style={{
+                    height: '60%',
+                    minHeight: 200,
+                    maxHeight: 400,
+                    background: 'var(--surface-container-lowest)',
+                  }}
                   aria-label={`Открыть: ${title}`}>
                   {ad?.video ? (
-                    <video
-                      src={ad.video}
-                      autoPlay
-                      playsInline
-                      muted
-                      loop
-                      className="size-full object-contain"
-                    />
+                    // Video: contain + blurred bg
+                    <>
+                      <video
+                        src={ad.video}
+                        autoPlay
+                        playsInline
+                        muted
+                        loop
+                        className="absolute inset-0 size-full object-cover opacity-30 blur-2xl"
+                        aria-hidden
+                        style={{ transform: 'scale(1.12)' }}
+                      />
+                      <video
+                        src={ad.video}
+                        autoPlay
+                        playsInline
+                        muted
+                        loop
+                        className="relative size-full object-contain"
+                      />
+                    </>
                   ) : ad?.image ? (
-                    <Image
-                      loader={passthroughLoader}
-                      unoptimized
-                      src={ad.image}
-                      alt={title}
-                      fill
-                      sizes="(max-width: 480px) 100vw, 480px"
-                      className="object-contain object-center"
-                    />
-                  ) : (
-                    /* No-media fallback */
-                    <div className="flex size-full flex-col items-center justify-center gap-5 px-8 text-center">
+                    // Image: blurred bg (cover) + sharp foreground (contain)
+                    // guarantees 1:1, 1:2, 2:1 are all fully visible
+                    <>
+                      {/* Blurred atmospheric backdrop — slightly scaled to hide blur edges */}
                       <div
-                        className="absolute inset-0 opacity-40"
+                        className="absolute inset-0 overflow-hidden"
+                        style={{ transform: 'scale(1.12)' }}
+                        aria-hidden>
+                        <Image
+                          loader={passthroughLoader}
+                          unoptimized
+                          src={ad.image}
+                          alt=""
+                          fill
+                          sizes="(max-width: 480px) 100vw, 480px"
+                          className="object-cover opacity-35"
+                          style={{ filter: 'blur(24px)' }}
+                        />
+                      </div>
+                      {/* Sharp foreground at natural ratio */}
+                      <Image
+                        loader={passthroughLoader}
+                        unoptimized
+                        src={ad.image}
+                        alt={title}
+                        fill
+                        sizes="(max-width: 480px) 100vw, 480px"
+                        className="object-contain"
+                      />
+                    </>
+                  ) : (
+                    // No-media fallback
+                    <div className="flex size-full flex-col items-center justify-center gap-5">
+                      <div
+                        className="absolute inset-0"
                         style={{
                           background:
-                            'radial-gradient(ellipse at 50% 40%, var(--primary-container) 0%, transparent 65%)',
+                            'radial-gradient(ellipse at 50% 50%, var(--primary-container) 0%, transparent 70%)',
+                          opacity: 0.55,
                         }}
                       />
-                      <div className="relative flex size-[88px] items-center justify-center rounded-[22px] border border-white/[0.08] bg-white/[0.06]">
+                      <div
+                        className="relative flex size-24 items-center justify-center rounded-[28px] border border-white/[0.1]"
+                        style={{ background: 'rgba(195,166,255,0.1)' }}>
                         {ad?.icon ? (
                           <Image
                             loader={passthroughLoader}
                             unoptimized
                             src={ad.icon}
                             alt=""
-                            width={56}
-                            height={56}
-                            className="size-14 rounded-xl object-contain"
+                            width={64}
+                            height={64}
+                            className="size-16 rounded-2xl object-contain"
                           />
                         ) : (
-                          <span className="text-3xl font-bold text-[var(--primary)]">
+                          <span
+                            className="text-4xl font-black"
+                            style={{ color: 'var(--primary)' }}>
                             Ad
                           </span>
                         )}
                       </div>
-                      <span className="relative text-[22px] font-bold text-[var(--on-surface)]">
+                      <span
+                        className="relative text-2xl font-extrabold"
+                        style={{ color: 'var(--on-surface)' }}>
                         {title}
                       </span>
                     </div>
                   )}
 
-                  {/* Bottom gradient over media */}
-                  {hasMedia && (
-                    <div
-                      className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%]"
-                      style={{
-                        background:
-                          'linear-gradient(to top, var(--surface-container-low) 0%, rgba(15,13,17,0.75) 40%, transparent 100%)',
-                      }}
-                    />
-                  )}
+                  {/* Top vignette */}
+                  <div
+                    className="pointer-events-none absolute inset-x-0 top-0 h-16"
+                    style={{
+                      background:
+                        'linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, transparent 100%)',
+                    }}
+                  />
 
-                  {/* Tap hint */}
-                  <div className="absolute right-3 bottom-3 flex items-center gap-1.5 rounded-full border border-white/10 bg-black/40 py-1 pr-2.5 pl-2 text-[11px] font-medium text-white/50 pointer-events-none">
-                    <ArrowRight size={11} strokeWidth={2.5} />
-                    <span>Нажмите, чтобы открыть</span>
+                  {/* Bottom fade to card bg */}
+                  <div
+                    className="pointer-events-none absolute inset-x-0 bottom-0 h-28"
+                    style={{
+                      background:
+                        'linear-gradient(to top, var(--surface-container-low) 0%, transparent 100%)',
+                    }}
+                  />
+
+                  {/* Ad label badge — top left */}
+                  <div
+                    className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full border border-white/[0.14] px-2.5 py-1 backdrop-blur-sm"
+                    style={{ background: 'rgba(0,0,0,0.44)' }}>
+                    <div
+                      className="size-1.5 rounded-full"
+                      style={{ background: 'var(--primary)' }}
+                    />
+                    <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-white/65">
+                      Ad · 18+
+                    </span>
+                  </div>
+
+                  {/* Corner timer — top right */}
+                  <div className="absolute right-3 top-3 z-20">
+                    <CornerTimer
+                      closeEnabled={closeEnabled}
+                      remaining={remaining}
+                      total={totalSeconds}
+                      onClose={handleClose}
+                    />
                   </div>
                 </motion.button>
 
-                {/* ── CTA area ────────────────────────────────────────── */}
-                <div
-                  className="shrink-0 border-t border-white/[0.05] bg-[var(--surface-container-low)] px-4 pt-4"
-                  style={{
-                    paddingBottom:
-                      'max(20px, calc(16px + env(safe-area-inset-bottom)))',
-                  }}>
-                  {/* Icon + title + description */}
-                  <div className="mb-4 flex items-start gap-3">
-                    {ad?.icon && (
+                {/* ── Floating app icon ──────────────────────────────── */}
+                <div className="relative z-10 -mt-[26px] ml-4 shrink-0">
+                  <div
+                    className="relative size-[54px] overflow-hidden rounded-[14px] border-2"
+                    style={{
+                      borderColor: 'var(--surface-container-low)',
+                      boxShadow: '0 6px 20px rgba(0,0,0,0.55)',
+                    }}>
+                    {ad?.icon ? (
                       <Image
                         loader={passthroughLoader}
                         unoptimized
                         src={ad.icon}
                         alt=""
-                        width={42}
-                        height={42}
-                        className="size-[42px] shrink-0 rounded-xl border border-white/[0.08] object-cover"
+                        width={54}
+                        height={54}
+                        className="size-full object-cover"
                       />
+                    ) : (
+                      <div
+                        className="flex size-full items-center justify-center text-[18px] font-black"
+                        style={{
+                          background: 'var(--primary-container)',
+                          color: 'var(--primary)',
+                        }}>
+                        {title.charAt(0).toUpperCase()}
+                      </div>
                     )}
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-[17px] font-bold leading-snug text-[var(--on-surface)]">
-                        {title}
-                      </p>
-                      {description && (
-                        <p className="mt-1 line-clamp-2 text-[13px] leading-relaxed text-[var(--on-surface)]/55">
-                          {description}
-                        </p>
-                      )}
-                    </div>
                   </div>
+                </div>
 
-                  {/* Primary CTA */}
-                  <motion.button
-                    type="button"
-                    onClick={handleOpen}
-                    whileHover={{ scale: 1.015, y: -1 }}
-                    whileTap={{ scale: 0.97, y: 0 }}
-                    className="flex h-12 w-full items-center justify-center gap-2 rounded-xl text-[15px] font-bold tracking-[0.15px] outline-none"
-                    style={{
-                      background: 'var(--primary)',
-                      color: 'var(--on-primary)',
-                      boxShadow: '0 4px 24px rgba(195,166,255,0.28)',
-                    }}
-                    transition={{
-                      type: 'spring',
-                      stiffness: 400,
-                      damping: 25,
-                    }}>
-                    <span>{buttonText}</span>
-                    <ArrowRight size={16} strokeWidth={2.5} />
-                  </motion.button>
+                {/* ── Content ─────────────────────────────────────────── */}
+                <motion.div
+                  variants={contentContainerVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="relative z-10 flex flex-1 flex-col overflow-y-auto px-4 pt-2"
+                  style={{
+                    paddingBottom:
+                      'max(20px, calc(16px + env(safe-area-inset-bottom)))',
+                  }}>
+                  {/* Title */}
+                  <motion.p
+                    variants={itemVariants}
+                    className="mb-1 text-[20px] font-extrabold leading-tight tracking-tight"
+                    style={{ color: 'var(--on-surface)' }}>
+                    {title}
+                  </motion.p>
+
+                  {/* Description */}
+                  {description && (
+                    <motion.p
+                      variants={itemVariants}
+                      className="mb-4 line-clamp-2 text-[13.5px] leading-relaxed"
+                      style={{ color: 'rgba(233,230,234,0.52)' }}>
+                      {description}
+                    </motion.p>
+                  )}
+
+                  <div className="flex-1" />
+
+                  {/* CTA button */}
+                  <motion.div variants={itemVariants}>
+                    <motion.div
+                      className="rounded-2xl"
+                      animate={{
+                        boxShadow: [
+                          '0 4px 22px rgba(195,166,255,0.22)',
+                          '0 6px 44px rgba(195,166,255,0.52)',
+                          '0 4px 22px rgba(195,166,255,0.22)',
+                        ],
+                      }}
+                      transition={{
+                        duration: 2.8,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                      }}>
+                      <motion.button
+                        type="button"
+                        onClick={handleOpen}
+                        whileHover={{ scale: 1.025, y: -1 }}
+                        whileTap={{ scale: 0.97, y: 0 }}
+                        transition={{
+                          type: 'spring',
+                          stiffness: 420,
+                          damping: 24,
+                        }}
+                        className="relative flex h-[52px] w-full cursor-pointer items-center justify-center gap-2.5 overflow-hidden rounded-2xl border-none text-[15px] font-extrabold tracking-[0.02em] outline-none"
+                        style={{
+                          background: 'var(--primary)',
+                          color: 'var(--on-primary)',
+                        }}>
+                        {/* Shimmer sweep */}
+                        <motion.div
+                          className="pointer-events-none absolute inset-0"
+                          style={{
+                            background:
+                              'linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.2) 50%, transparent 70%)',
+                          }}
+                          animate={{ x: ['-130%', '130%'] }}
+                          transition={{
+                            duration: 2.2,
+                            repeat: Infinity,
+                            ease: 'linear',
+                            repeatDelay: 1.6,
+                          }}
+                        />
+                        <span className="relative z-10">{buttonText}</span>
+                        <motion.div
+                          className="relative z-10"
+                          animate={{ x: [0, 3, 0] }}
+                          transition={{
+                            duration: 1.8,
+                            repeat: Infinity,
+                            ease: 'easeInOut',
+                          }}>
+                          <ArrowRight size={17} strokeWidth={2.8} />
+                        </motion.div>
+                      </motion.button>
+                    </motion.div>
+                  </motion.div>
 
                   {/* Advertise link */}
-                  <Link
-                    href="https://taddy.pro/vpnsibcom_bot"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-3 block w-full text-center text-[12px] text-white/30 underline underline-offset-2 transition-colors hover:text-white/55">
-                    Разместить рекламу здесь
-                  </Link>
-                </div>
+                  <motion.div
+                    variants={itemVariants}
+                    className="mt-4 text-center">
+                    <Link
+                      href="https://taddy.pro/vpnsibcom_bot"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[11.5px] underline underline-offset-2 transition-colors hover:text-white/45"
+                      style={{ color: 'rgba(255,255,255,0.2)' }}>
+                      Разместить рекламу здесь
+                    </Link>
+                  </motion.div>
+                </motion.div>
               </>
             )}
           </motion.div>
