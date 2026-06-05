@@ -8,6 +8,7 @@ import { ServerDataInterface } from './servers-data.interface'
 export interface GetSubscriptionConfigResponseInterface {
   subscription: SubscriptionDataInterface
   marzbanSubRes?: MarzbanResponseInterface
+  routing?: string
 }
 
 export interface SubscriptionResponseInterface {
