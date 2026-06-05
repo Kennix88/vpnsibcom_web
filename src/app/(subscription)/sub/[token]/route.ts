@@ -60,6 +60,7 @@ export async function GET(
     const announce =
       rawAnnounce &&
       `base64:${Buffer.from(truncateAnnounce(rawAnnounce)).toString('base64')}`
+    const routing = resData.routing
 
     return new Response(Buffer.from(links).toString('base64'), {
       status: 200,
@@ -73,6 +74,7 @@ export async function GET(
         'profile-update-interval': '1',
         'profile-title': `base64:${Buffer.from(`${resData.subscription.name} - VPNsib`).toString('base64')}`,
         ...(announce && { announce }),
+        ...(routing && { routing }),
       },
     })
   } else {
