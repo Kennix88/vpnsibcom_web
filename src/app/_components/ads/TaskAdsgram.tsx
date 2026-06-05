@@ -215,34 +215,6 @@ export function TaskAdsgramTask({
         }}
       />
 
-      {/* Soft inner glow */}
-      <motion.div
-        className="absolute z-10 pointer-events-none"
-        style={{
-          left: 15,
-          top: '50%',
-          width: 38,
-          height: 38,
-          transform: 'translateY(-50%)',
-          borderRadius: 11,
-          border: '1px solid rgba(255,140,66,0.25)',
-        }}
-        animate={
-          !isCoolingDown
-            ? {
-                opacity: [0.35, 0, 0.35],
-                scale: [1, 1.12, 1],
-              }
-            : { opacity: 0 }
-        }
-        transition={{
-          duration: 2.2,
-          repeat: !isCoolingDown ? Infinity : 0,
-          ease: 'easeOut',
-          delay: 0.25,
-        }}
-      />
-
       {/* Subtle shimmer sweep across the card */}
       <motion.div
         className="absolute inset-0 z-[1] pointer-events-none"
@@ -294,51 +266,101 @@ export function TaskAdsgramTask({
         </div>
 
         {/* claim slot */}
-        <div slot="claim" className="adsgram-slot-button adsgram-slot-claim">
+        <div
+          slot="claim"
+          className="adsgram-slot-claim rotate-45"
+          aria-label="Забрать награду">
           Забрать
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 15 15"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true">
+            <path
+              d="M5.5 3.5L9.5 7.5L5.5 11.5"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </div>
 
         {/* done slot */}
-        <div slot="done" className="adsgram-slot-button adsgram-slot-done">
-          ✓
+        <div slot="done" className="adsgram-slot-done">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 14 14"
+            fill="none"
+            aria-hidden="true">
+            <path
+              d="M2.5 7.2L5.6 10.2L11.5 3.8"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </div>
       </AdsgramTask>
 
       <style>{`
-        .adsgram-task-override {
-            --adsgram-task-font-size: 13px;
-            --adsgram-task-icon-size: 38px;
-            --adsgram-task-icon-border-radius: 11px;
-            --adsgram-task-icon-title-gap: 10px;
-            --adsgram-task-button-width: 36px;
+          .adsgram-task-override {
+                  --adsgram-task-font-size: 13px;
+                  --adsgram-task-icon-size: 38px;
+                  --adsgram-task-icon-border-radius: 11px;
+                  --adsgram-task-icon-title-gap: 10px;
+                  --adsgram-task-button-width: 36px;
 
-            display: block;
-            width: 100%;
-            padding: 10px 10px 10px 15px;
-            color: var(--on-surface);
-            font-family: ui-monospace, SFMono-Regular, monospace;
-            position: relative;
-            z-index: 2;
-        }
+                  display: block;
+                  width: 100%;
+                  padding: 10px 10px 10px 15px;
+                  color: var(--on-surface);
+                  font-family: ui-monospace, SFMono-Regular, monospace;
+                  position: relative;
+                  z-index: 2;
+              }
 
-        .adsgram-slot-reward {
-          display: inline-flex;
-          align-items: center;
-          gap: 4px;
-          padding: 3px 9px;
-          border-radius: 8px;
-          font-size: 12px;
-          font-weight: 700;
-          font-family: ui-monospace, SFMono-Regular, monospace;
-          background: rgba(245,166,35,0.15);
-          color: var(--star);
-          border: 1px solid rgba(245,166,35,0.3);
-          margin-top: 4px;
-          letter-spacing: 0.02em;
-        }
+              .adsgram-slot-reward {
+                display: inline-flex;
+                align-items: center;
+                gap: 4px;
+                padding: 3px 9px;
+                border-radius: 8px;
+                font-size: 12px;
+                font-weight: 700;
+                font-family: ui-monospace, SFMono-Regular, monospace;
+                background: rgba(245,166,35,0.15);
+                color: var(--star);
+                border: 1px solid rgba(245,166,35,0.3);
+                margin-top: 4px;
+                letter-spacing: 0.02em;
+              }
 
-        /* Square arrow button */
-        .adsgram-slot-button {
+              /* Square arrow button */
+              .adsgram-slot-button {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 34px;
+                height: 34px;
+                font-size: 11px;
+                font-weight: 700;
+                font-family: ui-monospace, SFMono-Regular, monospace;
+                color: var(--cta);
+                cursor: pointer;
+                transition: all 150ms ease;
+              }
+
+              .adsgram-slot-button:active {
+                transform: scale(0.92);
+                background: rgba(255,140,66,0.25);
+              }
+
+          .adsgram-slot-claim {
           display: inline-flex;
           align-items: center;
           justify-content: center;
@@ -350,30 +372,32 @@ export function TaskAdsgramTask({
           color: var(--cta);
           cursor: pointer;
           transition: all 150ms ease;
-        }
+          }
 
-        .adsgram-slot-button:active {
+          .adsgram-slot-claim:hover {
           transform: scale(0.92);
           background: rgba(255,140,66,0.25);
-        }
+          }
 
-        .adsgram-slot-claim {
-          background: rgba(255,140,66,0.22);
-          color: var(--cta);
-          border-color: rgba(255,140,66,0.4);
-          font-size: 10px;
-          white-space: nowrap;
-          width: auto;
-          padding: 0 10px;
-        }
-
-        .adsgram-slot-done {
-          background: rgba(55,227,162,0.12);
-          color: var(--success);
-          border-color: rgba(55,227,162,0.3);
-          cursor: default;
+          .adsgram-slot-done {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
           width: 34px;
-        }
+          height: 34px;
+          font-size: 11px;
+          font-weight: 700;
+          font-family: ui-monospace, SFMono-Regular, monospace;
+          color: var(--cta);
+          cursor: pointer;
+          transition: all 150ms ease;
+          }
+
+          .adsgram-slot-done:hover {
+          transform: scale(0.92);
+          background: rgba(255,140,66,0.25);
+          }
+
       `}</style>
     </motion.div>
   )
