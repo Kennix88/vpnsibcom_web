@@ -357,7 +357,6 @@ export function TaskAdsgramTask({
 
               .adsgram-slot-button:active {
                 transform: scale(0.92);
-                background: rgba(255,140,66,0.25);
               }
 
           .adsgram-slot-claim {
@@ -376,7 +375,6 @@ export function TaskAdsgramTask({
 
           .adsgram-slot-claim:hover {
           transform: scale(0.92);
-          background: rgba(255,140,66,0.25);
           }
 
           .adsgram-slot-done {
@@ -395,7 +393,6 @@ export function TaskAdsgramTask({
 
           .adsgram-slot-done:hover {
           transform: scale(0.92);
-          background: rgba(255,140,66,0.25);
           }
 
       `}</style>
