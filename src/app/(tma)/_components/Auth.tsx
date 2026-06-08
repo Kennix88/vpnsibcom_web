@@ -1,75 +1,77 @@
 'use client'
+
 import Loader from '@app/app/_components/Loader'
 import { config } from '@app/config/client'
 import { authApiClient } from '@app/core/authApiClient'
 import { resetAllStores } from '@app/store/resetAllStores'
 import { useUserStore } from '@app/store/user.store'
-
 import { TonConnectUIProvider } from '@tonconnect/ui-react'
 import { PropsWithChildren, useEffect, useState } from 'react'
 
-let bootstrapAuthPromise: Promise<void> | null = null
-let bootstrapAuthInitDataRaw: string | null = null
+/**
+ * ✅ Fix #6: Map-based registry instead of module-level mutable vars.
+ * Keyed by initDataRaw — same session reuses the same promise.
+ * StrictMode-safe: double effect run finds existing promise and awaits it.
+ */
+const authCache = new Map<string, Promise<void>>()
+
+async function bootstrapAuth(
+  setAccessToken: (t: string) => void,
+  setUser: (
+    u: Parameters<typeof setAccessToken>[0] extends string
+      ? never
+      : Parameters<ReturnType<typeof useUserStore.getState>['setUser']>[0],
+  ) => void,
+): Promise<void> {
+  const { retrieveLaunchParams, retrieveRawInitData } =
+    await import('@tma.js/sdk-react')
+
+  const initDataRaw = retrieveRawInitData()
+  if (!initDataRaw) {
+    console.warn('No Telegram initData found')
+    return
+  }
+
+  // ✅ If already bootstrapping or done with same initData — reuse the promise
+  const cached = authCache.get(initDataRaw)
+  if (cached) return cached
+
+  // New session: reset all stores to prevent stale data from previous TG account
+  resetAllStores()
+
+  const launchParams = retrieveLaunchParams()
+  const startParam = launchParams.tgWebAppStartParam?.trim() || undefined
+
+  const promise = authApiClient
+    .telegramLogin(initDataRaw, startParam)
+    .then(({ accessToken, user }) => {
+      setAccessToken(accessToken)
+      // @ts-expect-error user type from store
+      setUser(user)
+    })
+    .catch((err) => {
+      console.error('Error during Telegram auth', err)
+      authCache.delete(initDataRaw) // allow retry on error
+      throw err
+    })
+
+  authCache.set(initDataRaw, promise)
+  return promise
+}
 
 export function Auth({ children }: PropsWithChildren) {
   const { user, accessToken, setUser, setAccessToken } = useUserStore()
   const [isBootstrapping, setIsBootstrapping] = useState(true)
 
-  // main effect: detect initData change and re-auth
   useEffect(() => {
     let cancelled = false
-
-    const handleInit = async () => {
-      setIsBootstrapping(true)
-
+    ;(async () => {
       try {
-        const { retrieveLaunchParams, retrieveRawInitData } = await import(
-          '@tma.js/sdk-react'
-        )
-        const initDataRaw = retrieveRawInitData()
-        const launchParams = retrieveLaunchParams()
-        const startParam = launchParams.tgWebAppStartParam?.trim()
-
-        if (!initDataRaw) {
-          console.warn('No Telegram initData found')
-          return
-        }
-
-        // If the same auth bootstrap is already in progress, just wait for it.
-        if (bootstrapAuthPromise && bootstrapAuthInitDataRaw === initDataRaw) {
-          await bootstrapAuthPromise
-          return
-        }
-
-        // Always force fresh Telegram login for each TMA session entry.
-        // This prevents showing stale persisted data from previous TG account.
-        resetAllStores()
-
-        bootstrapAuthInitDataRaw = initDataRaw
-        bootstrapAuthPromise = (async () => {
-          try {
-            const { accessToken: newToken, user: newUser } =
-              await authApiClient.telegramLogin(initDataRaw, startParam)
-            setAccessToken(newToken)
-            setUser(newUser)
-          } catch (err) {
-            console.error('Error during initData handling', err)
-          } finally {
-            bootstrapAuthPromise = null
-            bootstrapAuthInitDataRaw = null
-          }
-        })()
-
-        await bootstrapAuthPromise
+        await bootstrapAuth(setAccessToken, setUser as never)
       } finally {
-        if (!cancelled) {
-          setIsBootstrapping(false)
-        }
+        if (!cancelled) setIsBootstrapping(false)
       }
-    }
-
-    handleInit()
-
+    })()
     return () => {
       cancelled = true
     }
@@ -85,7 +87,7 @@ export function Auth({ children }: PropsWithChildren) {
   }
 
   return (
-    <TonConnectUIProvider manifestUrl={config.tonManifestUrl}>
+    <TonConnectUIProvider manifestUrl={manifestUrl}>
       {children}
     </TonConnectUIProvider>
   )
