@@ -1,43 +1,50 @@
+import { initTelegramWebAppCompat } from './initTelegramWebAppCompat'
+
+let initPromise: Promise<void> | null = null
+
+/**
+ * Idempotent Telegram SDK initializer.
+ * Safe to call multiple times (StrictMode, hot-reload) — only runs once.
+ */
 export async function initTelegramSDK(options: {
   debug: boolean
   eruda: boolean
   mockForMacOS: boolean
 }): Promise<void> {
-  const { initTelegramWebAppCompat } =
-    await import('./initTelegramWebAppCompat')
-  const {
-    backButton,
-    initData,
-    init: initSDK,
-    miniApp,
-    setDebug,
-    themeParams,
-  } = await import('@tma.js/sdk-react')
+  // Return the same promise if already in progress or done
+  if (initPromise) return initPromise
 
-  setDebug(options.debug)
-  initSDK()
+  initPromise = (async () => {
+    const {
+      backButton,
+      initData,
+      init: initSDK,
+      miniApp,
+      setDebug,
+      themeParams,
+    } = await import('@tma.js/sdk-react')
 
-  options.eruda &&
-    void import('eruda').then(({ default: eruda }) => {
-      eruda.init()
-      eruda.position({
-        x: window.innerWidth - 70,
-        y: 100,
+    setDebug(options.debug)
+    initSDK()
+
+    if (options.eruda) {
+      void import('eruda').then(({ default: eruda }) => {
+        eruda.init()
+        eruda.position({ x: window.innerWidth - 70, y: 100 })
       })
-    })
+    }
 
-  // await useTelegramMock({ mockForMacOS: options.mockForMacOS })
-  // initData.restore()
+    backButton.mount.ifAvailable()
+    initData.restore()
 
-  // Mount all components used in the project.
-  backButton.mount.ifAvailable()
-  initData.restore()
+    if (miniApp.mount.isAvailable()) {
+      themeParams.mount()
+      miniApp.mount()
+      themeParams.bindCssVars() // ✅ Пробрасываем CSS-переменные темы Telegram
+    }
 
-  if (miniApp.mount.isAvailable()) {
-    themeParams.mount()
-    miniApp.mount()
-    // themeParams.bindCssVars()
-  }
+    await initTelegramWebAppCompat()
+  })()
 
-  await initTelegramWebAppCompat()
+  return initPromise
 }
