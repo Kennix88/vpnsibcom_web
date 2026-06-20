@@ -93,91 +93,98 @@ export function TaskAdsReward() {
         AdsTypeEnum.REWARD,
       )
 
-      if (!response.isNoAds && response.ad) {
-        const nextAd = response.ad
-        adRef.current = nextAd
+      // ad может быть null — это нормально, если включён Taddy:
+      // он показывается независимо от наличия рекламы у бэкенда,
+      // так как является приоритетным способом показа рекламы.
+      const nextAd = response.isNoAds ? null : (response.ad ?? null)
+      adRef.current = nextAd
 
-        if (!containerRef.current) containerRef.current = createAdContainer()
-        if (mountedRootRef.current) return
-
-        const root = createRoot(containerRef.current)
-        mountedRootRef.current = root
-
-        const handleClose = () => scheduleCleanup()
-
-        const handleReward = async (isTaddy = false, isClose = false) => {
-          await reward(isTaddy)
-          if (isClose) handleClose()
-        }
-
-        const showFallbackAd = async () => {
-          if (nextAd.network === AdsNetworkEnum.TADDY) {
-            const { default: TaddyInterstitialForSDK } =
-              await import('./TaddyInterstitialForSDK')
-            root.render(
-              <TaddyInterstitialForSDK
-                onClosed={() => void handleReward(false, true)}
-                onError={() => void handleClose()}
-                onNoFill={() => void handleClose()}
-              />,
-            )
-          } else if (nextAd.network === AdsNetworkEnum.ADSGRAM) {
-            const { default: AdsgramAd } = await import('./AdsgramAd')
-            root.render(
-              <AdsgramAd
-                blockId={String(nextAd.blockId)}
-                onReward={() => void handleReward()}
-                onClose={handleClose}
-                isDebug={process.env.NODE_ENV !== 'production'}
-              />,
-            )
-          } else if (nextAd.network === AdsNetworkEnum.ADSONAR) {
-            const { default: AdsonarReward } = await import('./AdsonarReward')
-            root.render(
-              <AdsonarReward
-                blockId={String(nextAd.blockId)}
-                onReward={() => void handleReward()}
-                onClose={handleClose}
-              />,
-            )
-          } else if (nextAd.network === AdsNetworkEnum.RICHADS) {
-            const { default: RichadsReward } = await import('./RichadsReward')
-            root.render(
-              <RichadsReward
-                onReward={() => void handleReward()}
-                onClose={handleClose}
-              />,
-            )
-          } else {
-            handleClose()
-          }
-        }
-
-        if (isTaddyEnabled && nextAd.network !== AdsNetworkEnum.TADDY) {
-          const { default: TaddyInterstitial } =
-            await import('./TaddyInterstitial')
-          root.render(
-            <TaddyInterstitial
-              canCloseImmediately={false}
-              requiredViewSeconds={10}
-              autoCloseOnViewed={false}
-              onClosed={handleClose}
-              onViewed={(isShow) => {
-                if (isShow) void handleReward(true, true)
-              }}
-              onError={() => void showFallbackAd()}
-              onNoFill={() => void showFallbackAd()}
-            />,
-          )
-        } else {
-          void showFallbackAd()
-        }
-
+      // Нечего показывать только если нет ни backend-рекламы, ни Taddy
+      if (!nextAd && !isTaddyEnabled) {
+        if (response.isNoAds) toast.warn('Нет рекламы на текущий момент!')
+        scheduleCleanup()
         return
       }
 
-      if (response.isNoAds) toast.warn('Нет рекламы на текущий момент!')
-      scheduleCleanup()
+      if (!containerRef.current) containerRef.current = createAdContainer()
+      if (mountedRootRef.current) return
+
+      const root = createRoot(containerRef.current)
+      mountedRootRef.current = root
+
+      const handleClose = () => scheduleCleanup()
+
+      const handleReward = async (isTaddy = false, isClose = false) => {
+        await reward(isTaddy)
+        if (isClose) handleClose()
+      }
+
+      const showFallbackAd = async () => {
+        // Нет backend-рекламы — больше нечем показывать
+        if (!nextAd) {
+          if (response.isNoAds) toast.warn('Нет рекламы на текущий момент!')
+          handleClose()
+          return
+        }
+
+        if (nextAd.network === AdsNetworkEnum.TADDY) {
+          const { default: TaddyInterstitialForSDK } =
+            await import('./TaddyInterstitialForSDK')
+          root.render(
+            <TaddyInterstitialForSDK
+              onClosed={() => void handleReward(false, true)}
+              onError={() => void handleClose()}
+              onNoFill={() => void handleClose()}
+            />,
+          )
+        } else if (nextAd.network === AdsNetworkEnum.ADSGRAM) {
+          const { default: AdsgramAd } = await import('./AdsgramAd')
+          root.render(
+            <AdsgramAd
+              blockId={String(nextAd.blockId)}
+              onReward={() => void handleReward()}
+              onClose={handleClose}
+              isDebug={process.env.NODE_ENV !== 'production'}
+            />,
+          )
+        } else if (nextAd.network === AdsNetworkEnum.ADSONAR) {
+          const { default: AdsonarReward } = await import('./AdsonarReward')
+          root.render(
+            <AdsonarReward
+              blockId={String(nextAd.blockId)}
+              onReward={() => void handleReward()}
+              onClose={handleClose}
+            />,
+          )
+        } else if (nextAd.network === AdsNetworkEnum.RICHADS) {
+          const { default: RichadsReward } = await import('./RichadsReward')
+          root.render(
+            <RichadsReward
+              onReward={() => void handleReward()}
+              onClose={handleClose}
+            />,
+          )
+        } else {
+          handleClose()
+        }
+      }
+
+      if (isTaddyEnabled && nextAd?.network !== AdsNetworkEnum.TADDY) {
+        const { default: TaddyInterstitial } =
+          await import('./TaddyInterstitial')
+        root.render(
+          <TaddyInterstitial
+            canCloseImmediately={false}
+            requiredViewSeconds={10}
+            onClosed={handleClose}
+            onViewed={() => void handleReward(true, true)}
+            onError={() => void showFallbackAd()}
+            onNoFill={() => void showFallbackAd()}
+          />,
+        )
+      } else {
+        void showFallbackAd()
+      }
     } catch (err) {
       console.error('Failed to load ad', err)
       scheduleCleanup()
