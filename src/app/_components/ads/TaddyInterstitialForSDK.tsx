@@ -13,7 +13,7 @@ interface TaddyInterstitialProps {
   payload?: Record<string, unknown>
 }
 
-export default function TaddyInterstitial({
+export default function TaddyInterstitialForSDK({
   onClosed,
   onViewThrough,
   onNoFill,
