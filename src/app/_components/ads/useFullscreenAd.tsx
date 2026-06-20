@@ -98,13 +98,18 @@ export function useFullscreenAd() {
           AdsPlaceEnum.FULLSCREEN,
           AdsTypeEnum.VIEW,
         )
-        if (response.isNoAds || !response.ad) {
+
+        // ad может быть null — это нормально, если включён Taddy:
+        // он показывается независимо от наличия рекламы у бэкенда,
+        // так как является приоритетным способом показа рекламы.
+        const ad = response.isNoAds ? null : (response.ad ?? null)
+        adRef.current = ad
+
+        // Нечего показывать только если нет ни backend-рекламы, ни Taddy
+        if (!ad && !isTaddyEnabled) {
           releaseAdDisplayLock(FULLSCREEN_AD_OWNER)
           return
         }
-
-        const { ad } = response
-        adRef.current = ad
 
         if (!containerRef.current) containerRef.current = createAdContainer()
         if (mountedRootRef.current) return
@@ -118,6 +123,12 @@ export function useFullscreenAd() {
         }
 
         const showFallbackAd = async () => {
+          // Нет backend-рекламы — больше нечем показывать
+          if (!ad) {
+            scheduleCleanup()
+            return
+          }
+
           if (ad.network === AdsNetworkEnum.TADDY) {
             const { default: TaddyInterstitialForSDK } =
               await import('./TaddyInterstitialForSDK')
@@ -159,18 +170,15 @@ export function useFullscreenAd() {
           }
         }
 
-        if (isTaddyEnabled && ad.network !== AdsNetworkEnum.TADDY) {
+        if (isTaddyEnabled && ad?.network !== AdsNetworkEnum.TADDY) {
           const { default: TaddyInterstitial } =
             await import('./TaddyInterstitial')
           root.render(
             <TaddyInterstitial
               canCloseImmediately={true}
               requiredViewSeconds={10}
-              autoCloseOnViewed={false}
               onClosed={() => void handleClose(true)}
-              onViewed={(isShow) => {
-                if (isShow) void handleClose(true)
-              }}
+              onViewed={() => void handleClose(true)}
               onError={() => void showFallbackAd()}
               onNoFill={() => void showFallbackAd()}
             />,
