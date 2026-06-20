@@ -46,14 +46,13 @@ export type Props = {
   canCloseImmediately?: boolean
   requiredViewSeconds?: number
   demo?: boolean
-  autoCloseOnViewed?: boolean
-  // Called when the user dismisses the ad (without necessarily completing view)
+  /** Вызывается при закрытии объявления (нажатие на крестик) */
   onClosed?: () => void
-  // Called when the required view time elapsed or the user clicked through
-  onViewed?: (ad: TaddyAd) => void
-  // Called when the ad network returns no fill
+  /** Вызывается при полном просмотре (таймер истёк) или переходе по клику на объявление */
+  onViewed?: () => void
+  /** Вызывается, когда сеть не вернула объявление (no fill) */
   onNoFill?: () => void
-  // Called on any load failure (missing pubId, network error, etc.)
+  /** Вызывается при любой ошибке загрузки (нет pubId, сетевая ошибка и т.п.) */
   onError?: (error: unknown) => void
 }
 
@@ -295,7 +294,6 @@ export default function TaddyInterstitial({
   canCloseImmediately = true,
   requiredViewSeconds = canCloseImmediately ? 0 : 5,
   demo = false,
-  autoCloseOnViewed = true,
   onClosed,
   onViewed,
   onNoFill,
@@ -314,30 +312,37 @@ export default function TaddyInterstitial({
   )
 
   const impressionRef = useRef<string | null>(null)
-  const finishedRef = useRef(false)
-  const closedAfterViewRef = useRef(false)
-  const adRef = useRef<TaddyAd | null>(demo ? demoAd : null)
+  // Разделены на два независимых guard'а: «просмотр» и «закрытие» —
+  // это два самостоятельных события, и один не должен блокировать другой
+  // (раньше общий finishedRef после завершения таймера навсегда
+  // отключал крестик, потому что markViewed ставил тот же флаг).
+  const viewedFiredRef = useRef(false)
+  const closedFiredRef = useRef(false)
+
+  // Стабилизируем коллбэки через рефы — как в TaddyInterstitialForSDK,
+  // чтобы одноразовый эффект загрузки объявления не захватывал
+  // протухшие версии onNoFill/onError/onClosed/onViewed.
+  const onClosedRef = useRef(onClosed)
+  const onViewedRef = useRef(onViewed)
+  const onNoFillRef = useRef(onNoFill)
+  const onErrorRef = useRef(onError)
+  onClosedRef.current = onClosed
+  onViewedRef.current = onViewed
+  onNoFillRef.current = onNoFill
+  onErrorRef.current = onError
 
   // ── Helpers ────────────────────────────────────────────────────────────────
 
   const dismiss = useCallback(() => {
     setOpen(false)
-    setTimeout(() => onClosed?.(), 300)
-  }, [onClosed])
+    setTimeout(() => onClosedRef.current?.(), 300)
+  }, [])
 
-  const markViewed = useCallback(
-    async (currentAd: TaddyAd) => {
-      if (finishedRef.current) return
-      finishedRef.current = true
-      onViewed?.(currentAd)
-      if (autoCloseOnViewed && !closedAfterViewRef.current) {
-        closedAfterViewRef.current = true
-        onClosed?.()
-        setOpen(false)
-      }
-    },
-    [autoCloseOnViewed, onClosed, onViewed],
-  )
+  const markViewed = useCallback(() => {
+    if (viewedFiredRef.current) return
+    viewedFiredRef.current = true
+    onViewedRef.current?.()
+  }, [])
 
   // ── Load ad ────────────────────────────────────────────────────────────────
 
@@ -348,29 +353,28 @@ export default function TaddyInterstitial({
       try {
         if (isTaddyInterstitialRunning) {
           setLoadState('no-fill')
-          onNoFill?.()
+          onNoFillRef.current?.()
           return
         }
         isTaddyInterstitialRunning = true
         if (!pubId) {
           setLoadState('error')
-          onError?.(new Error('pubId is required'))
+          onErrorRef.current?.(new Error('pubId is required'))
           return
         }
         const next = await requestAd(pubId, payload)
         if (cancelled) return
         if (!next) {
           setLoadState('no-fill')
-          onNoFill?.()
+          onNoFillRef.current?.()
           return
         }
-        adRef.current = next
         setAd(next)
         setLoadState('ready')
       } catch (err) {
         if (!cancelled) {
           console.error('TaddyInterstitial load failed', err)
-          onError?.(err)
+          onErrorRef.current?.(err)
           setLoadState('error')
         }
       } finally {
@@ -383,10 +387,6 @@ export default function TaddyInterstitial({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  useEffect(() => {
-    adRef.current = ad
-  }, [ad])
 
   // ── Impression ─────────────────────────────────────────────────────────────
 
@@ -406,7 +406,7 @@ export default function TaddyInterstitial({
         if (next === 0) {
           window.clearInterval(timer)
           setCloseEnabled(true)
-          void markViewed(ad)
+          markViewed()
         }
         return next
       })
@@ -417,16 +417,15 @@ export default function TaddyInterstitial({
   // ── Handlers ───────────────────────────────────────────────────────────────
 
   const handleClose = () => {
-    if (!closeEnabled || finishedRef.current) return
-    finishedRef.current = true
+    if (!closeEnabled || closedFiredRef.current) return
+    closedFiredRef.current = true
     dismiss()
   }
 
   const handleOpen = () => {
-    const cur = adRef.current
-    if (!cur) return
-    void markViewed(cur)
-    window.open(cur.link, '_blank', 'noopener,noreferrer')
+    if (!ad) return
+    markViewed()
+    window.open(ad.link, '_blank', 'noopener,noreferrer')
   }
 
   // ── Bail out ───────────────────────────────────────────────────────────────
