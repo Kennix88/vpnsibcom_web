@@ -1,12 +1,13 @@
 'use client'
 
+import Currency from '@app/app/_components/Currency'
 import { publicApiClient } from '@app/core/publicApiClient'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
+  CheckCircle2,
   ExternalLink,
   RefreshCw,
   Sparkles,
-  Star,
   XCircle,
   Zap,
 } from 'lucide-react'
@@ -15,18 +16,13 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 type AdData = {
   redirectUrl: string
   rewardStars: number
+  isClaimed: boolean
 }
 
-type Phase = 'loading' | 'redirecting' | 'fallback' | 'error'
+type Phase = 'loading' | 'redirecting' | 'claimed' | 'fallback' | 'error'
 type ErrorReason = 'not_found' | 'expired' | 'network' | 'unknown'
 
 const CONFIRM_TIMEOUT_MS = 1800
-
-function sleep(ms: number) {
-  return new Promise<void>((resolve) => {
-    window.setTimeout(resolve, ms)
-  })
-}
 
 export default function AdRedirect({ adKey }: { adKey: string }) {
   const [ad, setAd] = useState<AdData | null>(null)
@@ -36,9 +32,7 @@ export default function AdRedirect({ adKey }: { adKey: string }) {
 
   const confirmAd = useCallback(async () => {
     if (confirmedRef.current) return
-
     confirmedRef.current = true
-
     try {
       await publicApiClient.confirmAdsIsRedirect(adKey)
     } catch (err) {
@@ -47,24 +41,21 @@ export default function AdRedirect({ adKey }: { adKey: string }) {
   }, [adKey])
 
   const doRedirect = useCallback(
-    (url: string) => {
+    (url: string, isClaimed: boolean) => {
       let cancelled = false
 
+      // Если награда уже получена — не стучимся на сервер подтверждения
+      if (!isClaimed) {
+        void confirmAd()
+      }
+
+      window.location.replace(url)
+
       const fallbackTimer = window.setTimeout(() => {
-        if (!cancelled && document.visibilityState === 'visible') {
+        if (!cancelled) {
           setPhase('fallback')
         }
       }, CONFIRM_TIMEOUT_MS)
-
-      void (async () => {
-        try {
-          await Promise.race([confirmAd(), sleep(CONFIRM_TIMEOUT_MS)])
-        } finally {
-          if (!cancelled) {
-            window.location.replace(url)
-          }
-        }
-      })()
 
       return () => {
         cancelled = true
@@ -94,6 +85,7 @@ export default function AdRedirect({ adKey }: { adKey: string }) {
       setAd({
         redirectUrl: response.redirectUrl,
         rewardStars: response.rewardStars,
+        isClaimed: response.isClaimed ?? false,
       })
     } catch (err) {
       console.error('Failed to load ad', err)
@@ -109,25 +101,33 @@ export default function AdRedirect({ adKey }: { adKey: string }) {
   useEffect(() => {
     if (!ad) return
 
+    if (ad.isClaimed) {
+      // Показываем экран "уже получено" и редиректим без подтверждения
+      setPhase('claimed')
+      return doRedirect(ad.redirectUrl, true)
+    }
+
     setPhase('redirecting')
-    return doRedirect(ad.redirectUrl)
+    return doRedirect(ad.redirectUrl, false)
   }, [ad, doRedirect])
 
   const handleManualRedirect = useCallback(async () => {
     if (!ad) return
-
-    await confirmAd()
+    if (!ad.isClaimed) {
+      await confirmAd()
+    }
     window.location.replace(ad.redirectUrl)
   }, [ad, confirmAd])
 
   const handleRetry = useCallback(() => {
     setPhase('loading')
     setErrorReason('unknown')
+    confirmedRef.current = false
     void fetchAd()
   }, [fetchAd])
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 relative overflow-hidden">
+    <div className="min-h-[100dvh] flex flex-col items-center justify-center px-4 py-8 relative overflow-hidden">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
@@ -148,6 +148,7 @@ export default function AdRedirect({ adKey }: { adKey: string }) {
       <AnimatePresence mode="wait">
         {phase === 'loading' && <LoadingState key="loading" />}
         {phase === 'redirecting' && <RedirectingState key="redirecting" />}
+        {phase === 'claimed' && <ClaimedState key="claimed" />}
         {phase === 'fallback' && ad && (
           <FallbackState
             key="fallback"
@@ -241,6 +242,55 @@ function RedirectingState() {
   )
 }
 
+/* ─────────────────────────── Claimed ──────────────────────────── */
+function ClaimedState() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.96 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 1.02 }}
+      transition={{ duration: 0.35 }}
+      className="flex flex-col items-center gap-4 text-center">
+      <motion.div
+        className="relative flex items-center justify-center w-16 h-16 rounded-2xl"
+        style={{ background: 'var(--surface-container-high)' }}
+        animate={{
+          boxShadow: [
+            '0 0 0px rgba(100,200,100,0)',
+            '0 0 24px rgba(100,200,100,0.25)',
+            '0 0 0px rgba(100,200,100,0)',
+          ],
+        }}
+        transition={{ duration: 1.6, repeat: Infinity }}>
+        <CheckCircle2 size={28} style={{ color: 'var(--success, #4caf50)' }} />
+      </motion.div>
+      <div>
+        <h2
+          className="text-lg font-semibold"
+          style={{ color: 'var(--on-surface)' }}>
+          Награда уже получена
+        </h2>
+        <p
+          className="text-sm mt-1"
+          style={{ color: 'var(--on-surface-variant)' }}>
+          Звёзды были начислены ранее — переходим на страницу партнёра
+        </p>
+      </div>
+      <motion.div
+        className="h-1 rounded-full w-48 overflow-hidden"
+        style={{ background: 'var(--surface-container-high)' }}>
+        <motion.div
+          className="h-full rounded-full"
+          style={{ background: 'var(--primary-gradient)' }}
+          initial={{ width: '0%' }}
+          animate={{ width: '100%' }}
+          transition={{ duration: 1.6, ease: 'easeInOut' }}
+        />
+      </motion.div>
+    </motion.div>
+  )
+}
+
 /* ─────────────────────────── Fallback ─────────────────────────── */
 function FallbackState({
   ad,
@@ -297,9 +347,22 @@ function FallbackState({
           }}
         />
 
-        <p className="text-sm" style={{ color: 'var(--on-surface-variant)' }}>
-          Ваша награда за переход
-        </p>
+        {ad.isClaimed ? (
+          <div
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium"
+            style={{
+              background: 'rgba(76,175,80,0.12)',
+              color: 'var(--success, #4caf50)',
+              border: '1px solid rgba(76,175,80,0.25)',
+            }}>
+            <CheckCircle2 size={12} />
+            Награда уже получена
+          </div>
+        ) : (
+          <p className="text-sm" style={{ color: 'var(--on-surface-variant)' }}>
+            Ваша награда за переход
+          </p>
+        )}
 
         <div className="flex items-center gap-3">
           <motion.div
@@ -310,11 +373,7 @@ function FallbackState({
             }}
             animate={{ y: [0, -4, 0] }}
             transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}>
-            <Star
-              size={28}
-              fill="var(--star)"
-              style={{ color: 'var(--star)' }}
-            />
+            <Currency type="star" w={28} />
           </motion.div>
           <div>
             <div className="flex items-baseline gap-1">
@@ -327,16 +386,12 @@ function FallbackState({
                 }}>
                 {ad.rewardStars}
               </span>
-              <span
-                className="text-lg font-semibold"
-                style={{ color: 'var(--star)' }}>
-                ⭐
-              </span>
+              <Currency type="star" w={22} />
             </div>
             <p
               className="text-xs mt-0.5"
               style={{ color: 'var(--on-surface-variant)' }}>
-              звёзд на ваш баланс
+              {ad.isClaimed ? 'уже на вашем балансе' : 'звёзд на ваш баланс'}
             </p>
           </div>
         </div>
@@ -387,7 +442,9 @@ function FallbackState({
             transition={{ duration: 2.2, repeat: Infinity, repeatDelay: 1.2 }}
           />
           <ExternalLink size={18} />
-          Получить награду и перейти
+          {ad.isClaimed
+            ? 'Перейти на страницу партнёра'
+            : 'Получить награду и перейти'}
         </motion.button>
       </motion.div>
 
@@ -395,8 +452,8 @@ function FallbackState({
         variants={stagger.item}
         className="text-center text-xs px-4 leading-relaxed"
         style={{ color: 'var(--disabled-content)' }}>
-        Нажимая кнопку, вы переходите на страницу рекламного партнёра. Звёзды
-        начисляются автоматически.
+        Нажимая кнопку, вы переходите на страницу рекламного партнёра.
+        {!ad.isClaimed && ' Звёзды начисляются автоматически.'}
       </motion.p>
     </motion.div>
   )
