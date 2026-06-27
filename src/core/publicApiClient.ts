@@ -178,6 +178,7 @@ class PublicApiClient {
     reason?: string | null
     redirectUrl: string
     rewardStars: number
+    isClaimed: boolean
   }> {
     return this.getRaw(`/ads/ad-redirect/${key}`)
   }
