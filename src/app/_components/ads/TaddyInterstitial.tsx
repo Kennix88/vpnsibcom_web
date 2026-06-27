@@ -46,13 +46,10 @@ export type Props = {
   canCloseImmediately?: boolean
   requiredViewSeconds?: number
   demo?: boolean
-  /** Вызывается при закрытии объявления (нажатие на крестик) */
+  showSkeleton?: boolean
   onClosed?: () => void
-  /** Вызывается при полном просмотре (таймер истёк) или переходе по клику на объявление */
   onViewed?: () => void
-  /** Вызывается, когда сеть не вернула объявление (no fill) */
   onNoFill?: () => void
-  /** Вызывается при любой ошибке загрузки (нет pubId, сетевая ошибка и т.п.) */
   onError?: (error: unknown) => void
 }
 
@@ -294,6 +291,7 @@ export default function TaddyInterstitial({
   canCloseImmediately = true,
   requiredViewSeconds = canCloseImmediately ? 0 : 5,
   demo = false,
+  showSkeleton = true,
   onClosed,
   onViewed,
   onNoFill,
@@ -303,7 +301,7 @@ export default function TaddyInterstitial({
   const [loadState, setLoadState] = useState<LoadState>(
     demo ? 'ready' : 'loading',
   )
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(showSkeleton ? true : demo)
 
   const totalSeconds = Math.max(0, requiredViewSeconds)
   const [remaining, setRemaining] = useState(totalSeconds)
@@ -343,6 +341,12 @@ export default function TaddyInterstitial({
     viewedFiredRef.current = true
     onViewedRef.current?.()
   }, [])
+
+  useEffect(() => {
+    if (!showSkeleton && loadState === 'ready') {
+      setOpen(true)
+    }
+  }, [showSkeleton, loadState])
 
   // ── Load ad ────────────────────────────────────────────────────────────────
 
@@ -430,7 +434,7 @@ export default function TaddyInterstitial({
 
   // ── Bail out ───────────────────────────────────────────────────────────────
 
-  if (!open && (loadState === 'no-fill' || loadState === 'error')) return null
+  if (!open && loadState !== 'ready') return null
 
   const title = ad?.title ?? 'Спонсор'
   const description = ad?.description ?? ad?.text ?? ''
@@ -516,9 +520,9 @@ export default function TaddyInterstitial({
               }}
             />
 
-            {loadState === 'loading' ? (
+            {loadState === 'loading' && showSkeleton ? (
               <AdSkeleton />
-            ) : (
+            ) : loadState === 'loading' ? null : (
               <>
                 {/* ── Media area ─────────────────────────────────────── */}
                 <motion.button
