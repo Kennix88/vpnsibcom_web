@@ -11,28 +11,17 @@
  *  - Добавлена секция «Действия» в виде bottom‑sheet модала
  */
 
-import { authApiClient } from '@app/core/authApiClient'
 import { PlansEnum } from '@app/enums/plans.enum'
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
 import { TrafficResetEnum } from '@app/enums/traffic-reset.enum'
 import { useLocale } from '@app/hooks/useLocale'
-import { useSubscriptionsStore } from '@app/store/subscriptions.store'
-import { useUserStore } from '@app/store/user.store'
 import { SubscriptionDataInterface } from '@app/types/subscription-data.interface'
 import { useCopyToClipboard } from '@app/utils/copy-to-clipboard.util'
 import { formatBytes } from '@app/utils/format-bytes.util'
 import limitLengthString from '@app/utils/limit-length-string.util'
 import { differenceInMinutes, intlFormat } from 'date-fns'
 import { AnimatePresence, motion } from 'framer-motion'
-import {
-  ChevronDown,
-  Copy,
-  ExternalLink,
-  RefreshCw,
-  Smartphone,
-  Trash2,
-  Zap,
-} from 'lucide-react'
+import { ChevronDown, Copy, ExternalLink, Smartphone, Zap } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import QRCodeStyling from 'qr-code-styling'
@@ -41,14 +30,11 @@ import { BiServer } from 'react-icons/bi'
 import { FaArrowRotateRight, FaClockRotateLeft } from 'react-icons/fa6'
 import { SiAdobeindesign } from 'react-icons/si'
 import { TbPlugConnected, TbQrcode } from 'react-icons/tb'
-import { toast } from 'react-toastify'
 import Modal from '../Modal'
-import AddTrafficButton from './AddTrafficButton'
 import ConnectGuide from './ConnectGuide'
 import EditName from './EditName'
 import FormatPeriod from './FromatPeriod'
 import HappDeepLinkButton from './HappDeepLinkButton'
-import RenewButton from './RenewButton'
 
 /* ─────────────────────────── palette helpers ───────────────────────────
    QR‑библиотека не умеет резолвить CSS‑переменные — передаём hex напрямую.
@@ -258,19 +244,12 @@ export default function SubscriptionCard({
   const { locale } = useLocale()
   const t = useTranslations('subscriptions')
   const copy = useCopyToClipboard()
-  const { setSubscriptions } = useSubscriptionsStore()
-  const { setUser } = useUserStore()
 
   /* ── UI state ── */
   const [expanded, setExpanded] = useState(isDefaultOpen)
   const [connectOpen, setConnectOpen] = useState(isDefaultOpen)
   const [actionsOpen, setActionsOpen] = useState(false)
   const [qrOpen, setQrOpen] = useState(false)
-  const [confirmDelete, setConfirmDelete] = useState(false)
-  const [confirmRefresh, setConfirmRefresh] = useState(false)
-  const [busy, setBusy] = useState(false)
-
-  const inFlight = useRef(false)
 
   /* ── derived ── */
   const isOnline = subscription.onlineAt
@@ -306,63 +285,12 @@ export default function SubscriptionCard({
       } as Partial<Record<TrafficResetEnum, string>>
     )[subscription.trafficReset as TrafficResetEnum] ?? ''
 
-  const isTrialPlan = [PlansEnum.TRIAL, PlansEnum.TRAFFIC].includes(
-    subscription.plan.key as PlansEnum,
-  )
-
-  const shouldShowRenew =
-    subscription.plan.key !== PlansEnum.TRIAL &&
-    subscription.plan.key !== PlansEnum.TRAFFIC &&
-    (subscription.period === SubscriptionPeriodEnum.TRIAL ||
-      subscription.period === SubscriptionPeriodEnum.TRAFFIC ||
-      subscription.period === SubscriptionPeriodEnum.INDEFINITELY ||
-      !subscription.nextRenewalStars ||
-      !subscription.expiredAt) &&
-    !subscription.isAutoRenewal
-
   const hasPeriodInfo =
     subscription.period !== SubscriptionPeriodEnum.INDEFINITELY &&
     subscription.period !== SubscriptionPeriodEnum.TRIAL &&
     subscription.period !== SubscriptionPeriodEnum.TRAFFIC &&
     subscription.plan.key !== PlansEnum.TRAFFIC &&
     subscription.plan.key !== PlansEnum.TRIAL
-
-  /* ── actions ── */
-  async function doDelete() {
-    if (inFlight.current) return
-    inFlight.current = true
-    setConfirmDelete(false)
-    setBusy(true)
-    try {
-      const data = await authApiClient.deleteSubscription(subscription.id)
-      setUser(data.user)
-      setSubscriptions(data.subscriptions)
-      toast.success('Подписка удалена')
-    } catch {
-      toast.error('Ошибка удаления подписки')
-    } finally {
-      inFlight.current = false
-      setBusy(false)
-    }
-  }
-
-  async function doRefresh() {
-    if (inFlight.current) return
-    inFlight.current = true
-    setConfirmRefresh(false)
-    setBusy(true)
-    try {
-      const data = await authApiClient.resetSubscriptionToken(subscription.id)
-      setUser(data.user)
-      setSubscriptions(data.subscriptions)
-      toast.success('Данные подписки обновлены')
-    } catch {
-      toast.error('Ошибка обновления данных подписки')
-    } finally {
-      inFlight.current = false
-      setBusy(false)
-    }
-  }
 
   /* ── render ── */
   return (
@@ -644,78 +572,7 @@ export default function SubscriptionCard({
                     <ExternalLink size={13} /> Открыть в браузере
                   </Link>
                 </div>
-
-                {/* Renew / add traffic */}
-                {(!shouldShowRenew || isTrialPlan) && (
-                  <div
-                    className="rounded-2xl p-3 flex flex-wrap gap-2"
-                    style={{
-                      background: 'rgba(255,255,255,0.03)',
-                      border: '1px solid rgba(255,255,255,0.06)',
-                    }}>
-                    <RenewButton subscription={subscription} />
-                    <AddTrafficButton subscription={subscription} />
-                  </div>
-                )}
-
-                {/* Dangerous actions */}
-                <div
-                  className="rounded-2xl p-3 flex flex-col gap-2"
-                  style={{
-                    background: 'rgba(255,255,255,0.02)',
-                    border: '1px solid rgba(255,255,255,0.05)',
-                  }}>
-                  <motion.button
-                    whileTap={{ scale: 0.97 }}
-                    disabled={busy}
-                    onClick={() => setConfirmRefresh(true)}
-                    className="flex items-center gap-2 w-full px-3 py-2.5 rounded-xl text-sm font-bold font-mono cursor-pointer"
-                    style={{
-                      background: 'rgba(255,171,64,0.1)',
-                      color: 'var(--warning)',
-                      border: '1px solid rgba(255,171,64,0.22)',
-                      opacity: busy ? 0.5 : 1,
-                    }}>
-                    <RefreshCw size={15} />
-                    {busy ? 'Обновление…' : t('modals.refresh.button')}
-                  </motion.button>
-
-                  <motion.button
-                    whileTap={{ scale: 0.97 }}
-                    disabled={busy}
-                    onClick={() => setConfirmDelete(true)}
-                    className="flex items-center gap-2 w-full px-3 py-2.5 rounded-xl text-sm font-bold font-mono cursor-pointer"
-                    style={{
-                      background: 'rgba(255,107,102,0.1)',
-                      color: 'var(--error)',
-                      border: '1px solid rgba(255,107,102,0.22)',
-                      opacity: busy ? 0.5 : 1,
-                    }}>
-                    <Trash2 size={15} />
-                    {busy ? 'Удаление…' : t('modals.delete.button')}
-                  </motion.button>
-                </div>
               </div>
-            </Modal>
-
-            {/* Confirm modals */}
-            <Modal
-              isOpen={confirmRefresh}
-              onClose={() => setConfirmRefresh(false)}
-              title={t('modals.refresh.title')}
-              variant="warning"
-              actionText={t('modals.refresh.action')}
-              onAction={doRefresh}>
-              {t('modals.refresh.message')}
-            </Modal>
-            <Modal
-              isOpen={confirmDelete}
-              onClose={() => setConfirmDelete(false)}
-              title={t('modals.delete.title')}
-              variant="error"
-              actionText={t('modals.delete.action')}
-              onAction={doDelete}>
-              {t('modals.delete.message')}
             </Modal>
           </div>
         )}
