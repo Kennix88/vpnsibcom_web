@@ -6,9 +6,5 @@ export default async function Page({
   params: Promise<{ key: string }>
 }) {
   const { key } = await params
-  return (
-    <div className="w-full">
-      <AdRedirect adKey={key} />
-    </div>
-  )
+  return <AdRedirect adKey={key} />
 }
