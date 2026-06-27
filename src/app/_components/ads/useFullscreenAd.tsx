@@ -181,6 +181,7 @@ export function useFullscreenAd() {
               onViewed={() => void handleClose(true)}
               onError={() => void showFallbackAd()}
               onNoFill={() => void showFallbackAd()}
+              showSkeleton={false}
             />,
           )
         } else {
