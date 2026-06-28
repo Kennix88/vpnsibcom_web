@@ -6,6 +6,7 @@ import SocialButtons from '@app/app/_components/SocialButtons'
 import { Subscriptions } from '@app/app/_components/Subscriptions'
 import TopBar from '@app/app/_components/TopBar'
 import dynamic from 'next/dynamic'
+import { SupportBanner } from './_components/SupportBanner'
 
 const TaskAdsReward = dynamic(
   () =>
@@ -25,6 +26,7 @@ export default function Page() {
         <TopBar />
         <TaskAdsReward />
         <TaskAdsgramTask debug={process.env.NODE_ENV !== 'production'} />
+        <SupportBanner />
         <Subscriptions />
         <br />
         <SocialButtons />
