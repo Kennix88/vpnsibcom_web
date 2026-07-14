@@ -2,7 +2,6 @@ import { useCurrencyStore } from '@app/store/currency.store'
 import { usePaymentMethodsStore } from '@app/store/payment-methods.store'
 import { usePlansStore } from '@app/store/plans.store'
 import { useRefferlsStore } from '@app/store/referrals.store'
-import { useServersStore } from '@app/store/servers.store'
 import { useSubscriptionsStore } from '@app/store/subscriptions.store'
 import { useUserStore } from '@app/store/user.store'
 
@@ -22,7 +21,6 @@ export function resetAllStores() {
   usePaymentMethodsStore.setState({ methods: [] })
   usePlansStore.setState({ plansData: null })
   useRefferlsStore.setState({ referralsData: null })
-  useServersStore.setState({ serversData: null })
   useSubscriptionsStore.setState({ subscriptions: null })
 
   useUserStore.persist?.clearStorage()
@@ -30,7 +28,6 @@ export function resetAllStores() {
   usePaymentMethodsStore.persist?.clearStorage()
   usePlansStore.persist?.clearStorage()
   useRefferlsStore.persist?.clearStorage()
-  useServersStore.persist?.clearStorage()
   useSubscriptionsStore.persist?.clearStorage()
 
   if (typeof window !== 'undefined') {
