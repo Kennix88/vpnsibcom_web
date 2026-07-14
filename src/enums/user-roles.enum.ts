@@ -2,6 +2,8 @@ export enum UserRolesEnum {
   SUPER_ADMIN = 'SUPER_ADMIN',
   ADMIN = 'ADMIN',
   USER = 'USER',
+  SUPPORT = 'SUPPORT',
+  VOLUNTEER = 'VOLUNTEER',
   FRIEND = 'FRIEND',
   OLD_USER = 'OLD_USER',
 }
