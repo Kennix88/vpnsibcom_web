@@ -6,21 +6,21 @@ import {
 import { AdsTypeEnum } from '@app/enums/ads-type.enum'
 import { CurrencyEnum } from '@app/enums/currency.enum'
 import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
-import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
-import { TrafficResetEnum } from '@app/enums/traffic-reset.enum'
 import { useUserStore } from '@app/store/user.store'
 import { BonusesInterface } from '@app/types/bonuses.interface'
 import { CurrencyInterface } from '@app/types/currency.interface'
+import {
+  NewEraSubWithTmaInterface,
+  SubscriptionExtensionsWithConditionsInterface,
+} from '@app/types/new-era.types'
 import { PaymentMethodsDataInterface } from '@app/types/payment-methods-data.interface'
 import { RatesInterface } from '@app/types/rates.interface'
 import { ReferralsDataInterface } from '@app/types/referrals-data-interface'
-import { ServersResponseDataInterface } from '@app/types/servers-data.interface'
 import {
-  CreateSubscriptionDataInterface,
-  GetSubscriptionConfigResponseInterface,
-  SubscriptionResponseInterface,
-} from '@app/types/subscription-data.interface'
-import { UserDataInterface } from '@app/types/user-data.interface'
+  PayPremiumMethodsEnum,
+  PayPremiumPeriodEnum,
+  UserDataInterface,
+} from '@app/types/user-data.interface'
 import { getTmaPlatform } from '@app/utils/get-tma-platform.util'
 
 import axios, {
@@ -369,223 +369,6 @@ class ApiClient {
     })
   }
 
-  // Subscription methods
-  async freePlanActivated() {
-    return this.safeRequest<{
-      subscriptions: SubscriptionResponseInterface
-      user: UserDataInterface
-    }>(async () => {
-      const { data } = await this.instance.post<
-        ApiResponse<{
-          subscriptions: SubscriptionResponseInterface
-          user: UserDataInterface
-        }>
-      >('/subscriptions/free-plan-activated')
-      return data.data
-    })
-  }
-
-  async getSubscriptons() {
-    return this.safeRequest<{
-      subscriptions: SubscriptionResponseInterface
-      user: UserDataInterface
-    }>(async () => {
-      const { data } = await this.instance.get<
-        ApiResponse<{
-          subscriptions: SubscriptionResponseInterface
-          user: UserDataInterface
-        }>
-      >('/subscriptions')
-      return data.data
-    })
-  }
-
-  async purchaseSubscription(params: CreateSubscriptionDataInterface) {
-    return this.safeRequest<{
-      subscriptions: SubscriptionResponseInterface
-      user: UserDataInterface
-      invoice?: {
-        linkPay: string
-        isTonPayment: boolean
-        amountTon: number
-        token: string
-      }
-    }>(async () => {
-      const { data } = await this.instance.post<
-        ApiResponse<{
-          subscriptions: SubscriptionResponseInterface
-          user: UserDataInterface
-          invoice?: {
-            linkPay: string
-            isTonPayment: boolean
-            amountTon: number
-            token: string
-          }
-        }>
-      >('/subscriptions/purchase', params)
-      return data.data
-    })
-  }
-
-  async editSubscriptionName(subscriptionId: string, name: string) {
-    return this.safeRequest<{
-      subscriptions: SubscriptionResponseInterface
-      user: UserDataInterface
-    }>(async () => {
-      const { data } = await this.instance.post<
-        ApiResponse<{
-          subscriptions: SubscriptionResponseInterface
-          user: UserDataInterface
-        }>
-      >('/subscriptions/edit-name/' + subscriptionId, { name })
-      return data.data
-    })
-  }
-
-  async updateServerSubscription(subscriptionId: string, servers: string[]) {
-    return this.safeRequest<{
-      subscriptions: SubscriptionResponseInterface
-      user: UserDataInterface
-    }>(async () => {
-      const { data } = await this.instance.post<
-        ApiResponse<{
-          subscriptions: SubscriptionResponseInterface
-          user: UserDataInterface
-        }>
-      >('/subscriptions/update-server/' + subscriptionId, { servers })
-      return data.data
-    })
-  }
-
-  async addTrafficSubscription(
-    subscriptionId: string,
-    traffic: number,
-    method: PaymentMethodEnum | 'BALANCE' | 'USDT',
-  ) {
-    return this.safeRequest<{
-      subscriptions: SubscriptionResponseInterface
-      user: UserDataInterface
-      invoice?: {
-        linkPay: string
-        isTonPayment: boolean
-        amountTon: number
-        token: string
-      }
-    }>(async () => {
-      const { data } = await this.instance.post<
-        ApiResponse<{
-          subscriptions: SubscriptionResponseInterface
-          user: UserDataInterface
-          invoice?: {
-            linkPay: string
-            isTonPayment: boolean
-            amountTon: number
-            token: string
-          }
-        }>
-      >('/subscriptions/add-traffic/' + subscriptionId, { traffic, method })
-      return data.data
-    })
-  }
-
-  async deleteSubscription(subscriptionId: string) {
-    return this.safeRequest<{
-      subscriptions: SubscriptionResponseInterface
-      user: UserDataInterface
-    }>(async () => {
-      const { data } = await this.instance.post<
-        ApiResponse<{
-          subscriptions: SubscriptionResponseInterface
-          user: UserDataInterface
-        }>
-      >('/subscriptions/delete', { subscriptionId })
-      return data.data
-    })
-  }
-
-  async renewSubscription(
-    subscriptionId: string,
-    method: PaymentMethodEnum | 'BALANCE' | 'USDT',
-    isSavePeriod: boolean,
-    period: SubscriptionPeriodEnum,
-    periodMultiplier: number,
-    trafficReset: TrafficResetEnum,
-  ) {
-    return this.safeRequest<{
-      subscriptions: SubscriptionResponseInterface
-      user: UserDataInterface
-      invoice?: {
-        linkPay: string
-        isTonPayment: boolean
-        amountTon: number
-        token: string
-      }
-    }>(async () => {
-      const { data } = await this.instance.post<
-        ApiResponse<{
-          subscriptions: SubscriptionResponseInterface
-          user: UserDataInterface
-          invoice?: {
-            linkPay: string
-            isTonPayment: boolean
-            amountTon: number
-            token: string
-          }
-        }>
-      >('/subscriptions/renew/' + subscriptionId, {
-        method,
-        isSavePeriod,
-        period,
-        periodMultiplier,
-        trafficReset,
-      })
-      return data.data
-    })
-  }
-
-  async resetSubscriptionToken(subscriptionId: string) {
-    return this.safeRequest<{
-      subscriptions: SubscriptionResponseInterface
-      user: UserDataInterface
-    }>(async () => {
-      const { data } = await this.instance.post<
-        ApiResponse<{
-          subscriptions: SubscriptionResponseInterface
-          user: UserDataInterface
-        }>
-      >('/subscriptions/reset-token', { subscriptionId })
-      return data.data
-    })
-  }
-
-  async toggleAutoRenewalSubscription(subscriptionId: string) {
-    return this.safeRequest<{
-      subscriptions: SubscriptionResponseInterface
-      user: UserDataInterface
-    }>(async () => {
-      const { data } = await this.instance.post<
-        ApiResponse<{
-          subscriptions: SubscriptionResponseInterface
-          user: UserDataInterface
-        }>
-      >('/subscriptions/toggle-auto-renewal', { subscriptionId })
-      return data.data
-    })
-  }
-
-  async getSubscriptionDataById(id: string, agent?: string) {
-    return this.safeRequest<GetSubscriptionConfigResponseInterface>(
-      async () => {
-        const { data } = await this.instance.get<
-          ApiResponse<GetSubscriptionConfigResponseInterface>
-        >(`/subscriptions/by-id/${id}`, {
-          headers: agent ? { 'User-Agent': agent } : undefined,
-        })
-        return data.data
-      },
-    )
-  }
-
   async getAdTaskReward(place: 'adsgram' | 'reward') {
     return this.safeRequest<TaskRewardResInterface>(async () => {
       const { data } = await this.instance.get(`/ads/task-reward/${place}`)
@@ -619,31 +402,79 @@ class ApiClient {
     })
   }
 
-  async getServers() {
-    return this.safeRequest<ServersResponseDataInterface>(async () => {
-      const { data } =
-        await this.instance.get<ApiResponse<ServersResponseDataInterface>>(
-          '/servers',
-        )
-      return data.data
+  // new-era
+  async getExtensions() {
+    return this.safeRequest<{
+      success: boolean
+      extensions: SubscriptionExtensionsWithConditionsInterface[]
+      user: UserDataInterface
+    }>(async () => {
+      const { data } = await this.instance.get(`/new-era/extensions`)
+
+      return data
     })
   }
 
-  async updateSubscriptionServers(
-    subscriptionId: string,
-    serverCodes: string[],
-  ) {
+  async checkExtensions() {
     return this.safeRequest<{
-      subscriptions: SubscriptionResponseInterface
+      success: boolean
+      extensions: SubscriptionExtensionsWithConditionsInterface[]
       user: UserDataInterface
     }>(async () => {
-      const { data } = await this.instance.post<
-        ApiResponse<{
-          subscriptions: SubscriptionResponseInterface
-          user: UserDataInterface
-        }>
-      >('/subscriptions/update-servers', { subscriptionId, serverCodes })
-      return data.data
+      const { data } = await this.instance.post(`/new-era/extensions`)
+
+      return data
+    })
+  }
+
+  async payPremium(
+    method: PayPremiumMethodsEnum,
+    period: PayPremiumPeriodEnum,
+  ) {
+    return this.safeRequest<{ success: boolean; user: UserDataInterface }>(
+      async () => {
+        const { data } = await this.instance.post('/user/pay-premium', {
+          method,
+          period,
+        })
+        return data
+      },
+    )
+  }
+
+  async getSubscription() {
+    return this.safeRequest<{
+      success: boolean
+      subscription: NewEraSubWithTmaInterface
+      user: UserDataInterface
+    }>(async () => {
+      const { data } = await this.instance.get(`/new-era/sub`)
+
+      return data
+    })
+  }
+
+  async renewSubscription() {
+    return this.safeRequest<{
+      success: boolean
+      subscription: NewEraSubWithTmaInterface
+      user: UserDataInterface
+    }>(async () => {
+      const { data } = await this.instance.post(`/new-era/sub`)
+
+      return data
+    })
+  }
+
+  async deleteDevice(hwid: string) {
+    return this.safeRequest<{
+      success: boolean
+      subscription: NewEraSubWithTmaInterface
+      user: UserDataInterface
+    }>(async () => {
+      const { data } = await this.instance.delete(`/new-era/device/` + hwid)
+
+      return data
     })
   }
 }
