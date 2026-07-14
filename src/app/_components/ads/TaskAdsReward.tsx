@@ -8,7 +8,7 @@ import { AdsDataInterface } from '@app/enums/ads-res.interface'
 import { AdsTypeEnum } from '@app/enums/ads-type.enum'
 import { useUserStore } from '@app/store/user.store'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Loader2, Play } from 'lucide-react'
+import { Loader2, Play, Sparkle } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { createRoot, Root } from 'react-dom/client'
 import { toast } from 'react-toastify'
@@ -34,6 +34,7 @@ export function TaskAdsReward() {
 
   const [amountReward, setAmountReward] = useState<number | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [isHovering, setIsHovering] = useState(false)
 
   const adRef = useRef<AdsDataInterface | null>(null)
   const mountedRootRef = useRef<Root | null>(null)
@@ -223,23 +224,48 @@ export function TaskAdsReward() {
       type={isActionable ? 'button' : undefined}
       onClick={isActionable ? fetchAd : undefined}
       disabled={isActionable ? false : undefined}
+      onHoverStart={isActionable ? () => setIsHovering(true) : undefined}
+      onHoverEnd={isActionable ? () => setIsHovering(false) : undefined}
       className="relative flex items-center gap-2.5 w-full rounded-2xl overflow-hidden text-left"
       style={{
-        background: 'var(--glass-bg)',
+        background: isActionable
+          ? 'linear-gradient(160deg, rgba(255,140,66,0.1), var(--glass-bg) 60%)'
+          : 'var(--glass-bg)',
         backdropFilter: 'blur(var(--glass-blur))',
         WebkitBackdropFilter: 'blur(var(--glass-blur))',
-        border: `1px solid ${isActionable ? 'rgba(255,140,66,0.13)' : 'rgba(255,255,255,0.07)'}`,
-        boxShadow:
-          '0 6px 24px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.06)',
+        border: `1px solid ${
+          isActionable ? 'rgba(255,140,66,0.18)' : 'rgba(255,255,255,0.06)'
+        }`,
+        boxShadow: isActionable
+          ? [
+              '0 6px 24px rgba(0,0,0,0.28)',
+              'inset 0 1px 0 rgba(255,255,255,0.06)',
+              isHovering
+                ? '0 8px 28px rgba(255,140,66,0.16)'
+                : '0 0 0 rgba(0,0,0,0)',
+            ].join(', ')
+          : '0 4px 16px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.03)',
         padding: '10px 12px',
         cursor: isActionable ? 'pointer' : 'default',
-        transition: 'border-color 400ms ease',
+        opacity: isCoolingDown ? 0.82 : 1,
+        transition:
+          'border-color 400ms ease, background 400ms ease, opacity 400ms ease',
       }}
       initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      whileHover={isActionable ? { scale: 1.012 } : undefined}
-      whileTap={isActionable ? { scale: 0.985 } : undefined}
+      animate={{ opacity: isCoolingDown ? 0.82 : 1, y: 0 }}
+      whileHover={isActionable ? { scale: 1.014, y: -1 } : undefined}
+      whileTap={isActionable ? { scale: 0.98 } : undefined}
       transition={{ duration: 0.35, ease: [0.2, 0, 0, 1] }}>
+      {/* ambient glow blob, only when actionable */}
+      {isActionable && (
+        <motion.div
+          className="pointer-events-none absolute -top-8 -right-6 w-24 h-24 rounded-full blur-2xl"
+          style={{ background: 'rgba(255,140,66,0.22)' }}
+          animate={{ opacity: isHovering ? 0.9 : 0.5 }}
+          transition={{ duration: 0.4 }}
+        />
+      )}
+
       {/* Left accent stripe */}
       <div
         className="absolute left-0 top-0 bottom-0 w-[3px] rounded-l-2xl"
@@ -257,7 +283,7 @@ export function TaskAdsReward() {
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              'linear-gradient(105deg, transparent 40%, rgba(255,140,66,0.055) 50%, transparent 60%)',
+              'linear-gradient(105deg, transparent 40%, rgba(255,140,66,0.08) 50%, transparent 60%)',
           }}
           animate={{ x: ['-100%', '200%'] }}
           transition={{
@@ -269,33 +295,75 @@ export function TaskAdsReward() {
         />
       )}
 
+      {/* floating mini-sparkles, only while hovering */}
+      <AnimatePresence>
+        {isActionable && isHovering && (
+          <>
+            {[0, 1, 2].map((i) => (
+              <motion.span
+                key={i}
+                className="pointer-events-none absolute"
+                style={{
+                  color: 'var(--cta)',
+                  right: `${18 + i * 14}%`,
+                  bottom: 6,
+                }}
+                initial={{ opacity: 0, y: 0, scale: 0.5 }}
+                animate={{ opacity: [0, 1, 0], y: -26, scale: [0.5, 1, 0.7] }}
+                exit={{ opacity: 0 }}
+                transition={{
+                  duration: 1.1,
+                  delay: i * 0.15,
+                  repeat: Infinity,
+                  repeatDelay: 0.4,
+                  ease: 'easeOut',
+                }}>
+                <Sparkle size={9} fill="currentColor" strokeWidth={0} />
+              </motion.span>
+            ))}
+          </>
+        )}
+      </AnimatePresence>
+
       <motion.div
         animate={
           !isCoolingDown && !isLoading
             ? {
                 boxShadow: [
-                  '0 0 0 0 rgba(255,140,66,0)',
-                  '0 0 0 6px rgba(255,140,66,0.18)',
-                  '0 0 0 0 rgba(255,140,66,0)',
+                  '0 0 0px rgba(255,140,66,0)',
+                  '0 0 14px rgba(255,140,66,0.45)',
+                  '0 0 0px rgba(255,140,66,0)',
                 ],
               }
-            : { boxShadow: '0 0 0 0 rgba(255,140,66,0)' }
+            : { boxShadow: '0 0 0px rgba(255,140,66,0)' }
         }
-        transition={{
-          duration: 2.2,
-          repeat: !isCoolingDown && !isLoading ? Infinity : 0,
-          ease: 'easeOut',
-        }}
-        className="flex items-center justify-center w-9 h-9 rounded-xl shrink-0 ml-1"
+        transition={
+          !isCoolingDown && !isLoading
+            ? { duration: 2.4, repeat: Infinity, ease: 'easeInOut' }
+            : { duration: 0.3 }
+        }
+        whileHover={isActionable ? { scale: 1.06 } : undefined}
+        whileTap={isActionable ? { scale: 0.95 } : undefined}
+        className="relative flex items-center justify-center w-9 h-9 rounded-xl shrink-0 ml-1"
         style={{
           background: isCoolingDown
             ? 'rgba(255,171,64,0.08)'
-            : 'rgba(255,140,66,0.14)',
-          color: isCoolingDown ? 'var(--warning)' : 'var(--cta)',
+            : isHovering
+              ? 'linear-gradient(135deg, #ff8c42, #ffab6b)'
+              : 'rgba(255,140,66,0.14)',
+          color: isCoolingDown
+            ? 'var(--warning)'
+            : isHovering
+              ? '#1a0a00'
+              : 'var(--cta)',
           border: `1px solid ${isCoolingDown ? 'rgba(255,171,64,0.2)' : 'rgba(255,140,66,0.25)'}`,
-          transition: 'all 400ms ease',
+          transition: 'background 350ms ease, color 350ms ease',
         }}>
-        <Play size={13} style={{ marginLeft: 2 }} />
+        <motion.div
+          animate={isHovering ? { rotate: 10 } : { rotate: 0 }}
+          transition={{ duration: 0.35, ease: [0.2, 0, 0, 1] }}>
+          <Play size={13} style={{ marginLeft: 2 }} fill="currentColor" />
+        </motion.div>
       </motion.div>
 
       {/* Center text */}
@@ -311,14 +379,31 @@ export function TaskAdsReward() {
             initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ type: 'spring', stiffness: 400 }}
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg font-mono text-[12px] font-bold w-fit"
+            className="relative inline-flex items-center gap-1 px-2 py-0.5 rounded-lg font-mono text-[12px] font-bold w-fit overflow-hidden"
             style={{
               background: 'rgba(245,166,35,0.15)',
               color: 'var(--star)',
               border: '1px solid rgba(245,166,35,0.3)',
               letterSpacing: '0.02em',
             }}>
-            <Currency w={12} type="star" />+{amountReward}
+            {/* subtle shine sweep across the reward badge */}
+            <motion.div
+              className="pointer-events-none absolute inset-y-0 w-1/3"
+              style={{
+                background:
+                  'linear-gradient(115deg, transparent, rgba(255,255,255,0.35), transparent)',
+              }}
+              animate={{ x: ['-120%', '260%'] }}
+              transition={{
+                duration: 1.8,
+                repeat: Infinity,
+                repeatDelay: 2.6,
+                ease: 'easeInOut',
+              }}
+            />
+            <span className="relative flex items-center gap-1">
+              <Currency w={12} type="star" />+{amountReward}
+            </span>
           </motion.div>
         </AnimatePresence>
       </div>
@@ -352,13 +437,19 @@ export function TaskAdsReward() {
                 transition={{ duration: 0.15 }}
                 className="flex items-center justify-center w-9 h-9"
                 style={{ color: 'var(--cta)' }}>
-                <svg
+                <motion.svg
                   width="16"
                   height="16"
                   viewBox="0 0 16 16"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true">
+                  aria-hidden="true"
+                  animate={isHovering ? { x: [0, 3, 0] } : { x: 0 }}
+                  transition={{
+                    duration: 0.9,
+                    repeat: isHovering ? Infinity : 0,
+                    ease: 'easeInOut',
+                  }}>
                   <path
                     d="M6 4L10 8L6 12"
                     stroke="currentColor"
@@ -366,7 +457,7 @@ export function TaskAdsReward() {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />
-                </svg>
+                </motion.svg>
               </motion.span>
             )}
           </AnimatePresence>
