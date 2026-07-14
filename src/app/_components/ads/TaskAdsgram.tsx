@@ -135,7 +135,7 @@ export function TaskAdsgramTask({
       <motion.div
         key="cooldown"
         initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
+        animate={{ opacity: 0.82, y: 0 }}
         exit={{ opacity: 0, y: -8 }}
         transition={{ duration: 0.35, ease: [0.2, 0, 0, 1] }}
         className="relative flex items-center gap-2.5 w-full rounded-2xl overflow-hidden"
@@ -143,9 +143,9 @@ export function TaskAdsgramTask({
           background: 'var(--glass-bg)',
           backdropFilter: 'blur(var(--glass-blur))',
           WebkitBackdropFilter: 'blur(var(--glass-blur))',
-          border: '1px solid rgba(255,255,255,0.07)',
+          border: '1px solid rgba(255,255,255,0.06)',
           boxShadow:
-            '0 6px 24px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.06)',
+            '0 4px 16px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.03)',
           padding: '10px 12px',
         }}>
         <div
@@ -199,13 +199,20 @@ export function TaskAdsgramTask({
       transition={{ duration: 0.35, ease: [0.2, 0, 0, 1] }}
       className="relative w-full rounded-2xl overflow-hidden"
       style={{
-        background: 'var(--glass-bg)',
+        background:
+          'linear-gradient(160deg, rgba(255,140,66,0.08), var(--glass-bg) 60%)',
         backdropFilter: 'blur(var(--glass-blur))',
         WebkitBackdropFilter: 'blur(var(--glass-blur))',
-        border: '1px solid rgba(255,255,255,0.09)',
+        border: '1px solid rgba(255,140,66,0.16)',
         boxShadow:
           '0 6px 24px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.06)',
       }}>
+      {/* ambient glow blob — визуально согласовано с TaskAdsReward/PremiumCTA */}
+      <div
+        className="pointer-events-none absolute -top-8 -right-6 w-24 h-24 rounded-full blur-2xl z-0"
+        style={{ background: 'rgba(255,140,66,0.18)' }}
+      />
+
       {/* Left accent stripe */}
       <div
         className="absolute left-0 top-0 bottom-0 w-[3px] rounded-l-2xl z-10"
@@ -220,13 +227,13 @@ export function TaskAdsgramTask({
         className="absolute inset-0 z-[1] pointer-events-none"
         style={{
           background:
-            'linear-gradient(105deg, transparent 40%, rgba(255,140,66,0.06) 50%, transparent 60%)',
+            'linear-gradient(105deg, transparent 40%, rgba(255,140,66,0.07) 50%, transparent 60%)',
         }}
         animate={{ x: ['-100%', '200%'] }}
         transition={{
-          duration: 3.5,
+          duration: 3.6,
           repeat: Infinity,
-          repeatDelay: 4,
+          repeatDelay: 4.5,
           ease: 'easeInOut',
         }}
       />
@@ -237,13 +244,16 @@ export function TaskAdsgramTask({
         data-debug={debug ? 'true' : 'false'}
         data-debug-console="false"
         className="adsgram-task-override">
-        {/* reward slot — more prominent badge */}
+        {/* reward slot — badge with a soft shine sweep, matches TaskAdsReward */}
         <span slot="reward" className="adsgram-slot-reward">
-          <Currency w={12} type="star" />
-          <span>+{amountReward}</span>
+          <span className="adsgram-slot-reward-shine" />
+          <span className="adsgram-slot-reward-content">
+            <Currency w={12} type="star" />
+            <span>+{amountReward}</span>
+          </span>
         </span>
 
-        {/* button slot — arrow chevron instead of text */}
+        {/* button slot — circular icon container, soft glow on hover/active */}
         <div
           slot="button"
           className="adsgram-slot-button"
@@ -325,6 +335,7 @@ export function TaskAdsgramTask({
               }
 
               .adsgram-slot-reward {
+                position: relative;
                 display: inline-flex;
                 align-items: center;
                 gap: 4px;
@@ -338,25 +349,70 @@ export function TaskAdsgramTask({
                 border: 1px solid rgba(245,166,35,0.3);
                 margin-top: 4px;
                 letter-spacing: 0.02em;
+                overflow: hidden;
               }
 
-              /* Square arrow button */
+              .adsgram-slot-reward-content {
+                position: relative;
+                z-index: 1;
+                display: inline-flex;
+                align-items: center;
+                gap: 4px;
+              }
+
+              /* тонкий диагональный блик, зациклен через CSS-keyframes —
+                 безопаснее framer-motion внутри слотового контента */
+              .adsgram-slot-reward-shine {
+                position: absolute;
+                inset: 0;
+                width: 40%;
+                background: linear-gradient(
+                  115deg,
+                  transparent,
+                  rgba(255, 255, 255, 0.35),
+                  transparent
+                );
+                transform: translateX(-150%);
+                animation: adsgram-shine 4.4s ease-in-out infinite;
+                animation-delay: 1s;
+                pointer-events: none;
+              }
+
+              @keyframes adsgram-shine {
+                0% { transform: translateX(-150%); }
+                18% { transform: translateX(280%); }
+                100% { transform: translateX(280%); }
+              }
+
+              /* Square arrow button — теперь с мягким круглым фоном,
+                 как у Play-иконки в TaskAdsReward */
               .adsgram-slot-button {
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
                 width: 34px;
                 height: 34px;
+                border-radius: 11px;
                 font-size: 11px;
                 font-weight: 700;
                 font-family: ui-monospace, SFMono-Regular, monospace;
+                background: rgba(255,140,66,0.14);
                 color: var(--cta);
+                border: 1px solid rgba(255,140,66,0.25);
                 cursor: pointer;
-                transition: all 150ms ease;
+                transition: background 300ms cubic-bezier(0.2,0,0,1),
+                            box-shadow 300ms cubic-bezier(0.2,0,0,1),
+                            transform 200ms cubic-bezier(0.2,0,0,1);
+              }
+
+              .adsgram-slot-button:hover {
+                background: linear-gradient(135deg, #ff8c42, #ffab6b);
+                color: #1a0a00;
+                box-shadow: 0 0 14px rgba(255,140,66,0.45);
               }
 
               .adsgram-slot-button:active {
-                transform: scale(0.92);
+                transform: scale(0.94);
               }
 
           .adsgram-slot-claim {
@@ -365,16 +421,24 @@ export function TaskAdsgramTask({
           justify-content: center;
           width: 34px;
           height: 34px;
+          border-radius: 11px;
           font-size: 11px;
           font-weight: 700;
           font-family: ui-monospace, SFMono-Regular, monospace;
+          background: rgba(255,140,66,0.14);
           color: var(--cta);
+          border: 1px solid rgba(255,140,66,0.25);
           cursor: pointer;
-          transition: all 150ms ease;
+          transition: background 300ms cubic-bezier(0.2,0,0,1),
+                      box-shadow 300ms cubic-bezier(0.2,0,0,1),
+                      transform 200ms cubic-bezier(0.2,0,0,1);
           }
 
           .adsgram-slot-claim:hover {
-          transform: scale(0.92);
+          background: linear-gradient(135deg, #ff8c42, #ffab6b);
+          color: #1a0a00;
+          box-shadow: 0 0 14px rgba(255,140,66,0.45);
+          transform: scale(0.96);
           }
 
           .adsgram-slot-done {
@@ -383,16 +447,22 @@ export function TaskAdsgramTask({
           justify-content: center;
           width: 34px;
           height: 34px;
+          border-radius: 11px;
           font-size: 11px;
           font-weight: 700;
           font-family: ui-monospace, SFMono-Regular, monospace;
-          color: var(--cta);
+          background: rgba(55,227,162,0.14);
+          color: var(--success);
+          border: 1px solid rgba(55,227,162,0.25);
           cursor: pointer;
-          transition: all 150ms ease;
+          transition: background 300ms cubic-bezier(0.2,0,0,1),
+                      box-shadow 300ms cubic-bezier(0.2,0,0,1),
+                      transform 200ms cubic-bezier(0.2,0,0,1);
           }
 
           .adsgram-slot-done:hover {
-          transform: scale(0.92);
+          box-shadow: 0 0 14px rgba(55,227,162,0.35);
+          transform: scale(0.96);
           }
 
       `}</style>
