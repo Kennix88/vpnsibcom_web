@@ -17,7 +17,7 @@ export const config = {
   taddyPubId: '14cbeb980853dd416003462ca4db7c12',
   richadsPubId: process.env.NEXT_PUBLIC_RICHADS_PUB_ID || '1001262',
   richadsAppId: process.env.NEXT_PUBLIC_RICHADS_APP_ID || '6023',
-  isTaddyEnabled: process.env.NEXT_PUBLIC_TADDY_ENABLED || (false as boolean),
+  isTaddyEnabled: process.env.NEXT_PUBLIC_TADDY_ENABLED || (true as boolean),
 }
 
 if (typeof window !== 'undefined' && !config.apiUrl) {
