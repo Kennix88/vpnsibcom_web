@@ -1,11 +1,18 @@
 :root {
-  /* Star (FEBD04) */
+  /* TG Star — официальные Telegram Stars (оплата) */
+  --tg-star: #ffd000;
+  --on-tg-star: #2a1f00;
+  --tg-star-container: #fff0a0;
+  --on-tg-star-container: #1a1200;
+  --tg-star-container-rgba: rgba(255, 208, 0, 0.3);
+
+  /* Star — внутренний баланс (≈ TG Stars курс) */
   --star: #f5a623;
-  --star-gradient: linear-gradient(135deg, #f5a623, #febd04);
+  --star-gradient: linear-gradient(135deg, #e07a00, #f5b830);
   --on-star: #3a2e00;
   --star-container: #ffe08f;
   --on-star-container: #241c00;
-  --star-container-rgba: rgba(254, 189, 4, 0.3);
+  --star-container-rgba: rgba(245, 166, 35, 0.3);
 
   /* Ton (0088CC) */
   --ton: #0088cc;
@@ -13,6 +20,13 @@
   --ton-container: #b3e3ff;
   --on-ton-container: #001f2f;
   --ton-container-rgba: rgba(0, 136, 204, 0.3);
+
+  /* GRAM (#30A1F5) — ребрендинг TON */
+  --gram: #30a1f5;
+  --on-gram: #ffffff;
+  --gram-container: #a8d8ff;
+  --on-gram-container: #001e35;
+  --gram-container-rgba: rgba(48, 161, 245, 0.3);
 
   /* Ticket (EF6470) */
   --ticket: #ef6470;
