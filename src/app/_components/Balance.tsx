@@ -5,10 +5,9 @@ import addSuffixToNumberUtil from '@app/utils/add-suffix-to-number.util'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { FaPlus, FaRegSnowflake } from 'react-icons/fa6'
-import { TiWarning } from 'react-icons/ti'
+import { FaPlus } from 'react-icons/fa6'
 
-type BalanceType = 'payment' | 'wager' | 'hold' | 'usdt'
+type BalanceType = 'payment' | 'usdt'
 
 const typeConfig: Record<
   BalanceType,
@@ -26,18 +25,6 @@ const typeConfig: Record<
     border: 'rgba(80,175,149,0.35)',
     iconColor: 'var(--usdt)',
   },
-  wager: {
-    accent: 'var(--wager)',
-    glow: 'var(--wager-container-rgba)',
-    border: 'rgba(214,58,58,0.35)',
-    iconColor: 'var(--wager)',
-  },
-  hold: {
-    accent: 'var(--ice)',
-    glow: 'var(--ice-container-rgba)',
-    border: 'rgba(96,144,199,0.35)',
-    iconColor: 'var(--ice)',
-  },
 }
 
 export default function Balance({
@@ -54,11 +41,9 @@ export default function Balance({
   const balance = user?.balance
     ? type === 'payment'
       ? user.balance.payment
-      : type === 'hold'
-        ? user.balance.hold
-        : type === 'usdt'
-          ? user.balance.usdt
-          : 0
+      : type === 'usdt'
+        ? user.balance.usdt
+        : 0
     : 0
 
   const cfg = typeConfig[type]
@@ -84,13 +69,7 @@ export default function Balance({
       <div
         className="flex items-center justify-center"
         style={{ color: cfg.iconColor }}>
-        {type === 'hold' ? (
-          <FaRegSnowflake size={16} />
-        ) : type === 'wager' ? (
-          <TiWarning size={18} />
-        ) : (
-          <Currency w={18} type={type === 'usdt' ? 'usdt' : 'star'} />
-        )}
+        <Currency w={18} type={type === 'usdt' ? 'usdt' : 'star'} />
       </div>
 
       {/* Amount */}
