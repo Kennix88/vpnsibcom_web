@@ -15,7 +15,13 @@ import { ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import ScrollHint from './ScrollHint'
 
-export type ModalVariant = 'default' | 'info' | 'warning' | 'error' | 'success'
+export type ModalVariant =
+  | 'default'
+  | 'info'
+  | 'warning'
+  | 'error'
+  | 'success'
+  | 'premium'
 
 export interface ModalProps {
   isOpen: boolean
@@ -31,6 +37,9 @@ export interface ModalProps {
   actionButtonColor?: 'primary' | 'error' | 'warning' | 'success' | 'info'
   closeOnOutsideClick?: boolean
   maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | 'full'
+  /** Переопределяет класс блока с контентом (паддинги/скролл). По умолчанию
+   *  сохраняется прежнее поведение — 'relative p-4 overflow-y-auto max-h-[90vh]'. */
+  contentClassName?: string
 }
 
 /* ─── Variant config ─────────────────────────────────────────────── */
@@ -39,6 +48,7 @@ const VARIANT_CFG = {
     bg: 'var(--surface-container)',
     header: 'var(--surface-container-high)',
     headerText: 'var(--on-surface)',
+    headerBorder: 'rgba(0,0,0,0.15)',
     border: 'rgba(255,255,255,0.08)',
     accentRgb: '195,166,255',
     text: 'var(--on-surface)',
@@ -48,6 +58,7 @@ const VARIANT_CFG = {
     bg: 'var(--info-container)',
     header: 'var(--info)',
     headerText: 'var(--on-info)',
+    headerBorder: 'rgba(0,0,0,0.15)',
     border: 'rgba(89,191,255,0.35)',
     accentRgb: '89,191,255',
     text: 'var(--on-info-container)',
@@ -57,6 +68,7 @@ const VARIANT_CFG = {
     bg: 'var(--warning-container)',
     header: 'var(--warning)',
     headerText: 'var(--on-warning)',
+    headerBorder: 'rgba(0,0,0,0.15)',
     border: 'rgba(255,171,64,0.35)',
     accentRgb: '255,171,64',
     text: 'var(--on-warning-container)',
@@ -66,6 +78,7 @@ const VARIANT_CFG = {
     bg: 'var(--error-container)',
     header: 'var(--error)',
     headerText: 'var(--on-error)',
+    headerBorder: 'rgba(0,0,0,0.15)',
     border: 'rgba(255,107,102,0.35)',
     accentRgb: '255,107,102',
     text: 'var(--on-error-container)',
@@ -75,10 +88,23 @@ const VARIANT_CFG = {
     bg: 'var(--success-container)',
     header: 'var(--success)',
     headerText: 'var(--on-success)',
+    headerBorder: 'rgba(0,0,0,0.15)',
     border: 'rgba(55,227,162,0.35)',
     accentRgb: '55,227,162',
     text: 'var(--on-success-container)',
     actionColor: 'success' as const,
+  },
+  /** Золотая премиальная тема — для покупки/продления Telegram Premium. */
+  premium: {
+    bg: 'var(--surface-container)',
+    header:
+      'linear-gradient(135deg, rgba(245,166,35,0.22), rgba(157,113,255,0.08))',
+    headerText: '#ffe9b8',
+    headerBorder: 'rgba(255,233,184,0.1)',
+    border: 'rgba(245,166,35,0.28)',
+    accentRgb: '245,166,35',
+    text: 'var(--on-surface)',
+    actionColor: 'primary' as const,
   },
 }
 
@@ -152,6 +178,7 @@ export default function Modal({
   actionButtonColor,
   closeOnOutsideClick = true,
   maxWidth = 'md',
+  contentClassName,
 }: ModalProps) {
   const t = useTranslations('common.modal')
   const contentRef = useRef<HTMLDivElement>(null)
@@ -411,13 +438,19 @@ export default function Modal({
           {/* ── Header ───────────────────────────────────────────── */}
           {title && (
             <div
-              className="flex items-center justify-between px-4 py-3"
+              className="relative flex items-center justify-between px-4 py-3 overflow-hidden"
               style={{
                 background: cfg.header,
                 color: cfg.headerText,
-                borderBottom: '1px solid rgba(0,0,0,0.15)',
+                borderBottom: `1px solid ${cfg.headerBorder}`,
               }}>
-              <span className="font-semibold text-sm leading-snug">
+              {variant === 'premium' && (
+                <div
+                  className="pointer-events-none absolute -top-8 -right-8 w-28 h-28 rounded-full blur-3xl"
+                  style={{ background: 'rgba(245,166,35,0.35)' }}
+                />
+              )}
+              <span className="relative font-semibold text-sm leading-snug">
                 {title}
               </span>
               {showCloseButton && (
@@ -425,7 +458,7 @@ export default function Modal({
                   onClick={() => handleClose()}
                   whileHover={{ scale: 1.12 }}
                   whileTap={{ scale: 0.88 }}
-                  className="p-1.5 rounded-lg cursor-pointer shrink-0 ml-2"
+                  className="relative p-1.5 rounded-lg cursor-pointer shrink-0 ml-2"
                   style={{ background: 'rgba(0,0,0,0.18)' }}
                   aria-label={t('close')}>
                   <X size={15} />
@@ -437,7 +470,9 @@ export default function Modal({
           {/* ── Content ──────────────────────────────────────────── */}
           <div
             ref={contentRef}
-            className="relative p-4 overflow-y-auto max-h-[70vh]">
+            className={
+              contentClassName ?? 'relative p-4 overflow-y-auto max-h-[90vh]'
+            }>
             {children}
             <ScrollHint targetRef={contentRef} />
           </div>
