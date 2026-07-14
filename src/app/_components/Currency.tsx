@@ -1,19 +1,19 @@
 'use client'
-import ad from '@app/app/_assets/icons/ad-icon.svg'
+import gram from '@app/app/_assets/icons/gram.svg'
 import star from '@app/app/_assets/icons/star.svg'
 import tgStar from '@app/app/_assets/icons/tg-star-original.svg'
-import ticket from '@app/app/_assets/icons/ticket.svg'
 import ton from '@app/app/_assets/icons/ton-coin.svg'
-import traffic from '@app/app/_assets/icons/traffic.svg'
-import usdt from '@app/app/_assets/icons/USDT.svg'
+import usdt from '@app/app/_assets/icons/usdt.svg'
 import Image from 'next/image'
+
+export type CurrencyType = 'star' | 'tg-star' | 'ton' | 'usdt' | 'gram'
 
 export default function Currency({
   w = 40,
   type = 'star',
 }: {
   w?: number
-  type?: 'star' | 'tg-star' | 'ticket' | 'traffic' | 'ton' | 'ad' | 'usdt'
+  type?: CurrencyType
 }) {
   return (
     <Image
@@ -22,17 +22,13 @@ export default function Currency({
           ? star
           : type === 'tg-star'
             ? tgStar
-            : type === 'ticket'
-              ? ticket
-              : type === 'traffic'
-                ? traffic
-                : type === 'ton'
-                  ? ton
-                  : type === 'ad'
-                    ? ad
-                    : type === 'usdt'
-                      ? usdt
-                      : star
+            : type === 'ton'
+              ? ton
+              : type === 'usdt'
+                ? usdt
+                : type === 'gram'
+                  ? gram
+                  : star
       }
       alt={'currency'}
       width={w}
