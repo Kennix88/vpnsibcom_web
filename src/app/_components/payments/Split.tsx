@@ -1,4 +1,5 @@
 'use client'
+
 import { config } from '@app/config/client'
 import { motion } from 'framer-motion'
 import { ExternalLink, Info } from 'lucide-react'
@@ -6,6 +7,10 @@ import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import Currency from '../Currency'
 
+/**
+ * Split — альтернативный способ оплаты через Telegram-бот-сплит
+ * (реферальная ссылка на оплату частями / через партнёра).
+ */
 export default function Split() {
   const t = useTranslations('billing.payment')
 
@@ -27,7 +32,7 @@ export default function Split() {
         className="flex items-center gap-2 px-4 py-2.5"
         style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
         <Info
-          size={24}
+          size={16}
           aria-hidden
           style={{ color: 'var(--primary)', opacity: 0.8 }}
         />
@@ -40,30 +45,29 @@ export default function Split() {
 
       {/* CTA */}
       <div className="p-3">
-        <motion.div whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.975 }}>
-          <Link
-            href={config.SPLIT_TG_REF_URL}
-            target="_blank"
+        <Link
+          href={config.SPLIT_TG_REF_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block">
+          <motion.div
+            whileHover={{
+              scale: 1.015,
+              backgroundColor: 'rgba(195,166,255,0.16)',
+            }}
+            whileTap={{ scale: 0.975 }}
+            initial={{ backgroundColor: 'rgba(195,166,255,0.09)' }}
+            transition={{ duration: 0.15, ease: [0.2, 0, 0, 1] }}
             className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold font-mono"
             style={{
-              background: 'rgba(195,166,255,0.09)',
               color: 'var(--on-primary-container)',
               border: '1px solid rgba(195,166,255,0.2)',
-              transition: 'background 150ms ease',
-            }}
-            onMouseEnter={(e) =>
-              ((e.currentTarget as HTMLAnchorElement).style.background =
-                'rgba(195,166,255,0.16)')
-            }
-            onMouseLeave={(e) =>
-              ((e.currentTarget as HTMLAnchorElement).style.background =
-                'rgba(195,166,255,0.09)')
-            }>
+            }}>
             {t('splitBay')}
             <Currency type="tg-star" w={16} />
             <ExternalLink size={11} aria-hidden style={{ opacity: 0.45 }} />
-          </Link>
-        </motion.div>
+          </motion.div>
+        </Link>
       </div>
     </motion.div>
   )
