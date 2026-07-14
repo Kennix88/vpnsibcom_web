@@ -328,16 +328,6 @@ export function percentDifference(oldValue: number, newValue: number): number {
   return ((newValue - oldValue) / oldValue) * 100
 }
 
-export function calculateMbPay(
-  cost: number,
-  trafficGbPriceStars: number,
-): number {
-  if (cost <= 0) return 0
-  return roundingUpPrice(
-    (cost / roundingUpPrice(trafficGbPriceStars / 30)) * 1024,
-  )
-}
-
 export function roundUp(value: number, decimals: number = 5) {
   const factor = Math.pow(10, decimals)
   return Math.ceil(value * factor) / factor
