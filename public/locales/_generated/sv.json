@@ -1,1 +1,359 @@
-{"billing":{"title":"Fakturering","description":"Dina ekonomiska transaktioner","wallet":{"title":"Plånbok","payment":"Fyll på","paymentInfo":"Konto som används för betalningar.","withdrawal":"Ta ut","withdrawalInfo":"Konto från vilket medel kan tas ut.","holdInfo":"Frysta medel.\nDe kommer snart att överföras till utbetalningskontot."},"payment":{"title":"Fyll på saldo","sum":"Påfyllningsbelopp","enterSum":"Ange belopp","sort":{"all":"Alla","crypto":"Kryptovaluta","card":"Kort","sbp":"SBP","wallets":"Plånböcker","skins":"Skins"},"method":"Betalningsmetod","split":"Köp Telegram Stars utan KYC, med upp till 40% rabatt på Split-plattformen!","splitBay":"Köp STARS","walletInfo":"Betala med TON, USDT-TON, DOGS, NOT, HMSTR, JETTON och andra TON-nätverkstokens genom att ansluta din TON-plånbok.","limitMessage":"Tillgängligt från {min} till {max} {symbol}. Nu: {convertedAmount} {symbol}","commission":"Provision","toBalance":"Till saldot kommer","pay":"Betala"},"subscription":{"title":"Prenumeration","addSubscription":"Lägg till prenumeration","pay":"Betala","addFree":"🎁 Lägg till gratis","selectPeriod":"Välj period","periodMultiplier":"Periodmultiplikator","selectPlan":"Välj plan","selectServer":"Välj server","base":"Bas","premium":"Premium","orSelect":"eller välj","name":{"default":"Prenumeration","label":"Prenumerationsnamn","tooltip":"Namnet på prenumerationen som visas i prenumerationslistan.","placeholder":"Ange prenumerationsnamn"},"privileges":{"selectServers":"Välj önskade servrar","oneBaseServer":"En basserver att välja mellan","oneBaseOrPremiumServer":"En bas- eller premiumserver att välja mellan","accessAllServers":"Tillgång till alla servrar","accessAllBaseServers":"Tillgång till alla basservrar","accessBaseServers":"Tillgång till {{baseCount}} basservrar","accessBaseAndPremiumServers":"Tillgång till {{baseCount}} bas- och {{premiumCount}} premiumservrar","trafficPlan":"Ingen utgångsdatum, betala endast för trafik!","devices":"Upp till {count} samtidiga enheter","customDevices":"Önskat antal enheter","servers":"Tillgång till alla servrar","baseServers":"Tillgång till basservrar","premiumServers":"Tillgång till premiumservrar","customServers":"Önskat antal servrar","traffic":"Obegränsad trafik","customTraffic":"Önskat antal trafik","dailyTraffic":"{count} GB trafik dagligen","weeklyTraffic":"{count} GB trafik varje vecka","monthlyTraffic":"{count} GB trafik varje månad","yearlyTraffic":"{count} GB trafik varje år","security":"Säker anslutning","speed":"Inga hastighetsbegränsningar","masking":"Maskering av din trafik","noAds":"Inga annonser","devicesSupport":"Brett enhetsstöd","xray":"Pålitlig XRAY-kärna","opensource":"Öppen källkod"},"trafficReset":{"title":"Återställ trafik","daily":"Dagligen","weekly":"Veckovis","monthly":"Månatligen","yearly":"Årligen"},"period":{"hour":"1 timme","day":"1 dag","week":"1 vecka","month":"1 månad","threeMonth":"3 månader","sixMonth":"6 månader","year":"1 år","twoYear":"2 år","threeYear":"3 år","indefinitely":"Obegränsat"},"options":{"title":"Alternativ","autoRenewal":"Automatisk förnyelse","autoRenewalDescription":"Förnya prenumerationen automatiskt","info":"Prenumerationen förnyas automatiskt från ditt saldo","period":"Kom ihåg period"},"traffic":"Trafik","addTraffic":"Lägg till trafik","addingTraffic":"Lägger till trafik","buy":"Köp till","extension":"Förlängning","subscriptionExtension":"Förläng prenumeration","freeExtension":"🎁 Förläng gratis","summary":{"title":"Sammanfattning","name":"Namn","traffic":"Trafik","unlimit":"Obegränsat","daily":"dagligen","weekly":"veckovis","monthly":"månatligen","yearly":"årligen","servers":"Servrar","fullServers":"Tillgång till alla","allBase":"Alla bas","notServers":"Ej angivet!","period":"Period","periodDiscount":"Periodrabatt","roleDiscount":"Rollrabatt","autoRenewal":"Automatisk förnyelse","yes":"Ja","no":"Nej","toPaid":"Att betala"},"purchase":"Betala"}},"common":{"modal":{"cancel":"Avbryt","accept":"Acceptera","close":"Stäng"},"scrolling":"Scrolla ner","clipboard":{"copied":"Kopierat till urklipp!","failed":"Kunde inte kopiera!"},"freePlan":{"trialAvailable":"Du har tillgång till en provperiod på {days} dagar.","activate":"Aktivera","activationFailed":"Kunde inte aktivera gratisplanen"},"units":{"bytes":"B","kilobytes":"KB","megabytes":"MB","gigabytes":"GB","terabytes":"TB","petabytes":"PB","exabytes":"EB","zettabytes":"ZB","yottabytes":"YB"}},"freePlan":{"trialAvailable":"Du har tillgång till {gb} GB bonusdata för Trial-prenumeration under obegränsad tid.","activate":"Aktivera","activationFailed":"Kunde inte aktivera gratisplanen","modalTitle":"Aktivering av provperiod","modalAction":"Aktivera","modalConfirmation":"Vill du verkligen aktivera provperioden?"},"friends":{"title":"Vänner","get":"Få belöningar","for":"för att bjuda in vänner","level":"nivå","total":"Totalt","list":{"title":"Dina vänner","top":"Topp","empty":"Ingen här än 🥲"},"bonuses":{"title":"Bonusar","inviteTitle":"För att bjuda in en vän","paymentTitle":"För vänners handlingar","inviteInfo":"Efter första betalningen av en vän eller aktivering av en provperiod!","paymentInfo":"Få en procentandel av vår inkomst från vänner och de som dina vänner har bjudit in för alltid!","lvl1Info":"De du bjöd in","lvl2Info":"De som vänner bjöd in","lvl3Info":"De som vänners vänner bjöd in 😁"},"invite":{"title":"Bjud in en vän","message":"Skicka meddelande","copy":"Kopiera länk","story":"Skicka till stories"},"statistics":{"title":"Statistik","earnTitle":"Dina intäkter","inviteTitle":"Inbjudna","earnInfo":"Du har tjänat totalt","inviteInfo":"Inbjudna | Aktiverade | Varav Standard | Varav Premium"}},"greenCheck":{"loading":"Kontrollerar anslutningssäkerhet...","danger":"Din anslutning är INTE säker!\nAnslut VPN!","success":"Din anslutning är säker!"},"navbar":{"home":"Hem","earning":"Intäkter","gifts":"Gåvor","friends":"Vänner","billing":"Fakturering","settings":"Inställningar","profile":"Profil","games":"Spel"},"subscriptions":{"title":"Prenumeration","connection":"Anslutning","configs":"Konfigurationer","addSubscription":"Lägg till prenumeration","addSubscriptionTitle":"Lägg till prenumeration","yourSubscriptions":"Dina prenumerationer","noSubscriptions":"Du har inga aktiva prenumerationer","loading":"Laddar prenumerationsdata...","notFound":"Prenumeration hittades inte","renewSubscription":"Förnya prenumeration","autoRenewalEnabled":"Automatisk förnyelse aktiverad","autoRenewalDisabled":"Automatisk förnyelse inaktiverad","subscriptionDeleted":"Prenumerationen har tagits bort","subscriptionDataUpdated":"Prenumerationsdata har uppdaterats","subscriptionRenewed":"Prenumerationen har förnyats","changeServer":"Byt server","changeServerTitle":"Byt server","changeServerWarning":"VARNING: Serverbyte tar 2 minuter. Efter serverbyte måste du uppdatera data i appen!","active":"Aktiv","notActive":"Inaktiv","online":"Online","offline":"Offline","traffic":"Trafik","trafficReset":{"daily":"Dagligen","weekly":"Veckovis","monthly":"Månatligen","yearly":"Årligen","unlimit":"Obegränsat"},"inTotal":"Totalt","servers":"Servrar","fullServers":"Tillgång till alla","allBase":"Alla bas","base":"Bas","premium":"Premium","devices":"Enheter","period":"Betalningsperiod","expires":"Går ut","autoRenewal":"Automatisk förnyelse","actions":"Åtgärder","save":"Spara","required":"Rekommenderas!","paid":"Betald!","instruction":{"stage1":"Ladda ner appen","stage2":"Lägg till prenumeration i appen","copyUrl":"Kopiera prenumerations-URL","openQR":"QR-kod för prenumeration","scanApp":"Skanna i appen","scanPhone":"Skanna i telefonen","add":"Lägg till i appen"},"platform":"Plattform","success":{"serversUpdated":"Servrar har uppdaterats"},"errors":{"loadFailed":"Kunde inte ladda prenumerationer","disableAutoRenewalFailed":"Fel vid inaktivering av automatisk förnyelse!","enableAutoRenewalFailed":"Fel vid aktivering av automatisk förnyelse!","deleteSubscriptionFailed":"Fel vid borttagning av prenumeration!","resetSubscriptionFailed":"Fel vid återställning av prenumerationsdata!","renewSubscriptionFailed":"Kunde inte förnya prenumerationen!","fetchingServers":"Kunde inte ladda servrar","updatingServers":"Kunde inte uppdatera servrar","serverLimitReached":"Du har nått servergränsen","serverLimitReachedPremium":"Du har nått gränsen för premiumservrar","serverLimitReachedBase":"Du har nått gränsen för basservrar"},"periods":{"trial":"Provperiod","hour":"1 timme","day":"1 dag","week":"1 vecka","month":"1 månad","threeMonth":"3 månader","sixMonth":"6 månader","year":"1 år","twoYear":"2 år","threeYear":"3 år","indefinitely":"Obegränsat"},"modals":{"delete":{"title":"Ta bort prenumeration","button":"Ta bort","action":"Ta bort","message":"Är du säker på att du vill ta bort prenumerationen permanent? Den kan inte återställas! Ingen kompensation ges!"},"qr":{"title":"QR-kod för prenumeration","description":"Skanna i klientappen"},"refresh":{"title":"Återställ prenumerationsdata","button":"Återställ data","action":"Återställ","message":"Är du säker på att du vill återställa prenumerationsdata? Efter detta kommer nycklarna och prenumerationsadressen att ändras till nya! Du måste lägga till prenumerationen i appen igen! Återställning görs vanligtvis om din prenumeration har läckt ut på nätet eller om någon har fått åtkomst till den!"},"autoRenewal":{"enableTitle":"Aktivera automatisk förnyelse","disableTitle":"Inaktivera automatisk förnyelse","enableAction":"Aktivera","disableAction":"Inaktivera","enableMessage":"Vill du aktivera automatisk förnyelse av prenumerationen? Medel kommer att dras automatiskt när prenumerationen löper ut.","disableMessage":"Vill du inaktivera automatisk förnyelse av prenumerationen? Efter utgången kommer prenumerationen att avaktiveras."},"renew":{"title":"Förnya prenumeration","action":"Förnya","message":"Vill du förnya prenumerationen? {price} stjärnor kommer att dras från ditt saldo."}}},"user":{"role":"Roll","discount":"Rabatt","wallet":"Plånbok","usage":"Användning","inPayments":"i betalningar"},"wallet":{"connect":"Anslut TON-plånbok","disconnect":"Koppla från","replace":"Ersätt"},"earning":{"title":"Добыча","earned":"Награда получена","rewardTask":{"title":"Посмотреть рекламу"}}}
+{
+  "billing": {
+    "title": "Fakturering",
+    "description": "Dina ekonomiska transaktioner",
+    "wallet": {
+      "title": "Plånbok",
+      "payment": "Fyll på",
+      "paymentInfo": "Konto som används för betalningar.",
+      "withdrawal": "Ta ut",
+      "withdrawalInfo": "Konto från vilket medel kan tas ut.",
+      "holdInfo": "Frysta medel.\nDe kommer snart att överföras till utbetalningskontot."
+    },
+    "payment": {
+      "title": "Fyll på saldo",
+      "sum": "Påfyllningsbelopp",
+      "enterSum": "Ange belopp",
+      "sort": {
+        "all": "Alla",
+        "crypto": "Kryptovaluta",
+        "card": "Kort",
+        "sbp": "SBP",
+        "wallets": "Plånböcker",
+        "skins": "Skins"
+      },
+      "method": "Betalningsmetod",
+      "split": "Köp Telegram Stars utan KYC, med upp till 40% rabatt på Split-plattformen!",
+      "splitBay": "Köp STARS",
+      "walletInfo": "Betala med TON, USDT-TON, DOGS, NOT, HMSTR, JETTON och andra TON-nätverkstokens genom att ansluta din TON-plånbok.",
+      "limitMessage": "Tillgängligt från {min} till {max} {symbol}. Nu: {convertedAmount} {symbol}",
+      "commission": "Provision",
+      "toBalance": "Till saldot kommer",
+      "pay": "Betala"
+    },
+    "subscription": {
+      "title": "Prenumeration",
+      "addSubscription": "Lägg till prenumeration",
+      "pay": "Betala",
+      "addFree": "🎁 Lägg till gratis",
+      "selectPeriod": "Välj period",
+      "periodMultiplier": "Periodmultiplikator",
+      "selectPlan": "Välj plan",
+      "selectServer": "Välj server",
+      "base": "Bas",
+      "premium": "Premium",
+      "orSelect": "eller välj",
+      "name": {
+        "default": "Prenumeration",
+        "label": "Prenumerationsnamn",
+        "tooltip": "Namnet på prenumerationen som visas i prenumerationslistan.",
+        "placeholder": "Ange prenumerationsnamn"
+      },
+      "privileges": {
+        "selectServers": "Välj önskade servrar",
+        "oneBaseServer": "En basserver att välja mellan",
+        "oneBaseOrPremiumServer": "En bas- eller premiumserver att välja mellan",
+        "accessAllServers": "Tillgång till alla servrar",
+        "accessAllBaseServers": "Tillgång till alla basservrar",
+        "accessBaseServers": "Tillgång till {{baseCount}} basservrar",
+        "accessBaseAndPremiumServers": "Tillgång till {{baseCount}} bas- och {{premiumCount}} premiumservrar",
+        "trafficPlan": "Ingen utgångsdatum, betala endast för trafik!",
+        "devices": "Upp till {count} samtidiga enheter",
+        "customDevices": "Önskat antal enheter",
+        "servers": "Tillgång till alla servrar",
+        "baseServers": "Tillgång till basservrar",
+        "premiumServers": "Tillgång till premiumservrar",
+        "customServers": "Önskat antal servrar",
+        "traffic": "Obegränsad trafik",
+        "customTraffic": "Önskat antal trafik",
+        "dailyTraffic": "{count} GB trafik dagligen",
+        "weeklyTraffic": "{count} GB trafik varje vecka",
+        "monthlyTraffic": "{count} GB trafik varje månad",
+        "yearlyTraffic": "{count} GB trafik varje år",
+        "security": "Säker anslutning",
+        "speed": "Inga hastighetsbegränsningar",
+        "masking": "Maskering av din trafik",
+        "noAds": "Inga annonser",
+        "devicesSupport": "Brett enhetsstöd",
+        "xray": "Pålitlig XRAY-kärna",
+        "opensource": "Öppen källkod"
+      },
+      "trafficReset": {
+        "title": "Återställ trafik",
+        "daily": "Dagligen",
+        "weekly": "Veckovis",
+        "monthly": "Månatligen",
+        "yearly": "Årligen"
+      },
+      "period": {
+        "hour": "1 timme",
+        "day": "1 dag",
+        "week": "1 vecka",
+        "month": "1 månad",
+        "threeMonth": "3 månader",
+        "sixMonth": "6 månader",
+        "year": "1 år",
+        "twoYear": "2 år",
+        "threeYear": "3 år",
+        "indefinitely": "Obegränsat"
+      },
+      "options": {
+        "title": "Alternativ",
+        "autoRenewal": "Automatisk förnyelse",
+        "autoRenewalDescription": "Förnya prenumerationen automatiskt",
+        "info": "Prenumerationen förnyas automatiskt från ditt saldo",
+        "period": "Kom ihåg period"
+      },
+      "traffic": "Trafik",
+      "addTraffic": "Lägg till trafik",
+      "addingTraffic": "Lägger till trafik",
+      "buy": "Köp till",
+      "extension": "Förlängning",
+      "subscriptionExtension": "Förläng prenumeration",
+      "freeExtension": "🎁 Förläng gratis",
+      "summary": {
+        "title": "Sammanfattning",
+        "name": "Namn",
+        "traffic": "Trafik",
+        "unlimit": "Obegränsat",
+        "daily": "dagligen",
+        "weekly": "veckovis",
+        "monthly": "månatligen",
+        "yearly": "årligen",
+        "servers": "Servrar",
+        "fullServers": "Tillgång till alla",
+        "allBase": "Alla bas",
+        "notServers": "Ej angivet!",
+        "period": "Period",
+        "periodDiscount": "Periodrabatt",
+        "roleDiscount": "Rollrabatt",
+        "autoRenewal": "Automatisk förnyelse",
+        "yes": "Ja",
+        "no": "Nej",
+        "toPaid": "Att betala"
+      },
+      "purchase": "Betala"
+    }
+  },
+  "common": {
+    "modal": {
+      "cancel": "Avbryt",
+      "accept": "Acceptera",
+      "close": "Stäng"
+    },
+    "scrolling": "Scrolla ner",
+    "clipboard": {
+      "copied": "Kopierat till urklipp!",
+      "failed": "Kunde inte kopiera!"
+    },
+    "freePlan": {
+      "trialAvailable": "Du har tillgång till en provperiod på {days} dagar.",
+      "activate": "Aktivera",
+      "activationFailed": "Kunde inte aktivera gratisplanen"
+    },
+    "units": {
+      "bytes": "B",
+      "kilobytes": "KB",
+      "megabytes": "MB",
+      "gigabytes": "GB",
+      "terabytes": "TB",
+      "petabytes": "PB",
+      "exabytes": "EB",
+      "zettabytes": "ZB",
+      "yottabytes": "YB"
+    }
+  },
+  "freePlan": {
+    "trialAvailable": "Du har tillgång till {gb} GB bonusdata för Trial-prenumeration under obegränsad tid.",
+    "activate": "Aktivera",
+    "activationFailed": "Kunde inte aktivera gratisplanen",
+    "modalTitle": "Aktivering av provperiod",
+    "modalAction": "Aktivera",
+    "modalConfirmation": "Vill du verkligen aktivera provperioden?"
+  },
+  "friends": {
+    "title": "Vänner",
+    "get": "Få belöningar",
+    "for": "för att bjuda in vänner",
+    "level": "nivå",
+    "total": "Totalt",
+    "list": {
+      "title": "Dina vänner",
+      "top": "Topp",
+      "empty": "Ingen här än 🥲"
+    },
+    "bonuses": {
+      "title": "Bonusar",
+      "inviteTitle": "För att bjuda in en vän",
+      "paymentTitle": "För vänners handlingar",
+      "inviteInfo": "Efter första betalningen av en vän eller aktivering av en provperiod!",
+      "paymentInfo": "Få en procentandel av vår inkomst från vänner och de som dina vänner har bjudit in för alltid!",
+      "lvl1Info": "De du bjöd in",
+      "lvl2Info": "De som vänner bjöd in",
+      "lvl3Info": "De som vänners vänner bjöd in 😁"
+    },
+    "invite": {
+      "title": "Bjud in en vän",
+      "message": "Skicka meddelande",
+      "copy": "Kopiera länk",
+      "story": "Skicka till stories"
+    },
+    "statistics": {
+      "title": "Statistik",
+      "earnTitle": "Dina intäkter",
+      "inviteTitle": "Inbjudna",
+      "earnInfo": "Du har tjänat totalt",
+      "inviteInfo": "Inbjudna | Aktiverade | Varav Standard | Varav Premium"
+    }
+  },
+  "greenCheck": {
+    "loading": "Kontrollerar anslutningssäkerhet...",
+    "danger": "Din anslutning är INTE säker!\nAnslut VPN!",
+    "success": "Din anslutning är säker!"
+  },
+  "navbar": {
+    "home": "Hem",
+    "earning": "Intäkter",
+    "gifts": "Gåvor",
+    "friends": "Vänner",
+    "billing": "Fakturering",
+    "settings": "Inställningar",
+    "profile": "Profil",
+    "games": "Spel"
+  },
+  "subscriptions": {
+    "title": "Prenumeration",
+    "connection": "Anslutning",
+    "configs": "Konfigurationer",
+    "addSubscription": "Lägg till prenumeration",
+    "addSubscriptionTitle": "Lägg till prenumeration",
+    "yourSubscriptions": "Dina prenumerationer",
+    "noSubscriptions": "Du har inga aktiva prenumerationer",
+    "loading": "Laddar prenumerationsdata...",
+    "notFound": "Prenumeration hittades inte",
+    "renewSubscription": "Förnya prenumeration",
+    "autoRenewalEnabled": "Automatisk förnyelse aktiverad",
+    "autoRenewalDisabled": "Automatisk förnyelse inaktiverad",
+    "subscriptionDeleted": "Prenumerationen har tagits bort",
+    "subscriptionDataUpdated": "Prenumerationsdata har uppdaterats",
+    "subscriptionRenewed": "Prenumerationen har förnyats",
+    "changeServer": "Byt server",
+    "changeServerTitle": "Byt server",
+    "changeServerWarning": "VARNING: Serverbyte tar 2 minuter. Efter serverbyte måste du uppdatera data i appen!",
+    "active": "Aktiv",
+    "notActive": "Inaktiv",
+    "online": "Online",
+    "offline": "Offline",
+    "traffic": "Trafik",
+    "trafficReset": {
+      "daily": "Dagligen",
+      "weekly": "Veckovis",
+      "monthly": "Månatligen",
+      "yearly": "Årligen",
+      "unlimit": "Obegränsat"
+    },
+    "inTotal": "Totalt",
+    "servers": "Servrar",
+    "fullServers": "Tillgång till alla",
+    "allBase": "Alla bas",
+    "base": "Bas",
+    "premium": "Premium",
+    "devices": "Enheter",
+    "period": "Betalningsperiod",
+    "expires": "Går ut",
+    "autoRenewal": "Automatisk förnyelse",
+    "actions": "Åtgärder",
+    "save": "Spara",
+    "required": "Rekommenderas!",
+    "paid": "Betald!",
+    "instruction": {
+      "stage1": "Ladda ner appen",
+      "stage2": "Lägg till prenumeration i appen",
+      "copyUrl": "Kopiera prenumerations-URL",
+      "openQR": "QR-kod för prenumeration",
+      "scanApp": "Skanna i appen",
+      "scanPhone": "Skanna i telefonen",
+      "add": "Lägg till i appen"
+    },
+    "platform": "Plattform",
+    "success": {
+      "serversUpdated": "Servrar har uppdaterats"
+    },
+    "errors": {
+      "loadFailed": "Kunde inte ladda prenumerationer",
+      "disableAutoRenewalFailed": "Fel vid inaktivering av automatisk förnyelse!",
+      "enableAutoRenewalFailed": "Fel vid aktivering av automatisk förnyelse!",
+      "deleteSubscriptionFailed": "Fel vid borttagning av prenumeration!",
+      "resetSubscriptionFailed": "Fel vid återställning av prenumerationsdata!",
+      "renewSubscriptionFailed": "Kunde inte förnya prenumerationen!",
+      "fetchingServers": "Kunde inte ladda servrar",
+      "updatingServers": "Kunde inte uppdatera servrar",
+      "serverLimitReached": "Du har nått servergränsen",
+      "serverLimitReachedPremium": "Du har nått gränsen för premiumservrar",
+      "serverLimitReachedBase": "Du har nått gränsen för basservrar"
+    },
+    "periods": {
+      "trial": "Provperiod",
+      "hour": "1 timme",
+      "day": "1 dag",
+      "week": "1 vecka",
+      "month": "1 månad",
+      "threeMonth": "3 månader",
+      "sixMonth": "6 månader",
+      "year": "1 år",
+      "twoYear": "2 år",
+      "threeYear": "3 år",
+      "indefinitely": "Obegränsat"
+    },
+    "modals": {
+      "delete": {
+        "title": "Ta bort prenumeration",
+        "button": "Ta bort",
+        "action": "Ta bort",
+        "message": "Är du säker på att du vill ta bort prenumerationen permanent? Den kan inte återställas! Ingen kompensation ges!"
+      },
+      "qr": {
+        "title": "QR-kod för prenumeration",
+        "description": "Skanna i klientappen"
+      },
+      "refresh": {
+        "title": "Återställ prenumerationsdata",
+        "button": "Återställ data",
+        "action": "Återställ",
+        "message": "Är du säker på att du vill återställa prenumerationsdata? Efter detta kommer nycklarna och prenumerationsadressen att ändras till nya! Du måste lägga till prenumerationen i appen igen! Återställning görs vanligtvis om din prenumeration har läckt ut på nätet eller om någon har fått åtkomst till den!"
+      },
+      "autoRenewal": {
+        "enableTitle": "Aktivera automatisk förnyelse",
+        "disableTitle": "Inaktivera automatisk förnyelse",
+        "enableAction": "Aktivera",
+        "disableAction": "Inaktivera",
+        "enableMessage": "Vill du aktivera automatisk förnyelse av prenumerationen? Medel kommer att dras automatiskt när prenumerationen löper ut.",
+        "disableMessage": "Vill du inaktivera automatisk förnyelse av prenumerationen? Efter utgången kommer prenumerationen att avaktiveras."
+      },
+      "renew": {
+        "title": "Förnya prenumeration",
+        "action": "Förnya",
+        "message": "Vill du förnya prenumerationen? {price} stjärnor kommer att dras från ditt saldo."
+      }
+    }
+  },
+  "user": {
+    "role": "Roll",
+    "discount": "Rabatt",
+    "wallet": "Plånbok",
+    "usage": "Användning",
+    "inPayments": "i betalningar"
+  },
+  "wallet": {
+    "connect": "Anslut TON-plånbok",
+    "disconnect": "Koppla från",
+    "replace": "Ersätt"
+  },
+  "earning": {
+    "title": "Добыча",
+    "earned": "Награда получена",
+    "rewardTask": {
+      "title": "Посмотреть рекламу"
+    }
+  }
+}

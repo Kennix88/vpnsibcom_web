@@ -1,1 +1,396 @@
-{"billing":{"title":"Billing","description":"Bewegung Ihrer Finanzen","wallet":{"title":"Geldbörse","payment":"Aufladen","paymentInfo":"Konto, das für Zahlungen verwendet wird.","withdrawal":"Abheben","withdrawalInfo":"Konto, von dem Gelder abgehoben werden können.","holdInfo":"Gefrorene Gelder.\nSie werden bald auf das Zahlungskonto überwiesen."},"payment":{"title":"Guthaben aufladen","sum":"Aufladebetrag","enterSum":"Betrag eingeben","sort":{"all":"Alle","crypto":"Kryptowährung","card":"Karten","sbp":"SBP","wallets":"Geldbörsen","skins":"Skins"},"method":"Zahlungsmethode","split":"Kaufen Sie Telegram Stars ohne KYC mit einem Vorteil von bis zu 40% auf der Split-Plattform!","splitBay":"STARS kaufen","walletInfo":"Zahlen Sie in TON, USDT-TON, DOGS, NOT, HMSTR, JETTON und anderen Tokens des TON-Netzwerks, indem Sie eine TON-Geldbörse verbinden.","limitMessage":"Verfügbar von {min} bis {max} {symbol}. Aktuell: {convertedAmount} {symbol}","commission":"Provision","toBalance":"Wird auf das Guthaben gutgeschrieben","pay":"Zahlen"},"subscription":{"title":"Abonnement","addSubscription":"Abonnement hinzufügen","pay":"Zahlen","addFree":"🎁 Kostenlos hinzufügen","selectPeriod":"Periode auswählen","periodMultiplier":"Periodenmultiplikator","selectPlan":"Tarif auswählen","selectServer":"Server auswählen","base":"Basis","premium":"Premium","orSelect":"oder wählen Sie","name":{"default":"Abonnement","label":"Abonnementname","tooltip":"Abonnementname, der in der Abonnementliste angezeigt wird.","placeholder":"Abonnementname eingeben"},"privileges":{"selectServers":"Wählen Sie die gewünschten Server aus","oneBaseServer":"Einer der Basis-Server wählen","oneBaseOrPremiumServer":"Einer der Basis- oder Premium-Server wählen","accessAllServers":"Zugriff auf alle Server","accessAllBaseServers":"Zugriff auf alle Basis-Server","accessBaseServers":"Zugriff auf {{baseCount}} Basis-Server","accessBaseAndPremiumServers":"Zugriff auf {{baseCount}} Basis- und {{premiumCount}} Premium-Server","trafficPlan":"Keine Laufzeitbegrenzung, nur für Traffic bezahlen!","devices":"Bis zu {count} gleichzeitige Geräte","customDevices":"Benötigte Anzahl an Geräten","servers":"Zugriff auf alle Server","baseServers":"Zugriff auf Basis-Server","premiumServers":"Zugriff auf Premium-Server","customServers":"Benötigte Anzahl an Servern","traffic":"Unbegrenzter Traffic","customTraffic":"Benötigte Traffic-Menge","dailyTraffic":"{count} GB Traffic täglich","weeklyTraffic":"{count} GB Traffic wöchentlich","monthlyTraffic":"{count} GB Traffic monatlich","yearlyTraffic":"{count} GB Traffic jährlich","security":"Sichere Verbindung","speed":"Keine Geschwindigkeitsbeschränkungen","masking":"Maskierung Ihres Traffics","noAds":"Keine Werbung","devicesSupport":"Umfassende Geräteunterstützung","xray":"Zuverlässiger XRAY-Kern","opensource":"Open Source"},"trafficReset":{"title":"Traffic-Zurücksetzung","daily":"Täglich","weekly":"Wöchentlich","monthly":"Monatlich","yearly":"Jährlich"},"period":{"hour":"1 Stunde","day":"1 Tag","week":"1 Woche","month":"1 Monat","threeMonth":"3 Monate","sixMonth":"6 Monate","year":"1 Jahr","twoYear":"2 Jahre","threeYear":"3 Jahre","indefinitely":"Unbegrenzt"},"options":{"title":"Optionen","autoRenewal":"Automatische Verlängerung","autoRenewalDescription":"Abonnement automatisch verlängern","info":"Abonnement wird automatisch von Ihrem Guthaben verlängert","period":"Periode speichern"},"traffic":"Traffic","addTraffic":"Traffic hinzufügen","addingTraffic":"Traffic hinzufügen","buy":"Kaufen","extension":"Verlängerung","subscriptionExtension":"Abonnementverlängerung","freeExtension":"🎁 Kostenlos verlängern","summary":{"title":"Zusammenfassung","name":"Name","traffic":"Traffic","unlimit":"Unbegrenzt","daily":"täglich","weekly":"wöchentlich","monthly":"monatlich","yearly":"jährlich","servers":"Server","fullServers":"Zugriff auf alle","allBase":"Alle Basis-Server","notServers":"Nicht festgelegt!","period":"Periode","periodDiscount":"Rabatt für die Periode","roleDiscount":"Rabatt für die Rolle","autoRenewal":"Automatische Verlängerung","yes":"Ja","no":"Nein","toPaid":"Zu zahlen"},"purchase":"Zahlen"}},"common":{"modal":{"cancel":"Abbrechen","accept":"Akzeptieren","close":"Schließen"},"scrolling":"Nach unten scrollen","clipboard":{"copied":"In die Zwischenablage kopiert!","failed":"Kopieren fehlgeschlagen!"},"freePlan":{"trialAvailable":"Ihnen steht eine Testphase von {days} Tagen zur Verfügung.","activate":"Aktivieren","activationFailed":"Kostenloser Plan konnte nicht aktiviert werden"},"units":{"bytes":"B","kilobytes":"KB","megabytes":"MB","gigabytes":"GB","terabytes":"TB","petabytes":"PB","exabytes":"EB","zettabytes":"ZB","yottabytes":"YB"}},"freePlan":{"trialAvailable":"Ihnen stehen {gb} GB Bonustraffic für das Trial-Abonnement auf unbegrenzte Zeit zur Verfügung.","activate":"Aktivieren","activationFailed":"Kostenloser Plan konnte nicht aktiviert werden","modalTitle":"Testphase aktivieren","modalAction":"Aktivieren","modalConfirmation":"Möchten Sie die Testphase wirklich aktivieren?"},"friends":{"title":"Freunde","addFriend":"Freund hinzufügen","friendCode":"Freundescode","enterFriendCode":"Freundescode eingeben","inviteFriend":"Freund einladen","inviteLink":"Einladungslink","copy":"Kopieren","copied":"Kopiert","friendsList":"Freundesliste","noFriends":"Sie haben noch keine Freunde hinzugefügt","pendingRequests":"Ausstehende Anfragen","noPendingRequests":"Keine ausstehenden Anfragen","incomingRequests":"Eingehende Anfragen","noIncomingRequests":"Keine eingehenden Anfragen","accept":"Akzeptieren","decline":"Ablehnen","remove":"Entfernen","friendRemoved":"Freund erfolgreich entfernt","requestAccepted":"Anfrage erfolgreich angenommen","requestDeclined":"Anfrage erfolgreich abgelehnt","requestSent":"Anfrage erfolgreich gesendet","errors":{"addFriendFailed":"Freund konnte nicht hinzugefügt werden","removeFriendFailed":"Freund konnte nicht entfernt werden","acceptRequestFailed":"Anfrage konnte nicht angenommen werden","declineRequestFailed":"Anfrage konnte nicht abgelehnt werden","sendRequestFailed":"Anfrage konnte nicht gesendet werden","invalidFriendCode":"Ungültiger Freundescode","alreadyFriends":"Sie sind bereits Freunde","requestAlreadySent":"Anfrage bereits gesendet","selfAdd":"Sie können sich nicht selbst hinzufügen"},"get":"Получай вознаграждения","for":"за приглашение друзей","level":"уровень","total":"Всего","list":{"title":"Ваши друзья","top":"Топ","empty":"Здесь пока никого 🥲"},"bonuses":{"title":"Бонусы","inviteTitle":"За приглашение друга","paymentTitle":"За действия друга","inviteInfo":"После первой оплаты другом или активации пробного периода!","paymentInfo":"Получай процент от нашего дохода за друзей и тех кого пригласили ваши друзья навсегда!","lvl1Info":"Те кого пригласили вы","lvl2Info":"Те кого пригласили друзья","lvl3Info":"Те кого пригласили друзья друзей 😁"},"invite":{"title":"Пригласить друга","message":"Отправить сообщение","copy":"Копировать ссылку","story":"Отправить в сторис"},"statistics":{"title":"Статистика","earnTitle":"Ваша добыча","inviteTitle":"Приглашено","earnInfo":"Вы заработали за всё время","inviteInfo":"Приглашено | Активированы | Из них Standart | Из них Premium"}},"greenCheck":{"loading":"Sicherheitsprüfung der Verbindung läuft...","danger":"Ihre Verbindung ist NICHT geschützt!\nVerbinden Sie sich mit VPN!","success":"Ihre Verbindung ist geschützt!"},"navbar":{"main":"Hauptseite","profile":"Profil","subscriptions":"Abonnements","wallet":"Geldbörse","friends":"Freunde","free":"Kostenlos","settings":"Einstellungen","admin":"Admin","logout":"Abmelden","home":"Главная","earning":"Добыча","gifts":"Подарки","billing":"Биллинг","games":"Игры"},"subscriptions":{"title":"Abonnement","connection":"Verbindung","configs":"Konfigurationen","addSubscription":"Abonnement hinzufügen","addSubscriptionTitle":"Abonnement hinzufügen","yourSubscriptions":"Ihre Abonnements","noSubscriptions":"Sie haben keine aktiven Abonnements","loading":"Abonnementdaten werden geladen...","notFound":"Abonnement nicht gefunden","renewSubscription":"Abonnement verlängern","autoRenewalEnabled":"Automatische Verlängerung aktiviert","autoRenewalDisabled":"Automatische Verlängerung deaktiviert","subscriptionDeleted":"Abonnement wurde erfolgreich gelöscht","subscriptionDataUpdated":"Abonnementdaten wurden erfolgreich aktualisiert","subscriptionRenewed":"Abonnement erfolgreich verlängert","changeServer":"Server wechseln","changeServerTitle":"Serverwechsel","changeServerWarning":"ACHTUNG: Der Serverwechsel dauert 2 Minuten. Nach dem Serverwechsel müssen Sie die Daten in der Anwendung aktualisieren!","active":"Aktiv","notActive":"Nicht aktiv","online":"Online","offline":"Offline","traffic":"Traffic","trafficReset":{"daily":"Täglich","weekly":"Wöchentlich","monthly":"Monatlich","yearly":"Jährlich","unlimit":"Unbegrenzt"},"inTotal":"Insgesamt","servers":"Server","fullServers":"Zugang zu allen","allBase":"Alle Basis","base":"Basis","premium":"Premium","devices":"Geräte","period":"Zahlungsperiode","expires":"Läuft ab","autoRenewal":"Automatische Verlängerung","actions":"Aktionen","save":"Speichern","required":"Empfohlen!","paid":"Bezahlt!","instruction":{"stage1":"Anwendung herunterladen","stage2":"Abonnement zur Anwendung hinzufügen","copyUrl":"Abonnement-URL kopieren","openQR":"QR-Code des Abonnements","scanApp":"In der Anwendung scannen","scanPhone":"Auf dem Telefon scannen","add":"Zur Anwendung hinzufügen"},"platform":"Plattform","success":{"serversUpdated":"Server erfolgreich aktualisiert"},"errors":{"loadFailed":"Abonnements konnten nicht geladen werden","disableAutoRenewalFailed":"Fehler beim Deaktivieren der automatischen Verlängerung!","enableAutoRenewalFailed":"Fehler beim Aktivieren der automatischen Verlängerung!","deleteSubscriptionFailed":"Fehler beim Löschen des Abonnements!","resetSubscriptionFailed":"Fehler beim Zurücksetzen der Abonnementdaten!","renewSubscriptionFailed":"Abonnement konnte nicht verlängert werden!","fetchingServers":"Server konnten nicht geladen werden","updatingServers":"Server konnten nicht aktualisiert werden","serverLimitReached":"Sie haben das Serverlimit erreicht","serverLimitReachedPremium":"Sie haben das Premium-Serverlimit erreicht","serverLimitReachedBase":"Sie haben das Basis-Serverlimit erreicht"},"periods":{"trial":"Testphase","hour":"1 Stunde","day":"1 Tag","week":"1 Woche","month":"1 Monat","threeMonth":"3 Monate","sixMonth":"6 Monate","year":"1 Jahr","twoYear":"2 Jahre","threeYear":"3 Jahre","indefinitely":"Unbefristet"},"modals":{"delete":{"title":"Abonnement löschen","button":"Löschen","action":"Löschen","message":"Möchten Sie das Abonnement wirklich unwiderruflich löschen? Es kann nicht wiederhergestellt werden! Eine Entschädigung ist nicht vorgesehen!"},"qr":{"title":"QR-Code des Abonnements","description":"In der Client-Anwendung scannen"},"refresh":{"title":"Abonnementdaten zurücksetzen","button":"Daten zurücksetzen","action":"Zurücksetzen","message":"Möchten Sie die Abonnementdaten wirklich zurücksetzen? Danach ändern sich die Schlüssel und die Abonnementadresse zu neuen! Sie müssen das Abonnement erneut zur Anwendung hinzufügen! Normalerweise wird ein Reset durchgeführt, wenn Ihr Abonnement ins Netz gelangt ist oder jemand darauf Zugriff erhalten hat!"},"autoRenewal":{"enableTitle":"Automatische Verlängerung aktivieren","disableTitle":"Automatische Verlängerung deaktivieren","enableAction":"Aktivieren","disableAction":"Deaktivieren","enableMessage":"Möchten Sie die automatische Verlängerung des Abonnements aktivieren? Die Gelder werden automatisch bei Ablauf des Abonnements abgebucht.","disableMessage":"Möchten Sie die automatische Verlängerung des Abonnements deaktivieren? Nach Ablauf wird das Abonnement deaktiviert."},"renew":{"title":"Abonnement verlängern","action":"Verlängern","message":"Möchten Sie das Abonnement verlängern? {price} Sterne werden von Ihrem Guthaben abgebucht."}}},"user":{"role":"Rolle","discount":"Rabatt","wallet":"Geldbörse","usage":"Verwendung","inPayments":"bei Zahlungen"},"wallet":{"connect":"TON-Wallet verbinden","disconnect":"Trennen","replace":"Ersetzen"},"earning":{"title":"Добыча","earned":"Награда получена","rewardTask":{"title":"Посмотреть рекламу"}}}
+{
+  "billing": {
+    "title": "Billing",
+    "description": "Bewegung Ihrer Finanzen",
+    "wallet": {
+      "title": "Geldbörse",
+      "payment": "Aufladen",
+      "paymentInfo": "Konto, das für Zahlungen verwendet wird.",
+      "withdrawal": "Abheben",
+      "withdrawalInfo": "Konto, von dem Gelder abgehoben werden können.",
+      "holdInfo": "Gefrorene Gelder.\nSie werden bald auf das Zahlungskonto überwiesen."
+    },
+    "payment": {
+      "title": "Guthaben aufladen",
+      "sum": "Aufladebetrag",
+      "enterSum": "Betrag eingeben",
+      "sort": {
+        "all": "Alle",
+        "crypto": "Kryptowährung",
+        "card": "Karten",
+        "sbp": "SBP",
+        "wallets": "Geldbörsen",
+        "skins": "Skins"
+      },
+      "method": "Zahlungsmethode",
+      "split": "Kaufen Sie Telegram Stars ohne KYC mit einem Vorteil von bis zu 40% auf der Split-Plattform!",
+      "splitBay": "STARS kaufen",
+      "walletInfo": "Zahlen Sie in TON, USDT-TON, DOGS, NOT, HMSTR, JETTON und anderen Tokens des TON-Netzwerks, indem Sie eine TON-Geldbörse verbinden.",
+      "limitMessage": "Verfügbar von {min} bis {max} {symbol}. Aktuell: {convertedAmount} {symbol}",
+      "commission": "Provision",
+      "toBalance": "Wird auf das Guthaben gutgeschrieben",
+      "pay": "Zahlen"
+    },
+    "subscription": {
+      "title": "Abonnement",
+      "addSubscription": "Abonnement hinzufügen",
+      "pay": "Zahlen",
+      "addFree": "🎁 Kostenlos hinzufügen",
+      "selectPeriod": "Periode auswählen",
+      "periodMultiplier": "Periodenmultiplikator",
+      "selectPlan": "Tarif auswählen",
+      "selectServer": "Server auswählen",
+      "base": "Basis",
+      "premium": "Premium",
+      "orSelect": "oder wählen Sie",
+      "name": {
+        "default": "Abonnement",
+        "label": "Abonnementname",
+        "tooltip": "Abonnementname, der in der Abonnementliste angezeigt wird.",
+        "placeholder": "Abonnementname eingeben"
+      },
+      "privileges": {
+        "selectServers": "Wählen Sie die gewünschten Server aus",
+        "oneBaseServer": "Einer der Basis-Server wählen",
+        "oneBaseOrPremiumServer": "Einer der Basis- oder Premium-Server wählen",
+        "accessAllServers": "Zugriff auf alle Server",
+        "accessAllBaseServers": "Zugriff auf alle Basis-Server",
+        "accessBaseServers": "Zugriff auf {{baseCount}} Basis-Server",
+        "accessBaseAndPremiumServers": "Zugriff auf {{baseCount}} Basis- und {{premiumCount}} Premium-Server",
+        "trafficPlan": "Keine Laufzeitbegrenzung, nur für Traffic bezahlen!",
+        "devices": "Bis zu {count} gleichzeitige Geräte",
+        "customDevices": "Benötigte Anzahl an Geräten",
+        "servers": "Zugriff auf alle Server",
+        "baseServers": "Zugriff auf Basis-Server",
+        "premiumServers": "Zugriff auf Premium-Server",
+        "customServers": "Benötigte Anzahl an Servern",
+        "traffic": "Unbegrenzter Traffic",
+        "customTraffic": "Benötigte Traffic-Menge",
+        "dailyTraffic": "{count} GB Traffic täglich",
+        "weeklyTraffic": "{count} GB Traffic wöchentlich",
+        "monthlyTraffic": "{count} GB Traffic monatlich",
+        "yearlyTraffic": "{count} GB Traffic jährlich",
+        "security": "Sichere Verbindung",
+        "speed": "Keine Geschwindigkeitsbeschränkungen",
+        "masking": "Maskierung Ihres Traffics",
+        "noAds": "Keine Werbung",
+        "devicesSupport": "Umfassende Geräteunterstützung",
+        "xray": "Zuverlässiger XRAY-Kern",
+        "opensource": "Open Source"
+      },
+      "trafficReset": {
+        "title": "Traffic-Zurücksetzung",
+        "daily": "Täglich",
+        "weekly": "Wöchentlich",
+        "monthly": "Monatlich",
+        "yearly": "Jährlich"
+      },
+      "period": {
+        "hour": "1 Stunde",
+        "day": "1 Tag",
+        "week": "1 Woche",
+        "month": "1 Monat",
+        "threeMonth": "3 Monate",
+        "sixMonth": "6 Monate",
+        "year": "1 Jahr",
+        "twoYear": "2 Jahre",
+        "threeYear": "3 Jahre",
+        "indefinitely": "Unbegrenzt"
+      },
+      "options": {
+        "title": "Optionen",
+        "autoRenewal": "Automatische Verlängerung",
+        "autoRenewalDescription": "Abonnement automatisch verlängern",
+        "info": "Abonnement wird automatisch von Ihrem Guthaben verlängert",
+        "period": "Periode speichern"
+      },
+      "traffic": "Traffic",
+      "addTraffic": "Traffic hinzufügen",
+      "addingTraffic": "Traffic hinzufügen",
+      "buy": "Kaufen",
+      "extension": "Verlängerung",
+      "subscriptionExtension": "Abonnementverlängerung",
+      "freeExtension": "🎁 Kostenlos verlängern",
+      "summary": {
+        "title": "Zusammenfassung",
+        "name": "Name",
+        "traffic": "Traffic",
+        "unlimit": "Unbegrenzt",
+        "daily": "täglich",
+        "weekly": "wöchentlich",
+        "monthly": "monatlich",
+        "yearly": "jährlich",
+        "servers": "Server",
+        "fullServers": "Zugriff auf alle",
+        "allBase": "Alle Basis-Server",
+        "notServers": "Nicht festgelegt!",
+        "period": "Periode",
+        "periodDiscount": "Rabatt für die Periode",
+        "roleDiscount": "Rabatt für die Rolle",
+        "autoRenewal": "Automatische Verlängerung",
+        "yes": "Ja",
+        "no": "Nein",
+        "toPaid": "Zu zahlen"
+      },
+      "purchase": "Zahlen"
+    }
+  },
+  "common": {
+    "modal": {
+      "cancel": "Abbrechen",
+      "accept": "Akzeptieren",
+      "close": "Schließen"
+    },
+    "scrolling": "Nach unten scrollen",
+    "clipboard": {
+      "copied": "In die Zwischenablage kopiert!",
+      "failed": "Kopieren fehlgeschlagen!"
+    },
+    "freePlan": {
+      "trialAvailable": "Ihnen steht eine Testphase von {days} Tagen zur Verfügung.",
+      "activate": "Aktivieren",
+      "activationFailed": "Kostenloser Plan konnte nicht aktiviert werden"
+    },
+    "units": {
+      "bytes": "B",
+      "kilobytes": "KB",
+      "megabytes": "MB",
+      "gigabytes": "GB",
+      "terabytes": "TB",
+      "petabytes": "PB",
+      "exabytes": "EB",
+      "zettabytes": "ZB",
+      "yottabytes": "YB"
+    }
+  },
+  "freePlan": {
+    "trialAvailable": "Ihnen stehen {gb} GB Bonustraffic für das Trial-Abonnement auf unbegrenzte Zeit zur Verfügung.",
+    "activate": "Aktivieren",
+    "activationFailed": "Kostenloser Plan konnte nicht aktiviert werden",
+    "modalTitle": "Testphase aktivieren",
+    "modalAction": "Aktivieren",
+    "modalConfirmation": "Möchten Sie die Testphase wirklich aktivieren?"
+  },
+  "friends": {
+    "title": "Freunde",
+    "addFriend": "Freund hinzufügen",
+    "friendCode": "Freundescode",
+    "enterFriendCode": "Freundescode eingeben",
+    "inviteFriend": "Freund einladen",
+    "inviteLink": "Einladungslink",
+    "copy": "Kopieren",
+    "copied": "Kopiert",
+    "friendsList": "Freundesliste",
+    "noFriends": "Sie haben noch keine Freunde hinzugefügt",
+    "pendingRequests": "Ausstehende Anfragen",
+    "noPendingRequests": "Keine ausstehenden Anfragen",
+    "incomingRequests": "Eingehende Anfragen",
+    "noIncomingRequests": "Keine eingehenden Anfragen",
+    "accept": "Akzeptieren",
+    "decline": "Ablehnen",
+    "remove": "Entfernen",
+    "friendRemoved": "Freund erfolgreich entfernt",
+    "requestAccepted": "Anfrage erfolgreich angenommen",
+    "requestDeclined": "Anfrage erfolgreich abgelehnt",
+    "requestSent": "Anfrage erfolgreich gesendet",
+    "errors": {
+      "addFriendFailed": "Freund konnte nicht hinzugefügt werden",
+      "removeFriendFailed": "Freund konnte nicht entfernt werden",
+      "acceptRequestFailed": "Anfrage konnte nicht angenommen werden",
+      "declineRequestFailed": "Anfrage konnte nicht abgelehnt werden",
+      "sendRequestFailed": "Anfrage konnte nicht gesendet werden",
+      "invalidFriendCode": "Ungültiger Freundescode",
+      "alreadyFriends": "Sie sind bereits Freunde",
+      "requestAlreadySent": "Anfrage bereits gesendet",
+      "selfAdd": "Sie können sich nicht selbst hinzufügen"
+    },
+    "get": "Получай вознаграждения",
+    "for": "за приглашение друзей",
+    "level": "уровень",
+    "total": "Всего",
+    "list": {
+      "title": "Ваши друзья",
+      "top": "Топ",
+      "empty": "Здесь пока никого 🥲"
+    },
+    "bonuses": {
+      "title": "Бонусы",
+      "inviteTitle": "За приглашение друга",
+      "paymentTitle": "За действия друга",
+      "inviteInfo": "После первой оплаты другом или активации пробного периода!",
+      "paymentInfo": "Получай процент от нашего дохода за друзей и тех кого пригласили ваши друзья навсегда!",
+      "lvl1Info": "Те кого пригласили вы",
+      "lvl2Info": "Те кого пригласили друзья",
+      "lvl3Info": "Те кого пригласили друзья друзей 😁"
+    },
+    "invite": {
+      "title": "Пригласить друга",
+      "message": "Отправить сообщение",
+      "copy": "Копировать ссылку",
+      "story": "Отправить в сторис"
+    },
+    "statistics": {
+      "title": "Статистика",
+      "earnTitle": "Ваша добыча",
+      "inviteTitle": "Приглашено",
+      "earnInfo": "Вы заработали за всё время",
+      "inviteInfo": "Приглашено | Активированы | Из них Standart | Из них Premium"
+    }
+  },
+  "greenCheck": {
+    "loading": "Sicherheitsprüfung der Verbindung läuft...",
+    "danger": "Ihre Verbindung ist NICHT geschützt!\nVerbinden Sie sich mit VPN!",
+    "success": "Ihre Verbindung ist geschützt!"
+  },
+  "navbar": {
+    "main": "Hauptseite",
+    "profile": "Profil",
+    "subscriptions": "Abonnements",
+    "wallet": "Geldbörse",
+    "friends": "Freunde",
+    "free": "Kostenlos",
+    "settings": "Einstellungen",
+    "admin": "Admin",
+    "logout": "Abmelden",
+    "home": "Главная",
+    "earning": "Добыча",
+    "gifts": "Подарки",
+    "billing": "Биллинг",
+    "games": "Игры"
+  },
+  "subscriptions": {
+    "title": "Abonnement",
+    "connection": "Verbindung",
+    "configs": "Konfigurationen",
+    "addSubscription": "Abonnement hinzufügen",
+    "addSubscriptionTitle": "Abonnement hinzufügen",
+    "yourSubscriptions": "Ihre Abonnements",
+    "noSubscriptions": "Sie haben keine aktiven Abonnements",
+    "loading": "Abonnementdaten werden geladen...",
+    "notFound": "Abonnement nicht gefunden",
+    "renewSubscription": "Abonnement verlängern",
+    "autoRenewalEnabled": "Automatische Verlängerung aktiviert",
+    "autoRenewalDisabled": "Automatische Verlängerung deaktiviert",
+    "subscriptionDeleted": "Abonnement wurde erfolgreich gelöscht",
+    "subscriptionDataUpdated": "Abonnementdaten wurden erfolgreich aktualisiert",
+    "subscriptionRenewed": "Abonnement erfolgreich verlängert",
+    "changeServer": "Server wechseln",
+    "changeServerTitle": "Serverwechsel",
+    "changeServerWarning": "ACHTUNG: Der Serverwechsel dauert 2 Minuten. Nach dem Serverwechsel müssen Sie die Daten in der Anwendung aktualisieren!",
+    "active": "Aktiv",
+    "notActive": "Nicht aktiv",
+    "online": "Online",
+    "offline": "Offline",
+    "traffic": "Traffic",
+    "trafficReset": {
+      "daily": "Täglich",
+      "weekly": "Wöchentlich",
+      "monthly": "Monatlich",
+      "yearly": "Jährlich",
+      "unlimit": "Unbegrenzt"
+    },
+    "inTotal": "Insgesamt",
+    "servers": "Server",
+    "fullServers": "Zugang zu allen",
+    "allBase": "Alle Basis",
+    "base": "Basis",
+    "premium": "Premium",
+    "devices": "Geräte",
+    "period": "Zahlungsperiode",
+    "expires": "Läuft ab",
+    "autoRenewal": "Automatische Verlängerung",
+    "actions": "Aktionen",
+    "save": "Speichern",
+    "required": "Empfohlen!",
+    "paid": "Bezahlt!",
+    "instruction": {
+      "stage1": "Anwendung herunterladen",
+      "stage2": "Abonnement zur Anwendung hinzufügen",
+      "copyUrl": "Abonnement-URL kopieren",
+      "openQR": "QR-Code des Abonnements",
+      "scanApp": "In der Anwendung scannen",
+      "scanPhone": "Auf dem Telefon scannen",
+      "add": "Zur Anwendung hinzufügen"
+    },
+    "platform": "Plattform",
+    "success": {
+      "serversUpdated": "Server erfolgreich aktualisiert"
+    },
+    "errors": {
+      "loadFailed": "Abonnements konnten nicht geladen werden",
+      "disableAutoRenewalFailed": "Fehler beim Deaktivieren der automatischen Verlängerung!",
+      "enableAutoRenewalFailed": "Fehler beim Aktivieren der automatischen Verlängerung!",
+      "deleteSubscriptionFailed": "Fehler beim Löschen des Abonnements!",
+      "resetSubscriptionFailed": "Fehler beim Zurücksetzen der Abonnementdaten!",
+      "renewSubscriptionFailed": "Abonnement konnte nicht verlängert werden!",
+      "fetchingServers": "Server konnten nicht geladen werden",
+      "updatingServers": "Server konnten nicht aktualisiert werden",
+      "serverLimitReached": "Sie haben das Serverlimit erreicht",
+      "serverLimitReachedPremium": "Sie haben das Premium-Serverlimit erreicht",
+      "serverLimitReachedBase": "Sie haben das Basis-Serverlimit erreicht"
+    },
+    "periods": {
+      "trial": "Testphase",
+      "hour": "1 Stunde",
+      "day": "1 Tag",
+      "week": "1 Woche",
+      "month": "1 Monat",
+      "threeMonth": "3 Monate",
+      "sixMonth": "6 Monate",
+      "year": "1 Jahr",
+      "twoYear": "2 Jahre",
+      "threeYear": "3 Jahre",
+      "indefinitely": "Unbefristet"
+    },
+    "modals": {
+      "delete": {
+        "title": "Abonnement löschen",
+        "button": "Löschen",
+        "action": "Löschen",
+        "message": "Möchten Sie das Abonnement wirklich unwiderruflich löschen? Es kann nicht wiederhergestellt werden! Eine Entschädigung ist nicht vorgesehen!"
+      },
+      "qr": {
+        "title": "QR-Code des Abonnements",
+        "description": "In der Client-Anwendung scannen"
+      },
+      "refresh": {
+        "title": "Abonnementdaten zurücksetzen",
+        "button": "Daten zurücksetzen",
+        "action": "Zurücksetzen",
+        "message": "Möchten Sie die Abonnementdaten wirklich zurücksetzen? Danach ändern sich die Schlüssel und die Abonnementadresse zu neuen! Sie müssen das Abonnement erneut zur Anwendung hinzufügen! Normalerweise wird ein Reset durchgeführt, wenn Ihr Abonnement ins Netz gelangt ist oder jemand darauf Zugriff erhalten hat!"
+      },
+      "autoRenewal": {
+        "enableTitle": "Automatische Verlängerung aktivieren",
+        "disableTitle": "Automatische Verlängerung deaktivieren",
+        "enableAction": "Aktivieren",
+        "disableAction": "Deaktivieren",
+        "enableMessage": "Möchten Sie die automatische Verlängerung des Abonnements aktivieren? Die Gelder werden automatisch bei Ablauf des Abonnements abgebucht.",
+        "disableMessage": "Möchten Sie die automatische Verlängerung des Abonnements deaktivieren? Nach Ablauf wird das Abonnement deaktiviert."
+      },
+      "renew": {
+        "title": "Abonnement verlängern",
+        "action": "Verlängern",
+        "message": "Möchten Sie das Abonnement verlängern? {price} Sterne werden von Ihrem Guthaben abgebucht."
+      }
+    }
+  },
+  "user": {
+    "role": "Rolle",
+    "discount": "Rabatt",
+    "wallet": "Geldbörse",
+    "usage": "Verwendung",
+    "inPayments": "bei Zahlungen"
+  },
+  "wallet": {
+    "connect": "TON-Wallet verbinden",
+    "disconnect": "Trennen",
+    "replace": "Ersetzen"
+  },
+  "earning": {
+    "title": "Добыча",
+    "earned": "Награда получена",
+    "rewardTask": {
+      "title": "Посмотреть рекламу"
+    }
+  }
+}

@@ -1,1 +1,359 @@
-{"billing":{"title":"الفواتير","description":"حركة أموالك","wallet":{"title":"المحفظة","payment":"تعبئة الرصيد","paymentInfo":"الحساب المستخدم للمدفوعات.","withdrawal":"سحب","withdrawalInfo":"الحساب الذي يمكن سحب الأموال منه.","holdInfo":"الأموال المجمدة.\nستصل قريباً إلى حساب الدفع."},"payment":{"title":"تعبئة الرصيد","sum":"مبلغ التعبئة","enterSum":"أدخل المبلغ","sort":{"all":"الكل","crypto":"العملات المشفرة","card":"البطاقات","sbp":"SBP","wallets":"المحافظ","skins":"الجلود"},"method":"طريقة الدفع","split":"يمكنك شراء Telegram Stars بدون KYC، بخصم يصل إلى 40% على منصة Split!","splitBay":"شراء STARS","walletInfo":"ادفع في TON، USDT-TON، DOGS، NOT، HMSTR، JETTON وغيرها من رموز شبكة TON عن طريق ربط محفظة TON.","limitMessage":"متاح من {min} إلى {max} {symbol}. حالياً: {convertedAmount} {symbol}","commission":"العمولة","toBalance":"سيصل إلى الرصيد","pay":"دفع"},"subscription":{"title":"الاشتراك","addSubscription":"إضافة اشتراك","pay":"دفع","addFree":"🎁 إضافة مجانية","selectPeriod":"اختر الفترة","periodMultiplier":"مضاعف الفترة","selectPlan":"اختر الخطة","selectServer":"اختر الخادم","base":"أساسي","premium":"مميز","orSelect":"أو اختر","name":{"default":"الاشتراك","label":"اسم الاشتراك","tooltip":"اسم الاشتراك الذي سيظهر في قائمة الاشتراكات.","placeholder":"أدخل اسم الاشتراك"},"privileges":{"selectServers":"اختر الخوادم التي تحتاجها","oneBaseServer":"خادم أساسي واحد للاختيار","oneBaseOrPremiumServer":"خادم أساسي أو مميز واحد للاختيار","accessAllServers":"الوصول إلى جميع الخوادم","accessAllBaseServers":"الوصول إلى جميع الخوادم الأساسية","accessBaseServers":"الوصول إلى {{baseCount}} خادم أساسي","accessBaseAndPremiumServers":"الوصول إلى {{baseCount}} خادم أساسي و {{premiumCount}} خادم مميز","trafficPlan":"بدون تاريخ انتهاء، الدفع فقط مقابل حركة المرور!","devices":"حتى {count} جهاز متزامن","customDevices":"العدد المطلوب من الأجهزة","servers":"الوصول إلى جميع الخوادم","baseServers":"الوصول إلى الخوادم الأساسية","premiumServers":"الوصول إلى الخوادم المميزة","customServers":"العدد المطلوب من الخوادم","traffic":"حركة مرور غير محدودة","customTraffic":"الكمية المطلوبة من حركة المرور","dailyTraffic":"{count} جيجابايت حركة مرور يومياً","weeklyTraffic":"{count} جيجابايت حركة مرور أسبوعياً","monthlyTraffic":"{count} جيجابايت حركة مرور شهرياً","yearlyTraffic":"{count} جيجابايت حركة مرور سنوياً","security":"اتصال آمن","speed":"لا توجد قيود على السرعة","masking":"إخفاء حركة المرور الخاصة بك","noAds":"لا إعلانات","devicesSupport":"دعم واسع للأجهزة","xray":"نواة XRAY موثوقة","opensource":"مصدر مفتوح"},"trafficReset":{"title":"إعادة تعيين حركة المرور","daily":"يومياً","weekly":"أسبوعياً","monthly":"شهرياً","yearly":"سنوياً"},"period":{"hour":"ساعة واحدة","day":"يوم واحد","week":"أسبوع واحد","month":"شهر واحد","threeMonth":"3 أشهر","sixMonth":"6 أشهر","year":"سنة واحدة","twoYear":"سنتان","threeYear":"3 سنوات","indefinitely":"غير محدد"},"options":{"title":"الخيارات","autoRenewal":"التجديد التلقائي","autoRenewalDescription":"تجديد الاشتراك تلقائياً","info":"سيتم تجديد الاشتراك تلقائياً من رصيدك","period":"تذكر الفترة"},"traffic":"حركة المرور","addTraffic":"إضافة حركة مرور","addingTraffic":"إضافة حركة مرور","buy":"شراء إضافي","extension":"تمديد","subscriptionExtension":"تمديد الاشتراك","freeExtension":"🎁 تمديد مجاني","summary":{"title":"الإجمالي","name":"الاسم","traffic":"حركة المرور","unlimit":"غير محدود","daily":"يومياً","weekly":"أسبوعياً","monthly":"شهرياً","yearly":"سنوياً","servers":"الخوادم","fullServers":"الوصول إلى الكل","allBase":"جميع الأساسية","notServers":"لم يتم التعيين!","period":"الفترة","periodDiscount":"خصم الفترة","roleDiscount":"خصم الدور","autoRenewal":"التجديد التلقائي","yes":"نعم","no":"لا","toPaid":"للدفع"},"purchase":"شراء"}},"common":{"modal":{"cancel":"إلغاء","accept":"قبول","close":"إغلاق"},"scrolling":"مرر للأسفل","clipboard":{"copied":"تم النسخ إلى الحافظة!","failed":"فشل النسخ!"},"freePlan":{"trialAvailable":"يتوفر لك فترة تجريبية لمدة {days} أيام.","activate":"تفعيل","activationFailed":"فشل تفعيل الخطة المجانية"},"units":{"bytes":"بايت","kilobytes":"كيلوبايت","megabytes":"ميجابايت","gigabytes":"جيجابايت","terabytes":"تيرابايت","petabytes":"بيتابايت","exabytes":"إكسابايت","zettabytes":"زيتابايت","yottabytes":"يوتابايت"}},"freePlan":{"trialAvailable":"يتوفر لك {gb} جيجابايت من حركة المرور الإضافية لاشتراك التجربة لفترة غير محدودة.","activate":"تفعيل","activationFailed":"فشل تفعيل الخطة المجانية","modalTitle":"تفعيل الفترة التجريبية","modalAction":"تفعيل","modalConfirmation":"هل أنت متأكد أنك تريد تفعيل الفترة التجريبية؟"},"friends":{"title":"الأصدقاء","get":"احصل على مكافآت","for":"لدعوة الأصدقاء","level":"المستوى","total":"المجموع","list":{"title":"أصدقاؤك","top":"الأعلى","empty":"لا يوجد أحد هنا بعد 🥲"},"bonuses":{"title":"المكافآت","inviteTitle":"لدعوة صديق","paymentTitle":"لأفعال الصديق","inviteInfo":"بعد الدفعة الأولى من الصديق أو تفعيل الفترة التجريبية!","paymentInfo":"احصل على نسبة مئوية من أرباحنا من الأصدقاء ومن دعاهم أصدقاؤك إلى الأبد!","lvl1Info":"الذين دعوتهم","lvl2Info":"الذين دعاهم الأصدقاء","lvl3Info":"الذين دعاهم أصدقاء الأصدقاء 😁"},"invite":{"title":"دعوة صديق","message":"إرسال رسالة","copy":"نسخ الرابط","story":"إرسال إلى القصص"},"statistics":{"title":"الإحصائيات","earnTitle":"أرباحك","inviteTitle":"مدعو","earnInfo":"لقد ربحت طوال الوقت","inviteInfo":"مدعو | مفعل | منهم ستاندرد | منهم بريميوم"}},"greenCheck":{"loading":"جاري التحقق من أمان الاتصال...","danger":"اتصالك غير آمن!\nاتصل بشبكة VPN!","success":"اتصالك آمن!"},"navbar":{"home":"الرئيسية","earning":"الكسب","gifts":"الهدايا","friends":"الأصدقاء","billing":"الفواتير","settings":"الإعدادات","profile":"الملف الشخصي","games":"الألعاب"},"subscriptions":{"title":"الاشتراك","connection":"الاتصال","configs":"التكوينات","addSubscription":"إضافة اشتراك","addSubscriptionTitle":"إضافة اشتراك","yourSubscriptions":"اشتراكاتك","noSubscriptions":"ليس لديك اشتراكات نشطة","loading":"جارٍ تحميل بيانات الاشتراك...","notFound":"الاشتراك غير موجود","renewSubscription":"تجديد الاشتراك","autoRenewalEnabled":"التجديد التلقائي ممكّن","autoRenewalDisabled":"التجديد التلقائي معطل","subscriptionDeleted":"تم حذف الاشتراك بنجاح","subscriptionDataUpdated":"تم تحديث بيانات الاشتراك بنجاح","subscriptionRenewed":"تم تجديد الاشتراك بنجاح","changeServer":"تغيير الخادم","changeServerTitle":"تغيير الخادم","changeServerWarning":"تحذير: يستغرق تغيير الخادم دقيقتين. بعد تغيير الخادم، يجب تحديث البيانات في التطبيق!","active":"نشط","notActive":"غير نشط","online":"متصل","offline":"غير متصل","traffic":"حركة المرور","trafficReset":{"daily":"يومي","weekly":"أسبوعي","monthly":"شهري","yearly":"سنوي","unlimit":"غير محدود"},"inTotal":"الإجمالي","servers":"الخوادم","fullServers":"الوصول إلى الكل","allBase":"جميع الأساسية","base":"أساسي","premium":"مميز","devices":"الأجهزة","period":"فترة الدفع","expires":"ينتهي في","autoRenewal":"التجديد التلقائي","actions":"الإجراءات","save":"حفظ","required":"مطلوب!","paid":"مدفوع!","instruction":{"stage1":"تنزيل التطبيق","stage2":"إضافة اشتراك إلى التطبيق","copyUrl":"نسخ رابط الاشتراك","openQR":"رمز QR للاشتراك","scanApp":"امسح في التطبيق","scanPhone":"امسح في الهاتف","add":"إضافة إلى التطبيق"},"platform":"المنصة","success":{"serversUpdated":"تم تحديث الخوادم بنجاح"},"errors":{"loadFailed":"فشل تحميل الاشتراكات","disableAutoRenewalFailed":"فشل تعطيل التجديد التلقائي!","enableAutoRenewalFailed":"فشل تمكين التجديد التلقائي!","deleteSubscriptionFailed":"فشل حذف الاشتراك!","resetSubscriptionFailed":"فشل إعادة تعيين بيانات الاشتراك!","renewSubscriptionFailed":"فشل تجديد الاشتراك!","fetchingServers":"فشل جلب الخوادم","updatingServers":"فشل تحديث الخوادم","serverLimitReached":"لقد وصلت إلى حد الخوادم","serverLimitReachedPremium":"لقد وصلت إلى حد الخوادم المميزة","serverLimitReachedBase":"لقد وصلت إلى حد الخوادم الأساسية"},"periods":{"trial":"فترة تجريبية","hour":"1 ساعة","day":"1 يوم","week":"1 أسبوع","month":"1 شهر","threeMonth":"3 أشهر","sixMonth":"6 أشهر","year":"1 سنة","twoYear":"2 سنة","threeYear":"3 سنوات","indefinitely":"إلى أجل غير مسمى"},"modals":{"delete":{"title":"حذف الاشتراك","button":"حذف","action":"حذف","message":"هل أنت متأكد أنك تريد حذف الاشتراك نهائيًا؟ لا يمكن استعادته! لا يوجد تعويض!"},"qr":{"title":"رمز QR للاشتراك","description":"امسح في التطبيق العميل"},"refresh":{"title":"إعادة تعيين بيانات الاشتراك","button":"إعادة تعيين البيانات","action":"إعادة تعيين","message":"هل أنت متأكد أنك تريد إعادة تعيين بيانات الاشتراك؟ بعد ذلك، ستتغير المفاتيح وعنوان الاشتراك إلى مفاتيح جديدة! ستحتاج إلى إضافة الاشتراك إلى التطبيق مرة أخرى! عادةً ما يتم إجراء إعادة التعيين إذا تم تسريب اشتراكك إلى الشبكة أو إذا وصل إليه شخص ما!"},"autoRenewal":{"enableTitle":"تمكين التجديد التلقائي","disableTitle":"تعطيل التجديد التلقائي","enableAction":"تمكين","disableAction":"تعطيل","enableMessage":"هل تريد تمكين التجديد التلقائي للاشتراك؟ سيتم خصم الأموال تلقائيًا عند انتهاء صلاحية الاشتراك.","disableMessage":"هل تريد تعطيل التجديد التلقائي للاشتراك؟ بعد انتهاء صلاحية الاشتراك، سيتم إلغاء تنشيطه."},"renew":{"title":"تجديد الاشتراك","action":"تجديد","message":"هل تريد تجديد الاشتراك؟ سيتم خصم {price} نجمة من رصيدك."}}},"user":{"role":"الدور","discount":"الخصم","wallet":"المحفظة","usage":"الاستخدام","inPayments":"في المدفوعات"},"wallet":{"connect":"ربط محفظة TON","disconnect":"فصل","replace":"استبدال"},"earning":{"title":"Добыча","earned":"Награда получена","rewardTask":{"title":"Посмотреть рекламу"}}}
+{
+  "billing": {
+    "title": "الفواتير",
+    "description": "حركة أموالك",
+    "wallet": {
+      "title": "المحفظة",
+      "payment": "تعبئة الرصيد",
+      "paymentInfo": "الحساب المستخدم للمدفوعات.",
+      "withdrawal": "سحب",
+      "withdrawalInfo": "الحساب الذي يمكن سحب الأموال منه.",
+      "holdInfo": "الأموال المجمدة.\nستصل قريباً إلى حساب الدفع."
+    },
+    "payment": {
+      "title": "تعبئة الرصيد",
+      "sum": "مبلغ التعبئة",
+      "enterSum": "أدخل المبلغ",
+      "sort": {
+        "all": "الكل",
+        "crypto": "العملات المشفرة",
+        "card": "البطاقات",
+        "sbp": "SBP",
+        "wallets": "المحافظ",
+        "skins": "الجلود"
+      },
+      "method": "طريقة الدفع",
+      "split": "يمكنك شراء Telegram Stars بدون KYC، بخصم يصل إلى 40% على منصة Split!",
+      "splitBay": "شراء STARS",
+      "walletInfo": "ادفع في TON، USDT-TON، DOGS، NOT، HMSTR، JETTON وغيرها من رموز شبكة TON عن طريق ربط محفظة TON.",
+      "limitMessage": "متاح من {min} إلى {max} {symbol}. حالياً: {convertedAmount} {symbol}",
+      "commission": "العمولة",
+      "toBalance": "سيصل إلى الرصيد",
+      "pay": "دفع"
+    },
+    "subscription": {
+      "title": "الاشتراك",
+      "addSubscription": "إضافة اشتراك",
+      "pay": "دفع",
+      "addFree": "🎁 إضافة مجانية",
+      "selectPeriod": "اختر الفترة",
+      "periodMultiplier": "مضاعف الفترة",
+      "selectPlan": "اختر الخطة",
+      "selectServer": "اختر الخادم",
+      "base": "أساسي",
+      "premium": "مميز",
+      "orSelect": "أو اختر",
+      "name": {
+        "default": "الاشتراك",
+        "label": "اسم الاشتراك",
+        "tooltip": "اسم الاشتراك الذي سيظهر في قائمة الاشتراكات.",
+        "placeholder": "أدخل اسم الاشتراك"
+      },
+      "privileges": {
+        "selectServers": "اختر الخوادم التي تحتاجها",
+        "oneBaseServer": "خادم أساسي واحد للاختيار",
+        "oneBaseOrPremiumServer": "خادم أساسي أو مميز واحد للاختيار",
+        "accessAllServers": "الوصول إلى جميع الخوادم",
+        "accessAllBaseServers": "الوصول إلى جميع الخوادم الأساسية",
+        "accessBaseServers": "الوصول إلى {{baseCount}} خادم أساسي",
+        "accessBaseAndPremiumServers": "الوصول إلى {{baseCount}} خادم أساسي و {{premiumCount}} خادم مميز",
+        "trafficPlan": "بدون تاريخ انتهاء، الدفع فقط مقابل حركة المرور!",
+        "devices": "حتى {count} جهاز متزامن",
+        "customDevices": "العدد المطلوب من الأجهزة",
+        "servers": "الوصول إلى جميع الخوادم",
+        "baseServers": "الوصول إلى الخوادم الأساسية",
+        "premiumServers": "الوصول إلى الخوادم المميزة",
+        "customServers": "العدد المطلوب من الخوادم",
+        "traffic": "حركة مرور غير محدودة",
+        "customTraffic": "الكمية المطلوبة من حركة المرور",
+        "dailyTraffic": "{count} جيجابايت حركة مرور يومياً",
+        "weeklyTraffic": "{count} جيجابايت حركة مرور أسبوعياً",
+        "monthlyTraffic": "{count} جيجابايت حركة مرور شهرياً",
+        "yearlyTraffic": "{count} جيجابايت حركة مرور سنوياً",
+        "security": "اتصال آمن",
+        "speed": "لا توجد قيود على السرعة",
+        "masking": "إخفاء حركة المرور الخاصة بك",
+        "noAds": "لا إعلانات",
+        "devicesSupport": "دعم واسع للأجهزة",
+        "xray": "نواة XRAY موثوقة",
+        "opensource": "مصدر مفتوح"
+      },
+      "trafficReset": {
+        "title": "إعادة تعيين حركة المرور",
+        "daily": "يومياً",
+        "weekly": "أسبوعياً",
+        "monthly": "شهرياً",
+        "yearly": "سنوياً"
+      },
+      "period": {
+        "hour": "ساعة واحدة",
+        "day": "يوم واحد",
+        "week": "أسبوع واحد",
+        "month": "شهر واحد",
+        "threeMonth": "3 أشهر",
+        "sixMonth": "6 أشهر",
+        "year": "سنة واحدة",
+        "twoYear": "سنتان",
+        "threeYear": "3 سنوات",
+        "indefinitely": "غير محدد"
+      },
+      "options": {
+        "title": "الخيارات",
+        "autoRenewal": "التجديد التلقائي",
+        "autoRenewalDescription": "تجديد الاشتراك تلقائياً",
+        "info": "سيتم تجديد الاشتراك تلقائياً من رصيدك",
+        "period": "تذكر الفترة"
+      },
+      "traffic": "حركة المرور",
+      "addTraffic": "إضافة حركة مرور",
+      "addingTraffic": "إضافة حركة مرور",
+      "buy": "شراء إضافي",
+      "extension": "تمديد",
+      "subscriptionExtension": "تمديد الاشتراك",
+      "freeExtension": "🎁 تمديد مجاني",
+      "summary": {
+        "title": "الإجمالي",
+        "name": "الاسم",
+        "traffic": "حركة المرور",
+        "unlimit": "غير محدود",
+        "daily": "يومياً",
+        "weekly": "أسبوعياً",
+        "monthly": "شهرياً",
+        "yearly": "سنوياً",
+        "servers": "الخوادم",
+        "fullServers": "الوصول إلى الكل",
+        "allBase": "جميع الأساسية",
+        "notServers": "لم يتم التعيين!",
+        "period": "الفترة",
+        "periodDiscount": "خصم الفترة",
+        "roleDiscount": "خصم الدور",
+        "autoRenewal": "التجديد التلقائي",
+        "yes": "نعم",
+        "no": "لا",
+        "toPaid": "للدفع"
+      },
+      "purchase": "شراء"
+    }
+  },
+  "common": {
+    "modal": {
+      "cancel": "إلغاء",
+      "accept": "قبول",
+      "close": "إغلاق"
+    },
+    "scrolling": "مرر للأسفل",
+    "clipboard": {
+      "copied": "تم النسخ إلى الحافظة!",
+      "failed": "فشل النسخ!"
+    },
+    "freePlan": {
+      "trialAvailable": "يتوفر لك فترة تجريبية لمدة {days} أيام.",
+      "activate": "تفعيل",
+      "activationFailed": "فشل تفعيل الخطة المجانية"
+    },
+    "units": {
+      "bytes": "بايت",
+      "kilobytes": "كيلوبايت",
+      "megabytes": "ميجابايت",
+      "gigabytes": "جيجابايت",
+      "terabytes": "تيرابايت",
+      "petabytes": "بيتابايت",
+      "exabytes": "إكسابايت",
+      "zettabytes": "زيتابايت",
+      "yottabytes": "يوتابايت"
+    }
+  },
+  "freePlan": {
+    "trialAvailable": "يتوفر لك {gb} جيجابايت من حركة المرور الإضافية لاشتراك التجربة لفترة غير محدودة.",
+    "activate": "تفعيل",
+    "activationFailed": "فشل تفعيل الخطة المجانية",
+    "modalTitle": "تفعيل الفترة التجريبية",
+    "modalAction": "تفعيل",
+    "modalConfirmation": "هل أنت متأكد أنك تريد تفعيل الفترة التجريبية؟"
+  },
+  "friends": {
+    "title": "الأصدقاء",
+    "get": "احصل على مكافآت",
+    "for": "لدعوة الأصدقاء",
+    "level": "المستوى",
+    "total": "المجموع",
+    "list": {
+      "title": "أصدقاؤك",
+      "top": "الأعلى",
+      "empty": "لا يوجد أحد هنا بعد 🥲"
+    },
+    "bonuses": {
+      "title": "المكافآت",
+      "inviteTitle": "لدعوة صديق",
+      "paymentTitle": "لأفعال الصديق",
+      "inviteInfo": "بعد الدفعة الأولى من الصديق أو تفعيل الفترة التجريبية!",
+      "paymentInfo": "احصل على نسبة مئوية من أرباحنا من الأصدقاء ومن دعاهم أصدقاؤك إلى الأبد!",
+      "lvl1Info": "الذين دعوتهم",
+      "lvl2Info": "الذين دعاهم الأصدقاء",
+      "lvl3Info": "الذين دعاهم أصدقاء الأصدقاء 😁"
+    },
+    "invite": {
+      "title": "دعوة صديق",
+      "message": "إرسال رسالة",
+      "copy": "نسخ الرابط",
+      "story": "إرسال إلى القصص"
+    },
+    "statistics": {
+      "title": "الإحصائيات",
+      "earnTitle": "أرباحك",
+      "inviteTitle": "مدعو",
+      "earnInfo": "لقد ربحت طوال الوقت",
+      "inviteInfo": "مدعو | مفعل | منهم ستاندرد | منهم بريميوم"
+    }
+  },
+  "greenCheck": {
+    "loading": "جاري التحقق من أمان الاتصال...",
+    "danger": "اتصالك غير آمن!\nاتصل بشبكة VPN!",
+    "success": "اتصالك آمن!"
+  },
+  "navbar": {
+    "home": "الرئيسية",
+    "earning": "الكسب",
+    "gifts": "الهدايا",
+    "friends": "الأصدقاء",
+    "billing": "الفواتير",
+    "settings": "الإعدادات",
+    "profile": "الملف الشخصي",
+    "games": "الألعاب"
+  },
+  "subscriptions": {
+    "title": "الاشتراك",
+    "connection": "الاتصال",
+    "configs": "التكوينات",
+    "addSubscription": "إضافة اشتراك",
+    "addSubscriptionTitle": "إضافة اشتراك",
+    "yourSubscriptions": "اشتراكاتك",
+    "noSubscriptions": "ليس لديك اشتراكات نشطة",
+    "loading": "جارٍ تحميل بيانات الاشتراك...",
+    "notFound": "الاشتراك غير موجود",
+    "renewSubscription": "تجديد الاشتراك",
+    "autoRenewalEnabled": "التجديد التلقائي ممكّن",
+    "autoRenewalDisabled": "التجديد التلقائي معطل",
+    "subscriptionDeleted": "تم حذف الاشتراك بنجاح",
+    "subscriptionDataUpdated": "تم تحديث بيانات الاشتراك بنجاح",
+    "subscriptionRenewed": "تم تجديد الاشتراك بنجاح",
+    "changeServer": "تغيير الخادم",
+    "changeServerTitle": "تغيير الخادم",
+    "changeServerWarning": "تحذير: يستغرق تغيير الخادم دقيقتين. بعد تغيير الخادم، يجب تحديث البيانات في التطبيق!",
+    "active": "نشط",
+    "notActive": "غير نشط",
+    "online": "متصل",
+    "offline": "غير متصل",
+    "traffic": "حركة المرور",
+    "trafficReset": {
+      "daily": "يومي",
+      "weekly": "أسبوعي",
+      "monthly": "شهري",
+      "yearly": "سنوي",
+      "unlimit": "غير محدود"
+    },
+    "inTotal": "الإجمالي",
+    "servers": "الخوادم",
+    "fullServers": "الوصول إلى الكل",
+    "allBase": "جميع الأساسية",
+    "base": "أساسي",
+    "premium": "مميز",
+    "devices": "الأجهزة",
+    "period": "فترة الدفع",
+    "expires": "ينتهي في",
+    "autoRenewal": "التجديد التلقائي",
+    "actions": "الإجراءات",
+    "save": "حفظ",
+    "required": "مطلوب!",
+    "paid": "مدفوع!",
+    "instruction": {
+      "stage1": "تنزيل التطبيق",
+      "stage2": "إضافة اشتراك إلى التطبيق",
+      "copyUrl": "نسخ رابط الاشتراك",
+      "openQR": "رمز QR للاشتراك",
+      "scanApp": "امسح في التطبيق",
+      "scanPhone": "امسح في الهاتف",
+      "add": "إضافة إلى التطبيق"
+    },
+    "platform": "المنصة",
+    "success": {
+      "serversUpdated": "تم تحديث الخوادم بنجاح"
+    },
+    "errors": {
+      "loadFailed": "فشل تحميل الاشتراكات",
+      "disableAutoRenewalFailed": "فشل تعطيل التجديد التلقائي!",
+      "enableAutoRenewalFailed": "فشل تمكين التجديد التلقائي!",
+      "deleteSubscriptionFailed": "فشل حذف الاشتراك!",
+      "resetSubscriptionFailed": "فشل إعادة تعيين بيانات الاشتراك!",
+      "renewSubscriptionFailed": "فشل تجديد الاشتراك!",
+      "fetchingServers": "فشل جلب الخوادم",
+      "updatingServers": "فشل تحديث الخوادم",
+      "serverLimitReached": "لقد وصلت إلى حد الخوادم",
+      "serverLimitReachedPremium": "لقد وصلت إلى حد الخوادم المميزة",
+      "serverLimitReachedBase": "لقد وصلت إلى حد الخوادم الأساسية"
+    },
+    "periods": {
+      "trial": "فترة تجريبية",
+      "hour": "1 ساعة",
+      "day": "1 يوم",
+      "week": "1 أسبوع",
+      "month": "1 شهر",
+      "threeMonth": "3 أشهر",
+      "sixMonth": "6 أشهر",
+      "year": "1 سنة",
+      "twoYear": "2 سنة",
+      "threeYear": "3 سنوات",
+      "indefinitely": "إلى أجل غير مسمى"
+    },
+    "modals": {
+      "delete": {
+        "title": "حذف الاشتراك",
+        "button": "حذف",
+        "action": "حذف",
+        "message": "هل أنت متأكد أنك تريد حذف الاشتراك نهائيًا؟ لا يمكن استعادته! لا يوجد تعويض!"
+      },
+      "qr": {
+        "title": "رمز QR للاشتراك",
+        "description": "امسح في التطبيق العميل"
+      },
+      "refresh": {
+        "title": "إعادة تعيين بيانات الاشتراك",
+        "button": "إعادة تعيين البيانات",
+        "action": "إعادة تعيين",
+        "message": "هل أنت متأكد أنك تريد إعادة تعيين بيانات الاشتراك؟ بعد ذلك، ستتغير المفاتيح وعنوان الاشتراك إلى مفاتيح جديدة! ستحتاج إلى إضافة الاشتراك إلى التطبيق مرة أخرى! عادةً ما يتم إجراء إعادة التعيين إذا تم تسريب اشتراكك إلى الشبكة أو إذا وصل إليه شخص ما!"
+      },
+      "autoRenewal": {
+        "enableTitle": "تمكين التجديد التلقائي",
+        "disableTitle": "تعطيل التجديد التلقائي",
+        "enableAction": "تمكين",
+        "disableAction": "تعطيل",
+        "enableMessage": "هل تريد تمكين التجديد التلقائي للاشتراك؟ سيتم خصم الأموال تلقائيًا عند انتهاء صلاحية الاشتراك.",
+        "disableMessage": "هل تريد تعطيل التجديد التلقائي للاشتراك؟ بعد انتهاء صلاحية الاشتراك، سيتم إلغاء تنشيطه."
+      },
+      "renew": {
+        "title": "تجديد الاشتراك",
+        "action": "تجديد",
+        "message": "هل تريد تجديد الاشتراك؟ سيتم خصم {price} نجمة من رصيدك."
+      }
+    }
+  },
+  "user": {
+    "role": "الدور",
+    "discount": "الخصم",
+    "wallet": "المحفظة",
+    "usage": "الاستخدام",
+    "inPayments": "في المدفوعات"
+  },
+  "wallet": {
+    "connect": "ربط محفظة TON",
+    "disconnect": "فصل",
+    "replace": "استبدال"
+  },
+  "earning": {
+    "title": "Добыча",
+    "earned": "Награда получена",
+    "rewardTask": {
+      "title": "Посмотреть рекламу"
+    }
+  }
+}

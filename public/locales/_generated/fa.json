@@ -1,1 +1,359 @@
-{"billing":{"title":"صورتحساب","description":"حرکت مالی شما","wallet":{"title":"کیف پول","payment":"شارژ","paymentInfo":"حسابی که برای پرداخت ها استفاده می شود.","withdrawal":"برداشت","withdrawalInfo":"حسابی که می توانید از آن پول برداشت کنید.","holdInfo":"وجوه مسدود شده.\nبه زودی به حساب پرداخت واریز می شود."},"payment":{"title":"شارژ موجودی","sum":"مبلغ شارژ","enterSum":"مبلغ را وارد کنید","sort":{"all":"همه","crypto":"ارز دیجیتال","card":"کارت ها","sbp":"SBP","wallets":"کیف پول ها","skins":"پوسته ها"},"method":"روش پرداخت","split":"خرید Telegram Stars بدون KYC، با سود تا 40% می توانید در پلتفرم Split!","splitBay":"خرید STARS","walletInfo":"با اتصال کیف پول TON، با TON, USDT-TON, DOGS, NOT, HMSTR, JETTON و سایر توکن های شبکه TON پرداخت کنید.","limitMessage":"از {min} تا {max} {symbol} موجود است. اکنون: {convertedAmount} {symbol}","commission":"کمیسیون","toBalance":"به موجودی واریز می شود","pay":"پرداخت"},"subscription":{"title":"اشتراک","addSubscription":"افزودن اشتراک","pay":"پرداخت","addFree":"🎁 افزودن رایگان","selectPeriod":"دوره را انتخاب کنید","periodMultiplier":"ضریب دوره","selectPlan":"طرح را انتخاب کنید","selectServer":"سرور را انتخاب کنید","base":"پایه","premium":"ویژه","orSelect":"یا انتخاب کنید","name":{"default":"اشتراک","label":"نام اشتراک","tooltip":"نام اشتراکی که در لیست اشتراک ها نمایش داده می شود.","placeholder":"نام اشتراک را وارد کنید"},"privileges":{"selectServers":"سرورهای مورد نیاز را انتخاب کنید","oneBaseServer":"یک سرور پایه به انتخاب شما","oneBaseOrPremiumServer":"یک سرور پایه یا ویژه به انتخاب شما","accessAllServers":"دسترسی به همه سرورها","accessAllBaseServers":"دسترسی به همه سرورهای پایه","accessBaseServers":"دسترسی به {{baseCount}} سرور پایه","accessBaseAndPremiumServers":"دسترسی به {{baseCount}} سرور پایه و {{premiumCount}} سرور ویژه","trafficPlan":"بدون تاریخ انقضا، فقط هزینه ترافیک!","devices":"تا {count} دستگاه همزمان","customDevices":"تعداد دستگاه های مورد نیاز","servers":"دسترسی به همه سرورها","baseServers":"دسترسی به سرورهای پایه","premiumServers":"دسترسی به سرورهای ویژه","customServers":"تعداد سرورهای مورد نیاز","traffic":"ترافیک نامحدود","customTraffic":"تعداد ترافیک مورد نیاز","dailyTraffic":"{count} گیگابایت ترافیک روزانه","weeklyTraffic":"{count} گیگابایت ترافیک هفتگی","monthlyTraffic":"{count} گیگابایت ترافیک ماهانه","yearlyTraffic":"{count} گیگابایت ترافیک سالانه","security":"اتصال امن","speed":"بدون محدودیت سرعت","masking":"پنهان کردن ترافیک شما","noAds":"بدون تبلیغات","devicesSupport":"پشتیبانی گسترده از دستگاه ها","xray":"هسته قابل اعتماد XRAY","opensource":"منبع باز"},"trafficReset":{"title":"بازنشانی ترافیک","daily":"روزانه","weekly":"هفتگی","monthly":"ماهانه","yearly":"سالانه"},"period":{"hour":"1 ساعت","day":"1 روز","week":"1 هفته","month":"1 ماه","threeMonth":"3 ماه","sixMonth":"6 ماه","year":"1 سال","twoYear":"2 سال","threeYear":"3 سال","indefinitely":"نامحدود"},"options":{"title":"گزینه ها","autoRenewal":"تمدید خودکار","autoRenewalDescription":"تمدید خودکار اشتراک","info":"اشتراک به طور خودکار از موجودی شما تمدید می شود","period":"ذخیره دوره"},"traffic":"ترافیک","addTraffic":"افزودن ترافیک","addingTraffic":"افزودن ترافیک","buy":"خرید","extension":"تمدید","subscriptionExtension":"تمدید اشتراک","freeExtension":"🎁 تمدید رایگان","summary":{"title":"خلاصه","name":"نام","traffic":"ترافیک","unlimit":"نامحدود","daily":"روزانه","weekly":"هفتگی","monthly":"ماهانه","yearly":"سالانه","servers":"سرورها","fullServers":"دسترسی به همه","allBase":"همه پایه","notServers":"تعیین نشده!","period":"دوره","periodDiscount":"تخفیف دوره","roleDiscount":"تخفیف نقش","autoRenewal":"تمدید خودکار","yes":"بله","no":"خیر","toPaid":"برای پرداخت"},"purchase":"پرداخت"}},"common":{"modal":{"cancel":"لغو","accept":"پذیرفتن","close":"بستن"},"scrolling":"به پایین اسکرول کنید","clipboard":{"copied":"در کلیپ بورد کپی شد!","failed":"کپی نشد!"},"freePlan":{"trialAvailable":"شما یک دوره آزمایشی {days} روزه در دسترس دارید.","activate":"فعال کردن","activationFailed":"فعال سازی طرح رایگان ناموفق بود"},"units":{"bytes":"بایت","kilobytes":"کیلوبایت","megabytes":"مگابایت","gigabytes":"گیگابایت","terabytes":"ترابایت","petabytes":"پتابایت","exabytes":"اگزابایت","zettabytes":"زتابایت","yottabytes":"یوتابایت"}},"freePlan":{"trialAvailable":"شما {gb} گیگابایت ترافیک جایزه برای اشتراک آزمایشی با مدت نامحدود در دسترس دارید.","activate":"فعال کردن","activationFailed":"فعال سازی طرح رایگان ناموفق بود","modalTitle":"فعال سازی دوره آزمایشی","modalAction":"فعال کردن","modalConfirmation":"آیا واقعاً می خواهید دوره آزمایشی را فعال کنید؟"},"friends":{"title":"دوستان","get":"پاداش دریافت کنید","for":"برای دعوت دوستان","level":"سطح","total":"کل","list":{"title":"دوستان شما","top":"برترین","empty":"هنوز کسی اینجا نیست 🥲"},"bonuses":{"title":"جوایز","inviteTitle":"برای دعوت دوست","paymentTitle":"برای فعالیت های دوست","inviteInfo":"پس از اولین پرداخت دوست یا فعال سازی دوره آزمایشی!","paymentInfo":"درصد از درآمد ما را برای دوستان و کسانی که دوستان شما برای همیشه دعوت کرده اند دریافت کنید!","lvl1Info":"کسانی که شما دعوت کرده اید","lvl2Info":"کسانی که دوستان دعوت کرده اند","lvl3Info":"کسانی که دوستان دوستان دعوت کرده اند 😁"},"invite":{"title":"دعوت از دوست","message":"ارسال پیام","copy":"کپی لینک","story":"ارسال در استوری"},"statistics":{"title":"آمار","earnTitle":"درآمد شما","inviteTitle":"دعوت شده","earnInfo":"شما در تمام مدت کسب کرده اید","inviteInfo":"دعوت شده | فعال شده | از آنها استاندارد | از آنها ویژه"}},"greenCheck":{"loading":"در حال بررسی امنیت اتصال...","danger":"اتصال شما ایمن نیست!\nبه VPN متصل شوید!","success":"اتصال شما ایمن است!"},"navbar":{"home":"خانه","earning":"کسب درآمد","gifts":"هدایا","friends":"دوستان","billing":"صورتحساب","settings":"تنظیمات","profile":"پروفایل","games":"بازی ها"},"subscriptions":{"title":"اشتراک","connection":"اتصال","configs":"پیکربندی ها","addSubscription":"افزودن اشتراک","addSubscriptionTitle":"افزودن اشتراک","yourSubscriptions":"اشتراک های شما","noSubscriptions":"شما اشتراک فعالی ندارید","loading":"در حال بارگذاری اطلاعات اشتراک...","notFound":"اشتراک یافت نشد","renewSubscription":"تمدید اشتراک","autoRenewalEnabled":"تمدید خودکار فعال است","autoRenewalDisabled":"تمدید خودکار غیرفعال است","subscriptionDeleted":"اشتراک با موفقیت حذف شد","subscriptionDataUpdated":"اطلاعات اشتراک با موفقیت به روز شد","subscriptionRenewed":"اشتراک با موفقیت تمدید شد","changeServer":"تغییر سرور","changeServerTitle":"تغییر سرور","changeServerWarning":"توجه: تغییر سرور در عرض 2 دقیقه انجام می شود. پس از تغییر سرور، باید داده ها را در برنامه به روز کنید!","active":"فعال","notActive":"غیرفعال","online":"آنلاین","offline":"آفلاین","traffic":"ترافیک","trafficReset":{"daily":"روزانه","weekly":"هفتگی","monthly":"ماهانه","yearly":"سالانه","unlimit":"نامحدود"},"inTotal":"در کل","servers":"سرورها","fullServers":"دسترسی به همه","allBase":"همه پایه","base":"پایه","premium":"ویژه","devices":"دستگاه ها","period":"دوره پرداخت","expires":"منقضی می شود","autoRenewal":"تمدید خودکار","actions":"عملیات","save":"ذخیره","required":"توصیه می شود!","paid":"پرداخت شده!","instruction":{"stage1":"دانلود برنامه","stage2":"افزودن اشتراک به برنامه","copyUrl":"کپی URL اشتراک","openQR":"کد QR اشتراک","scanApp":"اسکن در برنامه","scanPhone":"اسکن در تلفن","add":"افزودن به برنامه"},"platform":"پلتفرم","success":{"serversUpdated":"سرورها با موفقیت به روز شدند"},"errors":{"loadFailed":"بارگذاری اشتراک ها ناموفق بود","disableAutoRenewalFailed":"خطا در غیرفعال کردن تمدید خودکار!","enableAutoRenewalFailed":"خطا در فعال کردن تمدید خودکار!","deleteSubscriptionFailed":"خطا در حذف اشتراک!","resetSubscriptionFailed":"خطا در بازنشانی اطلاعات اشتراک!","renewSubscriptionFailed":"تمدید اشتراک ناموفق بود!","fetchingServers":"بارگذاری سرورها ناموفق بود","updatingServers":"به روزرسانی سرورها ناموفق بود","serverLimitReached":"به حد مجاز سرورها رسیده اید","serverLimitReachedPremium":"به حد مجاز سرورهای ویژه رسیده اید","serverLimitReachedBase":"به حد مجاز سرورهای پایه رسیده اید"},"periods":{"trial":"دوره آزمایشی","hour":"1 ساعت","day":"1 روز","week":"1 هفته","month":"1 ماه","threeMonth":"3 ماه","sixMonth":"6 ماه","year":"1 سال","twoYear":"2 سال","threeYear":"3 سال","indefinitely":"نامحدود"},"modals":{"delete":{"title":"حذف اشتراک","button":"حذف","action":"حذف","message":"آیا مطمئن هستید که می خواهید اشتراک را برای همیشه حذف کنید؟ امکان بازیابی آن وجود نخواهد داشت! هیچ غرامتی پرداخت نخواهد شد!"},"qr":{"title":"کد QR اشتراک","description":"اسکن در برنامه مشتری"},"refresh":{"title":"بازنشانی اطلاعات اشتراک","button":"بازنشانی اطلاعات","action":"بازنشانی","message":"آیا مطمئن هستید که می خواهید اطلاعات اشتراک را بازنشانی کنید؟ پس از آن کلیدها و آدرس اشتراک به موارد جدید تغییر خواهند کرد! باید اشتراک را دوباره به برنامه اضافه کنید! معمولاً بازنشانی زمانی انجام می شود که اشتراک شما به شبکه درز کرده یا کسی به آن دسترسی پیدا کرده باشد!"},"autoRenewal":{"enableTitle":"فعال کردن تمدید خودکار","disableTitle":"غیرفعال کردن تمدید خودکار","enableAction":"فعال کردن","disableAction":"غیرفعال کردن","enableMessage":"آیا می خواهید تمدید خودکار اشتراک را فعال کنید؟ وجوه به طور خودکار در زمان انقضای اشتراک کسر می شود.","disableMessage":"آیا می خواهید تمدید خودکار اشتراک را غیرفعال کنید؟ پس از انقضای اشتراک، غیرفعال خواهد شد."},"renew":{"title":"تمدید اشتراک","action":"تمدید","message":"آیا می خواهید اشتراک را تمدید کنید؟ {price} ستاره از موجودی شما کسر می شود."}}},"user":{"role":"نقش","discount":"تخفیف","wallet":"کیف پول","usage":"استفاده","inPayments":"در پرداخت ها"},"wallet":{"connect":"اتصال کیف پول TON","disconnect":"قطع اتصال","replace":"جایگزینی"},"earning":{"title":"Добыча","earned":"Награда получена","rewardTask":{"title":"Посмотреть рекламу"}}}
+{
+  "billing": {
+    "title": "صورتحساب",
+    "description": "حرکت مالی شما",
+    "wallet": {
+      "title": "کیف پول",
+      "payment": "شارژ",
+      "paymentInfo": "حسابی که برای پرداخت ها استفاده می شود.",
+      "withdrawal": "برداشت",
+      "withdrawalInfo": "حسابی که می توانید از آن پول برداشت کنید.",
+      "holdInfo": "وجوه مسدود شده.\nبه زودی به حساب پرداخت واریز می شود."
+    },
+    "payment": {
+      "title": "شارژ موجودی",
+      "sum": "مبلغ شارژ",
+      "enterSum": "مبلغ را وارد کنید",
+      "sort": {
+        "all": "همه",
+        "crypto": "ارز دیجیتال",
+        "card": "کارت ها",
+        "sbp": "SBP",
+        "wallets": "کیف پول ها",
+        "skins": "پوسته ها"
+      },
+      "method": "روش پرداخت",
+      "split": "خرید Telegram Stars بدون KYC، با سود تا 40% می توانید در پلتفرم Split!",
+      "splitBay": "خرید STARS",
+      "walletInfo": "با اتصال کیف پول TON، با TON, USDT-TON, DOGS, NOT, HMSTR, JETTON و سایر توکن های شبکه TON پرداخت کنید.",
+      "limitMessage": "از {min} تا {max} {symbol} موجود است. اکنون: {convertedAmount} {symbol}",
+      "commission": "کمیسیون",
+      "toBalance": "به موجودی واریز می شود",
+      "pay": "پرداخت"
+    },
+    "subscription": {
+      "title": "اشتراک",
+      "addSubscription": "افزودن اشتراک",
+      "pay": "پرداخت",
+      "addFree": "🎁 افزودن رایگان",
+      "selectPeriod": "دوره را انتخاب کنید",
+      "periodMultiplier": "ضریب دوره",
+      "selectPlan": "طرح را انتخاب کنید",
+      "selectServer": "سرور را انتخاب کنید",
+      "base": "پایه",
+      "premium": "ویژه",
+      "orSelect": "یا انتخاب کنید",
+      "name": {
+        "default": "اشتراک",
+        "label": "نام اشتراک",
+        "tooltip": "نام اشتراکی که در لیست اشتراک ها نمایش داده می شود.",
+        "placeholder": "نام اشتراک را وارد کنید"
+      },
+      "privileges": {
+        "selectServers": "سرورهای مورد نیاز را انتخاب کنید",
+        "oneBaseServer": "یک سرور پایه به انتخاب شما",
+        "oneBaseOrPremiumServer": "یک سرور پایه یا ویژه به انتخاب شما",
+        "accessAllServers": "دسترسی به همه سرورها",
+        "accessAllBaseServers": "دسترسی به همه سرورهای پایه",
+        "accessBaseServers": "دسترسی به {{baseCount}} سرور پایه",
+        "accessBaseAndPremiumServers": "دسترسی به {{baseCount}} سرور پایه و {{premiumCount}} سرور ویژه",
+        "trafficPlan": "بدون تاریخ انقضا، فقط هزینه ترافیک!",
+        "devices": "تا {count} دستگاه همزمان",
+        "customDevices": "تعداد دستگاه های مورد نیاز",
+        "servers": "دسترسی به همه سرورها",
+        "baseServers": "دسترسی به سرورهای پایه",
+        "premiumServers": "دسترسی به سرورهای ویژه",
+        "customServers": "تعداد سرورهای مورد نیاز",
+        "traffic": "ترافیک نامحدود",
+        "customTraffic": "تعداد ترافیک مورد نیاز",
+        "dailyTraffic": "{count} گیگابایت ترافیک روزانه",
+        "weeklyTraffic": "{count} گیگابایت ترافیک هفتگی",
+        "monthlyTraffic": "{count} گیگابایت ترافیک ماهانه",
+        "yearlyTraffic": "{count} گیگابایت ترافیک سالانه",
+        "security": "اتصال امن",
+        "speed": "بدون محدودیت سرعت",
+        "masking": "پنهان کردن ترافیک شما",
+        "noAds": "بدون تبلیغات",
+        "devicesSupport": "پشتیبانی گسترده از دستگاه ها",
+        "xray": "هسته قابل اعتماد XRAY",
+        "opensource": "منبع باز"
+      },
+      "trafficReset": {
+        "title": "بازنشانی ترافیک",
+        "daily": "روزانه",
+        "weekly": "هفتگی",
+        "monthly": "ماهانه",
+        "yearly": "سالانه"
+      },
+      "period": {
+        "hour": "1 ساعت",
+        "day": "1 روز",
+        "week": "1 هفته",
+        "month": "1 ماه",
+        "threeMonth": "3 ماه",
+        "sixMonth": "6 ماه",
+        "year": "1 سال",
+        "twoYear": "2 سال",
+        "threeYear": "3 سال",
+        "indefinitely": "نامحدود"
+      },
+      "options": {
+        "title": "گزینه ها",
+        "autoRenewal": "تمدید خودکار",
+        "autoRenewalDescription": "تمدید خودکار اشتراک",
+        "info": "اشتراک به طور خودکار از موجودی شما تمدید می شود",
+        "period": "ذخیره دوره"
+      },
+      "traffic": "ترافیک",
+      "addTraffic": "افزودن ترافیک",
+      "addingTraffic": "افزودن ترافیک",
+      "buy": "خرید",
+      "extension": "تمدید",
+      "subscriptionExtension": "تمدید اشتراک",
+      "freeExtension": "🎁 تمدید رایگان",
+      "summary": {
+        "title": "خلاصه",
+        "name": "نام",
+        "traffic": "ترافیک",
+        "unlimit": "نامحدود",
+        "daily": "روزانه",
+        "weekly": "هفتگی",
+        "monthly": "ماهانه",
+        "yearly": "سالانه",
+        "servers": "سرورها",
+        "fullServers": "دسترسی به همه",
+        "allBase": "همه پایه",
+        "notServers": "تعیین نشده!",
+        "period": "دوره",
+        "periodDiscount": "تخفیف دوره",
+        "roleDiscount": "تخفیف نقش",
+        "autoRenewal": "تمدید خودکار",
+        "yes": "بله",
+        "no": "خیر",
+        "toPaid": "برای پرداخت"
+      },
+      "purchase": "پرداخت"
+    }
+  },
+  "common": {
+    "modal": {
+      "cancel": "لغو",
+      "accept": "پذیرفتن",
+      "close": "بستن"
+    },
+    "scrolling": "به پایین اسکرول کنید",
+    "clipboard": {
+      "copied": "در کلیپ بورد کپی شد!",
+      "failed": "کپی نشد!"
+    },
+    "freePlan": {
+      "trialAvailable": "شما یک دوره آزمایشی {days} روزه در دسترس دارید.",
+      "activate": "فعال کردن",
+      "activationFailed": "فعال سازی طرح رایگان ناموفق بود"
+    },
+    "units": {
+      "bytes": "بایت",
+      "kilobytes": "کیلوبایت",
+      "megabytes": "مگابایت",
+      "gigabytes": "گیگابایت",
+      "terabytes": "ترابایت",
+      "petabytes": "پتابایت",
+      "exabytes": "اگزابایت",
+      "zettabytes": "زتابایت",
+      "yottabytes": "یوتابایت"
+    }
+  },
+  "freePlan": {
+    "trialAvailable": "شما {gb} گیگابایت ترافیک جایزه برای اشتراک آزمایشی با مدت نامحدود در دسترس دارید.",
+    "activate": "فعال کردن",
+    "activationFailed": "فعال سازی طرح رایگان ناموفق بود",
+    "modalTitle": "فعال سازی دوره آزمایشی",
+    "modalAction": "فعال کردن",
+    "modalConfirmation": "آیا واقعاً می خواهید دوره آزمایشی را فعال کنید؟"
+  },
+  "friends": {
+    "title": "دوستان",
+    "get": "پاداش دریافت کنید",
+    "for": "برای دعوت دوستان",
+    "level": "سطح",
+    "total": "کل",
+    "list": {
+      "title": "دوستان شما",
+      "top": "برترین",
+      "empty": "هنوز کسی اینجا نیست 🥲"
+    },
+    "bonuses": {
+      "title": "جوایز",
+      "inviteTitle": "برای دعوت دوست",
+      "paymentTitle": "برای فعالیت های دوست",
+      "inviteInfo": "پس از اولین پرداخت دوست یا فعال سازی دوره آزمایشی!",
+      "paymentInfo": "درصد از درآمد ما را برای دوستان و کسانی که دوستان شما برای همیشه دعوت کرده اند دریافت کنید!",
+      "lvl1Info": "کسانی که شما دعوت کرده اید",
+      "lvl2Info": "کسانی که دوستان دعوت کرده اند",
+      "lvl3Info": "کسانی که دوستان دوستان دعوت کرده اند 😁"
+    },
+    "invite": {
+      "title": "دعوت از دوست",
+      "message": "ارسال پیام",
+      "copy": "کپی لینک",
+      "story": "ارسال در استوری"
+    },
+    "statistics": {
+      "title": "آمار",
+      "earnTitle": "درآمد شما",
+      "inviteTitle": "دعوت شده",
+      "earnInfo": "شما در تمام مدت کسب کرده اید",
+      "inviteInfo": "دعوت شده | فعال شده | از آنها استاندارد | از آنها ویژه"
+    }
+  },
+  "greenCheck": {
+    "loading": "در حال بررسی امنیت اتصال...",
+    "danger": "اتصال شما ایمن نیست!\nبه VPN متصل شوید!",
+    "success": "اتصال شما ایمن است!"
+  },
+  "navbar": {
+    "home": "خانه",
+    "earning": "کسب درآمد",
+    "gifts": "هدایا",
+    "friends": "دوستان",
+    "billing": "صورتحساب",
+    "settings": "تنظیمات",
+    "profile": "پروفایل",
+    "games": "بازی ها"
+  },
+  "subscriptions": {
+    "title": "اشتراک",
+    "connection": "اتصال",
+    "configs": "پیکربندی ها",
+    "addSubscription": "افزودن اشتراک",
+    "addSubscriptionTitle": "افزودن اشتراک",
+    "yourSubscriptions": "اشتراک های شما",
+    "noSubscriptions": "شما اشتراک فعالی ندارید",
+    "loading": "در حال بارگذاری اطلاعات اشتراک...",
+    "notFound": "اشتراک یافت نشد",
+    "renewSubscription": "تمدید اشتراک",
+    "autoRenewalEnabled": "تمدید خودکار فعال است",
+    "autoRenewalDisabled": "تمدید خودکار غیرفعال است",
+    "subscriptionDeleted": "اشتراک با موفقیت حذف شد",
+    "subscriptionDataUpdated": "اطلاعات اشتراک با موفقیت به روز شد",
+    "subscriptionRenewed": "اشتراک با موفقیت تمدید شد",
+    "changeServer": "تغییر سرور",
+    "changeServerTitle": "تغییر سرور",
+    "changeServerWarning": "توجه: تغییر سرور در عرض 2 دقیقه انجام می شود. پس از تغییر سرور، باید داده ها را در برنامه به روز کنید!",
+    "active": "فعال",
+    "notActive": "غیرفعال",
+    "online": "آنلاین",
+    "offline": "آفلاین",
+    "traffic": "ترافیک",
+    "trafficReset": {
+      "daily": "روزانه",
+      "weekly": "هفتگی",
+      "monthly": "ماهانه",
+      "yearly": "سالانه",
+      "unlimit": "نامحدود"
+    },
+    "inTotal": "در کل",
+    "servers": "سرورها",
+    "fullServers": "دسترسی به همه",
+    "allBase": "همه پایه",
+    "base": "پایه",
+    "premium": "ویژه",
+    "devices": "دستگاه ها",
+    "period": "دوره پرداخت",
+    "expires": "منقضی می شود",
+    "autoRenewal": "تمدید خودکار",
+    "actions": "عملیات",
+    "save": "ذخیره",
+    "required": "توصیه می شود!",
+    "paid": "پرداخت شده!",
+    "instruction": {
+      "stage1": "دانلود برنامه",
+      "stage2": "افزودن اشتراک به برنامه",
+      "copyUrl": "کپی URL اشتراک",
+      "openQR": "کد QR اشتراک",
+      "scanApp": "اسکن در برنامه",
+      "scanPhone": "اسکن در تلفن",
+      "add": "افزودن به برنامه"
+    },
+    "platform": "پلتفرم",
+    "success": {
+      "serversUpdated": "سرورها با موفقیت به روز شدند"
+    },
+    "errors": {
+      "loadFailed": "بارگذاری اشتراک ها ناموفق بود",
+      "disableAutoRenewalFailed": "خطا در غیرفعال کردن تمدید خودکار!",
+      "enableAutoRenewalFailed": "خطا در فعال کردن تمدید خودکار!",
+      "deleteSubscriptionFailed": "خطا در حذف اشتراک!",
+      "resetSubscriptionFailed": "خطا در بازنشانی اطلاعات اشتراک!",
+      "renewSubscriptionFailed": "تمدید اشتراک ناموفق بود!",
+      "fetchingServers": "بارگذاری سرورها ناموفق بود",
+      "updatingServers": "به روزرسانی سرورها ناموفق بود",
+      "serverLimitReached": "به حد مجاز سرورها رسیده اید",
+      "serverLimitReachedPremium": "به حد مجاز سرورهای ویژه رسیده اید",
+      "serverLimitReachedBase": "به حد مجاز سرورهای پایه رسیده اید"
+    },
+    "periods": {
+      "trial": "دوره آزمایشی",
+      "hour": "1 ساعت",
+      "day": "1 روز",
+      "week": "1 هفته",
+      "month": "1 ماه",
+      "threeMonth": "3 ماه",
+      "sixMonth": "6 ماه",
+      "year": "1 سال",
+      "twoYear": "2 سال",
+      "threeYear": "3 سال",
+      "indefinitely": "نامحدود"
+    },
+    "modals": {
+      "delete": {
+        "title": "حذف اشتراک",
+        "button": "حذف",
+        "action": "حذف",
+        "message": "آیا مطمئن هستید که می خواهید اشتراک را برای همیشه حذف کنید؟ امکان بازیابی آن وجود نخواهد داشت! هیچ غرامتی پرداخت نخواهد شد!"
+      },
+      "qr": {
+        "title": "کد QR اشتراک",
+        "description": "اسکن در برنامه مشتری"
+      },
+      "refresh": {
+        "title": "بازنشانی اطلاعات اشتراک",
+        "button": "بازنشانی اطلاعات",
+        "action": "بازنشانی",
+        "message": "آیا مطمئن هستید که می خواهید اطلاعات اشتراک را بازنشانی کنید؟ پس از آن کلیدها و آدرس اشتراک به موارد جدید تغییر خواهند کرد! باید اشتراک را دوباره به برنامه اضافه کنید! معمولاً بازنشانی زمانی انجام می شود که اشتراک شما به شبکه درز کرده یا کسی به آن دسترسی پیدا کرده باشد!"
+      },
+      "autoRenewal": {
+        "enableTitle": "فعال کردن تمدید خودکار",
+        "disableTitle": "غیرفعال کردن تمدید خودکار",
+        "enableAction": "فعال کردن",
+        "disableAction": "غیرفعال کردن",
+        "enableMessage": "آیا می خواهید تمدید خودکار اشتراک را فعال کنید؟ وجوه به طور خودکار در زمان انقضای اشتراک کسر می شود.",
+        "disableMessage": "آیا می خواهید تمدید خودکار اشتراک را غیرفعال کنید؟ پس از انقضای اشتراک، غیرفعال خواهد شد."
+      },
+      "renew": {
+        "title": "تمدید اشتراک",
+        "action": "تمدید",
+        "message": "آیا می خواهید اشتراک را تمدید کنید؟ {price} ستاره از موجودی شما کسر می شود."
+      }
+    }
+  },
+  "user": {
+    "role": "نقش",
+    "discount": "تخفیف",
+    "wallet": "کیف پول",
+    "usage": "استفاده",
+    "inPayments": "در پرداخت ها"
+  },
+  "wallet": {
+    "connect": "اتصال کیف پول TON",
+    "disconnect": "قطع اتصال",
+    "replace": "جایگزینی"
+  },
+  "earning": {
+    "title": "Добыча",
+    "earned": "Награда получена",
+    "rewardTask": {
+      "title": "Посмотреть рекламу"
+    }
+  }
+}

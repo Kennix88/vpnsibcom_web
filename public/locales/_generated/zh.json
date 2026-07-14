@@ -1,1 +1,359 @@
-{"billing":{"title":"账单","description":"您的财务动向","wallet":{"title":"钱包","payment":"充值","paymentInfo":"用于支付的账户。","withdrawal":"提现","withdrawalInfo":"可以提款的账户。","holdInfo":"冻结资金。\n它们很快就会进入支付账户。"},"payment":{"title":"余额充值","sum":"充值金额","enterSum":"输入金额","sort":{"all":"全部","crypto":"加密货币","card":"银行卡","sbp":"SBP","wallets":"钱包","skins":"皮肤"},"method":"支付方式","split":"在Split平台购买Telegram Stars，无需KYC，最高可享40%优惠！","splitBay":"购买STARS","walletInfo":"通过连接TON钱包，使用TON、USDT-TON、DOGS、NOT、HMSTR、JETTON等TON网络代币支付。","limitMessage":"可用范围从 {min} 到 {max} {symbol}。当前：{convertedAmount} {symbol}","commission":"佣金","toBalance":"将存入余额","pay":"支付"},"subscription":{"title":"订阅","addSubscription":"添加订阅","pay":"支付","addFree":"🎁 免费添加","selectPeriod":"选择期限","periodMultiplier":"期限倍数","selectPlan":"选择套餐","selectServer":"选择服务器","base":"基础","premium":"高级","orSelect":"或选择","name":{"default":"订阅","label":"订阅名称","tooltip":"订阅名称将显示在订阅列表中。","placeholder":"输入订阅名称"},"privileges":{"selectServers":"选择所需的服务器","oneBaseServer":"选择一个基础服务器","oneBaseOrPremiumServer":"选择一个基础或高级服务器","accessAllServers":"访问所有服务器","accessAllBaseServers":"访问所有基础服务器","accessBaseServers":"访问 {{baseCount}} 个基础服务器","accessBaseAndPremiumServers":"访问 {{baseCount}} 个基础服务器和 {{premiumCount}} 个高级服务器","trafficPlan":"无期限限制，只按流量付费！","devices":"最多 {count} 台设备同时在线","customDevices":"所需设备数量","servers":"访问所有服务器","baseServers":"访问基础服务器","premiumServers":"访问高级服务器","customServers":"所需服务器数量","traffic":"无限流量","customTraffic":"所需流量数量","dailyTraffic":"每日 {count} GB 流量","weeklyTraffic":"每周 {count} GB 流量","monthlyTraffic":"每月 {count} GB 流量","yearlyTraffic":"每年 {count} GB 流量","security":"安全连接","speed":"无速度限制","masking":"流量伪装","noAds":"无广告","devicesSupport":"广泛的设备支持","xray":"可靠的XRAY核心","opensource":"开源"},"trafficReset":{"title":"流量重置","daily":"每日","weekly":"每周","monthly":"每月","yearly":"每年"},"period":{"hour":"1 小时","day":"1 天","week":"1 周","month":"1 个月","threeMonth":"3 个月","sixMonth":"6 个月","year":"1 年","twoYear":"2 年","threeYear":"3 年","indefinitely":"无限期"},"options":{"title":"选项","autoRenewal":"自动续订","autoRenewalDescription":"自动续订订阅","info":"订阅将自动从您的余额中扣除","period":"记住期限"},"traffic":"流量","addTraffic":"添加流量","addingTraffic":"添加流量","buy":"购买","extension":"延长","subscriptionExtension":"订阅延长","freeExtension":"🎁 免费延长","summary":{"title":"总计","name":"名称","traffic":"流量","unlimit":"无限","daily":"每日","weekly":"每周","monthly":"每月","yearly":"每年","servers":"服务器","fullServers":"访问所有","allBase":"所有基础","notServers":"未设置！","period":"期限","periodDiscount":"期限折扣","roleDiscount":"角色折扣","autoRenewal":"自动续订","yes":"是","no":"否","toPaid":"待支付"},"purchase":"购买"}},"common":{"modal":{"cancel":"取消","accept":"接受","close":"关闭"},"scrolling":"向下滚动","clipboard":{"copied":"已复制到剪贴板！","failed":"复制失败！"},"freePlan":{"trialAvailable":"您有 {days} 天的试用期。","activate":"激活","activationFailed":"无法激活免费计划"},"units":{"bytes":"字节","kilobytes":"千字节","megabytes":"兆字节","gigabytes":"千兆字节","terabytes":"太字节","petabytes":"拍字节","exabytes":"艾字节","zettabytes":"泽字节","yottabytes":"尧字节"}},"freePlan":{"trialAvailable":"您有 {gb} GB 奖励流量可用于无限期试用订阅。","activate":"激活","activationFailed":"无法激活免费计划","modalTitle":"激活试用期","modalAction":"激活","modalConfirmation":"您确定要激活试用期吗？"},"friends":{"title":"朋友","get":"获得奖励","for":"邀请朋友","level":"等级","total":"总计","list":{"title":"您的朋友","top":"顶部","empty":"这里还没有人🥲"},"bonuses":{"title":"奖励","inviteTitle":"邀请朋友","paymentTitle":"朋友的活动","inviteInfo":"朋友首次付款或激活试用期后！","paymentInfo":"永久获得您朋友和您朋友邀请的朋友的收入百分比！","lvl1Info":"您邀请的人","lvl2Info":"朋友邀请的人","lvl3Info":"朋友的朋友邀请的人😁"},"invite":{"title":"邀请朋友","message":"发送消息","copy":"复制链接","story":"发送到故事"},"statistics":{"title":"统计","earnTitle":"您的收益","inviteTitle":"已邀请","earnInfo":"您总共赚取了","inviteInfo":"已邀请 | 已激活 | 其中标准 | 其中高级"}},"greenCheck":{"loading":"正在检查连接安全...","danger":"您的连接不安全！\n请连接VPN！","success":"您的连接已受保护！"},"navbar":{"home":"主页","earning":"收益","gifts":"礼物","friends":"朋友","billing":"账单","settings":"设置","profile":"个人资料","games":"游戏"},"subscriptions":{"title":"订阅","connection":"连接","configs":"配置","addSubscription":"添加订阅","addSubscriptionTitle":"添加订阅","yourSubscriptions":"您的订阅","noSubscriptions":"您没有活跃的订阅","loading":"正在加载订阅数据...","notFound":"未找到订阅","renewSubscription":"续订","autoRenewalEnabled":"已启用自动续订","autoRenewalDisabled":"已禁用自动续订","subscriptionDeleted":"订阅已成功删除","subscriptionDataUpdated":"订阅数据已成功更新","subscriptionRenewed":"订阅已成功续订","changeServer":"更改服务器","changeServerTitle":"更改服务器","changeServerWarning":"注意：服务器更改将在2分钟内完成。更改服务器后，您需要更新应用程序中的数据！","active":"活跃","notActive":"不活跃","online":"在线","offline":"离线","traffic":"流量","trafficReset":{"daily":"每日","weekly":"每周","monthly":"每月","yearly":"每年","unlimit":"无限"},"inTotal":"总计","servers":"服务器","fullServers":"访问所有","allBase":"所有基础","base":"基础","premium":"高级","devices":"设备","period":"付款周期","expires":"到期","autoRenewal":"自动续订","actions":"操作","save":"保存","required":"推荐！","paid":"付费！","instruction":{"stage1":"下载应用程序","stage2":"在应用程序中添加订阅","copyUrl":"复制订阅URL","openQR":"订阅二维码","scanApp":"在应用程序中扫描","scanPhone":"在手机中扫描","add":"添加到应用程序"},"platform":"平台","success":{"serversUpdated":"服务器已成功更新"},"errors":{"loadFailed":"无法加载订阅","disableAutoRenewalFailed":"禁用自动续订失败！","enableAutoRenewalFailed":"启用自动续订失败！","deleteSubscriptionFailed":"删除订阅失败！","resetSubscriptionFailed":"重置订阅数据失败！","renewSubscriptionFailed":"无法续订订阅！","fetchingServers":"无法加载服务器","updatingServers":"无法更新服务器","serverLimitReached":"您已达到服务器限制","serverLimitReachedPremium":"您已达到高级服务器限制","serverLimitReachedBase":"您已达到基础服务器限制"},"periods":{"trial":"试用期","hour":"1 小时","day":"1 天","week":"1 周","month":"1 个月","threeMonth":"3 个月","sixMonth":"6 个月","year":"1 年","twoYear":"2 年","threeYear":"3 年","indefinitely":"无限期"},"modals":{"delete":{"title":"删除订阅","button":"删除","action":"删除","message":"您确定要永久删除订阅吗？它将无法恢复！不提供赔偿！"},"qr":{"title":"订阅二维码","description":"在客户端应用程序中扫描"},"refresh":{"title":"重置订阅数据","button":"重置数据","action":"重置","message":"您确定要重置订阅数据吗？之后，订阅密钥和地址将更改为新的！您需要重新将订阅添加到应用程序中！通常，如果您的订阅泄露或有人访问了它，就会进行重置！"},"autoRenewal":{"enableTitle":"启用自动续订","disableTitle":"禁用自动续订","enableAction":"启用","disableAction":"禁用","enableMessage":"您想启用自动续订吗？订阅到期时，资金将自动扣除。","disableMessage":"您想禁用自动续订吗？订阅到期后，它将被停用。"},"renew":{"title":"续订","action":"续订","message":"您想续订订阅吗？您的余额将扣除 {price} 星星。"}}},"user":{"role":"角色","discount":"折扣","wallet":"钱包","usage":"使用情况","inPayments":"在付款中"},"wallet":{"connect":"连接TON钱包","disconnect":"解除绑定","replace":"替换"},"earning":{"title":"Добыча","earned":"Награда получена","rewardTask":{"title":"Посмотреть рекламу"}}}
+{
+  "billing": {
+    "title": "账单",
+    "description": "您的财务动向",
+    "wallet": {
+      "title": "钱包",
+      "payment": "充值",
+      "paymentInfo": "用于支付的账户。",
+      "withdrawal": "提现",
+      "withdrawalInfo": "可以提款的账户。",
+      "holdInfo": "冻结资金。\n它们很快就会进入支付账户。"
+    },
+    "payment": {
+      "title": "余额充值",
+      "sum": "充值金额",
+      "enterSum": "输入金额",
+      "sort": {
+        "all": "全部",
+        "crypto": "加密货币",
+        "card": "银行卡",
+        "sbp": "SBP",
+        "wallets": "钱包",
+        "skins": "皮肤"
+      },
+      "method": "支付方式",
+      "split": "在Split平台购买Telegram Stars，无需KYC，最高可享40%优惠！",
+      "splitBay": "购买STARS",
+      "walletInfo": "通过连接TON钱包，使用TON、USDT-TON、DOGS、NOT、HMSTR、JETTON等TON网络代币支付。",
+      "limitMessage": "可用范围从 {min} 到 {max} {symbol}。当前：{convertedAmount} {symbol}",
+      "commission": "佣金",
+      "toBalance": "将存入余额",
+      "pay": "支付"
+    },
+    "subscription": {
+      "title": "订阅",
+      "addSubscription": "添加订阅",
+      "pay": "支付",
+      "addFree": "🎁 免费添加",
+      "selectPeriod": "选择期限",
+      "periodMultiplier": "期限倍数",
+      "selectPlan": "选择套餐",
+      "selectServer": "选择服务器",
+      "base": "基础",
+      "premium": "高级",
+      "orSelect": "或选择",
+      "name": {
+        "default": "订阅",
+        "label": "订阅名称",
+        "tooltip": "订阅名称将显示在订阅列表中。",
+        "placeholder": "输入订阅名称"
+      },
+      "privileges": {
+        "selectServers": "选择所需的服务器",
+        "oneBaseServer": "选择一个基础服务器",
+        "oneBaseOrPremiumServer": "选择一个基础或高级服务器",
+        "accessAllServers": "访问所有服务器",
+        "accessAllBaseServers": "访问所有基础服务器",
+        "accessBaseServers": "访问 {{baseCount}} 个基础服务器",
+        "accessBaseAndPremiumServers": "访问 {{baseCount}} 个基础服务器和 {{premiumCount}} 个高级服务器",
+        "trafficPlan": "无期限限制，只按流量付费！",
+        "devices": "最多 {count} 台设备同时在线",
+        "customDevices": "所需设备数量",
+        "servers": "访问所有服务器",
+        "baseServers": "访问基础服务器",
+        "premiumServers": "访问高级服务器",
+        "customServers": "所需服务器数量",
+        "traffic": "无限流量",
+        "customTraffic": "所需流量数量",
+        "dailyTraffic": "每日 {count} GB 流量",
+        "weeklyTraffic": "每周 {count} GB 流量",
+        "monthlyTraffic": "每月 {count} GB 流量",
+        "yearlyTraffic": "每年 {count} GB 流量",
+        "security": "安全连接",
+        "speed": "无速度限制",
+        "masking": "流量伪装",
+        "noAds": "无广告",
+        "devicesSupport": "广泛的设备支持",
+        "xray": "可靠的XRAY核心",
+        "opensource": "开源"
+      },
+      "trafficReset": {
+        "title": "流量重置",
+        "daily": "每日",
+        "weekly": "每周",
+        "monthly": "每月",
+        "yearly": "每年"
+      },
+      "period": {
+        "hour": "1 小时",
+        "day": "1 天",
+        "week": "1 周",
+        "month": "1 个月",
+        "threeMonth": "3 个月",
+        "sixMonth": "6 个月",
+        "year": "1 年",
+        "twoYear": "2 年",
+        "threeYear": "3 年",
+        "indefinitely": "无限期"
+      },
+      "options": {
+        "title": "选项",
+        "autoRenewal": "自动续订",
+        "autoRenewalDescription": "自动续订订阅",
+        "info": "订阅将自动从您的余额中扣除",
+        "period": "记住期限"
+      },
+      "traffic": "流量",
+      "addTraffic": "添加流量",
+      "addingTraffic": "添加流量",
+      "buy": "购买",
+      "extension": "延长",
+      "subscriptionExtension": "订阅延长",
+      "freeExtension": "🎁 免费延长",
+      "summary": {
+        "title": "总计",
+        "name": "名称",
+        "traffic": "流量",
+        "unlimit": "无限",
+        "daily": "每日",
+        "weekly": "每周",
+        "monthly": "每月",
+        "yearly": "每年",
+        "servers": "服务器",
+        "fullServers": "访问所有",
+        "allBase": "所有基础",
+        "notServers": "未设置！",
+        "period": "期限",
+        "periodDiscount": "期限折扣",
+        "roleDiscount": "角色折扣",
+        "autoRenewal": "自动续订",
+        "yes": "是",
+        "no": "否",
+        "toPaid": "待支付"
+      },
+      "purchase": "购买"
+    }
+  },
+  "common": {
+    "modal": {
+      "cancel": "取消",
+      "accept": "接受",
+      "close": "关闭"
+    },
+    "scrolling": "向下滚动",
+    "clipboard": {
+      "copied": "已复制到剪贴板！",
+      "failed": "复制失败！"
+    },
+    "freePlan": {
+      "trialAvailable": "您有 {days} 天的试用期。",
+      "activate": "激活",
+      "activationFailed": "无法激活免费计划"
+    },
+    "units": {
+      "bytes": "字节",
+      "kilobytes": "千字节",
+      "megabytes": "兆字节",
+      "gigabytes": "千兆字节",
+      "terabytes": "太字节",
+      "petabytes": "拍字节",
+      "exabytes": "艾字节",
+      "zettabytes": "泽字节",
+      "yottabytes": "尧字节"
+    }
+  },
+  "freePlan": {
+    "trialAvailable": "您有 {gb} GB 奖励流量可用于无限期试用订阅。",
+    "activate": "激活",
+    "activationFailed": "无法激活免费计划",
+    "modalTitle": "激活试用期",
+    "modalAction": "激活",
+    "modalConfirmation": "您确定要激活试用期吗？"
+  },
+  "friends": {
+    "title": "朋友",
+    "get": "获得奖励",
+    "for": "邀请朋友",
+    "level": "等级",
+    "total": "总计",
+    "list": {
+      "title": "您的朋友",
+      "top": "顶部",
+      "empty": "这里还没有人🥲"
+    },
+    "bonuses": {
+      "title": "奖励",
+      "inviteTitle": "邀请朋友",
+      "paymentTitle": "朋友的活动",
+      "inviteInfo": "朋友首次付款或激活试用期后！",
+      "paymentInfo": "永久获得您朋友和您朋友邀请的朋友的收入百分比！",
+      "lvl1Info": "您邀请的人",
+      "lvl2Info": "朋友邀请的人",
+      "lvl3Info": "朋友的朋友邀请的人😁"
+    },
+    "invite": {
+      "title": "邀请朋友",
+      "message": "发送消息",
+      "copy": "复制链接",
+      "story": "发送到故事"
+    },
+    "statistics": {
+      "title": "统计",
+      "earnTitle": "您的收益",
+      "inviteTitle": "已邀请",
+      "earnInfo": "您总共赚取了",
+      "inviteInfo": "已邀请 | 已激活 | 其中标准 | 其中高级"
+    }
+  },
+  "greenCheck": {
+    "loading": "正在检查连接安全...",
+    "danger": "您的连接不安全！\n请连接VPN！",
+    "success": "您的连接已受保护！"
+  },
+  "navbar": {
+    "home": "主页",
+    "earning": "收益",
+    "gifts": "礼物",
+    "friends": "朋友",
+    "billing": "账单",
+    "settings": "设置",
+    "profile": "个人资料",
+    "games": "游戏"
+  },
+  "subscriptions": {
+    "title": "订阅",
+    "connection": "连接",
+    "configs": "配置",
+    "addSubscription": "添加订阅",
+    "addSubscriptionTitle": "添加订阅",
+    "yourSubscriptions": "您的订阅",
+    "noSubscriptions": "您没有活跃的订阅",
+    "loading": "正在加载订阅数据...",
+    "notFound": "未找到订阅",
+    "renewSubscription": "续订",
+    "autoRenewalEnabled": "已启用自动续订",
+    "autoRenewalDisabled": "已禁用自动续订",
+    "subscriptionDeleted": "订阅已成功删除",
+    "subscriptionDataUpdated": "订阅数据已成功更新",
+    "subscriptionRenewed": "订阅已成功续订",
+    "changeServer": "更改服务器",
+    "changeServerTitle": "更改服务器",
+    "changeServerWarning": "注意：服务器更改将在2分钟内完成。更改服务器后，您需要更新应用程序中的数据！",
+    "active": "活跃",
+    "notActive": "不活跃",
+    "online": "在线",
+    "offline": "离线",
+    "traffic": "流量",
+    "trafficReset": {
+      "daily": "每日",
+      "weekly": "每周",
+      "monthly": "每月",
+      "yearly": "每年",
+      "unlimit": "无限"
+    },
+    "inTotal": "总计",
+    "servers": "服务器",
+    "fullServers": "访问所有",
+    "allBase": "所有基础",
+    "base": "基础",
+    "premium": "高级",
+    "devices": "设备",
+    "period": "付款周期",
+    "expires": "到期",
+    "autoRenewal": "自动续订",
+    "actions": "操作",
+    "save": "保存",
+    "required": "推荐！",
+    "paid": "付费！",
+    "instruction": {
+      "stage1": "下载应用程序",
+      "stage2": "在应用程序中添加订阅",
+      "copyUrl": "复制订阅URL",
+      "openQR": "订阅二维码",
+      "scanApp": "在应用程序中扫描",
+      "scanPhone": "在手机中扫描",
+      "add": "添加到应用程序"
+    },
+    "platform": "平台",
+    "success": {
+      "serversUpdated": "服务器已成功更新"
+    },
+    "errors": {
+      "loadFailed": "无法加载订阅",
+      "disableAutoRenewalFailed": "禁用自动续订失败！",
+      "enableAutoRenewalFailed": "启用自动续订失败！",
+      "deleteSubscriptionFailed": "删除订阅失败！",
+      "resetSubscriptionFailed": "重置订阅数据失败！",
+      "renewSubscriptionFailed": "无法续订订阅！",
+      "fetchingServers": "无法加载服务器",
+      "updatingServers": "无法更新服务器",
+      "serverLimitReached": "您已达到服务器限制",
+      "serverLimitReachedPremium": "您已达到高级服务器限制",
+      "serverLimitReachedBase": "您已达到基础服务器限制"
+    },
+    "periods": {
+      "trial": "试用期",
+      "hour": "1 小时",
+      "day": "1 天",
+      "week": "1 周",
+      "month": "1 个月",
+      "threeMonth": "3 个月",
+      "sixMonth": "6 个月",
+      "year": "1 年",
+      "twoYear": "2 年",
+      "threeYear": "3 年",
+      "indefinitely": "无限期"
+    },
+    "modals": {
+      "delete": {
+        "title": "删除订阅",
+        "button": "删除",
+        "action": "删除",
+        "message": "您确定要永久删除订阅吗？它将无法恢复！不提供赔偿！"
+      },
+      "qr": {
+        "title": "订阅二维码",
+        "description": "在客户端应用程序中扫描"
+      },
+      "refresh": {
+        "title": "重置订阅数据",
+        "button": "重置数据",
+        "action": "重置",
+        "message": "您确定要重置订阅数据吗？之后，订阅密钥和地址将更改为新的！您需要重新将订阅添加到应用程序中！通常，如果您的订阅泄露或有人访问了它，就会进行重置！"
+      },
+      "autoRenewal": {
+        "enableTitle": "启用自动续订",
+        "disableTitle": "禁用自动续订",
+        "enableAction": "启用",
+        "disableAction": "禁用",
+        "enableMessage": "您想启用自动续订吗？订阅到期时，资金将自动扣除。",
+        "disableMessage": "您想禁用自动续订吗？订阅到期后，它将被停用。"
+      },
+      "renew": {
+        "title": "续订",
+        "action": "续订",
+        "message": "您想续订订阅吗？您的余额将扣除 {price} 星星。"
+      }
+    }
+  },
+  "user": {
+    "role": "角色",
+    "discount": "折扣",
+    "wallet": "钱包",
+    "usage": "使用情况",
+    "inPayments": "在付款中"
+  },
+  "wallet": {
+    "connect": "连接TON钱包",
+    "disconnect": "解除绑定",
+    "replace": "替换"
+  },
+  "earning": {
+    "title": "Добыча",
+    "earned": "Награда получена",
+    "rewardTask": {
+      "title": "Посмотреть рекламу"
+    }
+  }
+}

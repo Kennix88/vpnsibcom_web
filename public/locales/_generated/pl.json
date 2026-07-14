@@ -1,1 +1,359 @@
-{"billing":{"title":"Rozliczenia","description":"Ruch Twoich finansów","wallet":{"title":"Portfel","payment":"Doładować","paymentInfo":"Konto używane do płatności.","withdrawal":"Wypłacić","withdrawalInfo":"Konto, z którego można wypłacić środki.","holdInfo":"Zamrożone środki.\nWkrótce zostaną przelane na konto wypłat."},"payment":{"title":"Doładowanie salda","sum":"Kwota doładowania","enterSum":"Wprowadź kwotę","sort":{"all":"Wszystkie","crypto":"Kryptowaluta","card":"Karty","sbp":"SBP","wallets":"Portfele","skins":"Skórki"},"method":"Metoda płatności","split":"Kup Telegram Stars bez KYC, z korzyścią do 40% na platformie Split!","splitBay":"Kup STARS","walletInfo":"Płać w TON, USDT-TON, DOGS, NOT, HMSTR, JETTON i innych tokenach sieci TON, podłączając portfel TON.","limitMessage":"Dostępne od {min} do {max} {symbol}. Obecnie: {convertedAmount} {symbol}","commission":"Prowizja","toBalance":"Na saldo wpłynie","pay":"Zapłać"},"subscription":{"title":"Subskrypcja","addSubscription":"Dodaj subskrypcję","pay":"Zapłać","addFree":"🎁 Dodaj za darmo","selectPeriod":"Wybierz okres","periodMultiplier":"Mnożnik okresu","selectPlan":"Wybierz plan","selectServer":"Wybierz serwer","base":"Podstawowe","premium":"Premium","orSelect":"lub do wyboru","name":{"default":"Subskrypcja","label":"Nazwa subskrypcji","tooltip":"Nazwa subskrypcji, która będzie wyświetlana na liście subskrypcji.","placeholder":"Wprowadź nazwę subskrypcji"},"privileges":{"selectServers":"Wybierz potrzebne serwery","oneBaseServer":"Jeden podstawowy serwer do wyboru","oneBaseOrPremiumServer":"Jeden podstawowy lub premium serwer do wyboru","accessAllServers":"Dostęp do wszystkich serwerów","accessAllBaseServers":"Dostęp do wszystkich podstawowych serwerów","accessBaseServers":"Dostęp do {{baseCount}} podstawowych serwerów","accessBaseAndPremiumServers":"Dostęp do {{baseCount}} podstawowych i {{premiumCount}} serwerów premium","trafficPlan":"Bez terminu ważności, płatność tylko za ruch!","devices":"Do {count} jednoczesnych urządzeń","customDevices":"Wymagana liczba urządzeń","servers":"Dostęp do wszystkich serwerów","baseServers":"Dostęp do podstawowych serwerów","premiumServers":"Dostęp do serwerów premium","customServers":"Wymagana liczba serwerów","traffic":"Nielimitowany ruch","customTraffic":"Wymagana ilość ruchu","dailyTraffic":"{count} GB ruchu dziennie","weeklyTraffic":"{count} GB ruchu tygodniowo","monthlyTraffic":"{count} GB ruchu miesięcznie","yearlyTraffic":"{count} GB ruchu rocznie","security":"Bezpieczne połączenie","speed":"Bez ograniczeń prędkości","masking":"Maskowanie Twojego ruchu","noAds":"Brak reklam","devicesSupport":"Szerokie wsparcie dla urządzeń","xray":"Niezawodny rdzeń XRAY","opensource":"Otwarty kod źródłowy"},"trafficReset":{"title":"Resetowanie ruchu","daily":"Codziennie","weekly":"Co tydzień","monthly":"Co miesiąc","yearly":"Co rok"},"period":{"hour":"1 godzina","day":"1 dzień","week":"1 tydzień","month":"1 miesiąc","threeMonth":"3 miesiące","sixMonth":"6 miesięcy","year":"1 rok","twoYear":"2 lata","threeYear":"3 lata","indefinitely":"Bezterminowo"},"options":{"title":"Opcje","autoRenewal":"Automatyczne odnawianie","autoRenewalDescription":"Automatycznie odnawiaj subskrypcję","info":"Subskrypcja zostanie automatycznie odnowiona z Twojego salda","period":"Zapamiętaj okres"},"traffic":"Ruch","addTraffic":"Dodaj ruch","addingTraffic":"Dodawanie ruchu","buy":"Dokup","extension":"Przedłużenie","subscriptionExtension":"Przedłużenie subskrypcji","freeExtension":"🎁 Przedłuż za darmo","summary":{"title":"Podsumowanie","name":"Nazwa","traffic":"Ruch","unlimit":"Nielimitowany","daily":"dziennie","weekly":"tygodniowo","monthly":"miesięcznie","yearly":"rocznie","servers":"Serwery","fullServers":"Dostęp do wszystkich","allBase":"Wszystkie podstawowe","notServers":"Nie ustawiono!","period":"Okres","periodDiscount":"Zniżka za okres","roleDiscount":"Zniżka za rolę","autoRenewal":"Automatyczne odnawianie","yes":"Tak","no":"Nie","toPaid":"Do zapłaty"},"purchase":"Kup"}},"common":{"modal":{"cancel":"Anuluj","accept":"Akceptuj","close":"Zamknij"},"scrolling":"Przewiń w dół","clipboard":{"copied":"Skopiowano do schowka!","failed":"Nie udało się skopiować!"},"freePlan":{"trialAvailable":"Dostępny jest dla Ciebie okres próbny na {days} dni.","activate":"Aktywuj","activationFailed":"Nie udało się aktywować darmowego planu"},"units":{"bytes":"B","kilobytes":"KB","megabytes":"MB","gigabytes":"GB","terabytes":"TB","petabytes":"PB","exabytes":"EB","zettabytes":"ZB","yottabytes":"YB"}},"freePlan":{"trialAvailable":"Dostępny jest dla Ciebie {gb} GB bonusowego ruchu dla subskrypcji Trial na czas nieokreślony.","activate":"Aktywuj","activationFailed":"Nie udało się aktywować darmowego planu","modalTitle":"Aktywacja okresu próbnego","modalAction":"Aktywuj","modalConfirmation":"Czy na pewno chcesz aktywować okres próbny?"},"friends":{"title":"Znajomi","get":"Otrzymuj nagrody","for":"za zapraszanie znajomych","level":"poziom","total":"Razem","list":{"title":"Twoi znajomi","top":"Top","empty":"Jeszcze nikogo tu nie ma 🥲"},"bonuses":{"title":"Bonusy","inviteTitle":"Za zaproszenie znajomego","paymentTitle":"Za działania znajomego","inviteInfo":"Po pierwszej płatności znajomego lub aktywacji okresu próbnego!","paymentInfo":"Otrzymuj procent od naszych dochodów za znajomych i tych, których zaprosili Twoi znajomi na zawsze!","lvl1Info":"Ci, których zaprosiłeś Ty","lvl2Info":"Ci, których zaprosili znajomi","lvl3Info":"Ci, których zaprosili znajomi znajomych 😁"},"invite":{"title":"Zaproś znajomego","message":"Wyślij wiadomość","copy":"Kopiuj link","story":"Wyślij do relacji"},"statistics":{"title":"Statystyki","earnTitle":"Twoje zarobki","inviteTitle":"Zaproszono","earnInfo":"Zarobiłeś przez cały czas","inviteInfo":"Zaproszono | Aktywowano | Z tego Standard | Z tego Premium"}},"greenCheck":{"loading":"Sprawdzanie bezpieczeństwa połączenia...","danger":"Twoje połączenie NIE jest bezpieczne!\nPodłącz VPN!","success":"Twoje połączenie jest bezpieczne!"},"navbar":{"home":"Strona główna","earning":"Zarobki","gifts":"Prezenty","friends":"Znajomi","billing":"Rozliczenia","settings":"Ustawienia","profile":"Profil","games":"Gry"},"subscriptions":{"title":"Subskrypcja","connection":"Połączenie","configs":"Konfiguracje","addSubscription":"Dodaj subskrypcję","addSubscriptionTitle":"Dodawanie subskrypcji","yourSubscriptions":"Twoje subskrypcje","noSubscriptions":"Nie masz aktywnych subskrypcji","loading":"Ładowanie danych subskrypcji...","notFound":"Subskrypcja nie znaleziona","renewSubscription":"Odnów subskrypcję","autoRenewalEnabled":"Automatyczne odnawianie włączone","autoRenewalDisabled":"Automatyczne odnawianie wyłączone","subscriptionDeleted":"Subskrypcja została pomyślnie usunięta","subscriptionDataUpdated":"Dane subskrypcji zostały pomyślnie zaktualizowane","subscriptionRenewed":"Subskrypcja pomyślnie odnowiona","changeServer":"Zmień serwer","changeServerTitle":"Zmiana serwera","changeServerWarning":"UWAGA: Zmiana serwera trwa do 2 minut. Po zmianie serwera należy zaktualizować dane w aplikacji!","active":"Aktywna","notActive":"Nieaktywna","online":"Online","offline":"Offline","traffic":"Ruch","trafficReset":{"daily":"Codziennie","weekly":"Co tydzień","monthly":"Co miesiąc","yearly":"Co rok","unlimit":"Nielimitowany"},"inTotal":"W sumie","servers":"Serwery","fullServers":"Dostęp do wszystkich","allBase":"Wszystkie podstawowe","base":"Podstawowe","premium":"Premium","devices":"Urządzenia","period":"Częstotliwość płatności","expires":"Wygasa","autoRenewal":"Automatyczne odnawianie","actions":"Działania","save":"Zapisz","required":"Zalecane!","paid":"Płatne!","instruction":{"stage1":"Pobierz aplikację","stage2":"Dodaj subskrypcję do aplikacji","copyUrl":"Kopiuj URL subskrypcji","openQR":"Kod QR subskrypcji","scanApp":"Skanuj w aplikacji","scanPhone":"Skanuj w telefonie","add":"Dodaj do aplikacji"},"platform":"Platforma","success":{"serversUpdated":"Serwery pomyślnie zaktualizowane"},"errors":{"loadFailed":"Nie udało się załadować subskrypcji","disableAutoRenewalFailed":"Błąd wyłączenia automatycznego odnawiania!","enableAutoRenewalFailed":"Błąd włączenia automatycznego odnawiania!","deleteSubscriptionFailed":"Błąd usunięcia subskrypcji!","resetSubscriptionFailed":"Błąd resetowania danych subskrypcji!","renewSubscriptionFailed":"Nie udało się odnowić subskrypcji!","fetchingServers":"Nie udało się załadować serwerów","updatingServers":"Nie udało się zaktualizować serwerów","serverLimitReached":"Osiągnięto limit serwerów","serverLimitReachedPremium":"Osiągnięto limit serwerów premium","serverLimitReachedBase":"Osiągnięto limit serwerów podstawowych"},"periods":{"trial":"Okres próbny","hour":"1 godzina","day":"1 dzień","week":"1 tydzień","month":"1 miesiąc","threeMonth":"3 miesiące","sixMonth":"6 miesięcy","year":"1 rok","twoYear":"2 lata","threeYear":"3 lata","indefinitely":"Bezterminowo"},"modals":{"delete":{"title":"Usuwanie subskrypcji","button":"Usuń","action":"Usuń","message":"Czy na pewno chcesz bezpowrotnie usunąć subskrypcję? Nie będzie można jej odzyskać! Nie przewidziano rekompensaty!"},"qr":{"title":"Kod QR subskrypcji","description":"Skanuj w aplikacji klienta"},"refresh":{"title":"Resetowanie danych subskrypcji","button":"Zresetuj dane","action":"Zresetuj","message":"Czy na pewno chcesz zresetować dane subskrypcji? Po tym klucze i adres subskrypcji zmienią się na nowe! Będziesz musiał ponownie dodać subskrypcję do aplikacji! Zazwyczaj resetuje się, jeśli Twoja subskrypcja wyciekła do sieci lub ktoś uzyskał do niej dostęp!"},"autoRenewal":{"enableTitle":"Włączanie automatycznego odnawiania","disableTitle":"Wyłączanie automatycznego odnawiania","enableAction":"Włącz","disableAction":"Wyłącz","enableMessage":"Czy chcesz włączyć automatyczne odnawianie subskrypcji? Środki będą pobierane automatycznie po wygaśnięciu subskrypcji.","disableMessage":"Czy chcesz wyłączyć automatyczne odnawianie subskrypcji? Po wygaśnięciu subskrypcja zostanie dezaktywowana."},"renew":{"title":"Odnawianie subskrypcji","action":"Odnów","message":"Czy chcesz odnowić subskrypcję? Z Twojego salda zostanie pobrane {price} gwiazdek."}}},"user":{"role":"Rola","discount":"Zniżka","wallet":"Portfel","usage":"Użycie","inPayments":"w płatnościach"},"wallet":{"connect":"Podłącz portfel TON","disconnect":"Odłącz","replace":"Zastąp"},"earning":{"title":"Добыча","earned":"Награда получена","rewardTask":{"title":"Посмотреть рекламу"}}}
+{
+  "billing": {
+    "title": "Rozliczenia",
+    "description": "Ruch Twoich finansów",
+    "wallet": {
+      "title": "Portfel",
+      "payment": "Doładować",
+      "paymentInfo": "Konto używane do płatności.",
+      "withdrawal": "Wypłacić",
+      "withdrawalInfo": "Konto, z którego można wypłacić środki.",
+      "holdInfo": "Zamrożone środki.\nWkrótce zostaną przelane na konto wypłat."
+    },
+    "payment": {
+      "title": "Doładowanie salda",
+      "sum": "Kwota doładowania",
+      "enterSum": "Wprowadź kwotę",
+      "sort": {
+        "all": "Wszystkie",
+        "crypto": "Kryptowaluta",
+        "card": "Karty",
+        "sbp": "SBP",
+        "wallets": "Portfele",
+        "skins": "Skórki"
+      },
+      "method": "Metoda płatności",
+      "split": "Kup Telegram Stars bez KYC, z korzyścią do 40% na platformie Split!",
+      "splitBay": "Kup STARS",
+      "walletInfo": "Płać w TON, USDT-TON, DOGS, NOT, HMSTR, JETTON i innych tokenach sieci TON, podłączając portfel TON.",
+      "limitMessage": "Dostępne od {min} do {max} {symbol}. Obecnie: {convertedAmount} {symbol}",
+      "commission": "Prowizja",
+      "toBalance": "Na saldo wpłynie",
+      "pay": "Zapłać"
+    },
+    "subscription": {
+      "title": "Subskrypcja",
+      "addSubscription": "Dodaj subskrypcję",
+      "pay": "Zapłać",
+      "addFree": "🎁 Dodaj za darmo",
+      "selectPeriod": "Wybierz okres",
+      "periodMultiplier": "Mnożnik okresu",
+      "selectPlan": "Wybierz plan",
+      "selectServer": "Wybierz serwer",
+      "base": "Podstawowe",
+      "premium": "Premium",
+      "orSelect": "lub do wyboru",
+      "name": {
+        "default": "Subskrypcja",
+        "label": "Nazwa subskrypcji",
+        "tooltip": "Nazwa subskrypcji, która będzie wyświetlana na liście subskrypcji.",
+        "placeholder": "Wprowadź nazwę subskrypcji"
+      },
+      "privileges": {
+        "selectServers": "Wybierz potrzebne serwery",
+        "oneBaseServer": "Jeden podstawowy serwer do wyboru",
+        "oneBaseOrPremiumServer": "Jeden podstawowy lub premium serwer do wyboru",
+        "accessAllServers": "Dostęp do wszystkich serwerów",
+        "accessAllBaseServers": "Dostęp do wszystkich podstawowych serwerów",
+        "accessBaseServers": "Dostęp do {{baseCount}} podstawowych serwerów",
+        "accessBaseAndPremiumServers": "Dostęp do {{baseCount}} podstawowych i {{premiumCount}} serwerów premium",
+        "trafficPlan": "Bez terminu ważności, płatność tylko za ruch!",
+        "devices": "Do {count} jednoczesnych urządzeń",
+        "customDevices": "Wymagana liczba urządzeń",
+        "servers": "Dostęp do wszystkich serwerów",
+        "baseServers": "Dostęp do podstawowych serwerów",
+        "premiumServers": "Dostęp do serwerów premium",
+        "customServers": "Wymagana liczba serwerów",
+        "traffic": "Nielimitowany ruch",
+        "customTraffic": "Wymagana ilość ruchu",
+        "dailyTraffic": "{count} GB ruchu dziennie",
+        "weeklyTraffic": "{count} GB ruchu tygodniowo",
+        "monthlyTraffic": "{count} GB ruchu miesięcznie",
+        "yearlyTraffic": "{count} GB ruchu rocznie",
+        "security": "Bezpieczne połączenie",
+        "speed": "Bez ograniczeń prędkości",
+        "masking": "Maskowanie Twojego ruchu",
+        "noAds": "Brak reklam",
+        "devicesSupport": "Szerokie wsparcie dla urządzeń",
+        "xray": "Niezawodny rdzeń XRAY",
+        "opensource": "Otwarty kod źródłowy"
+      },
+      "trafficReset": {
+        "title": "Resetowanie ruchu",
+        "daily": "Codziennie",
+        "weekly": "Co tydzień",
+        "monthly": "Co miesiąc",
+        "yearly": "Co rok"
+      },
+      "period": {
+        "hour": "1 godzina",
+        "day": "1 dzień",
+        "week": "1 tydzień",
+        "month": "1 miesiąc",
+        "threeMonth": "3 miesiące",
+        "sixMonth": "6 miesięcy",
+        "year": "1 rok",
+        "twoYear": "2 lata",
+        "threeYear": "3 lata",
+        "indefinitely": "Bezterminowo"
+      },
+      "options": {
+        "title": "Opcje",
+        "autoRenewal": "Automatyczne odnawianie",
+        "autoRenewalDescription": "Automatycznie odnawiaj subskrypcję",
+        "info": "Subskrypcja zostanie automatycznie odnowiona z Twojego salda",
+        "period": "Zapamiętaj okres"
+      },
+      "traffic": "Ruch",
+      "addTraffic": "Dodaj ruch",
+      "addingTraffic": "Dodawanie ruchu",
+      "buy": "Dokup",
+      "extension": "Przedłużenie",
+      "subscriptionExtension": "Przedłużenie subskrypcji",
+      "freeExtension": "🎁 Przedłuż za darmo",
+      "summary": {
+        "title": "Podsumowanie",
+        "name": "Nazwa",
+        "traffic": "Ruch",
+        "unlimit": "Nielimitowany",
+        "daily": "dziennie",
+        "weekly": "tygodniowo",
+        "monthly": "miesięcznie",
+        "yearly": "rocznie",
+        "servers": "Serwery",
+        "fullServers": "Dostęp do wszystkich",
+        "allBase": "Wszystkie podstawowe",
+        "notServers": "Nie ustawiono!",
+        "period": "Okres",
+        "periodDiscount": "Zniżka za okres",
+        "roleDiscount": "Zniżka za rolę",
+        "autoRenewal": "Automatyczne odnawianie",
+        "yes": "Tak",
+        "no": "Nie",
+        "toPaid": "Do zapłaty"
+      },
+      "purchase": "Kup"
+    }
+  },
+  "common": {
+    "modal": {
+      "cancel": "Anuluj",
+      "accept": "Akceptuj",
+      "close": "Zamknij"
+    },
+    "scrolling": "Przewiń w dół",
+    "clipboard": {
+      "copied": "Skopiowano do schowka!",
+      "failed": "Nie udało się skopiować!"
+    },
+    "freePlan": {
+      "trialAvailable": "Dostępny jest dla Ciebie okres próbny na {days} dni.",
+      "activate": "Aktywuj",
+      "activationFailed": "Nie udało się aktywować darmowego planu"
+    },
+    "units": {
+      "bytes": "B",
+      "kilobytes": "KB",
+      "megabytes": "MB",
+      "gigabytes": "GB",
+      "terabytes": "TB",
+      "petabytes": "PB",
+      "exabytes": "EB",
+      "zettabytes": "ZB",
+      "yottabytes": "YB"
+    }
+  },
+  "freePlan": {
+    "trialAvailable": "Dostępny jest dla Ciebie {gb} GB bonusowego ruchu dla subskrypcji Trial na czas nieokreślony.",
+    "activate": "Aktywuj",
+    "activationFailed": "Nie udało się aktywować darmowego planu",
+    "modalTitle": "Aktywacja okresu próbnego",
+    "modalAction": "Aktywuj",
+    "modalConfirmation": "Czy na pewno chcesz aktywować okres próbny?"
+  },
+  "friends": {
+    "title": "Znajomi",
+    "get": "Otrzymuj nagrody",
+    "for": "za zapraszanie znajomych",
+    "level": "poziom",
+    "total": "Razem",
+    "list": {
+      "title": "Twoi znajomi",
+      "top": "Top",
+      "empty": "Jeszcze nikogo tu nie ma 🥲"
+    },
+    "bonuses": {
+      "title": "Bonusy",
+      "inviteTitle": "Za zaproszenie znajomego",
+      "paymentTitle": "Za działania znajomego",
+      "inviteInfo": "Po pierwszej płatności znajomego lub aktywacji okresu próbnego!",
+      "paymentInfo": "Otrzymuj procent od naszych dochodów za znajomych i tych, których zaprosili Twoi znajomi na zawsze!",
+      "lvl1Info": "Ci, których zaprosiłeś Ty",
+      "lvl2Info": "Ci, których zaprosili znajomi",
+      "lvl3Info": "Ci, których zaprosili znajomi znajomych 😁"
+    },
+    "invite": {
+      "title": "Zaproś znajomego",
+      "message": "Wyślij wiadomość",
+      "copy": "Kopiuj link",
+      "story": "Wyślij do relacji"
+    },
+    "statistics": {
+      "title": "Statystyki",
+      "earnTitle": "Twoje zarobki",
+      "inviteTitle": "Zaproszono",
+      "earnInfo": "Zarobiłeś przez cały czas",
+      "inviteInfo": "Zaproszono | Aktywowano | Z tego Standard | Z tego Premium"
+    }
+  },
+  "greenCheck": {
+    "loading": "Sprawdzanie bezpieczeństwa połączenia...",
+    "danger": "Twoje połączenie NIE jest bezpieczne!\nPodłącz VPN!",
+    "success": "Twoje połączenie jest bezpieczne!"
+  },
+  "navbar": {
+    "home": "Strona główna",
+    "earning": "Zarobki",
+    "gifts": "Prezenty",
+    "friends": "Znajomi",
+    "billing": "Rozliczenia",
+    "settings": "Ustawienia",
+    "profile": "Profil",
+    "games": "Gry"
+  },
+  "subscriptions": {
+    "title": "Subskrypcja",
+    "connection": "Połączenie",
+    "configs": "Konfiguracje",
+    "addSubscription": "Dodaj subskrypcję",
+    "addSubscriptionTitle": "Dodawanie subskrypcji",
+    "yourSubscriptions": "Twoje subskrypcje",
+    "noSubscriptions": "Nie masz aktywnych subskrypcji",
+    "loading": "Ładowanie danych subskrypcji...",
+    "notFound": "Subskrypcja nie znaleziona",
+    "renewSubscription": "Odnów subskrypcję",
+    "autoRenewalEnabled": "Automatyczne odnawianie włączone",
+    "autoRenewalDisabled": "Automatyczne odnawianie wyłączone",
+    "subscriptionDeleted": "Subskrypcja została pomyślnie usunięta",
+    "subscriptionDataUpdated": "Dane subskrypcji zostały pomyślnie zaktualizowane",
+    "subscriptionRenewed": "Subskrypcja pomyślnie odnowiona",
+    "changeServer": "Zmień serwer",
+    "changeServerTitle": "Zmiana serwera",
+    "changeServerWarning": "UWAGA: Zmiana serwera trwa do 2 minut. Po zmianie serwera należy zaktualizować dane w aplikacji!",
+    "active": "Aktywna",
+    "notActive": "Nieaktywna",
+    "online": "Online",
+    "offline": "Offline",
+    "traffic": "Ruch",
+    "trafficReset": {
+      "daily": "Codziennie",
+      "weekly": "Co tydzień",
+      "monthly": "Co miesiąc",
+      "yearly": "Co rok",
+      "unlimit": "Nielimitowany"
+    },
+    "inTotal": "W sumie",
+    "servers": "Serwery",
+    "fullServers": "Dostęp do wszystkich",
+    "allBase": "Wszystkie podstawowe",
+    "base": "Podstawowe",
+    "premium": "Premium",
+    "devices": "Urządzenia",
+    "period": "Częstotliwość płatności",
+    "expires": "Wygasa",
+    "autoRenewal": "Automatyczne odnawianie",
+    "actions": "Działania",
+    "save": "Zapisz",
+    "required": "Zalecane!",
+    "paid": "Płatne!",
+    "instruction": {
+      "stage1": "Pobierz aplikację",
+      "stage2": "Dodaj subskrypcję do aplikacji",
+      "copyUrl": "Kopiuj URL subskrypcji",
+      "openQR": "Kod QR subskrypcji",
+      "scanApp": "Skanuj w aplikacji",
+      "scanPhone": "Skanuj w telefonie",
+      "add": "Dodaj do aplikacji"
+    },
+    "platform": "Platforma",
+    "success": {
+      "serversUpdated": "Serwery pomyślnie zaktualizowane"
+    },
+    "errors": {
+      "loadFailed": "Nie udało się załadować subskrypcji",
+      "disableAutoRenewalFailed": "Błąd wyłączenia automatycznego odnawiania!",
+      "enableAutoRenewalFailed": "Błąd włączenia automatycznego odnawiania!",
+      "deleteSubscriptionFailed": "Błąd usunięcia subskrypcji!",
+      "resetSubscriptionFailed": "Błąd resetowania danych subskrypcji!",
+      "renewSubscriptionFailed": "Nie udało się odnowić subskrypcji!",
+      "fetchingServers": "Nie udało się załadować serwerów",
+      "updatingServers": "Nie udało się zaktualizować serwerów",
+      "serverLimitReached": "Osiągnięto limit serwerów",
+      "serverLimitReachedPremium": "Osiągnięto limit serwerów premium",
+      "serverLimitReachedBase": "Osiągnięto limit serwerów podstawowych"
+    },
+    "periods": {
+      "trial": "Okres próbny",
+      "hour": "1 godzina",
+      "day": "1 dzień",
+      "week": "1 tydzień",
+      "month": "1 miesiąc",
+      "threeMonth": "3 miesiące",
+      "sixMonth": "6 miesięcy",
+      "year": "1 rok",
+      "twoYear": "2 lata",
+      "threeYear": "3 lata",
+      "indefinitely": "Bezterminowo"
+    },
+    "modals": {
+      "delete": {
+        "title": "Usuwanie subskrypcji",
+        "button": "Usuń",
+        "action": "Usuń",
+        "message": "Czy na pewno chcesz bezpowrotnie usunąć subskrypcję? Nie będzie można jej odzyskać! Nie przewidziano rekompensaty!"
+      },
+      "qr": {
+        "title": "Kod QR subskrypcji",
+        "description": "Skanuj w aplikacji klienta"
+      },
+      "refresh": {
+        "title": "Resetowanie danych subskrypcji",
+        "button": "Zresetuj dane",
+        "action": "Zresetuj",
+        "message": "Czy na pewno chcesz zresetować dane subskrypcji? Po tym klucze i adres subskrypcji zmienią się na nowe! Będziesz musiał ponownie dodać subskrypcję do aplikacji! Zazwyczaj resetuje się, jeśli Twoja subskrypcja wyciekła do sieci lub ktoś uzyskał do niej dostęp!"
+      },
+      "autoRenewal": {
+        "enableTitle": "Włączanie automatycznego odnawiania",
+        "disableTitle": "Wyłączanie automatycznego odnawiania",
+        "enableAction": "Włącz",
+        "disableAction": "Wyłącz",
+        "enableMessage": "Czy chcesz włączyć automatyczne odnawianie subskrypcji? Środki będą pobierane automatycznie po wygaśnięciu subskrypcji.",
+        "disableMessage": "Czy chcesz wyłączyć automatyczne odnawianie subskrypcji? Po wygaśnięciu subskrypcja zostanie dezaktywowana."
+      },
+      "renew": {
+        "title": "Odnawianie subskrypcji",
+        "action": "Odnów",
+        "message": "Czy chcesz odnowić subskrypcję? Z Twojego salda zostanie pobrane {price} gwiazdek."
+      }
+    }
+  },
+  "user": {
+    "role": "Rola",
+    "discount": "Zniżka",
+    "wallet": "Portfel",
+    "usage": "Użycie",
+    "inPayments": "w płatnościach"
+  },
+  "wallet": {
+    "connect": "Podłącz portfel TON",
+    "disconnect": "Odłącz",
+    "replace": "Zastąp"
+  },
+  "earning": {
+    "title": "Добыча",
+    "earned": "Награда получена",
+    "rewardTask": {
+      "title": "Посмотреть рекламу"
+    }
+  }
+}

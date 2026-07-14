@@ -1,1 +1,359 @@
-{"billing":{"title":"Білінг","description":"Рух ваших фінансів","wallet":{"title":"Гаманець","payment":"Поповнити","paymentInfo":"Рахунок, що використовується для оплат.","withdrawal":"Вивести","withdrawalInfo":"Рахунок, з якого можна вивести кошти.","holdInfo":"Заморожені кошти.\nНезабаром вони надійдуть на рахунок для виплат."},"payment":{"title":"Поповнення балансу","sum":"Сума поповнення","enterSum":"Введіть суму","sort":{"all":"Всі","crypto":"Криптовалюта","card":"Картки","sbp":"СБП","wallets":"Гаманці","skins":"Скіни"},"method":"Метод оплати","split":"Купити Telegram Stars без KYC, з вигодою до 40% можна на платформі Split!","splitBay":"Купити STARS","walletInfo":"Платіть у TON, USDT-TON, DOGS, NOT, HMSTR, JETTON та інших жетонах мережі TON, підключивши TON-гаманець.","limitMessage":"Доступно від {min} до {max} {symbol}. Зараз: {convertedAmount} {symbol}","commission":"Комісія","toBalance":"На баланс надійде","pay":"Оплатити"},"subscription":{"title":"Підписка","addSubscription":"Додати підписку","pay":"Оплатити","addFree":"🎁 Додати безкоштовно","selectPeriod":"Виберіть період","periodMultiplier":"Множник періоду","selectPlan":"Виберіть тариф","selectServer":"Виберіть сервер","base":"Базові","premium":"Преміум","orSelect":"або на вибір","name":{"default":"Підписка","label":"Ім'я підписки","tooltip":"Ім'я підписки, яке буде відображатися у списку підписок.","placeholder":"Введіть ім'я підписки"},"privileges":{"selectServers":"Вибирайте потрібні сервери","oneBaseServer":"Один базовий сервер на вибір","oneBaseOrPremiumServer":"Один базовий або преміум сервер на вибір","accessAllServers":"Доступ до всіх серверів","accessAllBaseServers":"Доступ до всіх базових серверів","accessBaseServers":"Доступ до {{baseCount}} базових серверів","accessBaseAndPremiumServers":"Доступ до {{baseCount}} базових та {{premiumCount}} преміум серверів","trafficPlan":"Без терміну закінчення, оплата тільки за трафік!","devices":"До {count} одночасних пристроїв","customDevices":"Потрібна кількість пристроїв","servers":"Доступ до всіх серверів","baseServers":"Доступ до базових серверів","premiumServers":"Доступ до преміум серверів","customServers":"Потрібна кількість серверів","traffic":"Безлімітний трафік","customTraffic":"Потрібна кількість трафіку","dailyTraffic":"{count} GB трафіку щоденно","weeklyTraffic":"{count} GB трафіку щотижня","monthlyTraffic":"{count} GB трафіку щомісяця","yearlyTraffic":"{count} GB трафіку щорічно","security":"Захищене з'єднання","speed":"Без обмежень на швидкість","masking":"Маскування вашого трафіку","noAds":"Відсутність реклами","devicesSupport":"Широка підтримка пристроїв","xray":"Надійне ядро XRAY","opensource":"Відкритий вихідний код"},"trafficReset":{"title":"Обнулення трафіку","daily":"Щоденно","weekly":"Щотижня","monthly":"Щомісяця","yearly":"Щорічно"},"period":{"hour":"1 година","day":"1 день","week":"1 тиждень","month":"1 місяць","threeMonth":"3 місяці","sixMonth":"6 місяців","year":"1 рік","twoYear":"2 роки","threeYear":"3 роки","indefinitely":"Безстроково"},"options":{"title":"Опції","autoRenewal":"Автопродовження","autoRenewalDescription":"Автоматично продовжувати підписку","info":"Підписка автоматично продовжиться з вашого балансу","period":"Запам'ятати період"},"traffic":"Трафік","addTraffic":"Додати трафік","addingTraffic":"Додавання трафіку","buy":"Докупити","extension":"Продовження","subscriptionExtension":"Продовження підписки","freeExtension":"🎁 Продовжити безкоштовно","summary":{"title":"Разом","name":"Ім'я","traffic":"Трафік","unlimit":"Безліміт","daily":"щоденно","weekly":"щотижня","monthly":"щомісяця","yearly":"щорічно","servers":"Сервери","fullServers":"Доступ до всіх","allBase":"Всі базові","notServers":"Не задано!","period":"Період","periodDiscount":"Знижка за період","roleDiscount":"Знижка за роль","autoRenewal":"Автопродовження","yes":"Так","no":"Ні","toPaid":"До оплати"},"purchase":"Оплатити"}},"common":{"modal":{"cancel":"Скасувати","accept":"Прийняти","close":"Закрити"},"scrolling":"Прокрутіть вниз","clipboard":{"copied":"Скопійовано в буфер обміну!","failed":"Не вдалося скопіювати!"},"freePlan":{"trialAvailable":"Вам доступний пробний період на {days} днів.","activate":"Активувати","activationFailed":"Не вдалося активувати безкоштовний план"},"units":{"bytes":"Б","kilobytes":"КБ","megabytes":"МБ","gigabytes":"ГБ","terabytes":"ТБ","petabytes":"ПБ","exabytes":"ЕБ","zettabytes":"ЗБ","yottabytes":"ЙБ"}},"freePlan":{"trialAvailable":"Вам доступно {gb} ГБ бонусного трафіку для підписки Trial на необмежений термін.","activate":"Активувати","activationFailed":"Не вдалося активувати безкоштовний план","modalTitle":"Активація пробного періоду","modalAction":"Активувати","modalConfirmation":"Ви дійсно бажаєте активувати пробний період?"},"friends":{"title":"Друзі","get":"Отримуй винагороди","for":"за запрошення друзів","level":"рівень","total":"Всього","list":{"title":"Ваші друзі","top":"Топ","empty":"Тут поки нікого 🥲"},"bonuses":{"title":"Бонуси","inviteTitle":"За запрошення друга","paymentTitle":"За дії друга","inviteInfo":"Після першої оплати другом або активації пробного періоду!","paymentInfo":"Отримуй відсоток від нашого доходу за друзів і тих, кого запросили ваші друзі назавжди!","lvl1Info":"Ті, кого запросили ви","lvl2Info":"Ті, кого запросили друзі","lvl3Info":"Ті, кого запросили друзі друзів 😁"},"invite":{"title":"Запросити друга","message":"Надіслати повідомлення","copy":"Копіювати посилання","story":"Надіслати в сторіс"},"statistics":{"title":"Статистика","earnTitle":"Ваш видобуток","inviteTitle":"Запрошено","earnInfo":"Ви заробили за весь час","inviteInfo":"Запрошено | Активовано | З них Standart | З них Premium"}},"greenCheck":{"loading":"Перевірка безпеки з'єднання...","danger":"Ваше з'єднання НЕ захищено!\nПідключіть VPN!","success":"Ваше з'єднання захищено!"},"navbar":{"home":"Головна","earning":"Видобуток","gifts":"Подарунки","friends":"Друзі","billing":"Білінг","settings":"Налаштування","profile":"Профіль","games":"Ігри"},"subscriptions":{"title":"Підписка","connection":"Підключення","configs":"Конфігурації","addSubscription":"Додати підписку","addSubscriptionTitle":"Додавання підписки","yourSubscriptions":"Ваші підписки","noSubscriptions":"У вас немає активних підписок","loading":"Завантаження даних підписки...","notFound":"Підписка не знайдена","renewSubscription":"Продовжити підписку","autoRenewalEnabled":"Автопродовження увімкнено","autoRenewalDisabled":"Автопродовження вимкнено","subscriptionDeleted":"Підписка була успішно видалена","subscriptionDataUpdated":"Дані підписки були успішно оновлені","subscriptionRenewed":"Підписка успішно продовжена","changeServer":"Змінити сервер","changeServerTitle":"Зміна сервера","changeServerWarning":"УВАГА: Зміна сервера відбувається протягом 2 хвилин. Після зміни сервера необхідно оновити дані в додатку!","active":"Активна","notActive":"Неактивна","online":"Онлайн","offline":"Оффлайн","traffic":"Трафік","trafficReset":{"daily":"Щоденно","weekly":"Щотижня","monthly":"Щомісяця","yearly":"Щорічно","unlimit":"Безліміт"},"inTotal":"Всього","servers":"Сервери","fullServers":"Доступ до всіх","allBase":"Всі базові","base":"Базові","premium":"Преміум","devices":"Пристрої","period":"Періодичність оплати","expires":"Закінчується","autoRenewal":"Автопродовження","actions":"Дії","save":"Зберегти","required":"Рекомендовано!","paid":"Платно!","instruction":{"stage1":"Завантажити додаток","stage2":"Додати підписку в додаток","copyUrl":"Копіювати URL підписки","openQR":"QR-код підписки","scanApp":"Відскануйте в додатку","scanPhone":"Відскануйте в телефоні","add":"Додати в додаток"},"platform":"Платформа","success":{"serversUpdated":"Сервери успішно оновлені"},"errors":{"loadFailed":"Не вдалося завантажити підписки","disableAutoRenewalFailed":"Помилка відключення автопродовження!","enableAutoRenewalFailed":"Помилка включення автопродовження!","deleteSubscriptionFailed":"Помилка видалення підписки!","resetSubscriptionFailed":"Помилка скидання даних підписки!","renewSubscriptionFailed":"Не вдалося продовжити підписку!","fetchingServers":"Не вдалося завантажити сервери","updatingServers":"Не вдалося оновити сервери","serverLimitReached":"Ви досягли ліміту по серверах","serverLimitReachedPremium":"Ви досягли ліміту по преміум серверах","serverLimitReachedBase":"Ви досягли ліміту по базових серверах"},"periods":{"trial":"Пробний період","hour":"1 година","day":"1 день","week":"1 тиждень","month":"1 місяць","threeMonth":"3 місяці","sixMonth":"6 місяців","year":"1 рік","twoYear":"2 роки","threeYear":"3 роки","indefinitely":"Безстроково"},"modals":{"delete":{"title":"Видалення підписки","button":"Видалити","action":"Видалити","message":"Ви точно хочете безповоротно видалити підписку? Її неможливо буде відновити! Компенсація не передбачена!"},"qr":{"title":"QR-код підписки","description":"Відскануйте в клієнтському додатку"},"refresh":{"title":"Скидання даних підписки","button":"Скинути дані","action":"Скинути","message":"Ви точно хочете скинути дані підписки? Після цього ключі та адреса підписки зміняться на нові! Необхідно буде заново додати підписку в додаток! Зазвичай скидання роблять, якщо ваша підписка витекла в мережу або хтось отримав доступ до неї!"},"autoRenewal":{"enableTitle":"Увімкнення автопродовження","disableTitle":"Вимкнення автопродовження","enableAction":"Увімкнути","disableAction":"Вимкнути","enableMessage":"Ви хочете увімкнути автоматичне продовження підписки? Кошти будуть списуватися автоматично після закінчення терміну дії підписки.","disableMessage":"Ви хочете вимкнути автоматичне продовження підписки? Після закінчення терміну дії підписка буде деактивована."},"renew":{"title":"Продовження підписки","action":"Продовжити","message":"Ви хочете продовжити підписку? З вашого балансу буде списано {price} зірок."}}},"user":{"role":"Роль","discount":"Знижка","wallet":"Гаманець","usage":"Використання","inPayments":"в оплатах"},"wallet":{"connect":"Підключити TON-гаманець","disconnect":"Відв'язати","replace":"Замінити"},"earning":{"title":"Добыча","earned":"Награда получена","rewardTask":{"title":"Посмотреть рекламу"}}}
+{
+  "billing": {
+    "title": "Білінг",
+    "description": "Рух ваших фінансів",
+    "wallet": {
+      "title": "Гаманець",
+      "payment": "Поповнити",
+      "paymentInfo": "Рахунок, що використовується для оплат.",
+      "withdrawal": "Вивести",
+      "withdrawalInfo": "Рахунок, з якого можна вивести кошти.",
+      "holdInfo": "Заморожені кошти.\nНезабаром вони надійдуть на рахунок для виплат."
+    },
+    "payment": {
+      "title": "Поповнення балансу",
+      "sum": "Сума поповнення",
+      "enterSum": "Введіть суму",
+      "sort": {
+        "all": "Всі",
+        "crypto": "Криптовалюта",
+        "card": "Картки",
+        "sbp": "СБП",
+        "wallets": "Гаманці",
+        "skins": "Скіни"
+      },
+      "method": "Метод оплати",
+      "split": "Купити Telegram Stars без KYC, з вигодою до 40% можна на платформі Split!",
+      "splitBay": "Купити STARS",
+      "walletInfo": "Платіть у TON, USDT-TON, DOGS, NOT, HMSTR, JETTON та інших жетонах мережі TON, підключивши TON-гаманець.",
+      "limitMessage": "Доступно від {min} до {max} {symbol}. Зараз: {convertedAmount} {symbol}",
+      "commission": "Комісія",
+      "toBalance": "На баланс надійде",
+      "pay": "Оплатити"
+    },
+    "subscription": {
+      "title": "Підписка",
+      "addSubscription": "Додати підписку",
+      "pay": "Оплатити",
+      "addFree": "🎁 Додати безкоштовно",
+      "selectPeriod": "Виберіть період",
+      "periodMultiplier": "Множник періоду",
+      "selectPlan": "Виберіть тариф",
+      "selectServer": "Виберіть сервер",
+      "base": "Базові",
+      "premium": "Преміум",
+      "orSelect": "або на вибір",
+      "name": {
+        "default": "Підписка",
+        "label": "Ім'я підписки",
+        "tooltip": "Ім'я підписки, яке буде відображатися у списку підписок.",
+        "placeholder": "Введіть ім'я підписки"
+      },
+      "privileges": {
+        "selectServers": "Вибирайте потрібні сервери",
+        "oneBaseServer": "Один базовий сервер на вибір",
+        "oneBaseOrPremiumServer": "Один базовий або преміум сервер на вибір",
+        "accessAllServers": "Доступ до всіх серверів",
+        "accessAllBaseServers": "Доступ до всіх базових серверів",
+        "accessBaseServers": "Доступ до {{baseCount}} базових серверів",
+        "accessBaseAndPremiumServers": "Доступ до {{baseCount}} базових та {{premiumCount}} преміум серверів",
+        "trafficPlan": "Без терміну закінчення, оплата тільки за трафік!",
+        "devices": "До {count} одночасних пристроїв",
+        "customDevices": "Потрібна кількість пристроїв",
+        "servers": "Доступ до всіх серверів",
+        "baseServers": "Доступ до базових серверів",
+        "premiumServers": "Доступ до преміум серверів",
+        "customServers": "Потрібна кількість серверів",
+        "traffic": "Безлімітний трафік",
+        "customTraffic": "Потрібна кількість трафіку",
+        "dailyTraffic": "{count} GB трафіку щоденно",
+        "weeklyTraffic": "{count} GB трафіку щотижня",
+        "monthlyTraffic": "{count} GB трафіку щомісяця",
+        "yearlyTraffic": "{count} GB трафіку щорічно",
+        "security": "Захищене з'єднання",
+        "speed": "Без обмежень на швидкість",
+        "masking": "Маскування вашого трафіку",
+        "noAds": "Відсутність реклами",
+        "devicesSupport": "Широка підтримка пристроїв",
+        "xray": "Надійне ядро XRAY",
+        "opensource": "Відкритий вихідний код"
+      },
+      "trafficReset": {
+        "title": "Обнулення трафіку",
+        "daily": "Щоденно",
+        "weekly": "Щотижня",
+        "monthly": "Щомісяця",
+        "yearly": "Щорічно"
+      },
+      "period": {
+        "hour": "1 година",
+        "day": "1 день",
+        "week": "1 тиждень",
+        "month": "1 місяць",
+        "threeMonth": "3 місяці",
+        "sixMonth": "6 місяців",
+        "year": "1 рік",
+        "twoYear": "2 роки",
+        "threeYear": "3 роки",
+        "indefinitely": "Безстроково"
+      },
+      "options": {
+        "title": "Опції",
+        "autoRenewal": "Автопродовження",
+        "autoRenewalDescription": "Автоматично продовжувати підписку",
+        "info": "Підписка автоматично продовжиться з вашого балансу",
+        "period": "Запам'ятати період"
+      },
+      "traffic": "Трафік",
+      "addTraffic": "Додати трафік",
+      "addingTraffic": "Додавання трафіку",
+      "buy": "Докупити",
+      "extension": "Продовження",
+      "subscriptionExtension": "Продовження підписки",
+      "freeExtension": "🎁 Продовжити безкоштовно",
+      "summary": {
+        "title": "Разом",
+        "name": "Ім'я",
+        "traffic": "Трафік",
+        "unlimit": "Безліміт",
+        "daily": "щоденно",
+        "weekly": "щотижня",
+        "monthly": "щомісяця",
+        "yearly": "щорічно",
+        "servers": "Сервери",
+        "fullServers": "Доступ до всіх",
+        "allBase": "Всі базові",
+        "notServers": "Не задано!",
+        "period": "Період",
+        "periodDiscount": "Знижка за період",
+        "roleDiscount": "Знижка за роль",
+        "autoRenewal": "Автопродовження",
+        "yes": "Так",
+        "no": "Ні",
+        "toPaid": "До оплати"
+      },
+      "purchase": "Оплатити"
+    }
+  },
+  "common": {
+    "modal": {
+      "cancel": "Скасувати",
+      "accept": "Прийняти",
+      "close": "Закрити"
+    },
+    "scrolling": "Прокрутіть вниз",
+    "clipboard": {
+      "copied": "Скопійовано в буфер обміну!",
+      "failed": "Не вдалося скопіювати!"
+    },
+    "freePlan": {
+      "trialAvailable": "Вам доступний пробний період на {days} днів.",
+      "activate": "Активувати",
+      "activationFailed": "Не вдалося активувати безкоштовний план"
+    },
+    "units": {
+      "bytes": "Б",
+      "kilobytes": "КБ",
+      "megabytes": "МБ",
+      "gigabytes": "ГБ",
+      "terabytes": "ТБ",
+      "petabytes": "ПБ",
+      "exabytes": "ЕБ",
+      "zettabytes": "ЗБ",
+      "yottabytes": "ЙБ"
+    }
+  },
+  "freePlan": {
+    "trialAvailable": "Вам доступно {gb} ГБ бонусного трафіку для підписки Trial на необмежений термін.",
+    "activate": "Активувати",
+    "activationFailed": "Не вдалося активувати безкоштовний план",
+    "modalTitle": "Активація пробного періоду",
+    "modalAction": "Активувати",
+    "modalConfirmation": "Ви дійсно бажаєте активувати пробний період?"
+  },
+  "friends": {
+    "title": "Друзі",
+    "get": "Отримуй винагороди",
+    "for": "за запрошення друзів",
+    "level": "рівень",
+    "total": "Всього",
+    "list": {
+      "title": "Ваші друзі",
+      "top": "Топ",
+      "empty": "Тут поки нікого 🥲"
+    },
+    "bonuses": {
+      "title": "Бонуси",
+      "inviteTitle": "За запрошення друга",
+      "paymentTitle": "За дії друга",
+      "inviteInfo": "Після першої оплати другом або активації пробного періоду!",
+      "paymentInfo": "Отримуй відсоток від нашого доходу за друзів і тих, кого запросили ваші друзі назавжди!",
+      "lvl1Info": "Ті, кого запросили ви",
+      "lvl2Info": "Ті, кого запросили друзі",
+      "lvl3Info": "Ті, кого запросили друзі друзів 😁"
+    },
+    "invite": {
+      "title": "Запросити друга",
+      "message": "Надіслати повідомлення",
+      "copy": "Копіювати посилання",
+      "story": "Надіслати в сторіс"
+    },
+    "statistics": {
+      "title": "Статистика",
+      "earnTitle": "Ваш видобуток",
+      "inviteTitle": "Запрошено",
+      "earnInfo": "Ви заробили за весь час",
+      "inviteInfo": "Запрошено | Активовано | З них Standart | З них Premium"
+    }
+  },
+  "greenCheck": {
+    "loading": "Перевірка безпеки з'єднання...",
+    "danger": "Ваше з'єднання НЕ захищено!\nПідключіть VPN!",
+    "success": "Ваше з'єднання захищено!"
+  },
+  "navbar": {
+    "home": "Головна",
+    "earning": "Видобуток",
+    "gifts": "Подарунки",
+    "friends": "Друзі",
+    "billing": "Білінг",
+    "settings": "Налаштування",
+    "profile": "Профіль",
+    "games": "Ігри"
+  },
+  "subscriptions": {
+    "title": "Підписка",
+    "connection": "Підключення",
+    "configs": "Конфігурації",
+    "addSubscription": "Додати підписку",
+    "addSubscriptionTitle": "Додавання підписки",
+    "yourSubscriptions": "Ваші підписки",
+    "noSubscriptions": "У вас немає активних підписок",
+    "loading": "Завантаження даних підписки...",
+    "notFound": "Підписка не знайдена",
+    "renewSubscription": "Продовжити підписку",
+    "autoRenewalEnabled": "Автопродовження увімкнено",
+    "autoRenewalDisabled": "Автопродовження вимкнено",
+    "subscriptionDeleted": "Підписка була успішно видалена",
+    "subscriptionDataUpdated": "Дані підписки були успішно оновлені",
+    "subscriptionRenewed": "Підписка успішно продовжена",
+    "changeServer": "Змінити сервер",
+    "changeServerTitle": "Зміна сервера",
+    "changeServerWarning": "УВАГА: Зміна сервера відбувається протягом 2 хвилин. Після зміни сервера необхідно оновити дані в додатку!",
+    "active": "Активна",
+    "notActive": "Неактивна",
+    "online": "Онлайн",
+    "offline": "Оффлайн",
+    "traffic": "Трафік",
+    "trafficReset": {
+      "daily": "Щоденно",
+      "weekly": "Щотижня",
+      "monthly": "Щомісяця",
+      "yearly": "Щорічно",
+      "unlimit": "Безліміт"
+    },
+    "inTotal": "Всього",
+    "servers": "Сервери",
+    "fullServers": "Доступ до всіх",
+    "allBase": "Всі базові",
+    "base": "Базові",
+    "premium": "Преміум",
+    "devices": "Пристрої",
+    "period": "Періодичність оплати",
+    "expires": "Закінчується",
+    "autoRenewal": "Автопродовження",
+    "actions": "Дії",
+    "save": "Зберегти",
+    "required": "Рекомендовано!",
+    "paid": "Платно!",
+    "instruction": {
+      "stage1": "Завантажити додаток",
+      "stage2": "Додати підписку в додаток",
+      "copyUrl": "Копіювати URL підписки",
+      "openQR": "QR-код підписки",
+      "scanApp": "Відскануйте в додатку",
+      "scanPhone": "Відскануйте в телефоні",
+      "add": "Додати в додаток"
+    },
+    "platform": "Платформа",
+    "success": {
+      "serversUpdated": "Сервери успішно оновлені"
+    },
+    "errors": {
+      "loadFailed": "Не вдалося завантажити підписки",
+      "disableAutoRenewalFailed": "Помилка відключення автопродовження!",
+      "enableAutoRenewalFailed": "Помилка включення автопродовження!",
+      "deleteSubscriptionFailed": "Помилка видалення підписки!",
+      "resetSubscriptionFailed": "Помилка скидання даних підписки!",
+      "renewSubscriptionFailed": "Не вдалося продовжити підписку!",
+      "fetchingServers": "Не вдалося завантажити сервери",
+      "updatingServers": "Не вдалося оновити сервери",
+      "serverLimitReached": "Ви досягли ліміту по серверах",
+      "serverLimitReachedPremium": "Ви досягли ліміту по преміум серверах",
+      "serverLimitReachedBase": "Ви досягли ліміту по базових серверах"
+    },
+    "periods": {
+      "trial": "Пробний період",
+      "hour": "1 година",
+      "day": "1 день",
+      "week": "1 тиждень",
+      "month": "1 місяць",
+      "threeMonth": "3 місяці",
+      "sixMonth": "6 місяців",
+      "year": "1 рік",
+      "twoYear": "2 роки",
+      "threeYear": "3 роки",
+      "indefinitely": "Безстроково"
+    },
+    "modals": {
+      "delete": {
+        "title": "Видалення підписки",
+        "button": "Видалити",
+        "action": "Видалити",
+        "message": "Ви точно хочете безповоротно видалити підписку? Її неможливо буде відновити! Компенсація не передбачена!"
+      },
+      "qr": {
+        "title": "QR-код підписки",
+        "description": "Відскануйте в клієнтському додатку"
+      },
+      "refresh": {
+        "title": "Скидання даних підписки",
+        "button": "Скинути дані",
+        "action": "Скинути",
+        "message": "Ви точно хочете скинути дані підписки? Після цього ключі та адреса підписки зміняться на нові! Необхідно буде заново додати підписку в додаток! Зазвичай скидання роблять, якщо ваша підписка витекла в мережу або хтось отримав доступ до неї!"
+      },
+      "autoRenewal": {
+        "enableTitle": "Увімкнення автопродовження",
+        "disableTitle": "Вимкнення автопродовження",
+        "enableAction": "Увімкнути",
+        "disableAction": "Вимкнути",
+        "enableMessage": "Ви хочете увімкнути автоматичне продовження підписки? Кошти будуть списуватися автоматично після закінчення терміну дії підписки.",
+        "disableMessage": "Ви хочете вимкнути автоматичне продовження підписки? Після закінчення терміну дії підписка буде деактивована."
+      },
+      "renew": {
+        "title": "Продовження підписки",
+        "action": "Продовжити",
+        "message": "Ви хочете продовжити підписку? З вашого балансу буде списано {price} зірок."
+      }
+    }
+  },
+  "user": {
+    "role": "Роль",
+    "discount": "Знижка",
+    "wallet": "Гаманець",
+    "usage": "Використання",
+    "inPayments": "в оплатах"
+  },
+  "wallet": {
+    "connect": "Підключити TON-гаманець",
+    "disconnect": "Відв'язати",
+    "replace": "Замінити"
+  },
+  "earning": {
+    "title": "Добыча",
+    "earned": "Награда получена",
+    "rewardTask": {
+      "title": "Посмотреть рекламу"
+    }
+  }
+}
