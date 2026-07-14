@@ -1,4 +1,5 @@
 import { SubscriptionPeriodEnum } from '@app/enums/subscription-period.enum'
+import { PayPremiumPeriodEnum } from '@app/types/user-data.interface'
 
 /**
  * Рассчитывает количество часов для периода подписки
@@ -38,5 +39,36 @@ export function periodHours(
       return trialDays && trialDays > 0 ? trialDays * 24 : 0
     default:
       return 0
+  }
+}
+
+export function periodMonthsCalculateUtil(
+  period: PayPremiumPeriodEnum,
+): number {
+  switch (period) {
+    case PayPremiumPeriodEnum.MONTH: {
+      return 1
+    }
+    case PayPremiumPeriodEnum.THREE_MONTH: {
+      return 3
+    }
+    case PayPremiumPeriodEnum.SIX_MONTH: {
+      return 6
+    }
+    case PayPremiumPeriodEnum.YEAR: {
+      return 12
+    }
+    case PayPremiumPeriodEnum.TWO_YEAR: {
+      return 24
+    }
+    case PayPremiumPeriodEnum.THREE_YEAR: {
+      return 36
+    }
+    case PayPremiumPeriodEnum.INDEFINITELY: {
+      return 120
+    }
+    default: {
+      return 1
+    }
   }
 }
