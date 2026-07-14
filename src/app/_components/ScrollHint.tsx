@@ -1,7 +1,7 @@
 'use client'
-import { motion, useAnimation } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { IoChevronDown } from 'react-icons/io5'
 
 function ScrollHint({
@@ -9,46 +9,54 @@ function ScrollHint({
 }: {
   targetRef: React.RefObject<HTMLDivElement | null>
 }) {
-  const controls = useAnimation()
   const [isScrollable, setIsScrollable] = useState(false)
   const [visible, setVisible] = useState(false)
   const t = useTranslations('common')
+  const hideTimeout = useRef<NodeJS.Timeout | undefined>(undefined)
 
+  // Единая проверка скролла: ResizeObserver (размер el) + MutationObserver (контент внутри)
   useEffect(() => {
     const el = targetRef.current
     if (!el) return
 
-    const checkScrollable = () => {
-      setIsScrollable(el.scrollHeight > el.clientHeight)
+    const check = () => {
+      const scrollable = el.scrollHeight > el.clientHeight
+      setIsScrollable(scrollable)
+      if (!scrollable) setVisible(false)
     }
 
-    checkScrollable()
-    window.addEventListener('resize', checkScrollable)
+    check()
+
+    const resizeObserver = new ResizeObserver(check)
+    resizeObserver.observe(el)
+
+    const mutationObserver = new MutationObserver(check)
+    mutationObserver.observe(el, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    })
+
     return () => {
-      window.removeEventListener('resize', checkScrollable)
+      resizeObserver.disconnect()
+      mutationObserver.disconnect()
     }
   }, [targetRef])
 
-  // Первый показ с задержкой
+  // Первый показ
   useEffect(() => {
-    if (!isScrollable) return
-    setVisible(true)
+    if (isScrollable) setVisible(true)
   }, [isScrollable])
 
-  // Скрытие при скролле и повторный показ после остановки
+  // Скрытие при скролле, повторный показ после остановки
   useEffect(() => {
     const el = targetRef.current
     if (!el || !isScrollable) return
 
-    let timeout: NodeJS.Timeout
-
     const handleScroll = () => {
-      // Скрываем при начале скролла
-      if (visible) setVisible(false)
-      // Показываем через 1 сек после окончания скролла
-      clearTimeout(timeout)
-      timeout = setTimeout(() => {
-        // Если всё ещё можно скроллить
+      setVisible(false)
+      clearTimeout(hideTimeout.current)
+      hideTimeout.current = setTimeout(() => {
         if (el.scrollTop + el.clientHeight < el.scrollHeight) {
           setVisible(true)
         }
@@ -58,53 +66,26 @@ function ScrollHint({
     el.addEventListener('scroll', handleScroll)
     return () => {
       el.removeEventListener('scroll', handleScroll)
-      clearTimeout(timeout)
+      clearTimeout(hideTimeout.current)
     }
-  }, [targetRef, visible, isScrollable])
-
-  // Анимация "микропокачивания"
-  useEffect(() => {
-    if (!isScrollable || !visible) return
-    const interval = setInterval(() => {
-      controls.start({ y: [0, -6, 0], transition: { duration: 0.6 } })
-    }, 8000)
-    return () => clearInterval(interval)
-  }, [controls, isScrollable, visible])
-
-  useEffect(() => {
-    const el = targetRef.current
-    if (!el) return
-
-    const observer = new ResizeObserver(() => {
-      setIsScrollable(el.scrollHeight > el.clientHeight)
-      // если контент уменьшился, скрываем подсказку
-      if (el.scrollHeight <= el.clientHeight) setVisible(false)
-    })
-
-    observer.observe(el)
-
-    return () => observer.disconnect()
-  }, [targetRef])
+  }, [targetRef, isScrollable])
 
   if (!isScrollable) return null
 
   return (
     <motion.div
+      aria-hidden="true"
       className="absolute bottom-2 left-1/2 -translate-x-1/2 pointer-events-none flex flex-col items-center font-extrabold"
-      animate={{ opacity: visible ? 1 : 0 }} // прозрачность управляется visible
+      animate={{ opacity: visible ? 1 : 0 }}
       transition={{ duration: 0.4, ease: 'easeInOut' }}>
       <motion.span
-        animate={{
-          y: [0, -4, 0], // лёгкое качание вверх-вниз
-        }}
+        animate={{ y: [0, -4, 0] }}
         transition={{ repeat: Infinity, duration: 1.5, repeatType: 'loop' }}
         className="text-xs">
         {t('scrolling')}
       </motion.span>
       <motion.div
-        animate={{
-          y: [0, -4, 0], // качание стрелки синхронно с текстом
-        }}
+        animate={{ y: [0, -4, 0] }}
         transition={{ repeat: Infinity, duration: 1.5, repeatType: 'loop' }}>
         <IoChevronDown size={20} />
       </motion.div>
