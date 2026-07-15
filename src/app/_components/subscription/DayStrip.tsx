@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { formatTimeLeft } from './format.util'
+import { formatTimeLeft, pluralDays } from './format.util'
 
 /**
  * Полосатая визуализация оставшихся дней подписки.
@@ -10,6 +10,11 @@ import { formatTimeLeft } from './format.util'
  * потраченный день полностью цветной и "стекает" (сжимается) по мере
  * того, как проходят сутки — так интуитивнее читается как остаток,
  * а не как прогресс использования.
+ *
+ * Порядок полосок развёрнут: нетронутый запас показывается сразу
+ * слева (там взгляд падает в первую очередь), а уже израсходованные
+ * дни "уезжают" к правому краю. Полоска, которая "стекает" прямо
+ * сейчас, оказывается на границе между ними.
  */
 export function DayStrip({
   totalDays,
@@ -54,7 +59,7 @@ export function DayStrip({
         <span
           className="text-xs font-mono"
           style={{ color: 'var(--on-surface-variant)' }}>
-          Период подписки · {totalDays} {totalDays === 1 ? 'день' : 'дней'}
+          Период подписки · {totalDays} {pluralDays(totalDays)}
         </span>
         <motion.span
           className="text-xs font-mono font-bold text-right"
@@ -75,7 +80,14 @@ export function DayStrip({
         </motion.span>
       </div>
 
-      <div className="flex gap-[3px] w-full">
+      <div
+        className="flex gap-[3px] w-full flex-row-reverse"
+        role="img"
+        aria-label={
+          isExpired
+            ? 'Подписка истекла'
+            : `Осталось ${daysLeft} из ${totalDays} ${pluralDays(totalDays)}`
+        }>
         {Array.from({ length: segmentCount }).map((_, i) => {
           const dayIndex = collapsed ? i * scale : i
 
@@ -123,13 +135,13 @@ export function DayStrip({
         })}
       </div>
 
-      {!isExpired && (
+      {/*{!isExpired && (
         <span
           className="text-[11px] self-end"
           style={{ color: 'var(--on-surface-variant)', opacity: 0.55 }}>
           {daysLeft} из {totalDays} {totalDays === 1 ? 'день' : 'дней'}
         </span>
-      )}
+      )}*/}
     </div>
   )
 }
