@@ -45,6 +45,7 @@ export interface NewEraSubWithTmaInterface {
   expiredAt?: Date // Когда заканчивается (в полосочках цветные сколько осталось, притемненные сколько прошло, текущий день можно в процентах заполнетости дня полоски, еще когда остается 1-2 дня, эти полоски мигают и кнопка продления тоже)
   onlineAt?: Date // Когда последний раз был онлайн
   devices: HwidDevice[] // Подключенные устройства (Можно удалять)
+  isAutoRenewing: boolean
 }
 
 export interface HwidDevice {
