@@ -7,21 +7,19 @@ export function AddDeviceModal({
   isOpen,
   onClose,
   subscriptionUrl,
-  isActive,
 }: {
   isOpen: boolean
   onClose: () => void
   subscriptionUrl: string
-  isActive: boolean
 }) {
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Подключить устройство"
+      // title="Подключить устройство"
       showCancelButton={false}
       maxWidth="md">
-      <ConnectGuide subscriptionUrl={subscriptionUrl} isActive={isActive} />
+      <ConnectGuide subscriptionUrl={subscriptionUrl} />
     </Modal>
   )
 }
