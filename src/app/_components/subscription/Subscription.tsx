@@ -158,6 +158,26 @@ function ActivateFreeSubscription({
   )
 }
 
+/* ─── auto-renew badge ──────────────────────────────────────────── */
+function AutoRenewBadge() {
+  return (
+    <TooltipWrapper
+      color="default"
+      placement="right"
+      prompt="Подписка продлевается автоматически — нажимать кнопку вручную не обязательно.">
+      <span
+        className="flex items-center gap-1 text-[10px] font-mono px-1.5 py-0.5 rounded-full cursor-help"
+        style={{
+          background: 'rgba(55,227,162,0.12)',
+          color: 'var(--success)',
+        }}>
+        <TbRefresh size={10} />
+        Авто
+      </span>
+    </TooltipWrapper>
+  )
+}
+
 /* ─── main ────────────────────────────────────────────────────────── */
 export function Subscription() {
   const { user, setUser } = useUserStore()
@@ -273,13 +293,21 @@ export function Subscription() {
 
   const statusCfg = STATUS_CFG[subscription.status]
   const isExpired = subscription.status === 'EXPIRED'
+  const isAutoRenewing = Boolean(subscription.isAutoRenewing)
   const accentRgb = isPremiumActive ? '245,166,35' : statusCfg.rgb
 
   const msLeft = subscription.expiredAt
     ? new Date(subscription.expiredAt).getTime() - Date.now()
     : null
+  // Автопродлеваемую подписку не имеет смысла подсвечивать как "горящую" —
+  // она продлится сама, тревожная пульсация тут только сбивает с толку.
   const isCritical =
-    !isExpired && msLeft !== null && msLeft > 0 && msLeft <= 2 * 86_400_000
+    !isAutoRenewing &&
+    !isExpired &&
+    msLeft !== null &&
+    msLeft > 0 &&
+    msLeft <= 2 * 86_400_000
+  const showUrgentRenew = (isCritical || isExpired) && !isAutoRenewing
 
   const devicesCount = subscription.devices.length
   const devicesFull = devicesCount >= subscription.devicesLimit
@@ -356,6 +384,7 @@ export function Subscription() {
                 style={{ color: statusCfg.color }}>
                 {statusCfg.label}
               </span>
+              {isAutoRenewing && <AutoRenewBadge />}
             </div>
             <div
               className="flex items-center gap-1.5 text-xs"
@@ -385,52 +414,64 @@ export function Subscription() {
           )}
 
           {/* renew button */}
-          <motion.button
-            whileTap={{ scale: 0.97 }}
-            onClick={renewSubscription}
-            disabled={renewing}
-            animate={
-              isCritical || isExpired
-                ? {
-                    boxShadow: [
-                      '0 0 0 rgba(255,107,102,0)',
-                      '0 0 22px rgba(255,107,102,0.45)',
-                      '0 0 0 rgba(255,107,102,0)',
-                    ],
-                  }
-                : {}
-            }
-            transition={
-              isCritical || isExpired
-                ? { duration: 1.4, repeat: Infinity, ease: 'easeInOut' }
-                : undefined
-            }
-            className="flex items-center justify-center gap-2 w-full py-3 rounded-2xl text-sm font-bold font-mono cursor-pointer disabled:opacity-60"
-            style={{
-              background:
-                isCritical || isExpired
+          <div className="flex flex-col gap-1.5">
+            <motion.button
+              whileTap={{ scale: 0.97 }}
+              onClick={renewSubscription}
+              disabled={renewing}
+              animate={
+                showUrgentRenew
+                  ? {
+                      boxShadow: [
+                        '0 0 0 rgba(255,107,102,0)',
+                        '0 0 22px rgba(255,107,102,0.45)',
+                        '0 0 0 rgba(255,107,102,0)',
+                      ],
+                    }
+                  : {}
+              }
+              transition={
+                showUrgentRenew
+                  ? { duration: 1.4, repeat: Infinity, ease: 'easeInOut' }
+                  : undefined
+              }
+              className="flex items-center justify-center gap-2 w-full py-3 rounded-2xl text-sm font-bold font-mono cursor-pointer disabled:opacity-60"
+              style={{
+                background: showUrgentRenew
                   ? 'var(--error)'
                   : isPremiumActive
                     ? 'linear-gradient(135deg, #f5a623, #febd04)'
                     : 'linear-gradient(135deg, var(--primary-deep), var(--primary))',
-              color:
-                isCritical || isExpired
+                color: showUrgentRenew
                   ? 'var(--on-error)'
                   : isPremiumActive
                     ? 'var(--on-star, #3a2e00)'
                     : 'var(--on-primary)',
-            }}>
-            <motion.span
-              animate={renewing ? { rotate: 360 } : { rotate: 0 }}
-              transition={
-                renewing
-                  ? { duration: 0.8, repeat: Infinity, ease: 'linear' }
-                  : undefined
-              }>
-              <TbRefresh size={17} />
-            </motion.span>
-            {renewing ? 'Продлеваем…' : 'Восполнить бесплатно'}
-          </motion.button>
+              }}>
+              <motion.span
+                animate={renewing ? { rotate: 360 } : { rotate: 0 }}
+                transition={
+                  renewing
+                    ? { duration: 0.8, repeat: Infinity, ease: 'linear' }
+                    : undefined
+                }>
+                <TbRefresh size={17} />
+              </motion.span>
+              {renewing
+                ? 'Продлеваем…'
+                : isAutoRenewing
+                  ? 'Продлить сейчас'
+                  : 'Восполнить бесплатно'}
+            </motion.button>
+
+            {isAutoRenewing && (
+              <p
+                className="text-[11px] text-center"
+                style={{ color: 'var(--on-surface-variant)', opacity: 0.6 }}>
+                Автопродление включено — можно ничего не нажимать
+              </p>
+            )}
+          </div>
         </div>
       </div>
 
@@ -526,7 +567,6 @@ export function Subscription() {
         isOpen={addDeviceOpen}
         onClose={() => setAddDeviceOpen(false)}
         subscriptionUrl={subscription.subscriptionUrl ?? ''}
-        isActive={subscription.status === 'ACTIVE'}
       />
     </div>
   )
