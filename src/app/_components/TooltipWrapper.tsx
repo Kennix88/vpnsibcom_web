@@ -163,6 +163,12 @@ export default function TooltipWrapper({
   const tooltipRef = useRef<HTMLDivElement>(null)
   const touchTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
+  /* Тач-устройства шлют synthetic click сразу после touchend, а также
+     иногда — "ghost" mouseenter/mouseleave. Оба флага не дают этим
+     событиям тут же закрыть только что открытый по тапу тултип. */
+  const suppressNextClick = useRef(false)
+  const ignoreMouseUntil = useRef(0)
+
   const cfg = COLOR_CFG[color]
 
   /* SSR guard — createPortal недоступен на сервере */
@@ -259,12 +265,61 @@ export default function TooltipWrapper({
     return () => document.removeEventListener('touchstart', handler)
   }, [visible])
 
-  /* Touch handlers — toggle по короткому тапу */
+  /* Чистим висящий таймер при размонтировании */
+  useEffect(() => {
+    return () => {
+      if (touchTimer.current) clearTimeout(touchTimer.current)
+    }
+  }, [])
+
+  /* Touch handlers — короткий тап открывает тултип напрямую, без
+     ожидания клика. 80мс — защита от случайного показа при свайпе. */
   const onTouchStart = () => {
-    touchTimer.current = setTimeout(() => setVisible(true), 80)
+    ignoreMouseUntil.current = Date.now() + 500
+    touchTimer.current = setTimeout(() => {
+      suppressNextClick.current = true
+      setVisible(true)
+    }, 80)
   }
+
+  const onTouchMove = () => {
+    // Палец сдвинулся — это скролл/свайп, а не тап. Отменяем показ.
+    if (touchTimer.current) {
+      clearTimeout(touchTimer.current)
+      touchTimer.current = null
+    }
+  }
+
   const onTouchEnd = () => {
-    if (touchTimer.current) clearTimeout(touchTimer.current)
+    if (touchTimer.current) {
+      clearTimeout(touchTimer.current)
+      touchTimer.current = null
+    }
+    // Если synthetic click так и не придёт — не блокируем следующий
+    // реальный клик навсегда.
+    if (suppressNextClick.current) {
+      setTimeout(() => {
+        suppressNextClick.current = false
+      }, 500)
+    }
+  }
+
+  const onMouseEnter = () => {
+    if (Date.now() < ignoreMouseUntil.current) return
+    setVisible(true)
+  }
+
+  const onMouseLeave = () => {
+    if (Date.now() < ignoreMouseUntil.current) return
+    setVisible(false)
+  }
+
+  const onClick = () => {
+    if (suppressNextClick.current) {
+      suppressNextClick.current = false
+      return
+    }
+    setVisible((v) => !v)
   }
 
   /* ── Tooltip node ──
@@ -321,11 +376,12 @@ export default function TooltipWrapper({
     <div
       ref={wrapperRef}
       className="relative inline-flex items-center justify-center font-mono"
-      onMouseEnter={() => setVisible(true)}
-      onMouseLeave={() => setVisible(false)}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
-      onClick={() => setVisible((v) => !v)}>
+      onClick={onClick}>
       {children}
 
       {/* Портал: тултип рендерится в document.body — вне любого родителя */}
