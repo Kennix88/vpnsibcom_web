@@ -174,11 +174,11 @@ export function PremiumCTA() {
           <div className="relative flex flex-col gap-0.5 min-w-0 text-left grow">
             <div className="flex items-center gap-1.5">
               <span
-                className="text-[14px] font-bold font-mono tracking-tight"
+                className="text-[14px] font-bold font-mono tracking-tight truncate"
                 style={{ color: '#ffe9b8' }}>
                 {isPremiumActive ? 'Продлить Premium' : 'Оформить Premium'}
               </span>
-              {isPremiumActive && (
+              {/*{isPremiumActive && (
                 <span
                   className="shrink-0 flex items-center gap-1 text-[9px] font-bold font-mono px-1.5 py-0.5 rounded-md"
                   style={{
@@ -194,7 +194,7 @@ export function PremiumCTA() {
                   />
                   АКТИВЕН
                 </span>
-              )}
+              )}*/}
             </div>
             <span
               className="text-[11px] font-mono"
