@@ -1,7 +1,7 @@
 'use client'
-
 import { useRouter } from 'next/navigation'
-import { PropsWithChildren, useEffect, useRef } from 'react'
+import { PropsWithChildren, useEffect } from 'react'
+import { pushBackHandler } from './backButtonStack'
 
 export function TmaPage({
   children,
@@ -14,39 +14,13 @@ export function TmaPage({
   back?: boolean
 }>) {
   const router = useRouter()
-  // ✅ Fix #4: store cleanup fn synchronously in a ref so the cleanup callback
-  // can call it without waiting for an async promise to resolve.
-  const cleanupRef = useRef<(() => void) | undefined>(undefined)
 
   useEffect(() => {
-    let cancelled = false
-
-    ;(async () => {
-      try {
-        const { backButton } = await import('@tma.js/sdk-react')
-
-        if (cancelled) return // component already unmounted while importing
-
-        if (back) {
-          if (backButton.show.isAvailable()) backButton.show()
-          // ✅ Fix #9: removed dead backButton.isVisible() call
-          const off = backButton.onClick(() => router.back())
-          cleanupRef.current = off
-        } else {
-          if (backButton.hide.isAvailable()) backButton.hide()
-          cleanupRef.current = undefined
-        }
-      } catch (err) {
-        console.error('Failed to init backButton', err)
-      }
-    })()
-
-    return () => {
-      cancelled = true
-      // ✅ Synchronous cleanup — no race with next component's mount
-      cleanupRef.current?.()
-      cleanupRef.current = undefined
-    }
+    // Регистрируем эту страницу как текущий уровень стека back-кнопки.
+    // Если поверх откроется модалка — она сама запушит свой уровень и при
+    // закрытии стек вернётся сюда автоматически, без ручной синхронизации.
+    const pop = pushBackHandler(back ? () => router.back() : null)
+    return pop
   }, [back, router])
 
   return (
