@@ -210,10 +210,8 @@ function CopyBtn({ value }: { value: string }) {
 
 export default function ConnectGuide({
   subscriptionUrl,
-  isActive,
 }: {
   subscriptionUrl: string
-  isActive: boolean
 }) {
   /* Platform state */
   const [platform, setPlatform] = useState<PlatformEnum>(PlatformEnum.ANDROID)
@@ -245,8 +243,6 @@ export default function ConnectGuide({
       : encodeURI(subscriptionUrl)
   const deepLink = happ.deepLink.replace('{URL}', encodeLink)
 
-  const activeRgb = isActive ? '55,227,162' : '255,107,102'
-
   return (
     <motion.div
       key="connect-guide"
@@ -255,9 +251,7 @@ export default function ConnectGuide({
       exit={{ height: 0, opacity: 0 }}
       transition={{ duration: 0.28, ease: [0.2, 0, 0, 1] }}
       className="overflow-hidden">
-      <div
-        className="flex flex-col gap-4 p-4"
-        style={{ borderTop: `1px solid rgba(${activeRgb},0.12)` }}>
+      <div className="flex flex-col gap-4">
         {/* Section label */}
         <div className="flex items-center gap-2">
           <TbDeviceMobile size={14} style={{ color: 'var(--primary)' }} />
