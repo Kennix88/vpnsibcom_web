@@ -79,7 +79,7 @@ export function DeviceRow({
           {device.deviceModel || platformLabel(device.platform)}
         </span>
         <span
-          className="text-xs truncate"
+          className="text-xs"
           style={{ color: 'var(--on-surface-variant)', opacity: 0.7 }}>
           {platformLabel(device.platform)}
           {device.osVersion ? ` · ${device.osVersion}` : ''}
