@@ -2,17 +2,26 @@
 
 import clsx from 'clsx'
 import {
-  PanInfo,
   animate,
   motion,
+  PanInfo,
   useDragControls,
   useMotionValue,
   useTransform,
 } from 'framer-motion'
 import { X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { ReactNode, useCallback, useEffect, useRef, useState } from 'react'
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { createPortal } from 'react-dom'
+import { pushBackHandler } from '../(tma)/_components/backButtonStack'
 import ScrollHint from './ScrollHint'
 
 export type ModalVariant =
@@ -148,6 +157,9 @@ const MAX_WIDTH_CLASS = {
 const DRAG_CLOSE_THRESHOLD = 80
 /** px/s swipe velocity to trigger close */
 const VELOCITY_CLOSE_THRESHOLD = 400
+/** px pulled down from the top of scrolled content before we hand the
+ *  gesture off to the sheet drag (vs. letting it just scroll normally) */
+const CONTENT_PULL_THRESHOLD = 10
 
 /* ─── SSR-safe Portal ────────────────────────────────────────────── */
 // Mounts children at document.body, completely escaping any parent
@@ -161,6 +173,12 @@ function ModalPortal({ children }: { children: ReactNode }) {
   // No document on the server — prevents hydration mismatch.
   if (!mounted) return null
   return createPortal(children, document.body)
+}
+
+const ModalNavigationContext = createContext<(() => void) | null>(null)
+
+export function useModalNavigatingAway() {
+  return useContext(ModalNavigationContext)
 }
 
 /* ─── Modal ──────────────────────────────────────────────────────── */
@@ -190,6 +208,11 @@ export default function Modal({
 
   // Guard against concurrent close calls (drag + ESC simultaneously, etc.)
   const isClosingRef = useRef(false)
+
+  const navigatingAwayRef = useRef(false)
+  const notifyNavigatingAway = useCallback(() => {
+    navigatingAwayRef.current = true
+  }, [])
 
   // Keep a stable ref to onClose so callbacks in async chains never go stale.
   const onCloseRef = useRef(onClose)
@@ -315,7 +338,40 @@ export default function Modal({
     }
   }, [localVisible, handleClose])
 
-  /* ── Drag handlers ─────────────────────────────────────────────── */
+  /* ── Back-кнопка Telegram: регистрируем модалку как верхний уровень
+   * стека вместо прямого show()/hide(). Стек сам разрулит конфликт с
+   * TmaPage — при закрытии модалки кнопка вернётся к тому состоянию,
+   * которое задавала страница снизу. */
+  useEffect(() => {
+    if (!localVisible) return
+    return pushBackHandler(() => handleClose())
+  }, [localVisible, handleClose])
+
+  useEffect(() => {
+    if (!localVisible) return
+    if (typeof window === 'undefined') return
+
+    navigatingAwayRef.current = false // ← сброс на каждое открытие
+    window.history.pushState({ __modalOpen: true }, '')
+    let closedByPopState = false
+
+    const onPopState = () => {
+      closedByPopState = true
+      handleClose()
+    }
+    window.addEventListener('popstate', onPopState)
+
+    return () => {
+      window.removeEventListener('popstate', onPopState)
+      // Откатываем фиктивную запись истории только если модалку закрыли
+      // штатно и никто не сообщил, что уходит по навигации (router.push).
+      if (!closedByPopState && !navigatingAwayRef.current) {
+        window.history.back()
+      }
+    }
+  }, [localVisible, handleClose])
+
+  /* ── Drag handlers (handle bar / header) ─────────────────────────── */
   const onDragStart = useCallback(() => setIsDragging(true), [])
 
   const onDragEnd = useCallback(
@@ -349,6 +405,52 @@ export default function Modal({
     [y],
   )
 
+  // Header (кроме кнопки закрытия) — тоже валидная зона для начала drag,
+  // не только узкая полоска-хэндл. Там нет скролла, так что подхватывать
+  // жест можно сразу на pointerdown.
+  const onHeaderPointerDown = useCallback(
+    (e: React.PointerEvent) => {
+      if ((e.target as HTMLElement).closest('button')) return
+      dragControls.start(e)
+    },
+    [dragControls],
+  )
+
+  // Контент: если он проскроллен до самого верха и палец идёт вниз (не
+  // вбок) — перехватываем жест как drag всего листа. Пока условие не
+  // выполнено, скролл работает как обычно, ничего не блокируем.
+  const contentPointerStart = useRef<{ x: number; y: number } | null>(null)
+  const contentPullStarted = useRef(false)
+
+  const onContentPointerDown = useCallback((e: React.PointerEvent) => {
+    contentPointerStart.current = { x: e.clientX, y: e.clientY }
+    contentPullStarted.current = false
+  }, [])
+
+  const onContentPointerMove = useCallback(
+    (e: React.PointerEvent) => {
+      if (!contentPointerStart.current || contentPullStarted.current) return
+      const el = contentRef.current
+      if (!el) return
+      const dy = e.clientY - contentPointerStart.current.y
+      const dx = e.clientX - contentPointerStart.current.x
+      if (
+        dy > CONTENT_PULL_THRESHOLD &&
+        dy > Math.abs(dx) &&
+        el.scrollTop <= 0
+      ) {
+        contentPullStarted.current = true
+        dragControls.start(e)
+      }
+    },
+    [dragControls],
+  )
+
+  const onContentPointerEnd = useCallback(() => {
+    contentPointerStart.current = null
+    contentPullStarted.current = false
+  }, [])
+
   if (!localVisible) return null
 
   return (
@@ -374,7 +476,8 @@ export default function Modal({
         <motion.div
           drag="y"
           dragControls={dragControls}
-          // Only the handle activates drag; content scroll is unaffected.
+          // Only the handle/header/pulled-content hands off drag; content
+          // scroll is otherwise unaffected.
           dragListener={false}
           // Can't drag upward; downward is free (we handle snap-back manually).
           dragConstraints={{ top: 0 }}
@@ -438,7 +541,8 @@ export default function Modal({
           {/* ── Header ───────────────────────────────────────────── */}
           {title && (
             <div
-              className="relative flex items-center justify-between px-4 py-3 overflow-hidden"
+              className="relative flex items-center justify-between px-4 py-3 overflow-hidden cursor-grab active:cursor-grabbing"
+              onPointerDown={onHeaderPointerDown}
               style={{
                 background: cfg.header,
                 color: cfg.headerText,
@@ -470,11 +574,17 @@ export default function Modal({
           {/* ── Content ──────────────────────────────────────────── */}
           <div
             ref={contentRef}
+            onPointerDown={onContentPointerDown}
+            onPointerMove={onContentPointerMove}
+            onPointerUp={onContentPointerEnd}
+            onPointerCancel={onContentPointerEnd}
             className={
               contentClassName ?? 'relative p-4 overflow-y-auto max-h-[90vh]'
             }>
-            {children}
-            <ScrollHint targetRef={contentRef} />
+            <ModalNavigationContext.Provider value={notifyNavigatingAway}>
+              {children}
+            </ModalNavigationContext.Provider>
+            <ScrollHint targetRef={contentRef} suppress={isDragging} />
           </div>
 
           {/* ── Footer ───────────────────────────────────────────── */}
