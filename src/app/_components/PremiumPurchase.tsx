@@ -20,9 +20,21 @@
  *  - periodMonthsCalculateUtil переводит period enum в число месяцев —
  *    используется как для расчёта полной цены, так и для примерной даты
  *    окончания подписки после оплаты (см. computeExpiryDate).
+ *  - Страница пополнения баланса живёт по пути '/tma/payment' и умеет
+ *    принимать сумму через query-параметр '?amount=' (в Stars, всегда
+ *    целое число, округлённое вверх) — поправь TOP_UP_ROUTE/имя параметра,
+ *    если у тебя иначе.
+ *  - CurrencyEnum.USDT / CurrencyEnum.XTR — поправь ключи енама, если в
+ *    проекте они называются по-другому (главное, чтобы fxUtil мог
+ *    сконвертировать USDT → Stars по текущему курсу из currency.store).
+ *  - USDT пополнить нельзя (баланс в USDT начисляется только за
+ *    награды/бонусы), поэтому при нехватке USDT редиректим на пополнение
+ *    Stars-эквивалентом недостающей суммы, а не на "пополнение USDT".
  */
 
 import { authApiClient } from '@app/core/authApiClient'
+import { CurrencyEnum } from '@app/enums/currency.enum'
+import { useCurrencyStore } from '@app/store/currency.store'
 import { useUserStore } from '@app/store/user.store'
 import { SubscriptionExtensionsWithConditionsInterface } from '@app/types/new-era.types'
 import {
@@ -31,6 +43,7 @@ import {
   PremiumStatusMethodInterface,
   PremiumStatusPeriodInterface,
 } from '@app/types/user-data.interface'
+import { fxUtil } from '@app/utils/fx.util'
 import { periodMonthsCalculateUtil } from '@app/utils/period-hours.util'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
@@ -42,14 +55,18 @@ import {
   Sparkles,
   Wallet,
 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
 import Currency from './Currency'
 import { buildRewards } from './Extensions'
+import { useModalNavigatingAway } from './Modal'
 
 /* ────────────────────────────────────────────────────────────────── */
 /*  Static labels / styling per payment method                        */
 /* ────────────────────────────────────────────────────────────────── */
+
+const TOP_UP_ROUTE = '/tma/payment'
 
 const METHOD_LABEL: Record<PayPremiumMethodsEnum, string> = {
   [PayPremiumMethodsEnum.BALANCE_STARS]: 'Stars',
@@ -187,7 +204,10 @@ export default function PremiumPurchase({
   onSuccess,
   onClose,
 }: PremiumPurchaseProps) {
+  const notifyNavigatingAway = useModalNavigatingAway()
+  const router = useRouter()
   const { user, setUser } = useUserStore()
+  const { rates } = useCurrencyStore()
   const premium = user?.premium
 
   const [selectedPeriod, setSelectedPeriod] =
@@ -226,6 +246,7 @@ export default function PremiumPurchase({
     ? methodBalance(selectedMethod, user?.balance)
     : 0
   const insufficient = selectedMethod ? balance < total : false
+  const missingAmount = insufficient ? round2(total - balance) : 0
 
   /* ── projected expiry date after payment ── */
   const baseExpiry = useMemo(() => {
@@ -251,10 +272,35 @@ export default function PremiumPurchase({
     ? METHOD_ACCENT[selectedMethod]
     : METHOD_ACCENT[PayPremiumMethodsEnum.BALANCE_STARS]
 
+  /** Пополнить баланс можно только в Stars — USDT начисляется исключительно
+   *  за награды. Поэтому если выбран метод USDT, недостающую сумму сначала
+   *  конвертируем в эквивалент Stars по текущему курсу и ведём пополнять
+   *  именно его. Страница /tma/payment суммы из query не ждёт "из коробки",
+   *  но мы прокидываем ?amount=, если она это умеет — округляя вверх. */
+  const handleTopUp = () => {
+    notifyNavigatingAway?.()
+    onClose()
+
+    if (!missingAmount) {
+      router.push(TOP_UP_ROUTE)
+      return
+    }
+
+    const isUsdt = selectedMethod === PayPremiumMethodsEnum.BALANCE_USDT
+    const starsEquivalent =
+      isUsdt && rates
+        ? fxUtil(missingAmount, CurrencyEnum.USDT, CurrencyEnum.XTR, rates)
+        : missingAmount
+
+    const amountToTopUp = Math.ceil(starsEquivalent)
+
+    router.push(`${TOP_UP_ROUTE}?amount=${amountToTopUp}`)
+  }
+
   const handlePay = async () => {
     if (!selectedMethod || !selectedPeriod || !selectedMethodData) return
     if (insufficient) {
-      toast.warn('Недостаточно средств для оплаты этим способом')
+      handleTopUp()
       return
     }
     try {
@@ -530,14 +576,28 @@ export default function PremiumPurchase({
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="flex items-center gap-2 px-3 py-2 rounded-xl text-[11px]"
+            className="flex flex-col gap-2 px-3 py-2.5 rounded-xl text-[11px]"
             style={{
               background: 'var(--error-container)',
               color: 'var(--on-error-container)',
             }}>
-            <AlertTriangle size={14} className="shrink-0" />
-            Недостаточно средств для выбранного способа оплаты — выбери другой
-            метод или пополни баланс.
+            <div className="flex items-center gap-2">
+              <AlertTriangle size={14} className="shrink-0" />
+              {selectedMethod === PayPremiumMethodsEnum.BALANCE_USDT
+                ? 'USDT нельзя пополнить напрямую — он начисляется только за награды. Оплати Stars-эквивалентом.'
+                : `Недостаточно средств — не хватает ${formatAmount(missingAmount)}.`}
+            </div>
+            <motion.button
+              onClick={handleTopUp}
+              whileTap={{ scale: 0.97 }}
+              className="flex items-center justify-center gap-1.5 w-full py-2 rounded-lg text-[11.5px] font-bold cursor-pointer"
+              style={{
+                background: 'var(--on-error-container)',
+                color: 'var(--error-container)',
+              }}>
+              <Wallet size={13} />
+              Пополнить баланс
+            </motion.button>
           </motion.div>
         )}
       </AnimatePresence>
@@ -545,9 +605,9 @@ export default function PremiumPurchase({
       {/* ── CTA ──────────────────────────────────────────────────── */}
       <motion.button
         onClick={handlePay}
-        disabled={isPaying || insufficient || !selectedMethodData}
-        whileHover={!isPaying && !insufficient ? { scale: 1.015 } : undefined}
-        whileTap={!isPaying && !insufficient ? { scale: 0.98 } : undefined}
+        disabled={isPaying || !selectedMethodData}
+        whileHover={!isPaying ? { scale: 1.015 } : undefined}
+        whileTap={!isPaying ? { scale: 0.98 } : undefined}
         className="flex items-center justify-center gap-2 w-full py-3 rounded-2xl text-[13.5px] font-bold cursor-pointer"
         style={{
           background: insufficient ? 'rgba(255,255,255,0.06)' : accent.gradient,
@@ -558,14 +618,14 @@ export default function PremiumPurchase({
         {isPaying ? (
           <Loader2 size={16} className="animate-spin" />
         ) : insufficient ? (
-          <AlertTriangle size={15} />
+          <Wallet size={15} />
         ) : (
           <Check size={16} strokeWidth={3} />
         )}
         {isPaying ? (
           'Оформляем…'
         ) : insufficient ? (
-          'Недостаточно средств'
+          'Пополнить и продолжить'
         ) : (
           <span className="flex items-center gap-1.5">
             {user?.isPremium ? 'Продлить за ' : 'Оформить за '}
