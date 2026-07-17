@@ -1,11 +1,50 @@
 'use client'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
+import { HiShieldCheck } from 'react-icons/hi2'
 import SocialButtons from './SocialButtons'
 
-function SpinnerRings() {
+// Rotates through connection-flavored status lines instead of a single
+// static "Инициализация..." — ties the wait directly to what a VPN app is
+// actually doing, and gives the eye something to read while it waits.
+const STATUS_MESSAGES = [
+  'Устанавливаем защищённое соединение',
+  'Подбираем ближайший сервер',
+  'Шифруем канал связи',
+  'Почти готово',
+]
+
+function useStatusMessage(reduceMotion: boolean) {
+  const [index, setIndex] = useState(0)
+
+  useEffect(() => {
+    if (reduceMotion) return
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % STATUS_MESSAGES.length)
+    }, 1900)
+    return () => clearInterval(id)
+  }, [reduceMotion])
+
+  return STATUS_MESSAGES[index]
+}
+
+function SpinnerRings({ reduceMotion }: { reduceMotion: boolean }) {
   return (
-    <div className="relative w-[60px] h-[60px]">
+    <div className="relative w-[64px] h-[64px]">
+      {/* Radar sweep — the signature element, ties the spinner to "scanning for a server" */}
+      {!reduceMotion && (
+        <motion.div
+          className="absolute inset-[-16px] rounded-full"
+          style={{
+            background:
+              'conic-gradient(from 0deg, transparent 0deg, color-mix(in srgb, var(--accent-network) 45%, transparent) 26deg, transparent 58deg)',
+          }}
+          animate={{ rotate: 360 }}
+          transition={{ duration: 2.6, repeat: Infinity, ease: 'linear' }}
+        />
+      )}
+
       {/* Outer ring */}
       <motion.div
         className="absolute inset-0 rounded-full border-2 border-transparent"
@@ -13,41 +52,48 @@ function SpinnerRings() {
           borderTopColor: 'var(--primary)',
           borderRightColor: 'var(--primary-container)',
         }}
-        animate={{ rotate: 360 }}
+        animate={reduceMotion ? {} : { rotate: 360 }}
         transition={{ duration: 1.3, repeat: Infinity, ease: 'linear' }}
       />
       {/* Inner ring */}
       <motion.div
-        className="absolute inset-[10px] rounded-full border-[1.5px] border-transparent"
+        className="absolute inset-[11px] rounded-full border-[1.5px] border-transparent"
         style={{
           borderBottomColor: 'var(--accent-network)',
           borderLeftColor: 'var(--accent-network)',
         }}
-        animate={{ rotate: -360 }}
+        animate={reduceMotion ? {} : { rotate: -360 }}
         transition={{ duration: 0.95, repeat: Infinity, ease: 'linear' }}
       />
-      {/* Pulsing center dot */}
+      {/* Shield glyph at the center — reinforces "secure connection" over a bare dot */}
       <div className="absolute inset-0 flex items-center justify-center">
         <motion.div
-          className="w-2 h-2 rounded-full"
-          style={{ background: 'var(--primary)' }}
-          animate={{
-            scale: [1, 1.5, 1],
-            opacity: [0.6, 1, 0.6],
-            boxShadow: [
-              '0 0 0px rgba(195,166,255,0)',
-              '0 0 10px rgba(195,166,255,0.7)',
-              '0 0 0px rgba(195,166,255,0)',
-            ],
-          }}
-          transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-        />
+          className="flex items-center justify-center"
+          style={{ color: 'var(--primary)' }}
+          animate={
+            reduceMotion
+              ? {}
+              : {
+                  scale: [1, 1.12, 1],
+                  filter: [
+                    'drop-shadow(0 0 0px rgba(195,166,255,0))',
+                    'drop-shadow(0 0 6px rgba(195,166,255,0.6))',
+                    'drop-shadow(0 0 0px rgba(195,166,255,0))',
+                  ],
+                }
+          }
+          transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}>
+          <HiShieldCheck size={20} />
+        </motion.div>
       </div>
     </div>
   )
 }
 
 const Loader = () => {
+  const reduceMotion = useReducedMotion() ?? false
+  const status = useStatusMessage(reduceMotion)
+
   return (
     <div
       className="relative flex flex-col justify-between items-center min-h-screen px-4 pb-4 pt-4 overflow-hidden w-full max-w-full"
@@ -78,13 +124,17 @@ const Loader = () => {
         {/* Glowing logo ring */}
         <motion.div
           className="relative"
-          animate={{
-            filter: [
-              'drop-shadow(0 0 10px rgba(195,166,255,0.25))',
-              'drop-shadow(0 0 26px rgba(195,166,255,0.55))',
-              'drop-shadow(0 0 10px rgba(195,166,255,0.25))',
-            ],
-          }}
+          animate={
+            reduceMotion
+              ? {}
+              : {
+                  filter: [
+                    'drop-shadow(0 0 10px rgba(195,166,255,0.25))',
+                    'drop-shadow(0 0 26px rgba(195,166,255,0.55))',
+                    'drop-shadow(0 0 10px rgba(195,166,255,0.25))',
+                  ],
+                }
+          }
           transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}>
           {/* Decorative ring behind logo */}
           <div
@@ -115,14 +165,22 @@ const Loader = () => {
             VPN
             <span style={{ color: 'var(--primary)' }}>sib</span>
           </motion.div>
-          <motion.div
-            className="font-mono text-[10px] tracking-[0.2em] uppercase mt-1"
-            style={{ color: 'var(--on-surface-variant)' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.45 }}
-            transition={{ delay: 0.22, duration: 0.4 }}>
-            Инициализация...
-          </motion.div>
+
+          {/* Rotating connection status — replaces the static "Инициализация..." */}
+          <div className="h-4 mt-1.5 relative w-[220px] flex items-center justify-center">
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={status}
+                className="font-mono text-[10px] tracking-[0.14em] uppercase absolute"
+                style={{ color: 'var(--on-surface-variant)' }}
+                initial={{ opacity: 0, y: reduceMotion ? 0 : 6 }}
+                animate={{ opacity: 0.5, y: 0 }}
+                exit={{ opacity: 0, y: reduceMotion ? 0 : -6 }}
+                transition={{ duration: 0.3, ease: [0.2, 0, 0, 1] }}>
+                {status}
+              </motion.span>
+            </AnimatePresence>
+          </div>
         </div>
       </motion.div>
 
@@ -131,19 +189,21 @@ const Loader = () => {
         initial={{ opacity: 0, scale: 0.75 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.18, duration: 0.4, ease: [0.2, 0, 0, 1] }}>
-        <SpinnerRings />
+        <SpinnerRings reduceMotion={reduceMotion} />
       </motion.div>
 
       {/* ── Social buttons ── */}
       <motion.div
-        className="w-full flex flex-col items-center max-w-md"
+        className="w-full flex flex-col items-center max-w-2xl"
         initial={{ opacity: 0, y: 22 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.28, duration: 0.5, ease: [0.2, 0, 0, 1] }}>
         <motion.p
           className="text-center font-mono text-[10px] tracking-[0.18em] uppercase mb-3"
           style={{ color: 'var(--on-surface-variant)' }}
-          animate={{ opacity: [0.25, 0.5, 0.25] }}
+          animate={
+            reduceMotion ? { opacity: 0.4 } : { opacity: [0.25, 0.5, 0.25] }
+          }
           transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}>
           Пока ждёшь
         </motion.p>
