@@ -25,6 +25,78 @@ type Props = {
   setUser: (user: UserDataInterface) => void
 }
 
+/* ── Brand marks (inlined so they can inherit currentColor / sit in badges) ── */
+
+function SbpMark({ size = 18 }: { size?: number }) {
+  // Original multicolor SBP glyph — keep native brand colors, no currentColor override.
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 40 40"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M10 12.4417L13.0402 17.8531V21.1539L10.0036 26.5548L10 12.4417Z"
+        fill="#5B57A2"
+      />
+      <path
+        d="M21.673 15.8839L24.5217 14.1452L30.3519 14.1398L21.673 19.4344V15.8839Z"
+        fill="#D90751"
+      />
+      <path
+        d="M21.6568 12.4098L21.6729 19.5744L18.6255 17.7098V7L21.6568 12.4098Z"
+        fill="#FAB718"
+      />
+      <path
+        d="M30.3517 14.1398L24.5214 14.1452L21.6568 12.4098L18.6255 7L30.3517 14.1398Z"
+        fill="#ED6F26"
+      />
+      <path
+        d="M21.6729 26.5848V23.1087L18.6255 21.2795L18.6272 32L21.6729 26.5848Z"
+        fill="#63B22F"
+      />
+      <path
+        d="M24.5146 24.8619L13.04 17.8531L10 12.4417L30.3396 24.8548L24.5146 24.8619Z"
+        fill="#1487C9"
+      />
+      <path
+        d="M18.6278 32L21.673 26.5848L24.5146 24.8619L30.3395 24.8548L18.6278 32Z"
+        fill="#017F36"
+      />
+      <path
+        d="M10.0035 26.5549L18.6505 21.2799L15.7435 19.5036L13.0401 21.154L10.0035 26.5549Z"
+        fill="#984995"
+      />
+    </svg>
+  )
+}
+
+function CardsMark({ size = 18 }: { size?: number }) {
+  // Original glyph is solid white — swapped to currentColor so it can sit on any badge color.
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 40 40"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M23.717 12.7294H11.7799C11.4258 12.7294 11.0971 12.742 10.7936 12.7547C7.79665 12.9317 7 14.0318 7 17.4461V18.1795C7 18.875 7.56904 19.444 8.26452 19.444H27.2324C27.9279 19.444 28.4969 18.875 28.4969 18.1795V17.4461C28.4969 13.6778 27.5359 12.7294 23.717 12.7294Z"
+        fill="currentColor"
+      />
+      <path
+        d="M8.26452 21.3391C7.56904 21.3391 7 21.9081 7 22.6036V26.2833C7 30.0516 7.96104 31 11.7799 31H23.717C27.4727 31 28.459 30.0896 28.4969 26.4857V22.6036C28.4969 21.9081 27.9279 21.3391 27.2324 21.3391H8.26452ZM13.272 27.9146H11.1097C10.5913 27.9146 10.1613 27.4846 10.1613 26.9662C10.1613 26.4477 10.5913 26.0178 11.1097 26.0178H13.2847C13.8031 26.0178 14.2331 26.4477 14.2331 26.9662C14.2331 27.4846 13.8031 27.9146 13.272 27.9146ZM20.3407 27.9146H15.9908C15.4723 27.9146 15.0424 27.4846 15.0424 26.9662C15.0424 26.4477 15.4723 26.0178 15.9908 26.0178H20.3407C20.8592 26.0178 21.2891 26.4477 21.2891 26.9662C21.2891 27.4846 20.8718 27.9146 20.3407 27.9146Z"
+        fill="currentColor"
+      />
+      <path
+        d="M32.2926 21.3039V14.6777C32.2926 10.7198 30.0291 9 26.6149 9H15.3226C14.3616 9 13.5017 9.1391 12.743 9.42994C12.1486 9.64491 11.6175 9.96104 11.1876 10.3783C10.96 10.5933 11.137 10.9474 11.4658 10.9474H25.2112C28.0564 10.9474 30.3578 13.2488 30.3578 16.094V25.1607C30.3578 25.4768 30.6993 25.6538 30.9269 25.4262C31.7994 24.5031 32.2926 23.1501 32.2926 21.3039Z"
+        fill="currentColor"
+      />
+    </svg>
+  )
+}
+
 /* ── Single themed pay button (premium card) ─────────────────────── */
 interface PayButtonProps {
   onClick: () => void
@@ -85,7 +157,7 @@ function PayButton({
         }}
       />
 
-      {/* Corner badge (e.g. "ex-TON") */}
+      {/* Corner badge (e.g. "ex-TON", "СКОРО") */}
       {badge && (
         <span
           className="absolute top-2 right-2 text-[8px] font-bold font-mono tracking-wide px-1.5 py-0.5 rounded-md"
@@ -153,6 +225,7 @@ function PayButton({
               style={{
                 background: `rgba(${glowRgb},0.16)`,
                 boxShadow: `0 0 16px rgba(${glowRgb},0.18)`,
+                color: colorVar,
               }}>
               {icon}
             </div>
@@ -237,7 +310,21 @@ export default function PaymentInvoiceButton({
 
   const isLoading = loadingMethod !== null
 
+  // Methods that are UI-only stubs right now (pending bank/acquiring approval).
+  // Tapping them explains the status instead of hitting the invoice API.
+  const STUB_METHODS: PaymentMethodEnum[] = [
+    PaymentMethodEnum.SBP,
+    PaymentMethodEnum.CARD_RU,
+  ]
+
   const handleClick = async (method: PaymentMethodEnum) => {
+    if (STUB_METHODS.includes(method)) {
+      toast.info(
+        'Этот способ оплаты скоро появится — сейчас на проверке у банка',
+      )
+      return
+    }
+
     setLoadingMethod(method)
     try {
       // Note: enum value stays TON_TON for backend/API compatibility during
@@ -357,6 +444,36 @@ export default function PaymentInvoiceButton({
         ) : (
           <PayButtonSkeleton />
         )}
+
+        {/* ── СБП — stub, pending bank/acquiring approval ── */}
+        <PayButton
+          onClick={() => handleClick(PaymentMethodEnum.SBP)}
+          disabled={isLoading}
+          isLoading={false}
+          isDone={false}
+          colorVar="var(--sbp)"
+          glowRgb="91,87,162"
+          icon={<SbpMark size={18} />}
+          label="СБП"
+          sublabel="Система быстрых платежей"
+          value={amount.toLocaleString()}
+          badge="СКОРО"
+        />
+
+        {/* ── Карты РФ (Мир / Visa / MC) — stub, pending bank/acquiring approval ── */}
+        <PayButton
+          onClick={() => handleClick(PaymentMethodEnum.CARD_RU)}
+          disabled={isLoading}
+          isLoading={false}
+          isDone={false}
+          colorVar="var(--mir-card)"
+          glowRgb="77,180,94"
+          icon={<CardsMark size={18} />}
+          label="Карта РФ"
+          sublabel="Мир · Visa · MC"
+          value={amount.toLocaleString()}
+          badge="СКОРО"
+        />
       </div>
 
       <Split />
