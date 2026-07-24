@@ -30,4 +30,6 @@ export enum PaymentMethodEnum {
   GRAM_TON = 'GRAM_TON',
   CATS_TON = 'CATS_TON',
   SKINSBACK = 'SKINSBACK',
+  SBP = 'SBP',
+  CARD_RU = 'CARD_RU',
 }
