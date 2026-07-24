@@ -1,4 +1,12 @@
 :root {
+  /* SBP (Система быстрых платежей) */
+  --sbp: #5b57a2;
+  --sbp-container-rgba: rgba(91, 87, 162, 0.3);
+
+  /* Карты РФ (Мир) */
+  --mir-card: #4db45e;
+  --mir-card-container-rgba: rgba(77, 180, 94, 0.3);
+
   /* TG Star — официальные Telegram Stars (оплата) */
   --tg-star: #ffd000;
   --on-tg-star: #2a1f00;
