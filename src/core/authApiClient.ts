@@ -407,6 +407,7 @@ class ApiClient {
     return this.safeRequest<{
       success: boolean
       extensions: SubscriptionExtensionsWithConditionsInterface[]
+      default: NewEraSubWithTmaInterface
       user: UserDataInterface
     }>(async () => {
       const { data } = await this.instance.get(`/new-era/extensions`)
@@ -419,6 +420,7 @@ class ApiClient {
     return this.safeRequest<{
       success: boolean
       extensions: SubscriptionExtensionsWithConditionsInterface[]
+      default: NewEraSubWithTmaInterface
       user: UserDataInterface
     }>(async () => {
       const { data } = await this.instance.post(`/new-era/extensions`)
@@ -446,6 +448,7 @@ class ApiClient {
     return this.safeRequest<{
       success: boolean
       subscription: NewEraSubWithTmaInterface
+      default: NewEraSubWithTmaInterface
       user: UserDataInterface
     }>(async () => {
       const { data } = await this.instance.get(`/new-era/sub`)
@@ -458,6 +461,7 @@ class ApiClient {
     return this.safeRequest<{
       success: boolean
       subscription: NewEraSubWithTmaInterface
+      default: NewEraSubWithTmaInterface
       user: UserDataInterface
     }>(async () => {
       const { data } = await this.instance.post(`/new-era/sub`)
@@ -470,6 +474,7 @@ class ApiClient {
     return this.safeRequest<{
       success: boolean
       subscription: NewEraSubWithTmaInterface
+      default: NewEraSubWithTmaInterface
       user: UserDataInterface
     }>(async () => {
       const { data } = await this.instance.delete(`/new-era/device/` + hwid)
