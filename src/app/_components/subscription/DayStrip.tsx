@@ -1,6 +1,8 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { Calendar } from 'lucide-react'
+import { BonusBadge } from './BonusBadge'
 import { formatTimeLeft, pluralDays } from './format.util'
 
 /**
@@ -18,11 +20,16 @@ import { formatTimeLeft, pluralDays } from './format.util'
  */
 export function DayStrip({
   totalDays,
+  defaultDays,
   expiredAt,
   isExpired,
   accentRgb,
 }: {
   totalDays: number
+  // Сколько дней давалось бы по умолчанию (без выполненных заданий) —
+  // если передано и меньше totalDays, рядом с лейблом покажется бейдж
+  // "+N дн." с пояснением, откуда взялась разница.
+  defaultDays?: number
   expiredAt?: Date | string | null
   isExpired: boolean
   accentRgb: string
@@ -53,16 +60,22 @@ export function DayStrip({
   const collapsed = totalDays > MAX_SEGMENTS
   const scale = collapsed ? totalDays / MAX_SEGMENTS : 1
 
+  const bonusDays =
+    typeof defaultDays === 'number' ? totalDays - defaultDays : 0
+
   return (
     <div className="flex flex-col gap-2 w-full">
       <div className="flex items-center justify-between gap-2">
-        <span
-          className="text-xs font-mono"
-          style={{ color: 'var(--on-surface-variant)' }}>
-          Период подписки · {totalDays} {pluralDays(totalDays)}
-        </span>
+        <div className="flex items-center gap-1.5 min-w-0">
+          <Calendar size={13} />
+          <span
+            className="text-xs font-mono truncate"
+            style={{ color: 'var(--on-surface-variant)' }}>
+            Период подписки · {totalDays} {pluralDays(totalDays)}
+          </span>
+        </div>
         <motion.span
-          className="text-xs font-mono font-bold text-right"
+          className="text-xs font-mono font-bold text-right shrink-0 flex gap-1 items-center"
           animate={isCritical ? { opacity: [1, 0.35, 1] } : { opacity: 1 }}
           transition={
             isCritical
@@ -76,7 +89,12 @@ export function DayStrip({
                 ? 'var(--warning)'
                 : 'var(--on-surface)',
           }}>
-          {isExpired ? 'Истекла' : formatTimeLeft(msLeft)}
+          {bonusDays > 0 && (
+            <BonusBadge
+              amount={`+${bonusDays} дн.`}
+              tooltip={`Срок подписки увеличен заданиями — по умолчанию было ${defaultDays} ${pluralDays(defaultDays as number)}`}
+            />
+          )}
         </motion.span>
       </div>
 
@@ -135,6 +153,11 @@ export function DayStrip({
         })}
       </div>
 
+      <span
+        className="text-[11px] self-end"
+        style={{ color: 'var(--on-surface-variant)', opacity: 0.55 }}>
+        {isExpired ? 'Истекла' : formatTimeLeft(msLeft)}{' '}
+      </span>
       {/*{!isExpired && (
         <span
           className="text-[11px] self-end"
