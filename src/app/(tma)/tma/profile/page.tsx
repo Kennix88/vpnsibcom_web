@@ -16,9 +16,18 @@ import limitLengthString from '@app/utils/limit-length-string.util'
 import { Address } from '@ton/ton'
 import { useTonWallet } from '@tonconnect/ui-react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { CheckCheck, Copy, Hash, Percent, User, Wallet } from 'lucide-react'
+import {
+  CheckCheck,
+  Copy,
+  Hash,
+  Percent,
+  User,
+  Users2,
+  Wallet,
+} from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'use-intl'
+import { SectionHeading } from '../earning/_components/SectionHeading'
 
 /* ─── Animation variants ─────────────────────────────────────────── */
 const stagger = {
@@ -351,7 +360,14 @@ export default function Page() {
           variants={fadeSlideUp}
           className="flex flex-col items-center gap-4 w-full ">
           <LanguageSwitcher />
-          <SocialButtons />
+          <div className="flex flex-col gap-2.5">
+            <SectionHeading
+              icon={<Users2 size={14} />}
+              title="Сообщество"
+              hint="Будь на связи с VPNsib"
+            />
+            <SocialButtons />
+          </div>
         </motion.div>
       </motion.div>
     </TmaPage>
