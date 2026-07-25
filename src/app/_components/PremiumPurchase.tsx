@@ -67,6 +67,7 @@ import { useModalNavigatingAway } from './Modal'
 /* ────────────────────────────────────────────────────────────────── */
 
 const TOP_UP_ROUTE = '/tma/payment'
+const TEN_YEARS_MS = 10 * 365 * 86_400_000
 
 const METHOD_LABEL: Record<PayPremiumMethodsEnum, string> = {
   [PayPremiumMethodsEnum.BALANCE_STARS]: 'Stars',
@@ -257,6 +258,19 @@ export default function PremiumPurchase({
     return new Date()
   }, [user?.premiumExpiredAt])
 
+  /* ── lifetime guard ──────────────────────────────────────────────
+       Если премиум уже куплен на 10+ лет вперёд, бесплатные (100%-скидка)
+       продления больше не имеют смысла — блокируем их явно, вместо того
+       чтобы тихо копить бессмысленный запас лет. Платные продления
+       по-прежнему разрешены. */
+  const alreadyLifetime =
+    !!user?.premiumExpiredAt &&
+    new Date(user.premiumExpiredAt).getTime() - Date.now() > TEN_YEARS_MS
+
+  const isFreeOffer = total <= 0
+
+  const blockedByLifetime = alreadyLifetime && isFreeOffer
+
   const isStacking = baseExpiry.getTime() > Date.now()
 
   const projectedExpiry = useMemo(
@@ -299,6 +313,12 @@ export default function PremiumPurchase({
 
   const handlePay = async () => {
     if (!selectedMethod || !selectedPeriod || !selectedMethodData) return
+    if (blockedByLifetime) {
+      toast.info(
+        'Premium уже оформлен на очень долгий срок — бесплатное продление недоступно',
+      )
+      return
+    }
     if (insufficient) {
       handleTopUp()
       return
@@ -602,21 +622,53 @@ export default function PremiumPurchase({
         )}
       </AnimatePresence>
 
+      {/* ── Free-extension blocked notice ───────────────────────── */}
+      <AnimatePresence>
+        {blockedByLifetime && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-[11px]"
+            style={{
+              background: 'var(--warning-container)',
+              color: 'var(--on-warning-container)',
+            }}>
+            <AlertTriangle size={14} className="shrink-0" />
+            Premium уже оформлен на срок более 10 лет — бесплатное продление
+            больше не начисляется. Доступны только платные периоды.
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* ── CTA ──────────────────────────────────────────────────── */}
       <motion.button
         onClick={handlePay}
-        disabled={isPaying || !selectedMethodData}
-        whileHover={!isPaying ? { scale: 1.015 } : undefined}
-        whileTap={!isPaying ? { scale: 0.98 } : undefined}
+        disabled={isPaying || !selectedMethodData || blockedByLifetime}
+        whileHover={
+          !isPaying && !blockedByLifetime ? { scale: 1.015 } : undefined
+        }
+        whileTap={!isPaying && !blockedByLifetime ? { scale: 0.98 } : undefined}
         className="flex items-center justify-center gap-2 w-full py-3 rounded-2xl text-[13.5px] font-bold cursor-pointer"
         style={{
-          background: insufficient ? 'rgba(255,255,255,0.06)' : accent.gradient,
-          color: insufficient ? 'var(--on-surface-variant)' : 'var(--on-star)',
-          opacity: isPaying ? 0.8 : 1,
-          boxShadow: insufficient ? 'none' : `0 6px 20px ${accent.glow}`,
+          background:
+            insufficient || blockedByLifetime
+              ? 'rgba(255,255,255,0.06)'
+              : accent.gradient,
+          color:
+            insufficient || blockedByLifetime
+              ? 'var(--on-surface-variant)'
+              : 'var(--on-star)',
+          opacity: isPaying ? 0.8 : blockedByLifetime ? 0.6 : 1,
+          boxShadow:
+            insufficient || blockedByLifetime
+              ? 'none'
+              : `0 6px 20px ${accent.glow}`,
         }}>
         {isPaying ? (
           <Loader2 size={16} className="animate-spin" />
+        ) : blockedByLifetime ? (
+          <AlertTriangle size={15} />
         ) : insufficient ? (
           <Wallet size={15} />
         ) : (
@@ -624,6 +676,8 @@ export default function PremiumPurchase({
         )}
         {isPaying ? (
           'Оформляем…'
+        ) : blockedByLifetime ? (
+          'Недоступно бесплатно'
         ) : insufficient ? (
           'Пополнить и продолжить'
         ) : (
