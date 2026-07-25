@@ -7,24 +7,26 @@ export function fxUtil(
   to: CurrencyEnum = CurrencyEnum.USD,
   ratesObj: RatesInterface,
 ): number {
-  const convert = function (val: number) {
-    return Number((val * getRate(to, from)).toFixed(15))
-  }
+  const rates = { ...ratesObj.rates, [ratesObj.base]: 1 }
 
-  const getRate = function (to: CurrencyEnum, from: CurrencyEnum) {
-    const rates = ratesObj.rates
-    rates[ratesObj.base] = 1
+  // Currencies whose `rate` is quoted as "units of the currency per 1 USD"
+  // (Telegram Stars + crypto). Every other currency here follows the
+  // standard FIAT convention: "USD value of 1 unit". Mixing the two
+  // conventions without normalizing first is what produced wrong RUB
+  // amounts.
+  const QUANTITY_PER_USD = new Set<CurrencyEnum>([
+    CurrencyEnum.XTR,
+    CurrencyEnum.TON,
+    CurrencyEnum.GRAM,
+    CurrencyEnum.USDT,
+    // + любые другие ваши CRYPTO/TELEGRAM ключи из currencies[].type
+  ])
 
-    if (from === ratesObj.base) {
-      return rates[to]
-    }
+  const usdValueOfUnit = (code: CurrencyEnum): number =>
+    QUANTITY_PER_USD.has(code) ? 1 / rates[code] : rates[code]
 
-    if (to === ratesObj.base) {
-      return Number((1 / rates[from]).toFixed(15))
-    }
+  const usdValueFrom = usdValueOfUnit(from)
+  const usdValueTo = usdValueOfUnit(to)
 
-    return Number((rates[to] * (1 / rates[from])).toFixed(15))
-  }
-
-  return convert(value)
+  return Number(((value * usdValueFrom) / usdValueTo).toFixed(15))
 }
