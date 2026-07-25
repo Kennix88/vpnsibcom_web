@@ -2,6 +2,7 @@
 
 import { useUserStore } from '@app/store/user.store'
 import { AnimatePresence, motion } from 'framer-motion'
+import { ListChecks } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -30,29 +31,19 @@ function CoinParticle({ delay }: { delay: number }) {
   )
 }
 
-/* ─── Pulsing notification dot ───────────────────────────────────── */
-function NotifDot() {
+/* ─── Pulsing notification dot — переиспользуется на нескольких табах ── */
+function NotifDot({ colorVar = 'var(--usdt)' }: { colorVar?: string }) {
   return (
-    <span className="relative block w-2 h-2">
-      {/* center dot */}
+    <span className="relative block w-1.5 h-1.5">
       <span
         className="absolute inset-0 rounded-full"
-        style={{ background: 'var(--usdt)' }}
+        style={{ background: colorVar }}
       />
-
-      {/* pulse */}
       <motion.span
         className="absolute inset-0 rounded-full origin-center"
-        style={{ background: 'var(--usdt)' }}
-        animate={{
-          scale: [1, 2.2],
-          opacity: [0.5, 0],
-        }}
-        transition={{
-          duration: 2.2,
-          repeat: Infinity,
-          ease: 'easeOut',
-        }}
+        style={{ background: colorVar }}
+        animate={{ scale: [1, 2.2], opacity: [0.5, 0] }}
+        transition={{ duration: 2.2, repeat: Infinity, ease: 'easeOut' }}
       />
     </span>
   )
@@ -62,14 +53,12 @@ function NotifDot() {
 function EarnIcon({ isActive }: { isActive: boolean }) {
   const [particles, setParticles] = useState<number[]>([])
 
-  /* Выстреливаем монетки каждые ~4 с, только если таб не активен */
   useEffect(() => {
     if (isActive) return
     const fire = () => {
       setParticles([Date.now()])
       setTimeout(() => setParticles([]), 1600)
     }
-    // первый залп через 3 с после монтирования
     const init = setTimeout(fire, 3000)
     const interval = setInterval(fire, 5500)
     return () => {
@@ -80,14 +69,12 @@ function EarnIcon({ isActive }: { isActive: boolean }) {
 
   return (
     <div className="relative flex items-center justify-center">
-      {/* Частицы */}
       <AnimatePresence>
         {particles.map((id) => (
           <CoinParticle key={id} delay={0} />
         ))}
       </AnimatePresence>
 
-      {/* Coin ring glow — только не-активное состояние */}
       {!isActive && (
         <motion.div
           aria-hidden
@@ -98,9 +85,49 @@ function EarnIcon({ isActive }: { isActive: boolean }) {
         />
       )}
 
-      <Currency w={20} type="usdt" />
+      <Currency w={18} type="usdt" />
     </div>
   )
+}
+
+/* ─── Tasks tab icon ─────────────────────────────────────────────── */
+function TaskIcon({
+  isActive,
+  hasPending = true,
+}: {
+  isActive: boolean
+  hasPending?: boolean
+}) {
+  return (
+    <div className="relative flex items-center justify-center">
+      {!isActive && (
+        <motion.div
+          aria-hidden
+          className="absolute inset-0 rounded-full"
+          style={{ background: 'rgba(245,166,35,0.24)', filter: 'blur(5px)' }}
+          animate={{ opacity: [0.4, 0.9, 0.4], scale: [0.85, 1.25, 0.85] }}
+          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      )}
+      <ListChecks size={18} strokeWidth={2.3} className="relative z-10" />
+      {!isActive && hasPending && (
+        <span className="absolute -top-1 -right-1 z-20">
+          <NotifDot colorVar="var(--star)" />
+        </span>
+      )}
+    </div>
+  )
+}
+
+/* ─── Акцентная палитра по табам ─────────────────────────────────── */
+const TAB_ACCENT: Record<string, { colorVar: string; rgb: string }> = {
+  earn: { colorVar: 'var(--usdt)', rgb: '80,175,149' },
+  tasks: { colorVar: 'var(--star)', rgb: '245,166,35' },
+}
+const DEFAULT_ACCENT = { colorVar: 'var(--primary)', rgb: '195,166,255' }
+
+function accentFor(id: string) {
+  return TAB_ACCENT[id] ?? DEFAULT_ACCENT
 }
 
 /* ─── NavBar ─────────────────────────────────────────────────────── */
@@ -110,8 +137,8 @@ export default function NavBar() {
   const url = location === '/app' ? '/app' : '/tma'
   const { user } = useUserStore()
 
-  const isEarnActive =
-    location.includes('/friends') || location.includes('/earning')
+  const isEarnActive = location.includes('/friends')
+  const isTasksActive = location.includes('/earning')
 
   const navItems = [
     {
@@ -122,29 +149,36 @@ export default function NavBar() {
         <Image
           src="/logo.png"
           alt="Logo"
-          width={22}
-          height={22}
+          width={20}
+          height={20}
           className="rounded-md"
         />
       ),
     },
     {
+      id: 'tasks',
+      name: 'Задачи',
+      href: url + '/earning',
+      icon: (isActive: boolean) => <TaskIcon isActive={isActive} />,
+    },
+    {
       id: 'earn',
       name: 'Заработать',
       href: url + '/friends',
-      icon: <EarnIcon isActive={isEarnActive} />,
-      special: true, // маркетинговый акцент
+      icon: (isActive: boolean) => <EarnIcon isActive={isActive} />,
+      special: true,
     },
     {
       id: 'profile',
       name: t('profile'),
       href: url + '/profile',
-      icon: <Avatar url={user?.photoUrl} w={22} className="cursor-pointer" />,
+      icon: <Avatar url={user?.photoUrl} w={20} className="cursor-pointer" />,
     },
   ]
 
   const isMainUrls =
     location.includes('/earning') ||
+    location.includes('/tasks') ||
     location.includes('/games') ||
     location.includes('/friends') ||
     location.includes('/billing') ||
@@ -158,7 +192,13 @@ export default function NavBar() {
   if (!isMainUrls) return null
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center pb-4 px-4 pointer-events-none">
+    <div
+      className="fixed bottom-0 left-0 right-0 z-50 flex justify-center px-2 pointer-events-none"
+      style={{
+        // safe-area снизу (home indicator) через нативный CSS env(),
+        // работает и без tma.js — Telegram WebView его поддерживает
+        paddingBottom: 'max(1rem, env(safe-area-inset-bottom, 1rem))',
+      }}>
       {/* Fade gradient */}
       <div
         aria-hidden
@@ -171,7 +211,7 @@ export default function NavBar() {
       />
 
       <motion.nav
-        className="relative pointer-events-auto flex items-center gap-1 px-2 py-2 rounded-2xl"
+        className="relative pointer-events-auto flex items-center w-full max-w-md gap-0.5 px-1 py-1.5 rounded-2xl"
         style={{
           background:
             'linear-gradient(135deg, var(--surface-container-high) 0%, var(--surface-container) 100%)',
@@ -185,14 +225,17 @@ export default function NavBar() {
         transition={{ duration: 0.4, ease: [0.2, 0, 0, 1] }}>
         {navItems.map((item) => {
           const isActive =
-            location === item.href || (item.id === 'earn' && isEarnActive)
+            location === item.href ||
+            (item.id === 'earn' && isEarnActive) ||
+            (item.id === 'tasks' && isTasksActive)
           const isSpecial = item.special && !isActive
+          const accent = accentFor(item.id)
 
           return (
             <Link
               key={item.id}
               href={item.href}
-              className="relative flex flex-col items-center justify-center gap-1 px-5 py-1.5 rounded-xl active:scale-[0.93] min-w-[72px] overflow-visible"
+              className="relative flex flex-1 min-w-0 flex-col items-center justify-center gap-0.5 px-1 py-1.5 rounded-xl active:scale-[0.93] overflow-visible"
               style={{
                 color: isActive
                   ? 'var(--on-primary-container)'
@@ -206,12 +249,12 @@ export default function NavBar() {
                   className="absolute inset-0 rounded-xl"
                   style={{
                     background:
-                      item.id === 'earn'
-                        ? 'linear-gradient(135deg, rgba(80,175,149,0.22) 0%, rgba(80,175,149,0.1) 100%)'
+                      item.id === 'earn' || item.id === 'tasks'
+                        ? `linear-gradient(135deg, rgba(${accent.rgb},0.22) 0%, rgba(${accent.rgb},0.1) 100%)`
                         : 'linear-gradient(135deg, var(--primary-container) 0%, color-mix(in srgb, var(--primary-container) 70%, var(--surface-container-highest)) 100%)',
                     boxShadow:
-                      item.id === 'earn'
-                        ? '0 0 14px rgba(80,175,149,0.2)'
+                      item.id === 'earn' || item.id === 'tasks'
+                        ? `0 0 14px rgba(${accent.rgb},0.2)`
                         : '0 0 12px rgba(195,166,255,0.18)',
                   }}
                   transition={{ type: 'spring', stiffness: 380, damping: 32 }}
@@ -246,8 +289,8 @@ export default function NavBar() {
 
               {/* ── Notification dot (earn tab, not active) ── */}
               {isSpecial && (
-                <span className="absolute top-2 right-2 z-20">
-                  <NotifDot />
+                <span className="absolute top-1.5 right-1.5 z-20">
+                  <NotifDot colorVar="var(--usdt)" />
                 </span>
               )}
 
@@ -256,58 +299,40 @@ export default function NavBar() {
                 className="relative z-10"
                 style={{
                   color: isActive
-                    ? item.id === 'earn'
-                      ? 'var(--usdt)'
+                    ? item.id === 'earn' || item.id === 'tasks'
+                      ? accent.colorVar
                       : 'var(--primary)'
                     : 'var(--on-surface-variant)',
                   filter: isActive
-                    ? item.id === 'earn'
-                      ? 'drop-shadow(0 0 7px rgba(80,175,149,0.55))'
+                    ? item.id === 'earn' || item.id === 'tasks'
+                      ? `drop-shadow(0 0 7px rgba(${accent.rgb},0.55))`
                       : 'drop-shadow(0 0 6px rgba(195,166,255,0.45))'
                     : isSpecial
                       ? 'drop-shadow(0 0 4px rgba(80,175,149,0.3))'
                       : 'none',
                   transition: 'filter 300ms',
                 }}>
-                {item.icon}
+                {typeof item.icon === 'function'
+                  ? item.icon(isActive)
+                  : item.icon}
               </div>
 
-              <div className="flex items-center gap-2">
-                {/* ── Label ── */}
-                <span
-                  className="relative z-10 font-mono text-[10px] font-bold tracking-wide leading-none"
-                  style={{
-                    color: isActive
-                      ? item.id === 'earn'
-                        ? 'var(--usdt)'
-                        : 'var(--on-primary-container)'
-                      : isSpecial
-                        ? 'var(--usdt)'
-                        : 'var(--on-surface-variant)',
-                    opacity: isActive ? 1 : isSpecial ? 0.9 : 0.6,
-                    transition: 'color 200ms, opacity 200ms',
-                  }}>
-                  {item.name}
-                </span>
-
-                {/* ── "Доход" micro-badge под лейблом ── */}
-                {/*{isSpecial && (
-                  <motion.span
-                    className="relative z-10 font-mono font-bold rounded-sm px-1"
-                    style={{
-                      fontSize: 8,
-                      letterSpacing: '0.04em',
-                      background: 'rgba(80,175,149,0.15)',
-                      color: 'var(--usdt)',
-                      border: '1px solid rgba(80,175,149,0.25)',
-                      lineHeight: '14px',
-                    }}
-                    animate={{ opacity: [0.7, 1, 0.7] }}
-                    transition={{ duration: 2.2, repeat: Infinity }}>
-                    USDT
-                  </motion.span>
-                )}*/}
-              </div>
+              {/* ── Label ── */}
+              <span
+                className="relative z-10 w-full text-center font-mono text-[8.5px] leading-none font-bold tracking-tight truncate px-0.5"
+                style={{
+                  color: isActive
+                    ? item.id === 'earn' || item.id === 'tasks'
+                      ? accent.colorVar
+                      : 'var(--on-primary-container)'
+                    : isSpecial
+                      ? 'var(--usdt)'
+                      : 'var(--on-surface-variant)',
+                  opacity: isActive ? 1 : isSpecial ? 0.9 : 0.6,
+                  transition: 'color 200ms, opacity 200ms',
+                }}>
+                {item.name}
+              </span>
             </Link>
           )
         })}
