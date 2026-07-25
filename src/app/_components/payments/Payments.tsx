@@ -17,10 +17,10 @@ import { useTranslations } from 'use-intl'
 
 /* ─── Constants ──────────────────────────────────────────────────── */
 const quickAmounts = [
-  50, 100, 500, 700, 1000, 2000, 3000, 5000, 10000, 25000, 50000,
+  60, 100, 500, 700, 1000, 2000, 3000, 5000, 10000, 15000, 25000, 50000,
 ]
 
-const MIN_FALLBACK = 50
+const MIN_FALLBACK = 60
 const MAX_AMOUNT = 5_000_000
 const SLIDER_MAX = 50_000
 
@@ -88,8 +88,12 @@ function PaymentsContent() {
   const searchParams = useSearchParams()
 
   const initialAmount = useMemo(
-    () => parseIncomingAmount(searchParams.get('amount'), MIN_FALLBACK) ?? 700,
-    [searchParams],
+    () =>
+      parseIncomingAmount(
+        searchParams.get('amount'),
+        user?.minPayStars ?? MIN_FALLBACK,
+      ) ?? 1000,
+    [searchParams, user],
   )
 
   const [amount, setAmount] = useState<number>(initialAmount)
@@ -127,7 +131,12 @@ function PaymentsContent() {
   const bonusStarsAmount = getBonusAmount(amount, bonuses)
   const tier = getTier(amount)
   const fiatValue = addSuffixToNumberUtil(
-    fxUtil(amount, CurrencyEnum.XTR, user.currencyCode, rates),
+    fxUtil(amount, CurrencyEnum.XTR, CurrencyEnum.USD, rates),
+    2,
+  )
+
+  const fiatValueRub = addSuffixToNumberUtil(
+    fxUtil(amount, CurrencyEnum.XTR, CurrencyEnum.RUB, rates),
     2,
   )
 
@@ -225,9 +234,7 @@ function PaymentsContent() {
             <span
               className="text-xs font-mono tabular-nums"
               style={{ color: 'var(--on-background)', opacity: 0.4 }}>
-              ≈ {fiatValue}{' '}
-              {currency.key !== currency.symbol ? `${currency.key}-` : ''}
-              {currency.symbol}
+              ≈ {fiatValue} $ | {fiatValueRub} ₽
             </span>
           </div>
 
@@ -299,9 +306,20 @@ function PaymentsContent() {
               type="range"
               min={user.minPayStars}
               max={SLIDER_MAX}
-              step={50}
+              step="any" // ← убираем нативный snapping
               value={Math.min(amount, SLIDER_MAX)}
-              onChange={(e) => setAmount(Number(e.target.value))}
+              onChange={(e) => {
+                const raw = Number(e.target.value)
+                // ручное квантование к шагу 50, но границы (min/max) не трогаем —
+                // на самом краю ползунок всегда даст ровно min или ровно max
+                const snapped =
+                  raw === SLIDER_MAX || raw === user.minPayStars
+                    ? raw
+                    : Math.round(raw / 50) * 50
+                setAmount(
+                  Math.max(user.minPayStars, Math.min(snapped, SLIDER_MAX)),
+                )
+              }}
               className="w-full h-1.5 rounded-full appearance-none cursor-pointer"
               style={{
                 accentColor: `rgb(${tier.rgb})`,
@@ -402,7 +420,7 @@ function PaymentsContent() {
           <span
             className="text-[10px] font-mono"
             style={{ color: 'var(--on-background)', opacity: 0.4 }}>
-            {amount.toLocaleString()} Stars ≈ {fiatValue} {currency.symbol}
+            {amount.toLocaleString()} Stars ≈ {fiatValue} $ | {fiatValueRub} ₽
           </span>
         </div>
         <PaymentInvoiceButton amount={amount} rates={rates} setUser={setUser} />
