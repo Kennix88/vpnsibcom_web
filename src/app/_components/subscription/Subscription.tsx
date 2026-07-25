@@ -8,18 +8,36 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   TbClock,
   TbCrown,
+  TbDevices,
   TbGift,
+  TbInfinity,
   TbPlus,
   TbRefresh,
   TbWifi,
 } from 'react-icons/tb'
+import { Extensions } from '../Extensions'
 import TooltipWrapper from '../TooltipWrapper' // путь скорректируй под реальное расположение
 import { AddDeviceModal } from './AddDeviceModal'
+import { BonusBadge } from './BonusBadge'
 import { DayStrip } from './DayStrip'
 import { DeviceRow } from './DeviceRow'
 import { formatPremiumTimeLeft, formatRelative } from './format.util'
 import { TrafficBar } from './TrafficBar'
 import { NewEraSubWithTmaInterface, RemnaUserStatus } from './types'
+
+const TEN_YEARS_MS = 10 * 365 * 86_400_000
+
+/* ─── divider used to separate logical groups inside the status card ── */
+function SectionDivider() {
+  return (
+    <div
+      className="w-full"
+      style={{
+        borderTop: '1px solid rgba(255,255,255,0.06)',
+      }}
+    />
+  )
+}
 
 /* ─── status presentation ────────────────────────────────────────── */
 const STATUS_CFG: Record<
@@ -183,6 +201,11 @@ export function Subscription() {
   const { user, setUser } = useUserStore()
   const [subscription, setSubscription] =
     useState<NewEraSubWithTmaInterface | null>(null)
+  // Дефолтные значения лимитов (какими они были бы без выполненных заданий).
+  // Нужны только для того, чтобы показать пользователю "+N" бонус — это
+  // просто справочные данные с сервера, отдельного стейта загрузки не требуют.
+  const [defaultSub, setDefaultSub] =
+    useState<NewEraSubWithTmaInterface | null>(null)
   const [isNoSub, setIsNoSub] = useState(false)
   const [loading, setLoading] = useState(true)
   const [renewing, setRenewing] = useState(false)
@@ -197,6 +220,7 @@ export function Subscription() {
       const response = await authApiClient.getSubscription()
       if (response && response.success) {
         setSubscription(response.subscription)
+        setDefaultSub(response.default ?? null)
         setIsNoSub(Boolean(response.subscription.isNoSub))
         setUser(response.user)
       } else {
@@ -219,6 +243,7 @@ export function Subscription() {
       const response = await authApiClient.renewSubscription()
       if (response && response.success) {
         setSubscription(response.subscription)
+        setDefaultSub(response.default ?? null)
         setIsNoSub(Boolean(response.subscription.isNoSub))
         setUser(response.user)
       }
@@ -239,6 +264,7 @@ export function Subscription() {
       const response = await authApiClient.renewSubscription()
       if (response && response.success) {
         setSubscription(response.subscription)
+        setDefaultSub(response.default ?? null)
         setIsNoSub(Boolean(response.subscription.isNoSub))
         setUser(response.user)
       }
@@ -255,6 +281,7 @@ export function Subscription() {
         const response = await authApiClient.deleteDevice(hwid)
         if (response && response.success) {
           setSubscription(response.subscription)
+          setDefaultSub(response.default ?? null)
           setUser(response.user)
         }
       } catch (err) {
@@ -273,11 +300,21 @@ export function Subscription() {
     return new Date(user.premiumExpiredAt).getTime() > Date.now()
   }, [user?.premiumExpiredAt])
 
-  const premiumTimeLeft = useMemo(() => {
+  const premiumMsLeft = useMemo(() => {
     if (!isPremiumActive || !user?.premiumExpiredAt) return null
-    const ms = new Date(user.premiumExpiredAt).getTime() - Date.now()
-    return formatPremiumTimeLeft(ms)
+    return new Date(user.premiumExpiredAt).getTime() - Date.now()
   }, [isPremiumActive, user?.premiumExpiredAt])
+
+  // Премиум на 10+ лет вперёд по факту бессрочный — показывать "3650 дней"
+  // не несёт пользы, символ бесконечности честнее передаёт смысл.
+  const isLifetimePremium =
+    premiumMsLeft !== null && premiumMsLeft > TEN_YEARS_MS
+
+  const premiumTimeLeft = useMemo(() => {
+    if (premiumMsLeft === null) return null
+    if (isLifetimePremium) return null
+    return formatPremiumTimeLeft(premiumMsLeft)
+  }, [premiumMsLeft, isLifetimePremium])
 
   if (loading) return <SubscriptionSkeleton />
   if (failed || !subscription)
@@ -311,6 +348,12 @@ export function Subscription() {
 
   const devicesCount = subscription.devices.length
   const devicesFull = devicesCount >= subscription.devicesLimit
+
+  // Разница между текущими и дефолтными лимитами — чтобы показать
+  // пользователю, что он уже "прокачал" подписку заданиями.
+  const deviceBonus = defaultSub
+    ? subscription.devicesLimit - defaultSub.devicesLimit
+    : 0
 
   return (
     <div className="flex flex-col gap-4 w-full">
@@ -351,25 +394,36 @@ export function Subscription() {
               </span>
             </div>
 
-            {premiumTimeLeft && (
+            {(premiumTimeLeft || isLifetimePremium) && (
               <>
                 <span
                   className="w-px h-3.5 rounded-full"
                   style={{ background: 'rgba(58,46,0,0.3)' }}
                 />
                 <div className="flex items-center gap-1">
-                  <TbClock size={12} className="opacity-70" />
-                  <span className="text-[12px] font-semibold opacity-85 whitespace-nowrap">
-                    {premiumTimeLeft}
-                  </span>
+                  {isLifetimePremium ? (
+                    <TooltipWrapper
+                      color="default"
+                      placement="left"
+                      prompt="Премиум оформлен на очень длительный срок — считаем его бессрочным.">
+                      <TbInfinity size={15} className="opacity-85" />
+                    </TooltipWrapper>
+                  ) : (
+                    <>
+                      <TbClock size={12} className="opacity-70" />
+                      <span className="text-[12px] font-semibold opacity-85 whitespace-nowrap">
+                        {premiumTimeLeft}
+                      </span>
+                    </>
+                  )}
                 </div>
               </>
             )}
           </div>
         )}
 
-        <div className="relative flex flex-col gap-4">
-          {/* header row */}
+        <div className="relative flex flex-col gap-3.5">
+          {/* ── группа 1: статус подписки + "в сети" ─────────────── */}
           <div className="flex items-center justify-between gap-2 pr-2">
             <div className="flex items-center gap-2">
               <span
@@ -394,26 +448,71 @@ export function Subscription() {
             </div>
           </div>
 
-          {/* day strip */}
-          <DayStrip
-            totalDays={subscription.days}
-            expiredAt={subscription.expiredAt}
-            isExpired={isExpired}
-            accentRgb={accentRgb}
-          />
+          <SectionDivider />
 
-          {/* traffic */}
-          {(subscription.isUnlimitTraffic || subscription.dataLimitBytes) && (
-            <TrafficBar
-              isUnlimited={subscription.isUnlimitTraffic}
-              usedBytes={subscription.usedTrafficBytes}
-              limitBytes={subscription.dataLimitBytes}
-              lifetimeUsedBytes={subscription.lifetimeUsedTrafficBytes}
+          {/* ── группа 2: метрики (устройства / период / трафик) ─── */}
+          <div className="flex flex-col gap-3.5">
+            <div className="flex items-center justify-between gap-2">
+              <div
+                className="flex items-center gap-1.5 text-xs"
+                style={{ color: 'var(--on-surface-variant)' }}>
+                <TbDevices size={13} />
+                Устройства:{' '}
+                <span
+                  className="text-xs font-mono px-2 py-0.5 rounded-full"
+                  style={{
+                    background: devicesFull
+                      ? 'rgba(255,171,64,0.14)'
+                      : 'rgba(255,255,255,0.06)',
+                    color: devicesFull
+                      ? 'var(--warning)'
+                      : 'var(--on-surface-variant)',
+                  }}>
+                  {devicesCount}/{subscription.devicesLimit}
+                </span>
+              </div>
+              {deviceBonus > 0 && (
+                <BonusBadge
+                  amount={`+${deviceBonus}`}
+                  tooltip={`Лимит устройств расширен заданиями — по умолчанию было ${defaultSub!.devicesLimit}`}
+                />
+              )}
+            </div>
+
+            {/* Пустой список устройств — не дублируем CTA здесь, единственная
+                кнопка подключения теперь только в блоке "Устройства" ниже. */}
+            {devicesCount === 0 && (
+              <p
+                className="text-xs"
+                style={{ color: 'var(--on-surface-variant)', opacity: 0.7 }}>
+                Устройства не подключены — добавьте ниже, в разделе «Устройства»
+              </p>
+            )}
+
+            <DayStrip
+              totalDays={subscription.days}
+              defaultDays={defaultSub?.days}
+              expiredAt={subscription.expiredAt}
+              isExpired={isExpired}
               accentRgb={accentRgb}
             />
-          )}
 
-          {/* renew button */}
+            {(subscription.isUnlimitTraffic || subscription.dataLimitBytes) && (
+              <TrafficBar
+                isUnlimited={subscription.isUnlimitTraffic}
+                usedBytes={subscription.usedTrafficBytes}
+                limitBytes={subscription.dataLimitBytes}
+                lifetimeUsedBytes={subscription.lifetimeUsedTrafficBytes}
+                accentRgb={accentRgb}
+                defaultIsUnlimited={defaultSub?.isUnlimitTraffic}
+                defaultLimitBytes={defaultSub?.dataLimitBytes}
+              />
+            )}
+          </div>
+
+          <SectionDivider />
+
+          {/* ── группа 3: действие (продление) ───────────────────── */}
           <div className="flex flex-col gap-1.5">
             <motion.button
               whileTap={{ scale: 0.97 }}
@@ -475,6 +574,12 @@ export function Subscription() {
         </div>
       </div>
 
+      <Extensions
+        variant="mini"
+        navigateHref="/tma/earning"
+        navigateLabel="Расширить"
+      />
+
       {/* ── Devices ──────────────────────────────────────────────── */}
       <div
         className="rounded-3xl p-5"
@@ -501,6 +606,12 @@ export function Subscription() {
               }}>
               {devicesCount}/{subscription.devicesLimit}
             </span>
+            {deviceBonus > 0 && (
+              <BonusBadge
+                amount={`+${deviceBonus}`}
+                tooltip={`По умолчанию было ${defaultSub!.devicesLimit} устройств — остальное дали задания`}
+              />
+            )}
           </div>
 
           <TooltipWrapper
