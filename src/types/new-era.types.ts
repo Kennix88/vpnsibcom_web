@@ -11,6 +11,15 @@ export enum SubscriptionExtensionsEnum {
   CHAT = 'CHAT', // Вступление в чат (открывает чат по ссылке)
   BIO = 'BIO', // Указание в описании профиля телеграм "@vpnsibcom_bot" (Стоит уточнить, что не будет читаться у тех, у кого профиль скрыт настройками приватности)
   NAME = 'NAME', // Указание в Имени пользователя телеграм "@vpnsibcom_bot"
+  REFERRAL_3 = 'REFERRAL_3', // Пригласить пользователя, который использовал VPN более 7 дней (3 количество) Текущее число приглашенных берется из user.referralsWeekSubCount Перекидывать на страницу /tma/friends (Страница реферальной программы)
+  REFERRAL_5 = 'REFERRAL_5',
+  REFERRAL_10 = 'REFERRAL_10',
+  REFERRAL_25 = 'REFERRAL_25',
+  REFERRAL_50 = 'REFERRAL_50',
+  REFERRAL_100 = 'REFERRAL_100',
+  REFERRAL_REACTIVATION_10 = 'REFERRAL_REACTIVATION_10', // Вернуть пользователя в Telegram mini app который не заходил более n дней (Число дней из user.reactivationDays), (10 - Сколько нужно вернуть) Текущее значение из user.referralReactivations. Перекидывать на страницу /tma/friends
+  REFERRAL_REACTIVATION_50 = 'REFERRAL_REACTIVATION_50',
+  REFERRAL_REACTIVATION_100 = 'REFERRAL_REACTIVATION_100',
 }
 
 export interface SubscriptionExtensionsWithConditionsInterface {
