@@ -12,22 +12,27 @@ import { invoice } from '@tma.js/sdk-react'
 import { beginCell, toNano } from '@ton/core'
 import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Check, Loader2, ShieldCheck } from 'lucide-react'
+import { Check, Loader2, RotateCw, ShieldCheck } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { usePathname, useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
-import Split from './Split'
 
 type Props = {
   amount: number
   rates: RatesInterface
   setUser: (user: UserDataInterface) => void
+  /**
+   * Optional callback that re-fetches `rates` from the backend and lets the
+   * parent update the `rates` prop. If omitted, the manual refresh control
+   * and the "stale rate" nudge are simply not shown.
+   */
+  onRefreshRates?: () => Promise<void> | void
 }
 
 /* ── Brand marks (inlined so they can inherit currentColor / sit in badges) ── */
 
-function SbpMark({ size = 18 }: { size?: number }) {
+function SbpMark({ size = 16 }: { size?: number }) {
   // Original multicolor SBP glyph — keep native brand colors, no currentColor override.
   return (
     <svg
@@ -37,42 +42,42 @@ function SbpMark({ size = 18 }: { size?: number }) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg">
       <path
-        d="M10 12.4417L13.0402 17.8531V21.1539L10.0036 26.5548L10 12.4417Z"
+        d="M4 8.70673L8.86427 17.365V22.6463L4.00569 31.2877L4 8.70673Z"
         fill="#5B57A2"
       />
       <path
-        d="M21.673 15.8839L24.5217 14.1452L30.3519 14.1398L21.673 19.4344V15.8839Z"
+        d="M22.6767 14.2143L27.2347 11.4323L36.563 11.4237L22.6767 19.895V14.2143Z"
         fill="#D90751"
       />
       <path
-        d="M21.6568 12.4098L21.6729 19.5744L18.6255 17.7098V7L21.6568 12.4098Z"
+        d="M22.6508 8.65571L22.6766 20.119L17.8008 17.1357V0L22.6508 8.65571Z"
         fill="#FAB718"
       />
       <path
-        d="M30.3517 14.1398L24.5214 14.1452L21.6568 12.4098L18.6255 7L30.3517 14.1398Z"
+        d="M36.5627 11.4237L27.2343 11.4323L22.6508 8.65571L17.8008 0L36.5627 11.4237Z"
         fill="#ED6F26"
       />
       <path
-        d="M21.6729 26.5848V23.1087L18.6255 21.2795L18.6272 32L21.6729 26.5848Z"
+        d="M22.6766 31.3357V25.7739L17.8008 22.8472L17.8036 39.9999L22.6766 31.3357Z"
         fill="#63B22F"
       />
       <path
-        d="M24.5146 24.8619L13.04 17.8531L10 12.4417L30.3396 24.8548L24.5146 24.8619Z"
+        d="M27.2234 28.579L8.86393 17.365L4 8.70673L36.5433 28.5677L27.2234 28.579Z"
         fill="#1487C9"
       />
       <path
-        d="M18.6278 32L21.673 26.5848L24.5146 24.8619L30.3395 24.8548L18.6278 32Z"
+        d="M17.8044 40L22.6767 31.3357L27.2233 28.579L36.5431 28.5677L17.8044 40Z"
         fill="#017F36"
       />
       <path
-        d="M10.0035 26.5549L18.6505 21.2799L15.7435 19.5036L13.0401 21.154L10.0035 26.5549Z"
+        d="M4.00558 31.2877L17.8408 22.8477L13.1896 20.0057L8.86415 22.6463L4.00558 31.2877Z"
         fill="#984995"
       />
     </svg>
   )
 }
 
-function CardsMark({ size = 18 }: { size?: number }) {
+function CardsMark({ size = 16 }: { size?: number }) {
   // Original glyph is solid white — swapped to currentColor so it can sit on any badge color.
   return (
     <svg
@@ -82,22 +87,26 @@ function CardsMark({ size = 18 }: { size?: number }) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg">
       <path
-        d="M23.717 12.7294H11.7799C11.4258 12.7294 11.0971 12.742 10.7936 12.7547C7.79665 12.9317 7 14.0318 7 17.4461V18.1795C7 18.875 7.56904 19.444 8.26452 19.444H27.2324C27.9279 19.444 28.4969 18.875 28.4969 18.1795V17.4461C28.4969 13.6778 27.5359 12.7294 23.717 12.7294Z"
+        d="M26.4378 8.93304H7.55939C6.99943 8.93304 6.47947 8.95316 5.99951 8.97328C1.2599 9.25492 0 11.0051 0 16.4369V17.6037C0 18.7102 0.899927 19.6154 1.99984 19.6154H31.9974C33.0973 19.6154 33.9972 18.7102 33.9972 17.6037V16.4369C33.9972 10.4419 32.4774 8.93304 26.4378 8.93304Z"
         fill="currentColor"
       />
       <path
-        d="M8.26452 21.3391C7.56904 21.3391 7 21.9081 7 22.6036V26.2833C7 30.0516 7.96104 31 11.7799 31H23.717C27.4727 31 28.459 30.0896 28.4969 26.4857V22.6036C28.4969 21.9081 27.9279 21.3391 27.2324 21.3391H8.26452ZM13.272 27.9146H11.1097C10.5913 27.9146 10.1613 27.4846 10.1613 26.9662C10.1613 26.4477 10.5913 26.0178 11.1097 26.0178H13.2847C13.8031 26.0178 14.2331 26.4477 14.2331 26.9662C14.2331 27.4846 13.8031 27.9146 13.272 27.9146ZM20.3407 27.9146H15.9908C15.4723 27.9146 15.0424 27.4846 15.0424 26.9662C15.0424 26.4477 15.4723 26.0178 15.9908 26.0178H20.3407C20.8592 26.0178 21.2891 26.4477 21.2891 26.9662C21.2891 27.4846 20.8718 27.9146 20.3407 27.9146Z"
+        d="M1.99984 22.6302C0.899927 22.6302 0 23.5355 0 24.642V30.4962C0 36.4912 1.51988 38 7.55939 38H26.4378C32.3774 38 33.9372 36.5515 33.9972 30.818V24.642C33.9972 23.5355 33.0973 22.6302 31.9974 22.6302H1.99984ZM9.91919 33.0913H6.49947C5.67954 33.0913 4.99959 32.4073 4.99959 31.5825C4.99959 30.7577 5.67954 30.0737 6.49947 30.0737H9.93919C10.7591 30.0737 11.4391 30.7577 11.4391 31.5825C11.4391 32.4073 10.7591 33.0913 9.91919 33.0913ZM21.0983 33.0913H14.2188C13.3989 33.0913 12.719 32.4073 12.719 31.5825C12.719 30.7577 13.3989 30.0737 14.2188 30.0737H21.0983C21.9182 30.0737 22.5982 30.7577 22.5982 31.5825C22.5982 32.4073 21.9382 33.0913 21.0983 33.0913Z"
         fill="currentColor"
       />
       <path
-        d="M32.2926 21.3039V14.6777C32.2926 10.7198 30.0291 9 26.6149 9H15.3226C14.3616 9 13.5017 9.1391 12.743 9.42994C12.1486 9.64491 11.6175 9.96104 11.1876 10.3783C10.96 10.5933 11.137 10.9474 11.4658 10.9474H25.2112C28.0564 10.9474 30.3578 13.2488 30.3578 16.094V25.1607C30.3578 25.4768 30.6993 25.6538 30.9269 25.4262C31.7994 24.5031 32.2926 23.1501 32.2926 21.3039Z"
+        d="M40 22.5744V12.0327C40 5.73597 36.4203 3 31.0207 3H13.1621C11.6422 3 10.2823 3.22129 9.08244 3.68399C8.14252 4.02599 7.30259 4.52893 6.62264 5.1928C6.26267 5.5348 6.54265 6.09809 7.06261 6.09809H28.8009C33.3005 6.09809 36.9402 9.75946 36.9402 14.2859V28.7102C36.9402 29.2131 37.4802 29.4948 37.8402 29.1326C39.2201 27.6641 40 25.5115 40 22.5744Z"
         fill="currentColor"
       />
     </svg>
   )
 }
 
-/* ── Single themed pay button (premium card) ─────────────────────── */
+/* ── Single themed pay row ─────────────────────────────────────────
+   Switched from a centered square card to a full-width row: icon in a
+   small corner badge on the left, label/sublabel in the middle, and the
+   price right-aligned. Long RUB amounts (e.g. "1 017 905 ₽") no longer
+   have to fight for space inside a half-width grid cell. */
 interface PayButtonProps {
   onClick: () => void
   disabled: boolean
@@ -131,127 +140,111 @@ function PayButton({
     <motion.button
       onClick={onClick}
       disabled={disabled}
-      whileHover={disabled ? {} : { scale: 1.02, y: -2 }}
-      whileTap={disabled ? {} : { scale: 0.97 }}
+      whileTap={disabled ? {} : { scale: 0.985 }}
       transition={{ type: 'spring', stiffness: 420, damping: 26 }}
-      className="relative grow basis-[150px] flex flex-col items-center justify-center gap-1.5 py-4 px-4 rounded-2xl overflow-hidden cursor-pointer"
+      className="relative flex w-full items-center gap-3 rounded-xl px-3 py-2.5 overflow-hidden cursor-pointer text-left"
       style={{
-        background: `linear-gradient(180deg, rgba(${glowRgb},0.14) 0%, rgba(${glowRgb},0.05) 100%)`,
-        border: `1px solid rgba(${glowRgb}, ${isDone ? 0.55 : 0.28})`,
+        background: 'var(--surface-container)',
+        border: `1px solid rgba(${glowRgb}, ${isDone ? 0.65 : 0.32})`,
         opacity: disabled && !isLoading ? 0.45 : 1,
         cursor: disabled ? 'not-allowed' : 'pointer',
-        boxShadow: isDone
-          ? `0 0 0 3px rgba(${glowRgb},0.12), 0 6px 24px rgba(${glowRgb},0.22)`
-          : disabled
-            ? 'none'
-            : `0 4px 20px rgba(${glowRgb}, 0.12)`,
+        boxShadow: isDone ? `0 0 0 2px rgba(${glowRgb},0.16)` : 'none',
+        minHeight: 56,
         transition:
-          'box-shadow 220ms ease, opacity 220ms ease, border 220ms ease',
+          'box-shadow 200ms ease, opacity 200ms ease, border 200ms ease',
       }}>
-      {/* Diagonal sheen */}
-      <span
-        aria-hidden
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: `linear-gradient(115deg, transparent 38%, rgba(${glowRgb},0.08) 50%, transparent 62%)`,
-        }}
-      />
-
-      {/* Corner badge (e.g. "ex-TON", "СКОРО") */}
-      {badge && (
-        <span
-          className="absolute top-2 right-2 text-[8px] font-bold font-mono tracking-wide px-1.5 py-0.5 rounded-md"
-          style={{
-            color: colorVar,
-            background: `rgba(${glowRgb},0.14)`,
-            opacity: 0.85,
-          }}>
-          {badge}
-        </span>
-      )}
-
       <AnimatePresence mode="wait" initial={false}>
         {isLoading ? (
           <motion.div
             key="spin"
-            initial={{ opacity: 0, scale: 0.7 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.7 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
-            className="flex flex-col items-center gap-2 py-1.5">
+            className="flex w-full items-center justify-center gap-2 py-1">
             <Loader2
-              size={20}
+              size={16}
               className="animate-spin"
               style={{ color: colorVar }}
             />
             <span
-              className="text-[10px] font-mono"
-              style={{ color: colorVar, opacity: 0.7 }}>
+              className="text-[11px] font-mono"
+              style={{ color: 'var(--on-surface-variant)' }}>
               Обработка…
             </span>
           </motion.div>
         ) : isDone ? (
           <motion.div
             key="done"
-            initial={{ opacity: 0, scale: 0.6 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ type: 'spring', stiffness: 500, damping: 20 }}
-            className="flex flex-col items-center gap-2 py-1.5">
+            className="flex w-full items-center justify-center gap-2 py-1">
             <motion.div
               initial={{ rotate: -90 }}
               animate={{ rotate: 0 }}
               transition={{ type: 'spring', stiffness: 400, damping: 18 }}
-              className="flex items-center justify-center w-7 h-7 rounded-full"
-              style={{ background: `rgba(${glowRgb},0.2)` }}>
-              <Check size={15} style={{ color: colorVar }} />
+              className="flex items-center justify-center w-5 h-5 rounded-full"
+              style={{ background: `rgba(${glowRgb},0.22)` }}>
+              <Check size={12} style={{ color: colorVar }} />
             </motion.div>
             <span
-              className="text-[10px] font-mono"
-              style={{ color: colorVar, opacity: 0.8 }}>
+              className="text-[11px] font-mono"
+              style={{ color: 'var(--on-surface-variant)' }}>
               Открываем…
             </span>
           </motion.div>
         ) : (
           <motion.div
             key="content"
-            className="flex flex-col items-center gap-1.5"
+            className="flex w-full items-center gap-3"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.12 }}>
-            {/* Icon in circular badge */}
+            {/* Icon — corner badge, no longer a big centered circle */}
             <div
-              className="flex items-center justify-center w-9 h-9 rounded-full mb-0.5"
+              className="relative flex items-center justify-center w-9 h-9 rounded-lg shrink-0"
               style={{
-                background: `rgba(${glowRgb},0.16)`,
-                boxShadow: `0 0 16px rgba(${glowRgb},0.18)`,
+                background: `rgba(${glowRgb},0.18)`,
                 color: colorVar,
               }}>
               {icon}
             </div>
 
-            {/* Amount */}
-            <span
-              className="font-black font-mono text-base leading-none"
-              style={{ color: colorVar, letterSpacing: '-0.01em' }}>
-              {value}
-            </span>
-
-            {/* Label */}
-            <span
-              className="text-[11px] font-bold font-mono uppercase tracking-wide"
-              style={{ color: colorVar, opacity: 0.75 }}>
-              {label}
-            </span>
-
-            {/* Sublabel */}
-            {sublabel && (
+            {/* Label + sublabel */}
+            <div className="flex flex-col items-start min-w-0 flex-1">
               <span
-                className="text-[9px] font-mono -mt-0.5"
-                style={{ color: colorVar, opacity: 0.4 }}>
-                {sublabel}
+                className="text-[12px] font-semibold font-mono uppercase tracking-wide truncate w-full flex gap-2 items-center"
+                style={{ color: colorVar }}>
+                {label}
+                {badge && (
+                  <span
+                    className="text-[7px] font-bold font-mono tracking-wide px-1 py-0.5 rounded-full leading-none whitespace-nowrap"
+                    style={{
+                      color: colorVar,
+                      background: 'var(--surface-container-high)',
+                      border: `1px solid rgba(${glowRgb},0.4)`,
+                    }}>
+                    {badge}
+                  </span>
+                )}
               </span>
-            )}
+              {sublabel && (
+                <span
+                  className="text-[10px] font-mono truncate w-full"
+                  style={{ color: 'var(--on-surface-variant)', opacity: 0.65 }}>
+                  {sublabel}
+                </span>
+              )}
+            </div>
+
+            {/* Value — right aligned, gets all the room it needs */}
+            <span
+              className="font-bold font-mono text-[14px] leading-none shrink-0 whitespace-nowrap"
+              style={{ color: 'var(--on-surface)', letterSpacing: '-0.01em' }}>
+              ≈ {value}
+            </span>
           </motion.div>
         )}
       </AnimatePresence>
@@ -263,19 +256,20 @@ function PayButton({
 function PayButtonSkeleton() {
   return (
     <div
-      className="relative grow basis-[150px] flex flex-col items-center justify-center gap-2 py-4 px-4 rounded-2xl overflow-hidden"
+      className="relative flex w-full items-center gap-3 rounded-xl px-3 py-2.5 overflow-hidden"
       style={{
-        background: 'rgba(255,255,255,0.03)',
-        border: '1px solid rgba(255,255,255,0.05)',
+        background: 'var(--surface-container)',
+        border: '1px solid var(--surface-border)',
+        minHeight: 56,
       }}>
       <motion.div
-        className="w-9 h-9 rounded-full"
+        className="w-9 h-9 rounded-lg shrink-0"
         style={{ background: 'rgba(255,255,255,0.06)' }}
         animate={{ opacity: [0.35, 0.6, 0.35] }}
         transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
       />
       <motion.div
-        className="w-14 h-3.5 rounded-md"
+        className="h-3.5 rounded-md flex-1"
         style={{ background: 'rgba(255,255,255,0.06)' }}
         animate={{ opacity: [0.35, 0.6, 0.35] }}
         transition={{
@@ -289,11 +283,25 @@ function PayButtonSkeleton() {
   )
 }
 
+/* ── Section divider ──────────────────────────────────────────────── */
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="px-1 pt-1">
+      <span
+        className="text-[10px] font-mono uppercase tracking-wide"
+        style={{ color: 'var(--on-background)', opacity: 0.35 }}>
+        {children}
+      </span>
+    </div>
+  )
+}
+
 /* ── Main component ───────────────────────────────────────────────── */
 export default function PaymentInvoiceButton({
   amount,
   rates,
   setUser,
+  onRefreshRates,
 }: Props) {
   const [tonConnectUI] = useTonConnectUI()
   const location = usePathname()
@@ -305,6 +313,54 @@ export default function PaymentInvoiceButton({
   const wallet = useTonWallet()
   const router = useRouter()
   const t = useTranslations('billing.payment')
+
+  // ── Rate freshness tracking ──────────────────────────────────────
+  // The displayed GRAM/RUB values are computed client-side from `rates`,
+  // but the amount actually charged is always recalculated server-side
+  // at invoice creation. If the user sits on this screen for a while the
+  // shown estimate can drift from what the server will charge — give
+  // them a way to pull a fresh rate instead of being surprised later.
+  const [lastUpdated, setLastUpdated] = useState(() => Date.now())
+  const [isRefreshing, setIsRefreshing] = useState(false)
+  const [secondsAgo, setSecondsAgo] = useState(0)
+  const rateStaleAfterMs = 45_000
+  const rateAutoRefreshMs = 60_000
+
+  useEffect(() => {
+    // `rates` reference changed → parent gave us a fresh quote.
+    setLastUpdated(Date.now())
+  }, [rates])
+
+  useEffect(() => {
+    const tick = setInterval(() => {
+      setSecondsAgo(Math.floor((Date.now() - lastUpdated) / 1000))
+    }, 1000)
+    return () => clearInterval(tick)
+  }, [lastUpdated])
+
+  const refreshInFlight = useRef(false)
+  const handleRefreshRates = async () => {
+    if (!onRefreshRates || refreshInFlight.current) return
+    refreshInFlight.current = true
+    setIsRefreshing(true)
+    try {
+      await onRefreshRates()
+    } catch {
+      toast.error('Не удалось обновить курс')
+    } finally {
+      refreshInFlight.current = false
+      setIsRefreshing(false)
+    }
+  }
+
+  useEffect(() => {
+    if (!onRefreshRates) return
+    const interval = setInterval(handleRefreshRates, rateAutoRefreshMs)
+    return () => clearInterval(interval)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onRefreshRates])
+
+  const isRateStale = secondsAgo * 1000 >= rateStaleAfterMs
 
   if (amount < 0) return null
 
@@ -327,6 +383,14 @@ export default function PaymentInvoiceButton({
 
     setLoadingMethod(method)
     try {
+      // If the quote we're showing is stale and the parent gave us a way
+      // to refresh it, pull a fresh one before creating the invoice so the
+      // user isn't confused by a server-side amount that doesn't match
+      // what they just saw on screen.
+      if (isRateStale && onRefreshRates) {
+        await handleRefreshRates()
+      }
+
       // Note: enum value stays TON_TON for backend/API compatibility during
       // the TON → GRAM rebrand; only the UI label/branding changed to GRAM.
       if (method === PaymentMethodEnum.TON_TON && !wallet?.account?.address) {
@@ -381,6 +445,13 @@ export default function PaymentInvoiceButton({
     ? roundUp(fxUtil(amount, CurrencyEnum.XTR, CurrencyEnum.TON, rates))
     : 0
 
+  // Ruble-based methods (SBP / cards) settle in RUB, not Stars — convert
+  // the XTR amount straight to RUB so the button shows what will actually
+  // be charged.
+  const rubAmount = rates
+    ? roundUp(fxUtil(amount, CurrencyEnum.XTR, CurrencyEnum.RUB, rates), 2)
+    : null
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -401,19 +472,55 @@ export default function PaymentInvoiceButton({
           </span>
         </div>
 
-        {/* Trust signal */}
-        <div className="flex items-center gap-1 opacity-40">
-          <ShieldCheck size={11} style={{ color: 'var(--success)' }} />
-          <span
-            className="text-[10px] font-mono"
-            style={{ color: 'var(--on-background)' }}>
-            безопасно
-          </span>
+        <div className="flex items-center gap-3">
+          {/* Rate freshness + manual refresh */}
+          {onRefreshRates && (
+            <button
+              type="button"
+              onClick={handleRefreshRates}
+              disabled={isRefreshing}
+              className="flex items-center gap-1 opacity-60 hover:opacity-90 transition-opacity"
+              style={{ cursor: isRefreshing ? 'default' : 'pointer' }}>
+              <RotateCw
+                size={11}
+                className={isRefreshing ? 'animate-spin' : ''}
+                style={{
+                  color: isRateStale
+                    ? 'var(--warning)'
+                    : 'var(--on-background)',
+                }}
+              />
+              <span
+                className="text-[10px] font-mono"
+                style={{
+                  color: isRateStale
+                    ? 'var(--warning)'
+                    : 'var(--on-background)',
+                }}>
+                {isRefreshing
+                  ? 'обновляем…'
+                  : isRateStale
+                    ? 'курс устарел'
+                    : 'курс актуален'}
+              </span>
+            </button>
+          )}
+
+          {/* Trust signal */}
+          <div className="flex items-center gap-1 opacity-40">
+            <ShieldCheck size={11} style={{ color: 'var(--success)' }} />
+            <span
+              className="text-[10px] font-mono"
+              style={{ color: 'var(--on-background)' }}>
+              безопасно
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Pay buttons */}
-      <div className="flex gap-3 flex-wrap">
+      {/* Pay rows */}
+      <div className="flex flex-col gap-2">
+        <SectionLabel>Основные</SectionLabel>
         <PayButton
           onClick={() => handleClick(PaymentMethodEnum.STARS)}
           disabled={isLoading}
@@ -437,15 +544,18 @@ export default function PaymentInvoiceButton({
             glowRgb="48,161,245"
             icon={<Currency type="gram" w={18} />}
             label="GRAM"
-            sublabel="ex-TON"
+            sublabel="Ton Open Network"
             value={gramAmount.toString()}
-            badge="TON→GRAM"
+            badge="ex-TON"
           />
         ) : (
           <PayButtonSkeleton />
         )}
+      </div>
 
-        {/* ── СБП — stub, pending bank/acquiring approval ── */}
+      {/* RU rail — pending bank/acquiring approval, kept visually separate */}
+      <SectionLabel>Российские · скоро</SectionLabel>
+      <div className="flex flex-col gap-2">
         <PayButton
           onClick={() => handleClick(PaymentMethodEnum.SBP)}
           disabled={isLoading}
@@ -453,14 +563,13 @@ export default function PaymentInvoiceButton({
           isDone={false}
           colorVar="var(--sbp)"
           glowRgb="91,87,162"
-          icon={<SbpMark size={18} />}
+          icon={<SbpMark size={16} />}
           label="СБП"
-          sublabel="Система быстрых платежей"
-          value={amount.toLocaleString()}
+          sublabel="AuraPay"
+          value={rubAmount !== null ? `${rubAmount.toLocaleString()} ₽` : '—'}
           badge="СКОРО"
         />
 
-        {/* ── Карты РФ (Мир / Visa / MC) — stub, pending bank/acquiring approval ── */}
         <PayButton
           onClick={() => handleClick(PaymentMethodEnum.CARD_RU)}
           disabled={isLoading}
@@ -468,15 +577,41 @@ export default function PaymentInvoiceButton({
           isDone={false}
           colorVar="var(--mir-card)"
           glowRgb="77,180,94"
-          icon={<CardsMark size={18} />}
+          icon={<CardsMark size={16} />}
           label="Карта РФ"
-          sublabel="Мир · Visa · MC"
-          value={amount.toLocaleString()}
+          sublabel="AuraPay"
+          value={rubAmount !== null ? `${rubAmount.toLocaleString()} ₽` : '—'}
+          badge="СКОРО"
+        />
+        <SectionLabel>Резерв</SectionLabel>
+        <PayButton
+          onClick={() => handleClick(PaymentMethodEnum.SBP)}
+          disabled={isLoading}
+          isLoading={false}
+          isDone={false}
+          colorVar="var(--sbp)"
+          glowRgb="91,87,162"
+          icon={<SbpMark size={16} />}
+          label="СБП"
+          sublabel="Platega"
+          value={rubAmount !== null ? `${rubAmount.toLocaleString()} ₽` : '—'}
+          badge="СКОРО"
+        />
+
+        <PayButton
+          onClick={() => handleClick(PaymentMethodEnum.CARD_RU)}
+          disabled={isLoading}
+          isLoading={false}
+          isDone={false}
+          colorVar="var(--mir-card)"
+          glowRgb="77,180,94"
+          icon={<CardsMark size={16} />}
+          label="Карта РФ"
+          sublabel="Platega"
+          value={rubAmount !== null ? `${rubAmount.toLocaleString()} ₽` : '—'}
           badge="СКОРО"
         />
       </div>
-
-      <Split />
     </motion.div>
   )
 }
