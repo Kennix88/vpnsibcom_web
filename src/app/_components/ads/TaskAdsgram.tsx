@@ -9,7 +9,7 @@ import { Clock } from 'lucide-react'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import Currency from '../Currency'
-import { CountdownTimer } from './CountdownTimer'
+import { CountdownTimer } from '../tasks/CountdownTimer'
 
 // ─── Обходим отсутствие типов для <adsgram-task> ─────────────────────────────
 const AdsgramTask = 'adsgram-task' as unknown as React.ElementType
@@ -181,7 +181,11 @@ export function TaskAdsgramTask({
           </div>
         </div>
         <div className="shrink-0 flex items-center justify-center">
-          <CountdownTimer expiryDate={user.nextAdsgramTaskAt!} />
+          <CountdownTimer
+            expiryDate={user.nextAdsgramTaskAt!}
+            onExpire={() => void authApiClient.getMe().then(setUser)}
+            size="sm"
+          />
         </div>
       </motion.div>
     )
