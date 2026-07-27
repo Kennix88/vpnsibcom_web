@@ -37,7 +37,6 @@ export default function Balance({
   const location = usePathname()
   const url = location === '/app' ? '/app' : '/tma'
   const { user } = useUserStore()
-
   const balance = user?.balance
     ? type === 'payment'
       ? user.balance.payment
@@ -45,7 +44,6 @@ export default function Balance({
         ? user.balance.usdt
         : 0
     : 0
-
   const cfg = typeConfig[type]
 
   return (
@@ -80,17 +78,48 @@ export default function Balance({
       </span>
 
       {/* Top-up button (payment only) */}
+      {/* Top-up button (payment only) */}
       {type === 'payment' && (
         <Link href={`${url}/payment`}>
           <motion.div
-            className="flex items-center justify-center w-6 h-6 rounded-lg"
+            className="relative flex items-center justify-center p-2 h-6 gap-1 text-[12px] font-semibold rounded-lg overflow-hidden"
             style={{
-              background: 'var(--secondary-container)',
-              color: 'var(--on-secondary-container)',
+              background: 'var(--star-gradient)',
+              color: 'var(--on-star)',
+            }}
+            animate={{
+              scale: [1, 1.06],
+              boxShadow: [
+                '0 0 0px rgba(245,166,35,0)',
+                '0 0 12px rgba(245,166,35,0.6)',
+              ],
+            }}
+            transition={{
+              duration: 1.1,
+              repeat: Infinity,
+              repeatType: 'mirror',
+              ease: 'easeInOut',
             }}
             whileTap={{ scale: 0.9 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 20 }}>
-            <FaPlus size={11} />
+            whileHover={{ scale: 1.08 }}>
+            {/* Shimmer sweep */}
+            <motion.div
+              className="absolute inset-0"
+              style={{
+                background:
+                  'linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.55) 50%, transparent 80%)',
+              }}
+              animate={{ x: ['-120%', '120%'] }}
+              transition={{
+                duration: 1.6,
+                repeat: Infinity,
+                repeatDelay: 2.4,
+                ease: 'easeInOut',
+              }}
+            />
+
+            <FaPlus size={11} className="relative z-10" />
+            <span className="relative z-10">Пополнить</span>
           </motion.div>
         </Link>
       )}
