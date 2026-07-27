@@ -1,7 +1,8 @@
 'use client'
 
 import { config } from '@app/config/client'
-import { AnimatePresence, motion, Variants } from 'framer-motion'
+import type { Variants } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight, X } from 'lucide-react'
 import Image, { type ImageLoaderProps } from 'next/image'
 import Link from 'next/link'
@@ -10,39 +11,36 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const TADDY_API_URL = 'https://api.taddy.pro/v1'
-const TADDY_SDK_VERSION = '1.3.17'
 const RING_SIZE = 38
 const RING_STROKE = 2.5
 const RING_R = (RING_SIZE - RING_STROKE) / 2
 const RING_CIRCUM = 2 * Math.PI * RING_R
 
-let isTaddyInterstitialRunning = false
-
 // ─── Types ────────────────────────────────────────────────────────────────────
 
+// Соответствует AdsGetResponse.result из схемы Taddy — поля video там нет,
+// API его не возвращает.
 type TaddyAd = {
   id: string
   title: string | null
   description: string | null
   image: string | null
-  video: string | null
   icon: string | null
   text: string | null
   button: string | null
   link: string
 }
 
+// Соответствует AbstractRequest.user — id обязателен и НЕ nullable по схеме.
 type TaddyUser = {
-  id: number | null
-  username?: string | null
-  source: string | null
+  id: number
+  username?: string
 }
 
 type LoadState = 'loading' | 'ready' | 'no-fill' | 'error'
 
 export type Props = {
   pubId?: string
-  payload?: Record<string, unknown>
   canCloseImmediately?: boolean
   requiredViewSeconds?: number
   demo?: boolean
@@ -61,7 +59,6 @@ const demoAd: TaddyAd = {
   description:
     'Fast VPN access for every device with secure, zero-log traffic routing.',
   image: '/logo.png',
-  video: null,
   icon: '/logo.png',
   text: 'Get more traffic and premium servers with one tap.',
   button: 'Get Premium',
@@ -79,7 +76,6 @@ function normalizeAd(value: unknown): TaddyAd | null {
     title: r.title ?? null,
     description: r.description ?? null,
     image: r.image ?? null,
-    video: r.video ?? null,
     icon: r.icon ?? null,
     text: r.text ?? null,
     button: r.button ?? null,
@@ -87,41 +83,42 @@ function normalizeAd(value: unknown): TaddyAd | null {
   }
 }
 
-async function getTelegramUser(): Promise<TaddyUser> {
+// Возвращает null, если Telegram-пользователя определить не удалось —
+// по схеме user.id обязателен и не nullable, поэтому в этом случае
+// запрос к ads/get отправлять нельзя вообще, а не слать id: null.
+async function getTelegramUser(): Promise<TaddyUser | null> {
   try {
-    const { retrieveLaunchParams, retrieveRawInitData } =
-      await import('@tma.js/sdk-react')
+    const { retrieveRawInitData } = await import('@tma.js/sdk-react')
     const raw = retrieveRawInitData()
-    const lp = retrieveLaunchParams()
     const params = new URLSearchParams(raw ?? '')
     const userRaw = params.get('user')
     const user = userRaw ? JSON.parse(userRaw) : undefined
+    if (typeof user?.id !== 'number') return null
     return {
-      id: typeof user?.id === 'number' ? user.id : null,
-      username: typeof user?.username === 'string' ? user.username : null,
-      source: lp.tgWebAppStartParam?.trim() || null,
+      id: user.id,
+      ...(typeof user?.username === 'string'
+        ? { username: user.username }
+        : {}),
     }
   } catch {
-    return { id: null, username: null, source: null }
+    return null
   }
 }
 
+// Тело запроса строго по AdsGetRequest: pubId, user, origin, format.
+// Никаких sdkVersion/fields/payload — их нет в схеме Taddy.
 async function requestAd(
   pubId: string,
-  payload?: Record<string, unknown>,
+  user: TaddyUser,
 ): Promise<TaddyAd | null> {
-  const user = await getTelegramUser()
   const res = await fetch(`${TADDY_API_URL}/ads/get`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      sdkVersion: TADDY_SDK_VERSION,
       pubId,
       user,
       origin: 'web',
       format: 'app-interstitial',
-      fields: [],
-      ...(payload ? { payload } : {}),
     }),
   })
   if (!res.ok) throw new Error(`Taddy ads/get ${res.status}`)
@@ -130,6 +127,8 @@ async function requestAd(
   return normalizeAd(data.result)
 }
 
+// AdsImpressionsRequest по схеме требует только id. pubId в схеме не описан,
+// но сохраняем его по договорённости.
 async function sendImpression(pubId: string, id: string): Promise<void> {
   const res = await fetch(`${TADDY_API_URL}/ads/impressions`, {
     method: 'POST',
@@ -291,7 +290,6 @@ function AdSkeleton() {
 
 export default function TaddyInterstitial({
   pubId = config.taddyPubId,
-  payload,
   canCloseImmediately = true,
   requiredViewSeconds = canCloseImmediately ? 0 : 5,
   demo = false,
@@ -358,19 +356,20 @@ export default function TaddyInterstitial({
     if (demo) return
     let cancelled = false
     const load = async () => {
+      if (!pubId) {
+        setLoadState('error')
+        onErrorRef.current?.(new Error('pubId is required'))
+        return
+      }
       try {
-        if (isTaddyInterstitialRunning) {
-          setLoadState('no-fill')
-          onNoFillRef.current?.()
-          return
+        const user = await getTelegramUser()
+        // user.id обязателен и не nullable по схеме Taddy — если Telegram
+        // initData недоступна (например, открыто вне мини-аппы), запрос
+        // отправлять нельзя: это осознанная ошибка, а не "нет рекламы".
+        if (!user) {
+          throw new Error('Telegram user id is unavailable')
         }
-        isTaddyInterstitialRunning = true
-        if (!pubId) {
-          setLoadState('error')
-          onErrorRef.current?.(new Error('pubId is required'))
-          return
-        }
-        const next = await requestAd(pubId, payload)
+        const next = await requestAd(pubId, user)
         if (cancelled) return
         if (!next) {
           setLoadState('no-fill')
@@ -385,8 +384,6 @@ export default function TaddyInterstitial({
           onErrorRef.current?.(err)
           setLoadState('error')
         }
-      } finally {
-        isTaddyInterstitialRunning = false
       }
     }
     void load()
@@ -402,7 +399,7 @@ export default function TaddyInterstitial({
     if (!ad || demo || impressionRef.current === ad.id) return
     impressionRef.current = ad.id
     void sendImpression(pubId, ad.id)
-  }, [ad, demo])
+  }, [ad, demo, pubId])
 
   // ── Countdown ─────────────────────────────────────────────────────────────
 
@@ -529,12 +526,19 @@ export default function TaddyInterstitial({
             ) : loadState === 'loading' ? null : (
               <>
                 {/* ── Media area ─────────────────────────────────────── */}
-                <motion.button
-                  type="button"
+                <motion.div
+                  role="button"
+                  tabIndex={0}
                   onClick={handleOpen}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault()
+                      handleOpen()
+                    }
+                  }}
                   whileTap={{ scale: 0.994 }}
                   transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-                  className="relative z-10 w-full shrink-0 cursor-pointer overflow-hidden border-none p-0"
+                  className="relative z-10 w-full shrink-0 cursor-pointer overflow-hidden"
                   style={{
                     height: '60%',
                     minHeight: 200,
@@ -542,29 +546,7 @@ export default function TaddyInterstitial({
                     background: 'var(--surface-container-lowest)',
                   }}
                   aria-label={`Открыть: ${title}`}>
-                  {ad?.video ? (
-                    // Video: contain + blurred bg
-                    <>
-                      <video
-                        src={ad.video}
-                        autoPlay
-                        playsInline
-                        muted
-                        loop
-                        className="absolute inset-0 size-full object-cover opacity-30 blur-2xl"
-                        aria-hidden
-                        style={{ transform: 'scale(1.12)' }}
-                      />
-                      <video
-                        src={ad.video}
-                        autoPlay
-                        playsInline
-                        muted
-                        loop
-                        className="relative size-full object-contain"
-                      />
-                    </>
-                  ) : ad?.image ? (
+                  {ad?.image ? (
                     // Image: blurred bg (cover) + sharp foreground (contain)
                     // guarantees 1:1, 1:2, 2:1 are all fully visible
                     <>
@@ -675,38 +657,7 @@ export default function TaddyInterstitial({
                       onClose={handleClose}
                     />
                   </div>
-                </motion.button>
-
-                {/* ── Floating app icon ──────────────────────────────── */}
-                {/*<div className="relative z-10 -mt-[26px] ml-4 shrink-0">
-                  <div
-                    className="relative size-[54px] overflow-hidden rounded-[14px] border-2"
-                    style={{
-                      borderColor: 'var(--surface-container-low)',
-                      boxShadow: '0 6px 20px rgba(0,0,0,0.55)',
-                    }}>
-                    {ad?.icon ? (
-                      <Image
-                        loader={passthroughLoader}
-                        unoptimized
-                        src={ad.icon}
-                        alt=""
-                        width={54}
-                        height={54}
-                        className="size-full object-cover"
-                      />
-                    ) : (
-                      <div
-                        className="flex size-full items-center justify-center text-[18px] font-black"
-                        style={{
-                          background: 'var(--primary-container)',
-                          color: 'var(--primary)',
-                        }}>
-                        {title.charAt(0).toUpperCase()}
-                      </div>
-                    )}
-                  </div>
-                </div>*/}
+                </motion.div>
 
                 {/* ── Content ─────────────────────────────────────────── */}
                 <motion.div
