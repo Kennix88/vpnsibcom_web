@@ -36,22 +36,29 @@ async function renderTaddyWrapper(
   variant: NetworkAdVariant,
 ) {
   const { onWatched, onDismissed } = handlers
-  const { default: TaddyInterstitial } = await import('./TaddyInterstitial')
   const isView = variant === 'view'
 
-  root.render(
-    <TaddyInterstitial
-      canCloseImmediately={isView}
-      requiredViewSeconds={10}
-      showSkeleton={!isView}
-      onClosed={() => (isView ? onWatched(true) : onDismissed(true))}
-      onViewed={() => onWatched(true)}
-      onError={() => void renderTaddySDK(root, handlers)}
-      onNoFill={() => void renderTaddySDK(root, handlers)}
-    />,
-  )
-}
+  try {
+    const { default: TaddyInterstitial } = await import('./TaddyInterstitial')
 
+    root.render(
+      <TaddyInterstitial
+        canCloseImmediately={isView}
+        requiredViewSeconds={10}
+        showSkeleton={!isView}
+        onClosed={() => (isView ? onWatched(true) : onDismissed(true))}
+        onViewed={() => onWatched(true)}
+        onError={() => void renderTaddySDK(root, handlers)}
+        onNoFill={() => void renderTaddySDK(root, handlers)}
+      />,
+    )
+  } catch (error) {
+    console.error('[renderTaddyWrapper] failed to load:', error)
+
+    // Текущая реклама не может быть показана.
+    onDismissed(true)
+  }
+}
 /**
  * Рендерит ОДНУ рекламу под конкретную сеть/blockId, которую отдал backend.
  * Никакого клиентского fallback на другую сеть — если ad === null, значит юзеру
