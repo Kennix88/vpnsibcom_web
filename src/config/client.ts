@@ -18,6 +18,7 @@ export const config = {
   richadsPubId: process.env.NEXT_PUBLIC_RICHADS_PUB_ID || '1001262',
   richadsAppId: process.env.NEXT_PUBLIC_RICHADS_APP_ID || '6023',
   isTaddyEnabled: process.env.NEXT_PUBLIC_TADDY_ENABLED || (true as boolean),
+  TELEGRAM_BOT_USERNAME: process.env.TELEGRAM_BOT_USERNAME || 'vpnsibcom_bot',
 }
 
 if (typeof window !== 'undefined' && !config.apiUrl) {
