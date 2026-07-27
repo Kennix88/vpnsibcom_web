@@ -3,8 +3,6 @@ import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
 import { useFullscreenAd } from '@app/app/_components/ads/useFullscreenAd'
 import Avatar from '@app/app/_components/Avatar'
 import Balance from '@app/app/_components/Balance'
-import LanguageSwitcher from '@app/app/_components/LanguageSwitcher'
-import SocialButtons from '@app/app/_components/SocialButtons'
 import { TonWalletConnect } from '@app/app/_components/ton/TonWalletConnect'
 import { TonWalletManager } from '@app/app/_components/ton/TonWalletManager'
 import { authApiClient } from '@app/core/authApiClient'
@@ -16,18 +14,9 @@ import limitLengthString from '@app/utils/limit-length-string.util'
 import { Address } from '@ton/ton'
 import { useTonWallet } from '@tonconnect/ui-react'
 import { AnimatePresence, motion } from 'framer-motion'
-import {
-  CheckCheck,
-  Copy,
-  Hash,
-  Percent,
-  User,
-  Users2,
-  Wallet,
-} from 'lucide-react'
+import { CheckCheck, Copy, Hash, Percent, User, Wallet } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'use-intl'
-import { SectionHeading } from '../earning/_components/SectionHeading'
 
 /* ─── Animation variants ─────────────────────────────────────────── */
 const stagger = {
@@ -353,21 +342,6 @@ export default function Page() {
           <motion.div variants={fadeSlideUp} className="px-4 pb-3">
             <TonWalletManager />
           </motion.div>
-        </motion.div>
-
-        {/* ── Bottom actions ── */}
-        <motion.div
-          variants={fadeSlideUp}
-          className="flex flex-col items-center gap-4 w-full ">
-          <LanguageSwitcher />
-          <div className="flex flex-col gap-2.5">
-            <SectionHeading
-              icon={<Users2 size={14} />}
-              title="Сообщество"
-              hint="Будь на связи с VPNsib"
-            />
-            <SocialButtons />
-          </div>
         </motion.div>
       </motion.div>
     </TmaPage>
