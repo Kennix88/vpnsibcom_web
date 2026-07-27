@@ -3,9 +3,8 @@
 import { TmaPage } from '@app/app/(tma)/_components/TmaPage'
 import { TaskAdsgramTask } from '@app/app/_components/ads/TaskAdsgram'
 import { Extensions } from '@app/app/_components/Extensions'
-import SocialButtons from '@app/app/_components/SocialButtons'
 import TopBar from '@app/app/_components/TopBar'
-import { Gift, ListChecks, Megaphone, ShieldAlert, Users2 } from 'lucide-react'
+import { Gift, ListChecks, Megaphone, ShieldAlert } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { SectionHeading } from './_components/SectionHeading'
 
@@ -110,14 +109,6 @@ export default function Page() {
             т.п. — начисленная награда спишется обратно, а сверху будет удержан
             штраф. Баланс при этом может уйти в минус.
           </span>
-        </div>
-        <div className="flex flex-col gap-2.5">
-          <SectionHeading
-            icon={<Users2 size={14} />}
-            title="Сообщество"
-            hint="Будь на связи с VPNsib"
-          />
-          <SocialButtons />
         </div>
       </div>
     </TmaPage>
