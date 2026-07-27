@@ -1,6 +1,5 @@
 'use client'
 import { config } from '@app/config/client'
-import { AdsNetworkEnum } from '@app/enums/ads-network.enum'
 import { AdsPlaceEnum } from '@app/enums/ads-place.enum'
 import { AdsTypeEnum } from '@app/enums/ads-type.enum'
 import { useUserStore } from '@app/store/user.store'
@@ -40,15 +39,10 @@ export function useFullscreenAd() {
         return
       }
 
-      const excludedNetworks: AdsNetworkEnum[] = isTaddyEnabled
-        ? []
-        : [AdsNetworkEnum.TADDY]
-
       const attempt = async (attemptsLeft: number): Promise<void> => {
         await session.start({
           place: AdsPlaceEnum.FULLSCREEN,
           type: AdsTypeEnum.VIEW,
-          excludeNetworks: excludedNetworks,
           onAd: async (ad, root) => {
             if (!ad) {
               // Backend явно решил не показывать рекламу этому юзеру — уважаем это, не пытаемся достать что-то ещё.
@@ -66,12 +60,7 @@ export function useFullscreenAd() {
                 onWatched: (viaTaddyWrapper) =>
                   void confirmAndClose(viaTaddyWrapper),
                 onDismissed: () => {
-                  excludedNetworks.push(ad.network)
-                  if (attemptsLeft > 1) {
-                    void attempt(attemptsLeft - 1)
-                  } else {
-                    session.close()
-                  }
+                  session.close()
                 },
               },
               'view',
