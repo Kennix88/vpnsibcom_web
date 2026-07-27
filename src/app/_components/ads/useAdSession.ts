@@ -1,7 +1,6 @@
 'use client'
 
 import { authApiClient } from '@app/core/authApiClient'
-import { AdsNetworkEnum } from '@app/enums/ads-network.enum'
 import { AdsPlaceEnum } from '@app/enums/ads-place.enum'
 import { AdsDataInterface } from '@app/enums/ads-res.interface'
 import { AdsTypeEnum } from '@app/enums/ads-type.enum'
@@ -32,8 +31,6 @@ interface StartParams {
   place: AdsPlaceEnum
   type: AdsTypeEnum
   onAd: (ad: AdsDataInterface | null, root: Root) => void | Promise<void>
-  /** Сети, которые backend должен исключить при подборе рекламы (например, только что провалившиеся). */
-  excludeNetworks?: AdsNetworkEnum[]
 }
 /**
  * Общая "механика" показа рекламы: лок с TTL, контейнер/root,
