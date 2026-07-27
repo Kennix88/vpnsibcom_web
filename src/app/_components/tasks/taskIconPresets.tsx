@@ -1,5 +1,6 @@
 'use client'
 import {
+  Bot,
   Camera,
   Crown,
   Download,
@@ -10,6 +11,7 @@ import {
   Rocket,
   Send,
   Share2,
+  Smartphone,
   Sparkle,
   Trophy,
   UserPlus,
@@ -30,6 +32,8 @@ export type TaskIconPreset =
   | 'story-post'
   | 'video-watch'
   | 'app-install'
+  | 'bot-start' // + запуск бота (/start)
+  | 'tma-launch' // + открытие/переход в TMA
   | 'default'
 
 export interface TaskColorScheme {
@@ -156,6 +160,24 @@ export const TASK_ICON_PRESETS: Record<TaskIconPreset, TaskColorScheme> = {
     border: 'rgba(80,175,149,0.25)',
     glow: 'rgba(80,175,149,0.22)',
     gradient: 'linear-gradient(135deg, #3d9a80, #50af95)',
+  },
+  'bot-start': {
+    Icon: Bot,
+    accent: 'var(--accent-network)',
+    onAccent: 'var(--accent-network-contrast)',
+    containerBg: 'rgba(106,227,255,0.14)',
+    border: 'rgba(106,227,255,0.25)',
+    glow: 'var(--accent-network-glow)',
+    gradient: 'linear-gradient(135deg, #34c9e8, #6ae3ff)',
+  },
+  'tma-launch': {
+    Icon: Smartphone,
+    accent: 'var(--gram)',
+    onAccent: 'var(--on-gram)',
+    containerBg: 'rgba(48,161,245,0.14)',
+    border: 'rgba(48,161,245,0.25)',
+    glow: 'rgba(48,161,245,0.22)',
+    gradient: 'linear-gradient(135deg, #1e88c9, #30a1f5)',
   },
   default: {
     Icon: Sparkle,
