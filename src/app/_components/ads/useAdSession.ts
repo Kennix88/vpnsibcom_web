@@ -1,6 +1,7 @@
 'use client'
 
 import { authApiClient } from '@app/core/authApiClient'
+import { AdsNetworkEnum } from '@app/enums/ads-network.enum'
 import { AdsPlaceEnum } from '@app/enums/ads-place.enum'
 import { AdsDataInterface } from '@app/enums/ads-res.interface'
 import { AdsTypeEnum } from '@app/enums/ads-type.enum'
@@ -30,10 +31,10 @@ export type AdSessionStartResult = 'ok' | 'locked' | 'error'
 interface StartParams {
   place: AdsPlaceEnum
   type: AdsTypeEnum
-  /** Вызывается, когда ad получен (может быть null, если реклама не найдена) и root готов к рендеру. */
   onAd: (ad: AdsDataInterface | null, root: Root) => void | Promise<void>
+  /** Сети, которые backend должен исключить при подборе рекламы (например, только что провалившиеся). */
+  excludeNetworks?: AdsNetworkEnum[]
 }
-
 /**
  * Общая "механика" показа рекламы: лок с TTL, контейнер/root,
  * вызовы getAds/confirmAds, гарантированный cleanup.
