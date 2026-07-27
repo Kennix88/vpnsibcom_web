@@ -5,16 +5,13 @@ import FriendsBonuses from '@app/app/_components/friends/FriendsBonuses'
 import FriendsHero from '@app/app/_components/friends/FriendsHero'
 import FriendsInviteButtons from '@app/app/_components/friends/FriendsInviteButtons'
 import FriendsStatistics from '@app/app/_components/friends/FriendsStatistics'
-import SocialButtons from '@app/app/_components/SocialButtons'
 import TopBar from '@app/app/_components/TopBar'
 import { authApiClient } from '@app/core/authApiClient'
 import { useRefferlsStore } from '@app/store/referrals.store'
 import { useUserStore } from '@app/store/user.store'
 import { motion } from 'framer-motion'
-import { Users2 } from 'lucide-react'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
-import { SectionHeading } from '../earning/_components/SectionHeading'
 
 const stagger = {
   hidden: {},
@@ -126,18 +123,6 @@ export default function Page() {
         {/* Stats dashboard */}
         <motion.div variants={fadeUp}>
           <FriendsStatistics />
-        </motion.div>
-
-        {/* Social */}
-        <motion.div variants={fadeUp}>
-          <div className="flex flex-col gap-2.5">
-            <SectionHeading
-              icon={<Users2 size={14} />}
-              title="Сообщество"
-              hint="Будь на связи с VPNsib"
-            />
-            <SocialButtons />
-          </div>
         </motion.div>
       </motion.div>
     </TmaPage>
