@@ -42,8 +42,13 @@ function NotifDot({ colorVar = 'var(--usdt)' }: { colorVar?: string }) {
       <motion.span
         className="absolute inset-0 rounded-full origin-center"
         style={{ background: colorVar }}
-        animate={{ scale: [1, 2.2], opacity: [0.5, 0] }}
-        transition={{ duration: 2.2, repeat: Infinity, ease: 'easeOut' }}
+        animate={{ scale: [1, 1, 2.2], opacity: [0, 0.6, 0] }}
+        transition={{
+          duration: 2.2,
+          repeat: Infinity,
+          ease: 'easeOut',
+          times: [0, 0.15, 1],
+        }}
       />
     </span>
   )
@@ -80,8 +85,13 @@ function EarnIcon({ isActive }: { isActive: boolean }) {
           aria-hidden
           className="absolute inset-0 rounded-full"
           style={{ background: 'rgba(80,175,149,0.28)', filter: 'blur(6px)' }}
-          animate={{ opacity: [0.5, 1, 0.5], scale: [0.9, 1.3, 0.9] }}
-          transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
+          animate={{ opacity: [0.5, 1], scale: [0.9, 1.3] }}
+          transition={{
+            duration: 1.3,
+            repeat: Infinity,
+            repeatType: 'mirror',
+            ease: 'easeInOut',
+          }}
         />
       )}
 
@@ -105,8 +115,13 @@ function TaskIcon({
           aria-hidden
           className="absolute inset-0 rounded-full"
           style={{ background: 'rgba(245,166,35,0.24)', filter: 'blur(5px)' }}
-          animate={{ opacity: [0.4, 0.9, 0.4], scale: [0.85, 1.25, 0.85] }}
-          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+          animate={{ opacity: [0.4, 0.9], scale: [0.85, 1.25] }}
+          transition={{
+            duration: 1.5,
+            repeat: Infinity,
+            repeatType: 'mirror',
+            ease: 'easeInOut',
+          }}
         />
       )}
       <ListChecks size={18} strokeWidth={2.3} className="relative z-10" />
@@ -271,17 +286,16 @@ export default function NavBar() {
                     borderColor: [
                       'rgba(80,175,149,0.0)',
                       'rgba(80,175,149,0.35)',
-                      'rgba(80,175,149,0.0)',
                     ],
                     boxShadow: [
                       '0 0 0px rgba(80,175,149,0)',
                       '0 0 12px rgba(80,175,149,0.18)',
-                      '0 0 0px rgba(80,175,149,0)',
                     ],
                   }}
                   transition={{
-                    duration: 2.8,
+                    duration: 1.4,
                     repeat: Infinity,
+                    repeatType: 'mirror',
                     ease: 'easeInOut',
                   }}
                 />
