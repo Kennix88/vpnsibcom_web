@@ -2,31 +2,23 @@
 import Avatar from '@app/app/_components/Avatar'
 import Balance from '@app/app/_components/Balance'
 import { useUserStore } from '@app/store/user.store'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-
 import { useSignal, viewport } from '@tma.js/sdk-react'
 import { motion } from 'framer-motion'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useLayoutEffect, useRef } from 'react'
+import BurgerMenu from './BurgerMenu'
 
-/**
- * Высота шапки прокидывается в CSS-переменную --topbar-height на
- * document.documentElement, чтобы контент под ней (TmaPage/страницы)
- * мог просто использовать `paddingTop: 'var(--topbar-height)'`,
- * не дублируя расчёт safe-area у себя.
- */
 function useTopBarHeightVar(ref: React.RefObject<HTMLDivElement | null>) {
   useLayoutEffect(() => {
     const el = ref.current
     if (!el) return
-
     const setVar = () => {
       document.documentElement.style.setProperty(
         '--topbar-height',
         `${el.offsetHeight}px`,
       )
     }
-
     setVar()
     const ro = new ResizeObserver(setVar)
     ro.observe(el)
@@ -41,8 +33,6 @@ export default function TopBar() {
   const rootRef = useRef<HTMLDivElement>(null)
   useTopBarHeightVar(rootRef)
 
-  // Те же сигналы, что и в TmaPage — если viewport ещё не смонтирован
-  // (страница открыта без обёртки TmaPage), сигналы просто вернут 0.
   const isFullscreen = useSignal(viewport.isFullscreen)
   const safeAreaTop = useSignal(viewport.safeAreaInsetTop)
   const contentSafeAreaTop = useSignal(viewport.contentSafeAreaInsetTop)
@@ -57,10 +47,9 @@ export default function TopBar() {
       initial={{ opacity: 0, y: -12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, ease: [0.2, 0, 0, 1] }}>
-      {/* ── Row 1: VPNsib  ── */}
       {isFullscreen && (
         <div
-          className="fixed top-0 left-0 right-0 z-50  flex items-center justify-between gap-2"
+          className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between gap-2"
           style={{
             paddingTop: topInset + 12,
             background:
@@ -74,29 +63,17 @@ export default function TopBar() {
         </div>
       )}
 
-      {/* ── Row 2: аватар — баланс звёзд — баланс алмазов ── */}
       <div
         className="flex gap-2 justify-between items-center w-full max-w-md"
-        style={{
-          paddingTop: isFullscreen ? 18 : 0,
-        }}>
+        style={{ paddingTop: isFullscreen ? 18 : 0 }}>
         <Link href={url + '/profile'}>
-          <Avatar
-            url={user?.photoUrl}
-            className={'cursor-pointer'}
-            withStatus
-          />
+          <Avatar url={user?.photoUrl} className="cursor-pointer" withStatus />
         </Link>
-        <div className={'flex justify-end items-center gap-2 '}>
+
+        <div className="flex justify-end items-center gap-2">
           <Balance type={'payment'} fixedNumber={3} />
-          <Balance type={'usdt'} fixedNumber={3} />
+          <BurgerMenu />
         </div>
-        {/* <div
-          className={
-            'flex justify-center bg-[var(--secondary-container)] rounded-md items-center p-1 cursor-pointer'
-          }>
-          <IoMenu className={'text-2xl'} />
-        </div> */}
       </div>
     </motion.div>
   )
