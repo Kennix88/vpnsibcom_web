@@ -37,10 +37,12 @@
     "react": "^19.1.5",
     "react-dom": "^19.1.5",
     "react-icons": "^5.5.0",
+    "react-markdown": "^10.1.0",
     "react-server-dom-parcel": "^19.1.5",
     "react-server-dom-turbopack": "^19.1.5",
     "react-server-dom-webpack": "^19.1.5",
     "react-toastify": "^11.0.5",
+    "remark-gfm": "^4.0.1",
     "taddy-sdk-web": "^1.3.17",
     "zustand": "^5.0.3"
   },
