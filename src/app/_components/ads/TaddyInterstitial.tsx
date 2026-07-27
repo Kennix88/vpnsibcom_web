@@ -130,12 +130,16 @@ async function requestAd(
   return normalizeAd(data.result)
 }
 
-async function sendImpression(id: string): Promise<void> {
-  await fetch(`${TADDY_API_URL}/ads/impression`, {
+async function sendImpression(pubId: string, id: string): Promise<void> {
+  const res = await fetch(`${TADDY_API_URL}/ads/impressions`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id }),
-  }).catch((err) => console.warn('Taddy impression failed', err))
+    body: JSON.stringify({ pubId, id }),
+  })
+
+  if (!res.ok) {
+    throw new Error(`Taddy ads/impressions ${res.status}`)
+  }
 }
 
 const passthroughLoader = ({ src }: ImageLoaderProps) => src
@@ -397,7 +401,7 @@ export default function TaddyInterstitial({
   useEffect(() => {
     if (!ad || demo || impressionRef.current === ad.id) return
     impressionRef.current = ad.id
-    void sendImpression(ad.id)
+    void sendImpression(pubId, ad.id)
   }, [ad, demo])
 
   // ── Countdown ─────────────────────────────────────────────────────────────
@@ -674,7 +678,7 @@ export default function TaddyInterstitial({
                 </motion.button>
 
                 {/* ── Floating app icon ──────────────────────────────── */}
-                <div className="relative z-10 -mt-[26px] ml-4 shrink-0">
+                {/*<div className="relative z-10 -mt-[26px] ml-4 shrink-0">
                   <div
                     className="relative size-[54px] overflow-hidden rounded-[14px] border-2"
                     style={{
@@ -702,7 +706,7 @@ export default function TaddyInterstitial({
                       </div>
                     )}
                   </div>
-                </div>
+                </div>*/}
 
                 {/* ── Content ─────────────────────────────────────────── */}
                 <motion.div
