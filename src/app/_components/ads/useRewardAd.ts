@@ -18,8 +18,8 @@ export function useRewardAd(place: AdsPlaceEnum) {
   const [isLoading, setIsLoading] = useState(false)
 
   const trigger = useCallback(async () => {
+    if (isLoading) return
     setIsLoading(true)
-
     let sawAnyAd = false
 
     const attempt = async (attemptsLeft: number): Promise<void> => {
@@ -43,6 +43,7 @@ export function useRewardAd(place: AdsPlaceEnum) {
             finish()
             return
           }
+
           sawAnyAd = true
 
           const confirmAndFinish = async (viaTaddyWrapper?: boolean) => {
@@ -54,20 +55,33 @@ export function useRewardAd(place: AdsPlaceEnum) {
             finish()
           }
 
+          const retryOrFinish = () => {
+            session.close()
+            if (attemptsLeft > 1) {
+              void attempt(attemptsLeft - 1)
+              return
+            }
+            setIsLoading(false)
+            toast.warn('Не удалось показать рекламу, попробуйте позже')
+          }
+
           await renderNetworkAd(
             root,
             ad,
             {
               onWatched: (viaTaddyWrapper) =>
                 void confirmAndFinish(viaTaddyWrapper),
-              onDismissed: () => {
-                session.close()
-              },
+              // Реклама не отрисовалась / закрыта без награды — пробуем ещё раз,
+              // backend сам решит какую сеть/блок отдать в следующий getAds.
+              onDismissed: retryOrFinish,
             },
             'reward',
           )
         },
       })
+
+      // 'locked' или 'error' на уровне самой сессии (не смогли даже получить
+      // рекламу/захватить лок) — ретраить бессмысленно, останавливаемся.
       if (result !== 'ok') setIsLoading(false)
     }
 
