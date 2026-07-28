@@ -1,5 +1,4 @@
 'use client'
-
 import { useEffect, useRef } from 'react'
 
 type RichadsControllerInstance = {
@@ -19,9 +18,11 @@ declare global {
 export default function RichadsReward({
   onReward,
   onClose,
+  onError,
 }: {
   onReward: () => void
   onClose: () => void
+  onError: (error: unknown) => void
 }) {
   const startedRef = useRef(false)
 
@@ -31,10 +32,9 @@ export default function RichadsReward({
 
     const run = async () => {
       const controller = window.richadsController
-
       if (!controller) {
         console.warn('RichAds: controller not initialized')
-        onClose()
+        onError(new Error('RichAds controller not initialized'))
         return
       }
 
@@ -49,8 +49,12 @@ export default function RichadsReward({
       }
     }
 
-    void run()
-  }, [onReward, onClose])
+    run().catch((err) => {
+      // непредвиденная ошибка (не reject самого SDK, а исключение в коде выше)
+      console.error('RichAds: unexpected error', err)
+      onError(err)
+    })
+  }, [onReward, onClose, onError])
 
   return null
 }
