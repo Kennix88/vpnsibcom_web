@@ -62,7 +62,7 @@ const demoAd: TaddyAd = {
   icon: '/logo.png',
   text: 'Get more traffic and premium servers with one tap.',
   button: 'Get Premium',
-  link: 'https://fasti.fun/tma',
+  link: 'https://gonet.fun/tma',
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -105,39 +105,65 @@ async function getTelegramUser(): Promise<TaddyUser | null> {
   }
 }
 
-// Тело запроса строго по AdsGetRequest: pubId, user, origin, format.
-// Никаких sdkVersion/fields/payload — их нет в схеме Taddy.
+const TADDY_FETCH_TIMEOUT_MS = 4000
+
 async function requestAd(
   pubId: string,
   user: TaddyUser,
 ): Promise<TaddyAd | null> {
-  const res = await fetch(`${TADDY_API_URL}/ads/get`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      pubId,
-      user,
-      origin: 'web',
-      format: 'app-interstitial',
-    }),
-  })
-  if (!res.ok) throw new Error(`Taddy ads/get ${res.status}`)
-  const data = (await res.json()) as { result?: unknown; error?: string }
-  if (data.error) throw new Error(data.error)
-  return normalizeAd(data.result)
+  const controller = new AbortController()
+  const timeout = window.setTimeout(
+    () => controller.abort(),
+    TADDY_FETCH_TIMEOUT_MS,
+  )
+  try {
+    const res = await fetch(`${TADDY_API_URL}/ads/get`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        pubId,
+        user,
+        origin: 'web',
+        format: 'app-interstitial',
+      }),
+      signal: controller.signal,
+    })
+    if (!res.ok) throw new Error(`Taddy ads/get ${res.status}`)
+    const data = (await res.json()) as { result?: unknown; error?: string }
+    if (data.error) throw new Error(data.error)
+    return normalizeAd(data.result)
+  } catch (err) {
+    if (err instanceof DOMException && err.name === 'AbortError') {
+      throw new Error('Taddy ads/get timeout')
+    }
+    throw err
+  } finally {
+    window.clearTimeout(timeout)
+  }
 }
 
 // AdsImpressionsRequest по схеме требует только id. pubId в схеме не описан,
 // но сохраняем его по договорённости.
 async function sendImpression(pubId: string, id: string): Promise<void> {
-  const res = await fetch(`${TADDY_API_URL}/ads/impressions`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ pubId, id }),
-  })
-
-  if (!res.ok) {
-    throw new Error(`Taddy ads/impressions ${res.status}`)
+  const controller = new AbortController()
+  const timeout = window.setTimeout(
+    () => controller.abort(),
+    TADDY_FETCH_TIMEOUT_MS,
+  )
+  try {
+    const res = await fetch(`${TADDY_API_URL}/ads/impressions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pubId, id }),
+      signal: controller.signal,
+    })
+    if (!res.ok) {
+      throw new Error(`Taddy ads/impressions ${res.status}`)
+    }
+  } catch (err) {
+    console.error('TaddyInterstitial impression failed', err)
+  } finally {
+    window.clearTimeout(timeout)
   }
 }
 
@@ -436,6 +462,7 @@ export default function TaddyInterstitial({
   // ── Bail out ───────────────────────────────────────────────────────────────
 
   if (!open && loadState !== 'ready') return null
+  if (loadState === 'error' || loadState === 'no-fill') return null
 
   const title = ad?.title ?? 'Спонсор'
   const description = ad?.description ?? ad?.text ?? ''
