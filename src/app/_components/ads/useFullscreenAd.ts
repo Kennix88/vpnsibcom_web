@@ -20,12 +20,14 @@ export function useFullscreenAd() {
   useEffect(() => {
     userRef.current = user
   }, [user])
+
   const session = useAdSession(FULLSCREEN_AD_OWNER)
   const startupTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const hasUser = Boolean(user)
 
   useEffect(() => {
     if (!hasUser) return
+
     const run = async () => {
       const currentUser = userRef.current
       if (!currentUser) return
@@ -49,19 +51,28 @@ export function useFullscreenAd() {
               session.close()
               return
             }
+
             const confirmAndClose = async (viaTaddyWrapper?: boolean) => {
               await session.confirm(Boolean(viaTaddyWrapper))
               session.close()
             }
+
+            const retryOrClose = () => {
+              session.close()
+              if (attemptsLeft > 1) {
+                void attempt(attemptsLeft - 1)
+              }
+              // Лимит попыток исчерпан — просто молча закрываемся,
+              // fullscreen-реклама не должна навязчиво ретраить дальше.
+            }
+
             await renderNetworkAd(
               root,
               ad,
               {
                 onWatched: (viaTaddyWrapper) =>
                   void confirmAndClose(viaTaddyWrapper),
-                onDismissed: () => {
-                  session.close()
-                },
+                onDismissed: retryOrClose,
               },
               'view',
             )
@@ -71,6 +82,7 @@ export function useFullscreenAd() {
 
       await attempt(MAX_AD_ATTEMPTS)
     }
+
     startupTimerRef.current = setTimeout(run, STARTUP_DELAY_MS)
     return () => {
       if (startupTimerRef.current) {
