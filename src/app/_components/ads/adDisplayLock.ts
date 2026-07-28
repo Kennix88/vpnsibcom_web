@@ -11,8 +11,11 @@ export const tryAcquireAdDisplayLock = (
   ttlMs: number = DEFAULT_TTL_MS,
 ): boolean => {
   const now = Date.now()
-  // Лок свободен, либо истёк по TTL, либо уже наш — можно (пере)захватить
-  if (lock === null || lock.expiresAt <= now || lock.owner === ownerId) {
+  // Лок свободен либо истёк по TTL — можно захватить.
+  // Захват тем же владельцем, пока лок ещё жив, НЕ допускается —
+  // это признак повторного/параллельного старта, а не легитимного продления
+  // (для продления есть renewAdDisplayLock).
+  if (lock === null || lock.expiresAt <= now) {
     lock = { owner: ownerId, expiresAt: now + ttlMs }
     return true
   }
