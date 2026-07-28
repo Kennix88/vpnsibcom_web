@@ -7,12 +7,9 @@ import { addMinutes, isAfter } from 'date-fns'
 import { useEffect, useRef } from 'react'
 import { renderNetworkAd } from './renderAdWidgets'
 import { useAdSession } from './useAdSession'
-
 const STARTUP_DELAY_MS = 5000
 const FULLSCREEN_AD_OWNER = 'fullscreen-ad'
-/** По числу сетей — страхует от бесконечного цикла запросов, если backend почему-то зациклит выдачу. */
 const MAX_AD_ATTEMPTS = 4
-
 export function useFullscreenAd() {
   const isTaddyEnabled = config.isTaddyEnabled as boolean
   const { user } = useUserStore()
@@ -20,14 +17,11 @@ export function useFullscreenAd() {
   useEffect(() => {
     userRef.current = user
   }, [user])
-
   const session = useAdSession(FULLSCREEN_AD_OWNER)
   const startupTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const hasUser = Boolean(user)
-
   useEffect(() => {
     if (!hasUser) return
-
     const run = async () => {
       const currentUser = userRef.current
       if (!currentUser) return
@@ -40,49 +34,45 @@ export function useFullscreenAd() {
       ) {
         return
       }
-
       const attempt = async (attemptsLeft: number): Promise<void> => {
         await session.start({
           place: AdsPlaceEnum.FULLSCREEN,
           type: AdsTypeEnum.VIEW,
           onAd: async (ad, root) => {
             if (!ad) {
-              // Backend явно решил не показывать рекламу этому юзеру — уважаем это, не пытаемся достать что-то ещё.
               session.close()
               return
             }
-
             const confirmAndClose = async (viaTaddyWrapper?: boolean) => {
               await session.confirm(Boolean(viaTaddyWrapper))
               session.close()
             }
-
-            const retryOrClose = () => {
+            const retryOnErrorOrClose = () => {
               session.close()
               if (attemptsLeft > 1) {
                 void attempt(attemptsLeft - 1)
               }
-              // Лимит попыток исчерпан — просто молча закрываемся,
-              // fullscreen-реклама не должна навязчиво ретраить дальше.
+              // Лимит попыток исчерпан — просто молча закрываемся.
             }
-
             await renderNetworkAd(
               root,
               ad,
               {
                 onWatched: (viaTaddyWrapper) =>
                   void confirmAndClose(viaTaddyWrapper),
-                onDismissed: retryOrClose,
+                // Техническая ошибка — можно попробовать ещё раз.
+                onError: retryOnErrorOrClose,
+                // Юзер закрыл раньше времени — для view это не должно происходить,
+                // но на всякий случай просто закрываем сессию без ретрая.
+                onClosedEarly: () => session.close(),
               },
               'view',
             )
           },
         })
       }
-
       await attempt(MAX_AD_ATTEMPTS)
     }
-
     startupTimerRef.current = setTimeout(run, STARTUP_DELAY_MS)
     return () => {
       if (startupTimerRef.current) {
