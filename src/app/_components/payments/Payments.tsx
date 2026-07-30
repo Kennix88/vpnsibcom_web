@@ -17,10 +17,10 @@ import { useTranslations } from 'use-intl'
 
 /* ─── Constants ──────────────────────────────────────────────────── */
 const quickAmounts = [
-  60, 100, 500, 700, 1000, 2000, 3000, 5000, 10000, 15000, 25000, 50000,
+  50, 100, 500, 700, 1000, 2000, 3000, 5000, 10000, 15000, 25000, 50000,
 ]
 
-const MIN_FALLBACK = 60
+const MIN_FALLBACK = 10
 const MAX_AMOUNT = 5_000_000
 const SLIDER_MAX = 50_000
 
