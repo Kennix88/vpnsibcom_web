@@ -1,4 +1,16 @@
 :root {
+  /* Heleket — крипто-эквайринг. Цвет ориентировочный, взят со скрина лога (красный). */
+  --heleket: #f0413a;
+  --heleket-container-rgba: rgba(240, 65, 58, 0.3);
+
+  /* Crypto Bot (@CryptoBot) — цвет ориентировочный, взят со скрина лога (бирюзовый). */
+  --cryptobot: #2bb6a3;
+  --cryptobot-container-rgba: rgba(43, 182, 163, 0.3);
+
+  /* xRocket / xRocket Pay — цвет ориентировочный, взят со скрина лога (синий). */
+  --xrocket: #2b8fe0;
+  --xrocket-container-rgba: rgba(43, 143, 224, 0.3);
+
   /* SBP (Система быстрых платежей) */
   --sbp: #5b57a2;
   --sbp-container-rgba: rgba(91, 87, 162, 0.3);
