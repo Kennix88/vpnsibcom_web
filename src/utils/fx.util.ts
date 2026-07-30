@@ -1,5 +1,18 @@
+import { CurrencyTypeEnum } from '@app/enums/currency-type.enum'
 import { CurrencyEnum } from '@app/enums/currency.enum'
 import { RatesInterface } from '@app/types/rates.interface'
+
+// Валюты типов CRYPTO и TELEGRAM хранят rate как "кол-во единиц за 1 USD"
+// (см. RatesService.updateCoinmarketcapRates / updateStarsRate: rate = 1/price).
+// FIAT хранит rate как "USD-стоимость 1 единицы" (updateForexrateapiRates).
+// Конвенция определяется типом валюты из БД, а не списком конкретных кодов —
+// это и было причиной бага: раньше список был захардкожен и не включал
+// часть крипто-валют (DOGS, CATS, NOT, PX, MAJOR, JETTON, CATI, HMSTR),
+// для которых конвертация была бы такой же некорректной, как раньше для Stars.
+const QUANTITY_PER_USD_TYPES = new Set<CurrencyTypeEnum>([
+  CurrencyTypeEnum.CRYPTO,
+  CurrencyTypeEnum.TELEGRAM,
+])
 
 export function fxUtil(
   value: number,
@@ -7,23 +20,25 @@ export function fxUtil(
   to: CurrencyEnum = CurrencyEnum.USD,
   ratesObj: RatesInterface,
 ): number {
+  if (from == to) return value
   const rates = { ...ratesObj.rates, [ratesObj.base]: 1 }
+  const types = ratesObj.types
 
-  // Currencies whose `rate` is quoted as "units of the currency per 1 USD"
-  // (Telegram Stars + crypto). Every other currency here follows the
-  // standard FIAT convention: "USD value of 1 unit". Mixing the two
-  // conventions without normalizing first is what produced wrong RUB
-  // amounts.
-  const QUANTITY_PER_USD = new Set<CurrencyEnum>([
-    CurrencyEnum.XTR,
-    CurrencyEnum.TON,
-    CurrencyEnum.GRAM,
-    CurrencyEnum.USDT,
-    // + любые другие ваши CRYPTO/TELEGRAM ключи из currencies[].type
-  ])
+  const usdValueOfUnit = (code: CurrencyEnum): number => {
+    if (code === ratesObj.base) return 1
 
-  const usdValueOfUnit = (code: CurrencyEnum): number =>
-    QUANTITY_PER_USD.has(code) ? 1 / rates[code] : rates[code]
+    const rate = rates[code]
+    if (rate === undefined || rate === null) {
+      throw new Error(`fxUtil: no rate for currency "${code}"`)
+    }
+    if (rate === 0) {
+      // например XDR в текущих данных — делить нельзя, курс невалиден
+      throw new Error(`fxUtil: rate for "${code}" is 0, cannot convert`)
+    }
+
+    const type = types[code]
+    return QUANTITY_PER_USD_TYPES.has(type) ? 1 / rate : rate
+  }
 
   const usdValueFrom = usdValueOfUnit(from)
   const usdValueTo = usdValueOfUnit(to)
