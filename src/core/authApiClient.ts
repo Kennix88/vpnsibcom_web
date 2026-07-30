@@ -348,12 +348,23 @@ class ApiClient {
     })
   }
 
-  async createInvoice(params: { method: PaymentMethodEnum; amount: number }) {
+  async createInvoice(params: {
+    method: PaymentMethodEnum
+    amount: number
+    walletAddress?: string
+  }) {
     return this.safeRequest<{
       user: UserDataInterface
       linkPay: string
       isTonPayment: boolean
+      isJettonPayment: boolean
+      isStars: boolean
+      sendTxAddress?: string
+      destinationAddress?: string
+      jettonMasterAddress?: string
+      jettonDecimals?: number
       amountTon: number
+      amountJetton?: string
       token: string
     }>(async () => {
       const { data } = await this.instance.post<
@@ -361,7 +372,14 @@ class ApiClient {
           user: UserDataInterface
           linkPay: string
           isTonPayment: boolean
+          isJettonPayment: boolean
+          isStars: boolean
+          sendTxAddress?: string
+          destinationAddress?: string
+          jettonMasterAddress?: string
+          jettonDecimals?: number
           amountTon: number
+          amountJetton?: string
           token: string
         }>
       >('/payments/invoice', params)
