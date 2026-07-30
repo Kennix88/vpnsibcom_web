@@ -1,27 +1,30 @@
-import { CurrencyTypeEnum } from '@app/enums/currency-type.enum'
 import { CurrencyEnum } from '@app/enums/currency.enum'
-import { PaymentMethodTypeEnum } from '@app/enums/payment-method-type.enum'
 import { PaymentMethodEnum } from '@app/enums/payment-method.enum'
-import { PaymentSystemEnum } from '@app/enums/payment-system.enum'
 
 export interface PaymentMethodsDataInterface {
   key: PaymentMethodEnum
+  isActive: boolean
   name: string
-  isTonBlockchain: boolean
-  tonSmartContractAddress?: string
-  minAmount: number
-  maxAmount: number
+  description?: string
+  bridge?: string
+  minStars: number
+  maxStars: number
   commission: number
   isPlusCommission: boolean
-  type: PaymentMethodTypeEnum
-  system: PaymentSystemEnum
   currency: CurrencyInterface
+  category: PaymentMethodCategoryEnum
+  isTonBlockchain: boolean
+  tonSmartContractAddress?: string
+}
+
+export enum PaymentMethodCategoryEnum {
+  MAIN = 'MAIN',
+  RUS = 'RUS',
+  CRYPTO = 'CRYPTO',
+  RESERVE = 'RESERVE',
 }
 
 export interface CurrencyInterface {
   key: CurrencyEnum
-  name: string
   symbol: string
-  type: CurrencyTypeEnum
-  rate: number
 }
